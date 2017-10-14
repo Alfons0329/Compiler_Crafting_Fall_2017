@@ -1,11 +1,37 @@
 // print hello world
-begin
-var a : integer;
-var b : real;
-print "hello world";
-a := 1+1;
-b := 1.23;
-if a > 01 then
-b := b*1.23e-1;
-end if
+    begin
+    var a : integer;
+    var b : real;
+    print "hello world";
+    "hello world with "" string parenthesis in the middle"
+
+    // this is a comment // line */ /* with some /* delimiters */ before the end
+    /* this is a comment // line with some /* and
+    // delimiters */
+
+    "hello world with "" string parenthesis"" in the wsofuhwfpuh ""  middle"
+    "ILLEGAL STRING VERSION 1""
+    ""ILLEGAL STRING VERSION 2"
+    "ILLEGAL " STRING VERSION 3"
+    "
+    """
+//&T-
+    a := 1+1;
+
+    b := 1.23;
+//&S-
+    if a > 01 then
+    if a > 01123456654654 then
+//&S+S-S+S-
+    b := b*1.23e-1;
+    b := b*1.23e+1456456465;
+    b := b*1.23e;
+//&T+
+    end if
+
+    d := "2"9;
+    d := "29;
+    d := "2"2"9;
+    d := ""995995";
+    d := 234)*&%(&^%@*&^@#!%*&^@#%*&@!^#%*&@!#^%@!*&#^%!@(&#^%!@)(*#&^$*)(#!^$&*#!^$(*)!&#^$!&*(#$^!(*&$^))))
 end

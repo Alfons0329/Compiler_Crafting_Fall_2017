@@ -1,0 +1,181 @@
+%{
+#define LIST               strcat(buf, yytext)
+#define token(t)           {LIST; if (Opt_T) printf("<%s>\n", #t);}
+#define tokenChar(t)       {LIST; if (Opt_T) printf("<%c>\n", (t));}
+#define tokenInteger(t, i) {LIST; if (Opt_T) printf("<%s: %d>\n", #t, (i));}
+#define tokenString(t, s)  {LIST; if (Opt_T) printf("<%s: %s>\n", #t, (s));}
+#define MAX_LINE_LENG      256
+
+int Opt_S = 1;
+int Opt_T = 1;
+int linenum = 1;
+int i=0;
+int buf_idx=0;
+char buf[MAX_LINE_LENG];
+char yytext_arr[MAX_LINE_LENG];
+char answer_buf[MAX_LINE_LENG];
+%}
+
+
+oct_integer [-]?[0][1-9]*
+integer [-]?[1-9][0-9]*
+
+float_num [+-]?[0-9]+\.[0-9]+
+%%
+"," {tokenChar(','); }
+";" {tokenChar(';'); }
+":" {tokenChar(':'); }
+"(" {tokenChar('('); }
+")" {tokenChar(')'); }
+"[" {tokenChar('['); }
+"]" {tokenChar(']'); }
+"+" {tokenChar('+'); }
+"-" {tokenChar('-'); }
+"*" {tokenChar('*'); }
+"/" {tokenChar('/'); }
+"mod" {token(mod); }
+":="   {token(:=); }
+("<"|"<="|"<>"|">="|">"|"=") {tokenChar(yytext[0]);}
+
+("and"|"or"|"not") {token(yytext);}
+
+"begin"     {token(KWbegin);}
+"array"     {token(KWarray);}
+"boolean"   {token(KWboolean);}
+"def"       {token(KWdef);}
+"do"        {token(KWdo);}
+"else"      {token(KWelse);}
+"end"       {token(KWend);}
+"false"     {token(KWfalse);}
+"for"       {token(KWfor);}
+"integer"   {token(KWinteger);}
+"if"        {token(KWif);}
+"of"        {token(KWof);}
+"print"     {token(KWprint);}
+"read"      {token(KWread);}
+"real"      {token(KWreal);}
+"string"    {token(KWstring);}
+"then"      {token(KWthen);}
+"to"        {token(KWto);}
+"true"      {token(KWtrue);}
+"return"    {token(KWreturn);}
+"var"       {token(KWvar);}
+"while"     {token(KWwhile);}
+
+["]?([0-9]+["])+ {printf("error at line %d: bad character \"%s\"\n",linenum,yytext); }
+
+[0-9]+[a-zA-Z_] {printf("error at line %d: bad character \"%s\"\n",linenum,yytext); }
+[a-zA-Z]([a-zA-Z_]|[0-9])* {tokenString(id,yytext);}
+
+[-]?[0-9]+[.]?[0-9]+[E|e][+|-]?[0-9]+ {tokenString(scientific ,yytext);}
+
+{oct_integer}   {tokenInteger(oct_integer ,strtol(yytext,NULL,10));}
+{integer}       {tokenInteger(integer ,strtol(yytext,NULL,10));}
+
+{float_num}     {tokenString(float ,yytext);}
+
+
+
+["](.)*["] {
+    i=0;
+    buf_idx=0;
+    for(;i<yyleng-1;)
+    {
+        if(!i)
+        {
+            i++;
+        }
+        else if(yytext[i]=='"')
+        {
+            if(i==(yyleng-2))
+            {
+                printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
+                break;
+            }
+            else if(yytext[i+1]=='"')
+            {
+                answer_buf[buf_idx]=yytext[i];
+                i+=2;
+                buf_idx++;
+            }
+            else
+            {
+                printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
+                i++;
+            }
+        }
+        else
+        {
+            answer_buf[buf_idx]=yytext[i];
+            i++;
+            buf_idx++;
+        }
+    }
+    tokenString(string ,answer_buf);
+
+    memset(yytext_arr,0,sizeof(char)*256);
+    memset(answer_buf,0,sizeof(char)*256);
+}
+
+"//&S+"(.)*[\n] { Opt_S=1; linenum++;}
+
+"//&S-"(.)*[\n] { Opt_S=0; linenum++;}
+
+"//&T+"(.)*[\n] { Opt_T=1; linenum++;}
+
+"//&T-"(.)*[\n] { Opt_T=0; linenum++;}
+
+
+"//"(.*) {
+    LIST;
+}
+
+[/][*](.|\n)*[*][/] {
+    i=0;
+    LIST;
+    for(;i<yyleng;i++)
+    {
+        if(yytext[i]=='\n')
+            linenum++;
+    }
+}
+
+[\n] {
+    if(Opt_S)
+    {
+        printf("%d: %s\n",linenum,buf);
+    }
+
+    linenum++;
+    memset(buf,0,sizeof(char)*256);
+    buf[0]='\0';
+}
+
+" " {
+    LIST;
+}
+
+. {
+    printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
+}
+%%
+int main( int argc, char **argv )
+{
+  if( argc != 2 )
+  {
+    fprintf( stderr, "Usage: ./scanner [filename]\n" );
+    exit(0);
+  }
+
+  FILE *fp = fopen( argv[1], "r" );
+  if( fp == NULL ) {
+    fprintf( stderr, "Open file error\n" );
+    exit(-1);
+  }
+
+  yyin = fp;
+  //buf[0]='\0';
+  yylex();
+
+  exit(0);
+}
