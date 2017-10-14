@@ -19,11 +19,11 @@
 5:     print "hello world";
 <string: hello world with " string parenthesis in the middle>
 6:     "hello world with "" string parenthesis in the middle"
-7: 
+7:
 8:     // this is a comment // line */ /* with some /* delimiters */ before the end
 10:     /* this is a comment // line with some /* and
     // delimiters */
-11: 
+11:
 <string: hello world with " string parenthesis" in the wsofuhwfpuh "  middle>
 12:     "hello world with "" string parenthesis"" in the wsofuhwfpuh ""  middle"
 error at line 13: bad character ""ILLEGAL STRING VERSION 1"""
@@ -36,145 +36,146 @@ error at line 15: bad character ""ILLEGAL " STRING VERSION 3""
 <string: ILLEGAL  STRING VERSION 3>
 15:     "ILLEGAL " STRING VERSION 3"
 error at line 16: bad character """
-16:     
+16:
 error at line 17: bad character """""
 <string: >
 17:     """
-19:     a := 1+1;
-20: 
-21:     b := 1.23;
-26:     b := b*1.23e-1;
-27:     b := b*1.23e+1456456465;
-28:     b := b*1.23e;
+<string: AA>
+18:     "AA"
+20:     a := 1+1;
+21:
+22:     b := 1.23;
+27:     b := b*1.23e-1;
+28:     b := b*1.23e+1456456465;
+29:     b := b*1.23e;
 <KWend>
 <KWif>
-30:     end if
-31: 
+31:     end if
+32:
 <id: d>
 <:=>
-error at line 32: bad character ""2""
+error at line 33: bad character ""2""
 <integer: 9>
 <;>
-32:     d := 9;
+33:     d := 9;
 <id: d>
 <:=>
-error at line 33: bad character """
+error at line 34: bad character """
 <integer: 29>
 <;>
-33:     d := 29;
+34:     d := 29;
 <id: d>
 <:=>
-error at line 34: bad character ""2"2""
+error at line 35: bad character ""2"2""
 <integer: 9>
 <;>
-34:     d := 9;
+35:     d := 9;
 <id: d>
 <:=>
-error at line 35: bad character """995995""
+error at line 36: bad character """995995""
 <string: 995995>
 <;>
-35:     d := ""995995";
+36:     d := ""995995";
 <id: d>
 <:=>
 <integer: 234>
 <)>
 <*>
-error at line 36: bad character "&"
-error at line 36: bad character "%"
+error at line 37: bad character "&"
+error at line 37: bad character "%"
 <(>
-error at line 36: bad character "&"
-error at line 36: bad character "^"
-error at line 36: bad character "%"
-error at line 36: bad character "@"
+error at line 37: bad character "&"
+error at line 37: bad character "^"
+error at line 37: bad character "%"
+error at line 37: bad character "@"
 <*>
-error at line 36: bad character "&"
-error at line 36: bad character "^"
-error at line 36: bad character "@"
-error at line 36: bad character "#"
-error at line 36: bad character "!"
-error at line 36: bad character "%"
+error at line 37: bad character "&"
+error at line 37: bad character "^"
+error at line 37: bad character "@"
+error at line 37: bad character "#"
+error at line 37: bad character "!"
+error at line 37: bad character "%"
 <*>
-error at line 36: bad character "&"
-error at line 36: bad character "^"
-error at line 36: bad character "@"
-error at line 36: bad character "#"
-error at line 36: bad character "%"
+error at line 37: bad character "&"
+error at line 37: bad character "^"
+error at line 37: bad character "@"
+error at line 37: bad character "#"
+error at line 37: bad character "%"
 <*>
-error at line 36: bad character "&"
-error at line 36: bad character "@"
-error at line 36: bad character "!"
-error at line 36: bad character "^"
-error at line 36: bad character "#"
-error at line 36: bad character "%"
+error at line 37: bad character "&"
+error at line 37: bad character "@"
+error at line 37: bad character "!"
+error at line 37: bad character "^"
+error at line 37: bad character "#"
+error at line 37: bad character "%"
 <*>
-error at line 36: bad character "&"
-error at line 36: bad character "@"
-error at line 36: bad character "!"
-error at line 36: bad character "#"
-error at line 36: bad character "^"
-error at line 36: bad character "%"
-error at line 36: bad character "@"
-error at line 36: bad character "!"
+error at line 37: bad character "&"
+error at line 37: bad character "@"
+error at line 37: bad character "!"
+error at line 37: bad character "#"
+error at line 37: bad character "^"
+error at line 37: bad character "%"
+error at line 37: bad character "@"
+error at line 37: bad character "!"
 <*>
-error at line 36: bad character "&"
-error at line 36: bad character "#"
-error at line 36: bad character "^"
-error at line 36: bad character "%"
-error at line 36: bad character "!"
-error at line 36: bad character "@"
+error at line 37: bad character "&"
+error at line 37: bad character "#"
+error at line 37: bad character "^"
+error at line 37: bad character "%"
+error at line 37: bad character "!"
+error at line 37: bad character "@"
 <(>
-error at line 36: bad character "&"
-error at line 36: bad character "#"
-error at line 36: bad character "^"
-error at line 36: bad character "%"
-error at line 36: bad character "!"
-error at line 36: bad character "@"
+error at line 37: bad character "&"
+error at line 37: bad character "#"
+error at line 37: bad character "^"
+error at line 37: bad character "%"
+error at line 37: bad character "!"
+error at line 37: bad character "@"
 <)>
 <(>
 <*>
-error at line 36: bad character "#"
-error at line 36: bad character "&"
-error at line 36: bad character "^"
-error at line 36: bad character "$"
+error at line 37: bad character "#"
+error at line 37: bad character "&"
+error at line 37: bad character "^"
+error at line 37: bad character "$"
 <*>
 <)>
 <(>
-error at line 36: bad character "#"
-error at line 36: bad character "!"
-error at line 36: bad character "^"
-error at line 36: bad character "$"
-error at line 36: bad character "&"
+error at line 37: bad character "#"
+error at line 37: bad character "!"
+error at line 37: bad character "^"
+error at line 37: bad character "$"
+error at line 37: bad character "&"
 <*>
-error at line 36: bad character "#"
-error at line 36: bad character "!"
-error at line 36: bad character "^"
-error at line 36: bad character "$"
+error at line 37: bad character "#"
+error at line 37: bad character "!"
+error at line 37: bad character "^"
+error at line 37: bad character "$"
 <(>
 <*>
 <)>
-error at line 36: bad character "!"
-error at line 36: bad character "&"
-error at line 36: bad character "#"
-error at line 36: bad character "^"
-error at line 36: bad character "$"
-error at line 36: bad character "!"
-error at line 36: bad character "&"
+error at line 37: bad character "!"
+error at line 37: bad character "&"
+error at line 37: bad character "#"
+error at line 37: bad character "^"
+error at line 37: bad character "$"
+error at line 37: bad character "!"
+error at line 37: bad character "&"
 <*>
 <(>
-error at line 36: bad character "#"
-error at line 36: bad character "$"
-error at line 36: bad character "^"
-error at line 36: bad character "!"
+error at line 37: bad character "#"
+error at line 37: bad character "$"
+error at line 37: bad character "^"
+error at line 37: bad character "!"
 <(>
 <*>
-error at line 36: bad character "&"
-error at line 36: bad character "$"
-error at line 36: bad character "^"
+error at line 37: bad character "&"
+error at line 37: bad character "$"
+error at line 37: bad character "^"
 <)>
 <)>
 <)>
 <)>
-36:     d := 234)*(*****()(**)(*(*)*((*))))
+37:     d := 234)*(*****()(**)(*(*)*((*))))
 <KWend>
-37: end
-
+38: end
