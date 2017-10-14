@@ -9,6 +9,8 @@
     /* this is a comment // line with some /* and
     // delimiters */
 
+    /*this is a tricky aommand */ wefwef*/
+    /*first comments */   /*second comment*/
     "hello world with "" string parenthesis"" in the wsofuhwfpuh ""  middle"
     "ILLEGAL STRING VERSION 1""
     ""ILLEGAL STRING VERSION 2"
