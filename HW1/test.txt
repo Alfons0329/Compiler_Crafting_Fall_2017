@@ -15,6 +15,7 @@
     "ILLEGAL " STRING VERSION 3"
     "
     """
+    "AA"
 //&T-
     a := 1+1;
 
