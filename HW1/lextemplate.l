@@ -1,3 +1,4 @@
+
 %{
 #define LIST               strcat(buf, yytext)
 #define token(t)           {LIST; if (Opt_T) printf("<%s>\n", #t);}
@@ -11,6 +12,8 @@ int Opt_T = 1;
 int linenum = 1;
 int i=0;
 int buf_idx=0;
+int is_comment = 0;
+int pre_line = 0;
 char buf[MAX_LINE_LENG];
 char yytext_arr[MAX_LINE_LENG];
 char answer_buf[MAX_LINE_LENG];
@@ -22,6 +25,26 @@ integer [-]?[1-9][0-9]*
 
 float_num [+-]?[0-9]+\.[0-9]+
 %%
+
+"//"(.*) {
+    printf("<A C++ style comment>\n");
+    is_comment=1;
+    pre_line=linenum;
+    LIST;
+}
+([/][*]([^*]|[\r\n]|[*]+[^/][\r\n]|[/][*])*[*]+[/]) {
+    printf("<A C style comment>\n");
+    i=0;
+    is_comment=1;
+    pre_line=linenum;
+    LIST;
+    for(;i<yyleng;i++)
+    {
+        if(yytext[i]=='\n')
+            linenum++;
+    }
+}
+
 "," {tokenChar(','); }
 ";" {tokenChar(';'); }
 ":" {tokenChar(':'); }
@@ -126,26 +149,20 @@ float_num [+-]?[0-9]+\.[0-9]+
 "//&T-"(.)*[\n] { Opt_T=0; linenum++;}
 
 
-"//"(.*) {
-    LIST;
-}
-
-[/][*]([^*]|[\r\n]|[*]+[^/][\r\n])*[*]+[/] {
-    i=0;
-    LIST;
-    for(;i<yyleng;i++)
-    {
-        if(yytext[i]=='\n')
-            linenum++;
-    }
-}
-
 [\n] {
     if(Opt_S)
     {
-        printf("%d: %s\n",linenum,buf);
-    }
 
+        if(is_comment)
+        {
+            printf("%d: %s\n",pre_line,buf);
+            is_comment=0;
+        }
+        else
+        {
+            printf("%d: %s\n",linenum,buf);
+        }
+    }
     linenum++;
     memset(buf,0,sizeof(char)*256);
     buf[0]='\0';
