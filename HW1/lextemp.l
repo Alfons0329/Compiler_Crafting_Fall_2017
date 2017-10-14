@@ -1,86 +1,96 @@
 %{
 #define LIST MAX_LINE_LENG strcat ( buf , yytext )
-#define token ( t ) { LIST ; if ( Opt_T ) printf ( " <%s>\ n " , # t );}
-#define tokenChar ( t )  { LIST ; if ( Opt_T ) printf ( " <%c>\ n " , ( t ));}
-#define tokenInteger (t , i ) { LIST ; if ( Opt_T ) printf ( " <%s : %d>\ n " , #t , ( i ));}
-#define tokenString (t , s ) { LIST ; if ( Opt_T ) printf ( " <%s : %s>\ n " , #t , ( s ));}
+#define token ( t ) { LIST ; if ( Opt_T ) printf ( " <%s> \n " , # t );}
+#define tokenChar ( t )  { LIST ; if ( Opt_T ) printf ( " <%c> \n " , ( t ));}
+#define tokenInteger (t , i ) { LIST ; if ( Opt_T ) printf ( " <%s : %d> \n " , #t , ( i ));}
+#define tokenString (t , s ) { LIST ; if ( Opt_T ) printf ( " <%s : %s> \n " , #t , ( s ));}
 #define MAX_LINE_LENG 256
 int Opt_S = 1;
 int Opt_T = 1;
 int linenum = 1;
-char buf [ MAX_LINE_LENG ];
+char buf[MAX_LINE_LENG];
+buf[0]='\0';
 
-oct_integer [0][1-9]*
-integer [1-9][0-9]*
+oct_integer [-]?[0][1-9]*
+integer [-]?[1-9][0-9]*
 
-float_num [0-9]+'.'[0-9]+
+float_num [+-]?[0-9]+\.[0-9]+
 
 %}
+
 %%
-',' {tokenChar(',');}
-';' {tokenChar(';');}
-':' {tokenChar(':');}
-'(' {tokenChar('(');}
-')' {tokenChar(')');}
-'[' {tokenChar('[');}
-']' {tokenChar(']');}
+"," {tokenChar(','); strcat(buf,yytext);}
+";" {tokenChar(';'); strcat(buf,yytext);}
+":" {tokenChar(':'); strcat(buf,yytext);}
+"(" {tokenChar('('); strcat(buf,yytext);}
+")" {tokenChar(')'); strcat(buf,yytext);}
+"[" {tokenChar('['); strcat(buf,yytext);}
+"]" {tokenChar(']'); strcat(buf,yytext);}
+"+" {tokenChar('+'); strcat(buf,yytext);}
+"-" {tokenChar('-'); strcat(buf,yytext);}
+"*" {tokenChar('*'); strcat(buf,yytext);}
+"/" {tokenChar('/'); strcat(buf,yytext);}
+"mod" {token("mod"); strcat(buf,yytext);}
+":="   {token(":="); strcat(buf,yytext);}
+("<"|"<="|"<>"|">="|">"|"=") {token(yytext);strcat(buf,yytext);}
+("and"|"or"|"not"){token(yytext);strcat(buf,yytext);}
 
-'+' {tokenChar('+');}
-'-' {tokenChar('-');}
-'*' {tokenChar('*');}
-'/' {tokenChar('/');}
-"mod" {token(yytext);}
-":=" {token(":=");}
-("<"|"<="|"<>"|">="|">"|"=") {token(yytext);}
-("and"|"or"|"not"){token(yytext);}
+"begin"     {token(KWbegin);strcat(buf,yytext);}
+"array"     {token(KWarray);strcat(buf,yytext);}
+"boolean"   {token(KWboolean);strcat(buf,yytext);}
+"def"       {token(KWdef);strcat(buf,yytext);}
+"do"        {token(KWdo);strcat(buf,yytext);}
+"else"      {token(KWelse);strcat(buf,yytext);}
+"end"       {token(KWend);strcat(buf,yytext);}
+"false"     {token(KWfalse);strcat(buf,yytext);}
+"for"       {token(KWfor);strcat(buf,yytext);}
+"integer"   {token(KWinteger);strcat(buf,yytext);}
+"if"        {token(KWif);strcat(buf,yytext);}
+"of"        {token(KWof);strcat(buf,yytext);}
+"print"     {token(KWprint);strcat(buf,yytext);}
+"read"      {token(KWread);strcat(buf,yytext);}
+"real"      {token(KWreal);strcat(buf,yytext);}
+"string"    {token(KWstring);strcat(buf,yytext);}
+"then"      {token(KWthen);strcat(buf,yytext);}
+"to"        {token(KWto);strcat(buf,yytext);}
+"true"      {token(KWtrue);strcat(buf,yytext);}
+"return"    {token(KWreturn);strcat(buf,yytext);}
+"var"       {token(KWvar);strcat(buf,yytext);}
+"while"     {token(KWwhile);strcat(buf,yytext);}
 
-"begin" {token(KWbegin); printf("%d: begin\n",linenum);}
-"array" {token(KWarray); printf("%d: array\n",linenum);}
-"boolean" {token(KWboolean); printf("%d: boolean\n",linenum);}
-"def" {token(KWdef); printf("%d: def\n",linenum);}
-"do" {token(KWdo); printf("%d: do\n",linenum);}
-"else" {token(KWelse); printf("%d: else\n",linenum);}
-"end" {token(KWend); printf("%d: end\n",linenum);}
-"false" {token(KWfalse); printf("%d: false\n",linenum);}
-"for" {token(KWfor); printf("%d: for\n",linenum);}
-"integer" {token(KWinteger); printf("%d: integer\n",linenum);}
-"if" {token(KWif); printf("%d: if\n",linenum);}
-"of" {token(KWof); printf("%d: of\n",linenum);}
-"print" {token(KWprint); printf("%d: print\n",linenum);}
-"read" {token(KWread); printf("%d: read\n",linenum);}
-"real" {token(KWreal); printf("%d: real\n",linenum);}
-"string" {token(KWstring); printf("%d: string\n",linenum);}
-"then" {token(KWthen); printf("%d: then\n",linenum);}
-"to" {token(KWto); printf("%d: to\n",linenum);}
-"true" {token(KWtrue); printf("%d: true\n",linenum);}
-"return" {token(KWreturn); printf("%d: return\n",linenum);}
-"var" {token(KWvar); printf("%d: var\n",linenum);}
-"while" {token(KWwhile); printf("%d: while\n",linenum);}
+[a-zA-Z_][a-zA-Z_0-9]* {tokenString(id,yytext);strcat(buf,yytext);}
 
-[a-zA-Z_][a-zA-Z_0-9]* {tokenString(id,yytext);}
+{oct_integer}   {tokenInteger("oct_integer",strtol(yytext,NULL));strcat(buf,yytext);}
+{integer}       {tokenInteger("integer",strtol(yytext,NULL));strcat(buf,yytext);}
 
-{oct_integer} {tokenInteger("oct_integer",strtol(yytext,NULL));}
-{integer} {tokenInteger("integer",strtol(yytext,NULL));}
+{float_num}     {token(strtof(yytext,NULL));strcat(buf,yytext);}
 
-{float_num} {token(strtof(yytext,NULL))}
+[-]?({integer}|{float_num})'E'[+-]?({integer}) {token("scientific: ",yytext);strcat(buf,yytext);}
 
-[+-]?({integer}|{float_num})'E'('+'|'-')?({integer})
-
-'"'(.)*'"'
+\"(.)*\"
 {
-    char yytext_arr[]= yytext
-    char answer_buf[10000]={0};
+    strcat(buf,yytext);
+    char yytext_arr[]= yytext;
+    char answer_buf[256]={0};
     for(int i=0,buf_idx=0;i<yyleng-1;)
     {
         if(!i)
         {
             i++;
         }
-        else if(yytext_arr[i]=='"'&&yytext_arr[i+1]=='"')
+        else if(yytext_arr[i]=='"')
         {
-            answer_buf[buf_idx]=yytext_arr[i];
-            i+=2;
-            buf_idx++;
+            if(i==(yleng-2))
+            {
+                printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
+                exit(EXIT_FAILURE);
+            }
+            else if(yytext_arr[i+1]=='"')
+            {
+                answer_buf[buf_idx]=yytext_arr[i];
+                i+=2;
+                buf_idx++;
+            }
         }
         else
         {
@@ -90,12 +100,54 @@ float_num [0-9]+'.'[0-9]+
         }
     }
 }
+
+" " ;
+
+"//&S+" {Opt_S=1;}
+
+"//&S-" {Opt_S=0;}
+
+"//&T+" {Opt_T=1;}
+
+"//&T-" {Opt_T=0;}
+
+
+\/\/(.)*
+{
+    strcat(buf,yytext);
+}
+
+\/\*(.|[\n])*\*\/
+{
+    strcat(buf,yytext);
+    char yytext_arr[]= yytext;
+    for(int i=0;i<yyleng;i++)
+    {
+        if(yytext_arr[i]=='\n')
+            linenum++;
+    }
+}
+
+[\n]
+{
+    printf("%d %s \n",linenum,buf);
+    linenum++;
+    memset(buf,0,sizeof(char)*256);
+    buf[0]='\0';
+}
+
+.
+{
+    printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
+    exit(EXIT_FAILURE);
+}
 %%
+
 int main ( int argc , char ** argv )
 {
-    if ( argc != 2 )
+    if(argc!=2)
     {
-        fprintf ( stderr , " Usage : ./ scanner [ filename ]\ n " );
+        fprintf( stderr , " Usage : ./ scanner [ filename ] \n " );
         exit (0);
     }
     FILE * fp = fopen ( argv [1] , " r " );
