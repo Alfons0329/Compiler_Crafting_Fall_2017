@@ -27,13 +27,13 @@ float_num [-]?[0-9]+\.[0-9]+
 %%
 
 "//"(.*) {
-    printf("<A C++ style comment>\n");
+    
     is_comment=1;
     pre_line=linenum;
     LIST;
 }
-([/][*]([^*]|[\n]|[*]+[^/][\n]|[/][*])*[*]+[/]) {
-    printf("<A C style comment>\n");
+([/][*]([^*]|[\n]|[*]+[^/]|[/][*])*[*]+[/]) {
+
     i=0;
     is_comment=1;
     pre_line=linenum;
@@ -85,9 +85,15 @@ float_num [-]?[0-9]+\.[0-9]+
 "var"       {token(KWvar);}
 "while"     {token(KWwhile);}
 
-["]?([0-9]+["])+ {printf("error at line %d: bad character \"%s\"\n",linenum,yytext); }
+["]?([0-9]+["])+ {
+    printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
+    exit(EXIT_FAILURE);
+}
 
-[0-9]+[a-zA-Z_] {printf("error at line %d: bad character \"%s\"\n",linenum,yytext); }
+[0-9]+[a-zA-Z_] {
+    printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
+    exit(EXIT_FAILURE);
+}
 [a-zA-Z]([a-zA-Z_]|[0-9])* {tokenString(id,yytext);}
 
 [-]?[0-9]+[.]?[0-9]+[E|e][+|-]?[0-9]+ {tokenString(scientific ,yytext);}
@@ -113,6 +119,7 @@ float_num [-]?[0-9]+\.[0-9]+
             if(i==(yyleng-2))
             {
                 printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
+                exit(EXIT_FAILURE);
                 break;
             }
             else if(yytext[i+1]=='"')
@@ -124,6 +131,7 @@ float_num [-]?[0-9]+\.[0-9]+
             else
             {
                 printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
+                exit(EXIT_FAILURE);
                 i++;
             }
         }
@@ -177,6 +185,7 @@ float_num [-]?[0-9]+\.[0-9]+
 
 . {
     printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
+    exit(EXIT_FAILURE);
 }
 %%
 int main( int argc, char **argv )
