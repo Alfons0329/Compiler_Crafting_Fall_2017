@@ -37,7 +37,7 @@ $ ./scanner [filename]
 (8) String Constants<br />
 (9) Control character [\n]<br />
 
-* Able to discard the unnecessary elements, but still to the necessary processing
+* Able to discard the unnecessary elements, but still to the necessary processing<br />
 (1) Whitespace and tab[\r]
 	Use the LIST function in lex template to do the source code indentation
 	correctly<br />
@@ -51,9 +51,10 @@ $ ./scanner [filename]
 	However, /*this is a tricky comment*/  this part is not considered to be a 	comment but some identifiers*/ is not a legal comment (the part between */ 	and */ is not the part of c style comment
 
 	// this is a comment // line */ /* with some /* delimiters */ before the end is a 	legal c style comments*<br />
-
-(3) Pseudocomments
+(3)Pseudocomments
 	Detect and use them to activate/deactive the function in lex scanner.<br />
+
+
 
 * Testcases are the following
 I use the following tricky testcase to test my scanner.
@@ -70,7 +71,7 @@ which will specify only one comment since lex uses greedy method(or say greedy a
 ```
 [/][*]([^*]|[\n]|[*]+[^/]|[/][*])*[*]+[/]
 ```
-which means
+which means<br />
 (1) We may not permit the star symbol in the middle (or we may, but the star symbol CANNOT BE FOLLOWED BY THE SLASH since the slash symbol only appears at the end of the comments.<br />
 
 (2) The \n new line symbol is legal in the c style comment<br />
