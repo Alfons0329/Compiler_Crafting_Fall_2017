@@ -32,27 +32,28 @@
 <*>
 </>
 12:     /*this is a tricky aommand */ wefwef*/
+13:
 <A C style comment>
 <A C style comment>
-13:     /*first comments */   /*second comment*/
+14:     /*first comments */   /*second comment*/
 <string: hello world with " string parenthesis" in the wsofuhwfpuh "  middle>
-14:     "hello world with "" string parenthesis"" in the wsofuhwfpuh ""  middle"
-error at line 15: bad character ""ILLEGAL STRING VERSION 1"""
+15:     "hello world with "" string parenthesis"" in the wsofuhwfpuh ""  middle"
+error at line 16: bad character ""ILLEGAL STRING VERSION 1"""
 <string: ILLEGAL STRING VERSION 1>
-15:     "ILLEGAL STRING VERSION 1""
-error at line 16: bad character """ILLEGAL STRING VERSION 2""
+16:     "ILLEGAL STRING VERSION 1""
+error at line 17: bad character """ILLEGAL STRING VERSION 2""
 <string: ILLEGAL STRING VERSION 2>
-16:     ""ILLEGAL STRING VERSION 2"
-error at line 17: bad character ""ILLEGAL " STRING VERSION 3""
+17:     ""ILLEGAL STRING VERSION 2"
+error at line 18: bad character ""ILLEGAL " STRING VERSION 3""
 <string: ILLEGAL  STRING VERSION 3>
-17:     "ILLEGAL " STRING VERSION 3"
-error at line 18: bad character """
-18:
-error at line 19: bad character """""
+18:     "ILLEGAL " STRING VERSION 3"
+error at line 19: bad character """
+19:
+error at line 20: bad character """""
 <string: >
-19:     """
+20:     """
 <string: AA>
-20:     "AA"
+21:     "AA"
 <id: c>
 <:=>
 <float: 1.23>
@@ -60,157 +61,160 @@ error at line 19: bad character """""
 <float: 5.456>
 <+>
 <float: 123.6667>
-21:     c:= 1.23+5.456+123.6667
-22:
+22:     c:= 1.23+5.456+123.6667
+23:
 <KWif>
 <id: a>
 <>>
-<oct_integer: 1>
+<oct_integer: 01>
 <KWthen>
 <A C style comment>
-23:     if a > 01 then  /*this is a octal number*/
+24:     if a > 01 then  /*this is a octal number*/
 <KWif>
 <id: a>
 <>>
-<oct_integer: -1824776898>
+<oct_integer: 01123456654654>
 <KWthen>
 <A C++ style comment>
-24:     if a > 01123456654654 then //this is also an octal number
-26:     a := 1+1;
-27:
-28:     b := 1.23;
-29:
-34:     b := b*1.23e-1;
-35:     b := b*1.23e+1456456465;
-36:     b := b*1.23e;
+25:     if a > 01123456654654 then //this is also an octal number
+26: //&T-
+27:     a := 1+1;
+28:
+29:     b := 1.23;
+30:
+34: //&S+S-S+S-
+35:     b := b*1.23e-1;
+36:     b := b*1.23e+1456456465;
+37:     b := b*1.23e;
+38: //&T+
 <KWend>
 <KWif>
-38:     end if
-39:
+39:     end if
+40:
 <id: d>
 <:=>
-error at line 40: bad character ""2""
+error at line 41: bad character ""2""
 <integer: 9>
 <;>
-40:     d := 9;
+41:     d := 9;
 <id: d>
 <:=>
-error at line 41: bad character """
+error at line 42: bad character """
 <integer: 29>
 <;>
-41:     d := 29;
+42:     d := 29;
 <id: d>
 <:=>
-error at line 42: bad character ""2"2""
+error at line 43: bad character ""2"2""
 <integer: 9>
 <;>
-42:     d := 9;
+43:     d := 9;
 <id: d>
 <:=>
-error at line 43: bad character """995995""
+error at line 44: bad character """995995""
 <string: 995995>
 <;>
-43:     d := ""995995";
+44:     d := ""995995";
 <id: d>
 <:=>
 <integer: 234>
 <)>
 <*>
-error at line 44: bad character "&"
-error at line 44: bad character "%"
+error at line 45: bad character "&"
+error at line 45: bad character "%"
 <(>
-error at line 44: bad character "&"
-error at line 44: bad character "^"
-error at line 44: bad character "%"
-error at line 44: bad character "@"
+error at line 45: bad character "&"
+error at line 45: bad character "^"
+error at line 45: bad character "%"
+error at line 45: bad character "@"
 <*>
-error at line 44: bad character "&"
-error at line 44: bad character "^"
-error at line 44: bad character "@"
-error at line 44: bad character "#"
-error at line 44: bad character "!"
-error at line 44: bad character "%"
+error at line 45: bad character "&"
+error at line 45: bad character "^"
+error at line 45: bad character "@"
+error at line 45: bad character "#"
+error at line 45: bad character "!"
+error at line 45: bad character "%"
 <*>
-error at line 44: bad character "&"
-error at line 44: bad character "^"
-error at line 44: bad character "@"
-error at line 44: bad character "#"
-error at line 44: bad character "%"
+error at line 45: bad character "&"
+error at line 45: bad character "^"
+error at line 45: bad character "@"
+error at line 45: bad character "#"
+error at line 45: bad character "%"
 <*>
-error at line 44: bad character "&"
-error at line 44: bad character "@"
-error at line 44: bad character "!"
-error at line 44: bad character "^"
-error at line 44: bad character "#"
-error at line 44: bad character "%"
+error at line 45: bad character "&"
+error at line 45: bad character "@"
+error at line 45: bad character "!"
+error at line 45: bad character "^"
+error at line 45: bad character "#"
+error at line 45: bad character "%"
 <*>
-error at line 44: bad character "&"
-error at line 44: bad character "@"
-error at line 44: bad character "!"
-error at line 44: bad character "#"
-error at line 44: bad character "^"
-error at line 44: bad character "%"
-error at line 44: bad character "@"
-error at line 44: bad character "!"
+error at line 45: bad character "&"
+error at line 45: bad character "@"
+error at line 45: bad character "!"
+error at line 45: bad character "#"
+error at line 45: bad character "^"
+error at line 45: bad character "%"
+error at line 45: bad character "@"
+error at line 45: bad character "!"
 <*>
-error at line 44: bad character "&"
-error at line 44: bad character "#"
-error at line 44: bad character "^"
-error at line 44: bad character "%"
-error at line 44: bad character "!"
-error at line 44: bad character "@"
+error at line 45: bad character "&"
+error at line 45: bad character "#"
+error at line 45: bad character "^"
+error at line 45: bad character "%"
+error at line 45: bad character "!"
+error at line 45: bad character "@"
 <(>
-error at line 44: bad character "&"
-error at line 44: bad character "#"
-error at line 44: bad character "^"
-error at line 44: bad character "%"
-error at line 44: bad character "!"
-error at line 44: bad character "@"
+error at line 45: bad character "&"
+error at line 45: bad character "#"
+error at line 45: bad character "^"
+error at line 45: bad character "%"
+error at line 45: bad character "!"
+error at line 45: bad character "@"
 <)>
 <(>
 <*>
-error at line 44: bad character "#"
-error at line 44: bad character "&"
-error at line 44: bad character "^"
-error at line 44: bad character "$"
+error at line 45: bad character "#"
+error at line 45: bad character "&"
+error at line 45: bad character "^"
+error at line 45: bad character "$"
 <*>
 <)>
 <(>
-error at line 44: bad character "#"
-error at line 44: bad character "!"
-error at line 44: bad character "^"
-error at line 44: bad character "$"
-error at line 44: bad character "&"
+error at line 45: bad character "#"
+error at line 45: bad character "!"
+error at line 45: bad character "^"
+error at line 45: bad character "$"
+error at line 45: bad character "&"
 <*>
-error at line 44: bad character "#"
-error at line 44: bad character "!"
-error at line 44: bad character "^"
-error at line 44: bad character "$"
+error at line 45: bad character "#"
+error at line 45: bad character "!"
+error at line 45: bad character "^"
+error at line 45: bad character "$"
 <(>
 <*>
 <)>
-error at line 44: bad character "!"
-error at line 44: bad character "&"
-error at line 44: bad character "#"
-error at line 44: bad character "^"
-error at line 44: bad character "$"
-error at line 44: bad character "!"
-error at line 44: bad character "&"
+error at line 45: bad character "!"
+error at line 45: bad character "&"
+error at line 45: bad character "#"
+error at line 45: bad character "^"
+error at line 45: bad character "$"
+error at line 45: bad character "!"
+error at line 45: bad character "&"
 <*>
 <(>
-error at line 44: bad character "#"
-error at line 44: bad character "$"
-error at line 44: bad character "^"
-error at line 44: bad character "!"
+error at line 45: bad character "#"
+error at line 45: bad character "$"
+error at line 45: bad character "^"
+error at line 45: bad character "!"
 <(>
 <*>
-error at line 44: bad character "&"
-error at line 44: bad character "$"
-error at line 44: bad character "^"
+error at line 45: bad character "&"
+error at line 45: bad character "$"
+error at line 45: bad character "^"
 <)>
 <)>
 <)>
 <)>
-44:     d := 234)*(*****()(**)(*(*)*((*))))
+45:     d := 234)*(*****()(**)(*(*)*((*))))
 <KWend>
-45: end
+46: end
