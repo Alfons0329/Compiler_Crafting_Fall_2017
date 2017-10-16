@@ -20,20 +20,20 @@ char answer_buf[MAX_LINE_LENG];
 %}
 
 
-oct_integer [-]?[0][1-9]*
+oct_integer [-]?[0][0-9]+
 integer [-]?[1-9][0-9]*
 
 float_num [-]?[0-9]+\.[0-9]+
 %%
 
 "//"(.*) {
-
+    printf("<A C++ style comment>\n");
     is_comment=1;
     pre_line=linenum;
     LIST;
 }
-([/][*]([^*]|[\n]|[*]+[^/]|[/][*])*[*]+[/]) {
-
+([/][*]([^*]|[\n]|[*]+[^/][\n]|[/][*])*[*]+[/]) {
+    printf("<A C style comment>\n");
     i=0;
     is_comment=1;
     pre_line=linenum;
@@ -88,17 +88,17 @@ float_num [-]?[0-9]+\.[0-9]+
 ["]?([0-9]+["])+ {
     printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
     exit(EXIT_FAILURE);
-}
+ }
 
-[0-9]+[a-zA-Z_]* {
+[0-9]+[a-zA-Z_]+ {
     printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
     exit(EXIT_FAILURE);
-}
+ }
 [a-zA-Z]([a-zA-Z_]|[0-9])* {tokenString(id,yytext);}
 
 [-]?[0-9]+[.]?[0-9]+[E|e][+|-]?[0-9]+ {tokenString(scientific ,yytext);}
 
-{oct_integer}   {tokenInteger(oct_integer ,strtol(yytext,NULL,10));}
+{oct_integer}   {tokenString(oct_integer ,yytext);}
 {integer}       {tokenInteger(integer ,strtol(yytext,NULL,10));}
 
 {float_num}     {tokenString(float ,yytext);}
@@ -120,6 +120,7 @@ float_num [-]?[0-9]+\.[0-9]+
             {
                 printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
                 exit(EXIT_FAILURE);
+
                 break;
             }
             else if(yytext[i+1]=='"')
@@ -132,6 +133,7 @@ float_num [-]?[0-9]+\.[0-9]+
             {
                 printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
                 exit(EXIT_FAILURE);
+
                 i++;
             }
         }
@@ -148,13 +150,36 @@ float_num [-]?[0-9]+\.[0-9]+
     memset(answer_buf,0,sizeof(char)*256);
 }
 
-"//&S+"(.)*[\n] { Opt_S=1; linenum++;}
+"//&S+"(.)*[\n] {
+    Opt_S=1;
+    printf("%d: %s",linenum,yytext);
+    linenum++;
+    memset(buf,0,sizeof(char)*256);
+    buf[0]='\0';
+}
 
-"//&S-"(.)*[\n] { Opt_S=0; linenum++;}
+"//&S-"(.)*[\n] {
+    Opt_S=0;
+    linenum++;
+    memset(buf,0,sizeof(char)*256);
+    buf[0]='\0';
+}
 
-"//&T+"(.)*[\n] { Opt_T=1; linenum++;}
+"//&T+"(.)*[\n] {
+    Opt_T=1;
+    printf("%d: %s",linenum,yytext);
+    linenum++;
+    memset(buf,0,sizeof(char)*256);
+    buf[0]='\0';
+}
 
-"//&T-"(.)*[\n] { Opt_T=0; linenum++;}
+"//&T-"(.)*[\n] {
+    Opt_T=0;
+    printf("%d: %s",linenum,yytext);
+    linenum++;
+    memset(buf,0,sizeof(char)*256);
+    buf[0]='\0';
+}
 
 
 [\n] {
@@ -186,6 +211,7 @@ float_num [-]?[0-9]+\.[0-9]+
 . {
     printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
     exit(EXIT_FAILURE);
+
 }
 %%
 int main( int argc, char **argv )
