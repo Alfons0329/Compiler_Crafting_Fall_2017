@@ -87,7 +87,7 @@ float_num [-]?[0-9]+\.[0-9]+
 
 ["]?([0-9]+["])+ {printf("error at line %d: bad character \"%s\"\n",linenum,yytext); }
 
-[0-9]+[a-zA-Z_] {printf("error at line %d: bad character \"%s\"\n",linenum,yytext); }
+[0-9]+[a-zA-Z_]* {printf("error at line %d: bad character \"%s\"\n",linenum,yytext); }
 [a-zA-Z]([a-zA-Z_]|[0-9])* {tokenString(id,yytext);}
 
 [-]?[0-9]+[.]?[0-9]+[E|e][+|-]?[0-9]+ {tokenString(scientific ,yytext);}

@@ -27,7 +27,7 @@ float_num [-]?[0-9]+\.[0-9]+
 %%
 
 "//"(.*) {
-    
+
     is_comment=1;
     pre_line=linenum;
     LIST;
@@ -90,7 +90,7 @@ float_num [-]?[0-9]+\.[0-9]+
     exit(EXIT_FAILURE);
 }
 
-[0-9]+[a-zA-Z_] {
+[0-9]+[a-zA-Z_]* {
     printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
     exit(EXIT_FAILURE);
 }

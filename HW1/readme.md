@@ -26,7 +26,7 @@ $ ./scanner [filename]
 
 ## Lex scanner ability
 
-* Able to detect the necessary elements including.
+* Able to detect the necessary elements including.<br />
 (1) Delimiters <br />
 (2) Arithmetic, Relational, and Logical Operators<br />
 (3) Keywords<br />
