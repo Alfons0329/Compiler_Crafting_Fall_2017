@@ -10,7 +10,8 @@
     // delimiters */
 
     /*this is a tricky aommand */ wefwef*/
-
+    955EBTswgorhg   //ILLEGAL IDENTIFIER
+    789789789_AST_WNG  //ILLEGAL IDENTIFIER
     /*first comments */   /*second comment*/
     "hello world with "" string parenthesis"" in the wsofuhwfpuh ""  middle"
     "ILLEGAL STRING VERSION 1""
