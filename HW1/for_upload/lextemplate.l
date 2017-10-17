@@ -85,14 +85,9 @@ float_num [-]?[0-9]+\.[0-9]+
 "var"       {token(KWvar);}
 "while"     {token(KWwhile);}
 
-["]?([0-9]+["])+ {
-    printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
-    exit(EXIT_FAILURE);
- }
-
 [0-9]+[a-zA-Z_]+ {
     printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
-    exit(EXIT_FAILURE);
+    exit(-1);;
  }
 [a-zA-Z]([a-zA-Z_]|[0-9])* {tokenString(id,yytext);}
 
@@ -105,7 +100,7 @@ float_num [-]?[0-9]+\.[0-9]+
 
 
 
-["](.)*["] {
+["]([^\n"]|["]["])*["] {
     i=0;
     buf_idx=0;
     for(;i<yyleng-1;)
@@ -119,7 +114,7 @@ float_num [-]?[0-9]+\.[0-9]+
             if(i==(yyleng-2))
             {
                 printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
-                exit(EXIT_FAILURE);
+                exit(-1);;
 
                 break;
             }
@@ -132,7 +127,7 @@ float_num [-]?[0-9]+\.[0-9]+
             else
             {
                 printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
-                exit(EXIT_FAILURE);
+                exit(-1);;
 
                 i++;
             }
@@ -148,6 +143,11 @@ float_num [-]?[0-9]+\.[0-9]+
 
     memset(yytext_arr,0,sizeof(char)*256);
     memset(answer_buf,0,sizeof(char)*256);
+}
+
+["] {
+    printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
+    exit(-1);
 }
 
 "//&S+"(.)*[\n] {
@@ -210,7 +210,7 @@ float_num [-]?[0-9]+\.[0-9]+
 
 . {
     printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
-    exit(EXIT_FAILURE);
+    exit(-1);;
 
 }
 %%

@@ -38,20 +38,29 @@
 14:     /*first comments */   /*second comment*/
 <string: hello world with " string parenthesis" in the wsofuhwfpuh "  middle>
 15:     "hello world with "" string parenthesis"" in the wsofuhwfpuh ""  middle"
-error at line 16: bad character ""ILLEGAL STRING VERSION 1"""
 <string: ILLEGAL STRING VERSION 1>
-16:     "ILLEGAL STRING VERSION 1""
-error at line 17: bad character """ILLEGAL STRING VERSION 2""
-<string: ILLEGAL STRING VERSION 2>
-17:     ""ILLEGAL STRING VERSION 2"
-error at line 18: bad character ""ILLEGAL " STRING VERSION 3""
-<string: ILLEGAL  STRING VERSION 3>
-18:     "ILLEGAL " STRING VERSION 3"
+error at line 16: bad character """
+16:     "ILLEGAL STRING VERSION 1"
+<string: ::?!>
+<id: ILLEGAL>
+<id: STRING>
+<id: VERSION>
+<integer: 2>
+error at line 17: bad character """
+17:     "::?!"ILLEGAL STRING VERSION 2
+<string: ILLEGAL >
+<id: STRING>
+<id: VERSION>
+<*>
+</>
+<integer: 3>
+error at line 18: bad character """
+18: "ILLEGAL " STRING VERSION */ 3
 error at line 19: bad character """
 19:
-error at line 20: bad character """""
 <string: >
-20:     """
+error at line 20: bad character """
+20:     ""
 <string: AA>
 21:     "AA"
 <id: c>
@@ -62,7 +71,9 @@ error at line 20: bad character """""
 <+>
 <float: 123.6667>
 22:     c:= 1.23+5.456+123.6667
-23:
+<scientific: 012e+345>
+<A C style comment>
+23:     012e+345 /*this should be scientific */
 <KWif>
 <id: a>
 <>>
@@ -93,10 +104,10 @@ error at line 20: bad character """""
 40:
 <id: d>
 <:=>
-error at line 41: bad character ""2""
+<string: 2>
 <integer: 9>
 <;>
-41:     d := 9;
+41:     d := "2"9;
 <id: d>
 <:=>
 error at line 42: bad character """
@@ -105,16 +116,19 @@ error at line 42: bad character """
 42:     d := 29;
 <id: d>
 <:=>
-error at line 43: bad character ""2"2""
+<string: 2>
+<integer: 2>
+error at line 43: bad character """
 <integer: 9>
 <;>
-43:     d := 9;
+43:     d := "2"29;
 <id: d>
 <:=>
-error at line 44: bad character """995995""
-<string: 995995>
+<string: >
+<integer: 995995>
+error at line 44: bad character """
 <;>
-44:     d := ""995995";
+44:     d := ""995995;
 <id: d>
 <:=>
 <integer: 234>

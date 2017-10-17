@@ -87,12 +87,12 @@ float_num [-]?[0-9]+\.[0-9]+
 
 ["]?([0-9]+["])+ {
     printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
-
+    while(0);
  }
 
 [0-9]+[a-zA-Z_]+ {
     printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
-
+    while(0);
  }
 [a-zA-Z]([a-zA-Z_]|[0-9])* {tokenString(id,yytext);}
 
@@ -105,7 +105,7 @@ float_num [-]?[0-9]+\.[0-9]+
 
 
 
-["](.)*["] {
+["]([^\n"]|["]["])*["] {
     i=0;
     buf_idx=0;
     for(;i<yyleng-1;)
@@ -119,7 +119,7 @@ float_num [-]?[0-9]+\.[0-9]+
             if(i==(yyleng-2))
             {
                 printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
-
+                while(0);
 
                 break;
             }
@@ -132,7 +132,7 @@ float_num [-]?[0-9]+\.[0-9]+
             else
             {
                 printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
-
+                while(0);
 
                 i++;
             }
@@ -210,7 +210,7 @@ float_num [-]?[0-9]+\.[0-9]+
 
 . {
     printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
-
+    while(0);
 
 }
 %%

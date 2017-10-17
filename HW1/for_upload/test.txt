@@ -14,13 +14,13 @@
     /*first comments */   /*second comment*/
     "hello world with "" string parenthesis"" in the wsofuhwfpuh ""  middle"
     "ILLEGAL STRING VERSION 1""
-    ""ILLEGAL STRING VERSION 2"
-    "ILLEGAL " STRING VERSION 3"
+    "::?!"ILLEGAL STRING VERSION 2"
+"ILLEGAL " STRING VERSION */ 3"
     "
     """
     "AA"
     c:= 1.23+5.456+123.6667
-
+    012e+345 /*this should be scientific */
     if a > 01 then  /*this is a octal number*/
     if a > 01123456654654 then //this is also an octal number
 //&T-
