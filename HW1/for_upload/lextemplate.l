@@ -112,7 +112,7 @@ float_num [-]?[0-9]+\.[0-9]+
             if(i==(yyleng-2))
             {
                 printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
-                while(0);
+                exit(-1);
 
                 break;
             }
@@ -125,7 +125,7 @@ float_num [-]?[0-9]+\.[0-9]+
             else
             {
                 printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
-                while(0);
+                exit(-1);
 
                 i++;
             }
@@ -145,7 +145,7 @@ float_num [-]?[0-9]+\.[0-9]+
 
 ["] {
     printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
-    while(0);
+    exit(-1);
 }
 
 "//&S+"(.)*[\n] {
@@ -214,7 +214,7 @@ float_num [-]?[0-9]+\.[0-9]+
 
 . {
     printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
-    while(0);
+    exit(-1);
 
 }
 %%
@@ -229,7 +229,7 @@ int main( int argc, char **argv )
   FILE *fp = fopen( argv[1], "r" );
   if( fp == NULL ) {
     fprintf( stderr, "Open file error\n" );
-    while(0);
+    exit(-1);
   }
 
   yyin = fp;
