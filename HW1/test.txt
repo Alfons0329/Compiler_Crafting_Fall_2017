@@ -24,7 +24,7 @@
     c:= 1.23+5.456+123.6667
     012e+345 /*this should be scientific */
     if a > 01 then  /*this is a octal number*/
-    if a > 01123456654654 then //this is also an octal number
+    if a > 01123456654654 then //this NOT A LEGAL OCTAL INTEGER
 //&T-
     a := 1+1;
 
