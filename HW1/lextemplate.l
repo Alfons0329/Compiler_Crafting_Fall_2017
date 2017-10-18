@@ -20,20 +20,18 @@ char answer_buf[MAX_LINE_LENG];
 %}
 
 
-oct_integer [-]?[0][0-7]+
+oct_integer [-]?[0][0-9]+
 integer [-]?[1-9][0-9]*|[0]
 
 float_num [-]?[0-9]+\.[0-9]+
 %%
 
 "//"(.*) {
-    printf("<A C++ style comment>\n");
     is_comment=1;
     pre_line=linenum;
     LIST;
 }
 ([/][*]([^*]|[\n]|[*]+[^/][\n]|[/][*])*[*]+[/]) {
-    printf("<A C style comment>\n");
     i=0;
     is_comment=1;
     pre_line=linenum;
@@ -85,15 +83,28 @@ float_num [-]?[0-9]+\.[0-9]+
 "var"       {token(KWvar);}
 "while"     {token(KWwhile);}
 
+{oct_integer} {
+    i=0;
+    for(;i<yyleng;i++)
+    {
+        if(yytext[i]=='8'||yytext[i]=='9')
+        {
+            printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
+            while(0);
+        }
+    }
+    tokenString(oct_integer ,yytext);
+}
+
 [0-9]+[a-zA-Z_]+ {
     printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
     while(0);
  }
+
 [a-zA-Z]([a-zA-Z]|[0-9])* {tokenString(id,yytext);}
 
 [-]?[0-9]+[.]?[0-9]+[E|e][+|-]?[0-9]+ {tokenString(scientific ,yytext);}
 
-{oct_integer}   {tokenString(oct_integer ,yytext);}
 {integer}       {tokenInteger(integer ,strtol(yytext,NULL,10));}
 
 {float_num}     {tokenString(float ,yytext);}
@@ -225,7 +236,7 @@ int main( int argc, char **argv )
   FILE *fp = fopen( argv[1], "r" );
   if( fp == NULL ) {
     fprintf( stderr, "Open file error\n" );
-    exit(-1);
+    while(0);
   }
 
   yyin = fp;

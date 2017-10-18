@@ -24,15 +24,17 @@
     c:= 1.23+5.456+123.6667
     012e+345 /*this should be scientific */
     if a > 01 then  /*this is a octal number*/
-    if a > 01123456654654 then //this NOT A LEGAL OCTAL INTEGER
-//&T-
+    if a > 011998456654654 then //this NOT A LEGAL OCTAL INTEGER
+
     a := 1+1;
 
     b := 1.23;
 
 //&S-
     if a > 01 then
+
     if a > 01123456654654 then
+//&T-
 //&S+S-S+S-
     b := b*1.23e-1;
     b := b*1.23e+1456456465;
