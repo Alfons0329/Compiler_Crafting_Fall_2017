@@ -90,7 +90,7 @@ float_num [-]?[0-9]+\.[0-9]+
         if(yytext[i]=='8'||yytext[i]=='9')
         {
             printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
-            exit(-1);
+            while(0);
         }
     }
     tokenString(oct_integer ,yytext);
@@ -98,7 +98,7 @@ float_num [-]?[0-9]+\.[0-9]+
 
 [0-9]+[a-zA-Z_]+ {
     printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
-    exit(-1);
+    while(0);
  }
 
 [a-zA-Z]([a-zA-Z]|[0-9])* {tokenString(id,yytext);}
@@ -125,7 +125,7 @@ float_num [-]?[0-9]+\.[0-9]+
             if(i==(yyleng-2))
             {
                 printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
-                exit(-1);
+                while(0);
 
                 break;
             }
@@ -138,7 +138,7 @@ float_num [-]?[0-9]+\.[0-9]+
             else
             {
                 printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
-                exit(-1);
+                while(0);
 
                 i++;
             }
@@ -158,7 +158,7 @@ float_num [-]?[0-9]+\.[0-9]+
 
 ["] {
     printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
-    exit(-1);
+    while(0);
 }
 
 "//&S+"(.)*[\n] {
@@ -221,7 +221,7 @@ float_num [-]?[0-9]+\.[0-9]+
 
 . {
     printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
-    exit(-1);
+    while(0);
 
 }
 %%
@@ -236,7 +236,7 @@ int main( int argc, char **argv )
   FILE *fp = fopen( argv[1], "r" );
   if( fp == NULL ) {
     fprintf( stderr, "Open file error\n" );
-    exit(-1);
+    while(0);
   }
 
   yyin = fp;

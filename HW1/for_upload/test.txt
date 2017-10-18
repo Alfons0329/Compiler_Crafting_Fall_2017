@@ -2,7 +2,7 @@
     ASDSADASdpfiuhw98798798798 //IDENTIFIER
     begin
     var a : integer;
-    var b : real;
+q   q   q   q 00000000000000000000000000000000000 12.  .02  12.e3   .02e3
     print "hello world";
     "hello world with "" string parenthesis in the middle"
 

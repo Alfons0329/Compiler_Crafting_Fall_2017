@@ -1098,7 +1098,6 @@ YY_RULE_SETUP
 #line 86 "lextemplate.l"
 {
     i=0;
-    printf("Oct integer!! \n");
     for(;i<yyleng;i++)
     {
         if(yytext[i]=='8'||yytext[i]=='9')
@@ -1112,7 +1111,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 100 "lextemplate.l"
+#line 99 "lextemplate.l"
 {
     printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
     while(0);
@@ -1120,27 +1119,27 @@ YY_RULE_SETUP
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 105 "lextemplate.l"
+#line 104 "lextemplate.l"
 {tokenString(id,yytext);}
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 107 "lextemplate.l"
+#line 106 "lextemplate.l"
 {tokenString(scientific ,yytext);}
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 109 "lextemplate.l"
+#line 108 "lextemplate.l"
 {tokenInteger(integer ,strtol(yytext,NULL,10));}
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 111 "lextemplate.l"
+#line 110 "lextemplate.l"
 {tokenString(float ,yytext);}
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 115 "lextemplate.l"
+#line 114 "lextemplate.l"
 {
     i=0;
     buf_idx=0;
@@ -1188,7 +1187,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 160 "lextemplate.l"
+#line 159 "lextemplate.l"
 {
     printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
     while(0);
@@ -1197,7 +1196,7 @@ YY_RULE_SETUP
 case 48:
 /* rule 48 can match eol */
 YY_RULE_SETUP
-#line 165 "lextemplate.l"
+#line 164 "lextemplate.l"
 {
     Opt_S=1;
     printf("%d: %s",linenum,yytext);
@@ -1209,7 +1208,7 @@ YY_RULE_SETUP
 case 49:
 /* rule 49 can match eol */
 YY_RULE_SETUP
-#line 173 "lextemplate.l"
+#line 172 "lextemplate.l"
 {
     Opt_S=0;
     linenum++;
@@ -1220,7 +1219,7 @@ YY_RULE_SETUP
 case 50:
 /* rule 50 can match eol */
 YY_RULE_SETUP
-#line 180 "lextemplate.l"
+#line 179 "lextemplate.l"
 {
     Opt_T=1;
     printf("%d: %s",linenum,yytext);
@@ -1232,7 +1231,7 @@ YY_RULE_SETUP
 case 51:
 /* rule 51 can match eol */
 YY_RULE_SETUP
-#line 188 "lextemplate.l"
+#line 187 "lextemplate.l"
 {
     Opt_T=0;
     printf("%d: %s",linenum,yytext);
@@ -1244,7 +1243,7 @@ YY_RULE_SETUP
 case 52:
 /* rule 52 can match eol */
 YY_RULE_SETUP
-#line 197 "lextemplate.l"
+#line 196 "lextemplate.l"
 {
     if(Opt_S)
     {
@@ -1266,21 +1265,21 @@ YY_RULE_SETUP
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 215 "lextemplate.l"
+#line 214 "lextemplate.l"
 {
     LIST;
 }
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 219 "lextemplate.l"
+#line 218 "lextemplate.l"
 {
     LIST;
 }
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 223 "lextemplate.l"
+#line 222 "lextemplate.l"
 {
     printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
     while(0);
@@ -1289,10 +1288,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 228 "lextemplate.l"
+#line 227 "lextemplate.l"
 ECHO;
 	YY_BREAK
-#line 1296 "lex.yy.c"
+#line 1295 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2293,7 +2292,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 228 "lextemplate.l"
+#line 227 "lextemplate.l"
 
 
 int main( int argc, char **argv )
