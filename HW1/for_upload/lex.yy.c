@@ -1103,7 +1103,7 @@ YY_RULE_SETUP
         if(yytext[i]=='8'||yytext[i]=='9')
         {
             printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
-            while(0);
+            exit(-1);
         }
     }
     tokenString(oct_integer ,yytext);
@@ -1114,7 +1114,7 @@ YY_RULE_SETUP
 #line 99 "lextemplate.l"
 {
     printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
-    while(0);
+    exit(-1);
  }
 	YY_BREAK
 case 42:
@@ -1154,7 +1154,7 @@ YY_RULE_SETUP
             if(i==(yyleng-2))
             {
                 printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
-                while(0);
+                exit(-1);
 
                 break;
             }
@@ -1167,7 +1167,7 @@ YY_RULE_SETUP
             else
             {
                 printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
-                while(0);
+                exit(-1);
 
                 i++;
             }
@@ -1190,7 +1190,7 @@ YY_RULE_SETUP
 #line 159 "lextemplate.l"
 {
     printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
-    while(0);
+    exit(-1);
 }
 	YY_BREAK
 case 48:
@@ -1282,7 +1282,7 @@ YY_RULE_SETUP
 #line 222 "lextemplate.l"
 {
     printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
-    while(0);
+    exit(-1);
 
 }
 	YY_BREAK
@@ -2306,7 +2306,7 @@ int main( int argc, char **argv )
   FILE *fp = fopen( argv[1], "r" );
   if( fp == NULL ) {
     fprintf( stderr, "Open file error\n" );
-    while(0);
+    exit(-1);
   }
 
   yyin = fp;
