@@ -20,7 +20,7 @@ char answer_buf[MAX_LINE_LENG];
 %}
 
 
-oct_integer [-]?[0][0-9]+
+oct_integer [-]?[0][0-7]+
 integer [-]?[1-9][0-9]*|[0]
 
 float_num [-]?[0-9]+\.[0-9]+
@@ -42,6 +42,7 @@ float_num [-]?[0-9]+\.[0-9]+
             linenum++;
     }
 }
+
 
 "," {tokenChar(','); }
 ";" {tokenChar(';'); }
@@ -84,22 +85,8 @@ float_num [-]?[0-9]+\.[0-9]+
 "while"     {token(KWwhile);}
 
 {oct_integer} {
-    i=0;
-    for(;i<yyleng;i++)
-    {
-        if(yytext[i]=='8'||yytext[i]=='9')
-        {
-            printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
-            while(0);
-        }
-    }
     tokenString(oct_integer ,yytext);
 }
-
-[0-9]+[a-zA-Z_]+ {
-    printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
-    while(0);
- }
 
 [a-zA-Z]([a-zA-Z]|[0-9])* {tokenString(id,yytext);}
 
@@ -163,7 +150,9 @@ float_num [-]?[0-9]+\.[0-9]+
 
 "//&S+"(.)*[\n] {
     Opt_S=1;
-    printf("%d: %s",linenum,yytext);
+    if(Opt_S)
+        printf("%d: %s",linenum,yytext);
+
     linenum++;
     memset(buf,0,sizeof(char)*256);
     buf[0]='\0';
@@ -178,7 +167,9 @@ float_num [-]?[0-9]+\.[0-9]+
 
 "//&T+"(.)*[\n] {
     Opt_T=1;
-    printf("%d: %s",linenum,yytext);
+    if(Opt_S)
+        printf("%d: %s",linenum,yytext);
+
     linenum++;
     memset(buf,0,sizeof(char)*256);
     buf[0]='\0';
@@ -186,7 +177,9 @@ float_num [-]?[0-9]+\.[0-9]+
 
 "//&T-"(.)*[\n] {
     Opt_T=0;
-    printf("%d: %s",linenum,yytext);
+    if(Opt_S)
+        printf("%d: %s",linenum,yytext);
+
     linenum++;
     memset(buf,0,sizeof(char)*256);
     buf[0]='\0';
