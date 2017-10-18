@@ -20,8 +20,8 @@ char answer_buf[MAX_LINE_LENG];
 %}
 
 
-oct_integer [-]?[0][0-9]+
-integer [-]?[1-9][0-9]*
+oct_integer [-]?[0][0-7]+
+integer [-]?[1-9][0-9]*|[0]
 
 float_num [-]?[0-9]+\.[0-9]+
 %%
@@ -85,16 +85,11 @@ float_num [-]?[0-9]+\.[0-9]+
 "var"       {token(KWvar);}
 "while"     {token(KWwhile);}
 
-["]?([0-9]+["])+ {
-    printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
-    while(0);
- }
-
 [0-9]+[a-zA-Z_]+ {
     printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
     while(0);
  }
-[a-zA-Z]([a-zA-Z_]|[0-9])* {tokenString(id,yytext);}
+[a-zA-Z]([a-zA-Z]|[0-9])* {tokenString(id,yytext);}
 
 [-]?[0-9]+[.]?[0-9]+[E|e][+|-]?[0-9]+ {tokenString(scientific ,yytext);}
 
@@ -148,6 +143,11 @@ float_num [-]?[0-9]+\.[0-9]+
 
     memset(yytext_arr,0,sizeof(char)*256);
     memset(answer_buf,0,sizeof(char)*256);
+}
+
+["] {
+    printf("error at line %d: bad character \"%s\"\n",linenum,yytext);
+    while(0);
 }
 
 "//&S+"(.)*[\n] {

@@ -1,4 +1,5 @@
 // print hello world
+    ASDSADASdpfiuhw98798798798 //IDENTIFIER
     begin
     var a : integer;
     var b : real;
@@ -8,9 +9,9 @@
     // this is a comment // line */ /* with some /* delimiters */ before the end
     /* this is a comment // line with some /* and
     // delimiters */
-
+    EDN99089897//LEGAL IDENTIFIER
     /*this is a tricky aommand */ wefwef*/
-    955EBTswgorhg   //ILLEGAL IDENTIFIER
+    RERGH_WOIEH   //ILLEGAL IDENTIFIER
     789789789_AST_WNG  //ILLEGAL IDENTIFIER
     /*first comments */   /*second comment*/
     "hello world with "" string parenthesis"" in the wsofuhwfpuh ""  middle"
@@ -38,7 +39,7 @@
     b := b*1.23e;
 //&T+
     end if
-
+    a := 09"9"9"9"9"9@@
     d := "2"9;
     d := "29;
     d := "2"2"9;
