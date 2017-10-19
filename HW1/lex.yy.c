@@ -1109,7 +1109,7 @@ YY_RULE_SETUP
 case 43:
 YY_RULE_SETUP
 #line 95 "lextemplate.l"
-{tokenInteger(integer ,strtol(yytext,NULL,10));}
+{tokenString(integer ,yytext);}
 	YY_BREAK
 case 44:
 YY_RULE_SETUP

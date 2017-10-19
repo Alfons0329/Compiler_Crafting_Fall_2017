@@ -92,7 +92,7 @@ float_num [-]?[0-9]+\.[0-9]+
 
 [-]?[0-9]+[.]?[0-9]+[E|e][+|-]?[0-9]+ {tokenString(scientific ,yytext);}
 
-{integer}       {tokenInteger(integer ,strtol(yytext,NULL,10));}
+{integer}       {tokenString(integer ,yytext);}
 
 {float_num}     {tokenString(float ,yytext);}
 
