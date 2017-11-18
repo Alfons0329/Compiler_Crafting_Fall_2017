@@ -4,7 +4,7 @@
  */
 
 %{
-
+#include "y.tab.h"
 #include <string.h>
 
 #define LIST strcat( buf, yytext )
@@ -44,60 +44,60 @@ identifier ({letter})({letter}|{digit})*
 
 %%
 
-","				{ tokenChar(','); return COMMA}
-";"				{ tokenChar(';'); return SEMICOLON}
-":"				{ tokenChar(':'); return COLON}
-")"				{ tokenChar(')'); return BRACELEFT}
-"("				{ tokenChar('('); return BRACERIGHT}
-"["				{ tokenChar('['); return BRACELEFT}
-"]"				{ tokenChar(']'); return BRACKETRIGHT}
+<INITIAL>","				{ tokenChar(','); return COMMA; }
+<INITIAL>";"				{ tokenChar(';'); return SEMICOLON; }
+<INITIAL>":"				{ tokenChar(':'); return COLON; }
+<INITIAL>")"				{ tokenChar(')'); return BRACELEFT; }
+<INITIAL>"("				{ tokenChar('('); return BRACERIGHT; }
+<INITIAL>"["				{ tokenChar('['); return BRACELEFT; }
+<INITIAL>"]"				{ tokenChar(']'); return BRACKETRIGHT; }
 
-"+"				{ tokenChar('+'); return PLUS}
-"-"				{ tokenChar('-'); return MINUS}
-"*"				{ tokenChar('*'); return MULTIPLY}
-"/"				{ tokenChar('/'); return DIVIDE}
-"mod"			{ token(mod); return MOD}
-":="			{ token(:=); return ASSIGN}
-"<"				{ tokenChar('<'); return LESS}
-"<="			{ token(<=); return LESSEQUAL}
-"<>"			{ token(<>); return LESSGREATER}
-">="			{ token(>=); return GREATEREQUAL}
-">"				{ tokenChar('>'); return GREATER}
-"="				{ tokenChar('='); return EQUAL}
-"and"			{ token(and); return AND}
-"or"			{ token(or); return OR}
-"not"			{ token(not); return NOT}
+<INITIAL>"+"				{ tokenChar('+'); return PLUS; }
+<INITIAL>"-"				{ tokenChar('-'); return MINUS; }
+<INITIAL>"*"				{ tokenChar('*'); return MULTIPLY; }
+<INITIAL>"/"				{ tokenChar('/'); return DIVIDE; }
+<INITIAL>"mod"			{ token(mod); return MOD; }
+<INITIAL>":="			{ token(:=); return ASSIGN; }
+<INITIAL>"<"				{ tokenChar('<'); return LESS; }
+<INITIAL>"<="			{ token(<=); return LESSEQUAL; }
+<INITIAL>"<>"			{ token(<>); return LESSGREATER; }
+<INITIAL>">="			{ token(>=); return GREATEREQUAL; }
+<INITIAL>">"				{ tokenChar('>'); return GREATER; }
+<INITIAL>"="				{ tokenChar('='); return EQUAL; }
+<INITIAL>"and"			{ token(and); return AND; }
+<INITIAL>"or"			{ token(or); return OR; }
+<INITIAL>"not"			{ token(not); return NOT; }
 
-"array"			{ token(KWarray); return KWARRAY}
-"begin"			{ token(KWbegin); return KWBEGIN}
-"boolean"		{ token(KWboolean); return KWBOOLEAN}
-"def"			{ token(KWdef); return KWDEF}
-"do"			{ token(KWdo); return KWDO}
-"else"			{ token(KWelse); return KWELSE}
-"end"			{ token(KWend); return KWEND}
-"false"			{ token(KWfalse); return KWFALSE}
-"for"			{ token(KWfor); return KWFOR}
-"integer"		{ token(KWinteger); return KWINTEGER}
-"if"			{ token(KWif); return KWIF}
-"of"			{ token(KWof); return KWOF}
-"print"			{ token(KWprint); return KWPRINT}
-"read"			{ token(KWread); return KWREAD}
-"real"			{ token(KWreal); return KWREAL}
-"string"		{ token(KWstring); return KWSTRING}
-"then"			{ token(KWthen); return KWTHEN}
-"to"			{ token(KWto); return KWTO}
-"true"			{ token(KWtrue); return KWTRUE}
-"return"		{ token(KWreturn); return KWRETURN}
-"var"			{ token(KWvar); return KWVAR}
-"while"			{ token(KWwhile); return KWWHILE}
+<INITIAL>"array"			{ token(KWarray); return KWARRAY; }
+<INITIAL>"begin"			{ token(KWbegin); return KWBEGIN; }
+<INITIAL>"boolean"		{ token(KWboolean); return KWBOOLEAN; }
+<INITIAL>"def"			{ token(KWdef); return KWDEF; }
+<INITIAL>"do"			{ token(KWdo); return KWDO; }
+<INITIAL>"else"			{ token(KWelse); return KWELSE; }
+<INITIAL>"end"			{ token(KWend); return KWEND; }
+<INITIAL>"false"			{ token(KWfalse); return KWFALSE; }
+<INITIAL>"for"			{ token(KWfor); return KWFOR; }
+<INITIAL>"integer"		{ token(KWinteger); return KWINTEGER; }
+<INITIAL>"if"			{ token(KWif); return KWIF; }
+<INITIAL>"of"			{ token(KWof); return KWOF; }
+<INITIAL>"print"			{ token(KWprint); return KWPRINT; }
+<INITIAL>"read"			{ token(KWread); return KWREAD; }
+<INITIAL>"real"			{ token(KWreal); return KWREAL; }
+<INITIAL>"string"		{ token(KWstring); return KWSTRING; }
+<INITIAL>"then"			{ token(KWthen); return KWTHEN; }
+<INITIAL>"to"			{ token(KWto); return KWTO; }
+<INITIAL>"true"			{ token(KWtrue); return KWTRUE; }
+<INITIAL>"return"		{ token(KWreturn); return KWRETURN; }
+<INITIAL>"var"			{ token(KWvar); return KWVAR; }
+<INITIAL>"while"			{ token(KWwhile); return KWWHILE; }
 
-{octal} { tokenOctInteger("oct_integer",yytext); return OCTAL}
-{identifier}			{ tokenString("id",yytext); return IDENT}
-{integer}			{ tokenInteger("integer",atoi(yytext)); return INTEGER}
-{float}				{ tokenFloat("float",yytext); return FLOAT}
-{scientific}			{ tokenScientific("scientific", yytext); return SCIENTIFIC}
+<INITIAL>{octal} { tokenOctInteger("oct_integer",yytext); return OCTAL; }
+<INITIAL>{identifier}			{ tokenString("id",yytext); return IDENT; }
+<INITIAL>{integer}			{ tokenInteger("integer",atoi(yytext)); return INTEGER; }
+<INITIAL>{float}				{ tokenFloat("float",yytext); return FLOAT; }
+<INITIAL>{scientific}			{ tokenScientific("scientific", yytext); return SCIENTIFIC; }
 
-\"((\"\")|[^\"\n])*\"	{
+<STRING>\"((\"\")|[^\"\n])*\"	{
 				LIST;
 				if (Opt_T){
 					size_t wrt_idx = 0;
@@ -116,7 +116,7 @@ identifier ({letter})({letter}|{digit})*
 					strContent[wrt_idx] = '\0';
 					printf("<%s: %s>\n", "string", strContent);
 				}
-				return STRING
+				return STRING;
 			}
 
 "//&"[A-Z][+-][^\n]*		{ /* pseudo comment */
