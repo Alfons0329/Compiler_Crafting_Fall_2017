@@ -94,8 +94,8 @@ identifier ({letter})({letter}|{digit})*
 <INITIAL>{octal} { tokenOctInteger("oct_integer",yytext); return OCTAL; }
 <INITIAL>{identifier}			{ tokenString("id",yytext); return IDENT; }
 <INITIAL>{integer}			{ tokenInteger("integer",atoi(yytext)); return INTEGER; }
-<INITIAL>{float}				{ tokenFloat("float",yytext); return FLOAT; }
-<INITIAL>{scientific}			{ tokenScientific("scientific", yytext); return SCIENTIFIC; }
+<INITIAL>{float}				{ tokenFloat("float",yytext); return REAL; }
+<INITIAL>{scientific}			{ tokenScientific("scientific", yytext); return REAL; }
 
 <STRING>\"((\"\")|[^\"\n])*\"	{
 				LIST;
