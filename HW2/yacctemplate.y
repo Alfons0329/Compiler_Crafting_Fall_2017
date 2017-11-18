@@ -63,19 +63,30 @@ func_type : KWINTEGER |
 /*2.2 Data Types and Declarations */
 data_decl :  	var_decl |
 				array_decl |
-				KWVAR identifier_list COLON literal_constant
+				const_decl
 		;
 
 var_decl : 	KWVAR IDENT COLON var_type SEMICOLON
 		;
 
-array_decl :	KWVAR identifier_list COLON array_dimension_decl SEMICOLON
+array_decl : KWVAR identifier_list COLON array_dimension_decl SEMICOLON
 		;
 
 array_dimension_decl :	array_dimension_decl OF |
 						KWARRAY INTEGER KWTO INTEGER
 		;
-/*2.3 Statements in program*/
+
+const_decl : KWVAR identifier_list COLON literal_constant_list SEMICOLON
+		;
+
+literal_constant_list :	INTEGER |
+						REAL |
+						STRING |
+						KWTRUE |
+						KWFALSE
+		;
+
+/*2.3 Statements in program are listed below */
 statement_list : 	compound_statement |
 					simple_statement |
 					conditional_statement |
@@ -93,8 +104,7 @@ var_const_decl :	var_decl |
 		;
 
 
-const_decl :
-		;
+
 
 var_type : 	KWOCTAL |
 			KWINTEGER |
@@ -137,6 +147,10 @@ expression :
 		;
 
 function_invocation_statement :	IDENT BRACELEFT expression_list BRACKETRIGHT
+		;
+
+/*2.3.3 Conditional statements*/
+conditional_statement
 
 expression_list : 	expression_list COMMA |
 					expression
