@@ -3,7 +3,7 @@ OBJECT = lex.yy.c y.tab.h  y.tab.c #link the required libraries together
 CC     = gcc -g
 CFLAGS = -Wall -Wextra -pedantic -g3
 LEX    = flex
-LIBS   = -lfl -ly
+LIBS   = -lfl 
 YACC = yacc -d -v
 
 all: lex.yy.c y.tab.c
