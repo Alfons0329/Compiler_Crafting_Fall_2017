@@ -8,10 +8,10 @@ extern char *yytext;            /* declared by lex */
 extern char buf[256];           /* declared in lex.l */
 %}
 
-%token SEMICOLON END IDENT /*write context free grammar here*/
-
+%token SEMICOLON END IDENT  /*write context free grammar here*/
+%token BRACELEFT BRACERIGHT PLUS MINUS MULTIPLY DIVIDE
 %%
-
+/*use non-capital for non terminal and capital for terminal*/
 program		: programname SEMICOLON programbody END IDENT
 		;
 
@@ -20,10 +20,10 @@ programname	: identifier
 
 identifier	: IDENT
 		;
-
+epsilon : ; /*epsilon does nothing*/
 %%
 
-int yyerror( char *msg )
+int yyerror( char *msg ) /*parsing error goes here*/
 {
     fprintf( stderr, "\n|--------------------------------------------------------------------------\n" );
 	fprintf( stderr, "| Error found in Line #%d: %s\n", linenum, buf );
