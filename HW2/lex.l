@@ -179,24 +179,6 @@ identifier ({letter})({letter}|{digit})*
 				}
 
 %%
-int  main( int argc, char **argv )
-{
-	if( argc != 2 ) {
-		fprintf(  stdout,  "Usage:  ./scanner  [filename]\n"  );
-		exit(0);
-	}
-
-	FILE *fp = fopen( argv[1], "r" );
-
-	if( fp == NULL )  {
-		fprintf( stdout, "Open  file  error\n" );
-		exit(-1);
-	}
-
-	yyin = fp;
-	yylex();
-	exit(0);
-}
 
 void setPseudoComment( const char *text )
 {
