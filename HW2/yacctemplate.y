@@ -9,23 +9,30 @@ extern char buf[256];           /* declared in lex.l */
 %}
 // symbols
 %token COMMA SEMICOLON COLON BRACELEFT BRACERIGHT BRACKETLEFT BRACKETRIGHT
+
 // mathematical operators
 %token PLUS MINUS MULTIPLY DIVIDE MOD
+
 // logical operators
 %token LESS LESSEQUAL LESSGREATER GREATEREQUAL GREATER EQUAL AND OR NOT
+
 // KW
 %token KWARRAY KWBEGIN KWBOOLEAN KWDEF KWDO KWELSE KWEND KWFALSSE KWFOR KWINTEGER
 %token KWIF KWOF KWPRINT KWREAD KWREAL KWSTRING KWTHEN KWTO KWTRUE KWRETURN KWVAR KWWHILE
+
 //mathematical numbers
 %token OCTAL INTEGER FLOAT SCIENTIFIC
+
 //identifier
 %token IDENT
+
 //others
 %token STRING
+
 %%
 /*use non-capital for non terminal and capital for terminal*/
-/*2 Program Units */
-/*2.1 Program */
+/*2.1  Program Units */
+/*Program */
 program	: programname SEMICOLON programbody END IDENT
 		;
 
@@ -34,7 +41,7 @@ programname	: identifier
 
 programbody : var_const_decl | func_decl | compound_statement
 		;
-/*2.2 Function*/
+/*Function*/
 func_decl : IDENT BRACELEFT arg_lists BRACERIGHT COLON func_type compound_statement KWEND IDENT
 		;
 
@@ -52,8 +59,39 @@ func_type : INTEGER SEMICOLON |
 			KWSTRING SEMICOLON |
 			epsilon SEMICOLON
 		;
+/*2.2 Data Types and Declarations */
+data_decl :  KWVAR identifier_list COLON scalar_type SEMICOLON |
+			KWVAR identifier_list COLON KWARRAY integer_const KWTO integer_const KWOF |
+			KWVAR identifier_list COLON literal_constant
+		;
+/*2.3 Statements in program*/
+statement_list : 	compound_statement |
+					simple_statement |
+					conditional_statement |
+					while_statement |
+					for_statement |
+					return_statement |
+					function_invocation_statement |
+		;
 
-data_decl :
+compound_statement : KWBEGIN var_const_decl statement_list KWEND
+		;
+
+simple_statement : 	variable_reference COLON EQUAL expression_list |
+					KWPRINT variable_reference SEMICOLON |
+					KWPRINT expression_list SEMICOLON |
+					KWREAD variable_reference SEMICOLON
+		;
+
+array_reference	: epsilon /*terminate array reference*/ 
+ BRACKETLEFT expression BRACKETRIGHT array_reference {;}
+					;
+
+variable_reference	: ID
+					 ID BRACKETLEFT expression BRACKETRIGHT array_reference {;}
+					;
+
+
 identifier :
 		;
 epsilon : ; /*epsilon does nothing*/
