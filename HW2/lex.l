@@ -47,10 +47,10 @@ identifier ({letter})({letter}|{digit})*
 <INITIAL>","				{ tokenChar(','); return COMMA; }
 <INITIAL>";"				{ tokenChar(';'); return SEMICOLON; }
 <INITIAL>":"				{ tokenChar(':'); return COLON; }
-<INITIAL>")"				{ tokenChar(')'); return BRACELEFT; }
-<INITIAL>"("				{ tokenChar('('); return BRACERIGHT; }
-<INITIAL>"["				{ tokenChar('['); return BRACELEFT; }
-<INITIAL>"]"				{ tokenChar(']'); return BRACKETRIGHT; }
+<INITIAL>"("				{ tokenChar('('); return BRACELEFT; }
+<INITIAL>")"				{ tokenChar(')'); return BRACERIGHT; }
+<INITIAL>"]"				{ tokenChar(']'); return BRACKETLEFT; }
+<INITIAL>"["				{ tokenChar('['); return BRACKETRIGHT; }
 
 <INITIAL>"+"				{ tokenChar('+'); return PLUS; }
 <INITIAL>"-"				{ tokenChar('-'); return MINUS; }

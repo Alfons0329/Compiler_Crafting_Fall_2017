@@ -8,7 +8,7 @@
 8: 
 9: foo( a, b: integer ): integer;
 10: begin
-11: 	return a*b;
+11: 	return a+b;
 12: end
 13: end foo
 14: 
