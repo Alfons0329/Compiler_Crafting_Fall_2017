@@ -7,3 +7,4 @@ make
 ./parser_exec test.p
 ./parser_exec expr1.p
 ./parser_exec statement.p
+./parser_exec mytest.p

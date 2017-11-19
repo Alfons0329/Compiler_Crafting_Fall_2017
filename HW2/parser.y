@@ -60,7 +60,9 @@ var_const_decl :	var_decl |
 					const_decl
 		;
 
-func_decl_list : func_decl_list func_decl | func_decl | epsilon
+func_decl_list : 	func_decl_list func_decl |
+					func_decl |
+					epsilon
  		;
 
 /*Function*/
@@ -83,6 +85,7 @@ func_type : COLON KWINTEGER |
 			COLON KWREAL |
 			COLON KWBOOLEAN |
 			COLON KWSTRING |
+			COLON KWARRAY array_dimension_decl var_type {/*printf("parsed here");*/} |
 			epsilon
 		;
 /*2.2 Data Types and Declarations */
@@ -129,22 +132,27 @@ statement : 		compound_statement |
 					conditional_statement |
 					while_statement |
 					for_statement |
-					return_statement SEMICOLON|
-					function_invocation_statement SEMICOLON|
+					return_statement SEMICOLON |
+					function_invocation_statement SEMICOLON
 		;
 /*2.3.1 compound_statement*/
 compound_statement : KWBEGIN var_const_decl_list statement_list KWEND
 		;
 
 /*2.3.2 simple statement*/
-simple_statement : 	variable_reference ASSIGN expression_list |
+simple_statement : 	variable_reference ASSIGN expression_list {printf("6666 \n");}|
+					variable_reference ASSIGN IDENT array_reference |
 					KWPRINT variable_reference  |
 					KWPRINT expression  |
 					KWREAD variable_reference
 		;
 
-variable_reference	: 	IDENT |
-					 	IDENT BRACKETLEFT integer_expression BRACKETRIGHT array_reference
+ident_or_ont : 	IDENT |
+				epsilon
+		;
+
+variable_reference	: 	IDENT  |
+					 	array_reference {printf("6667 \n");}
 		;
 
 integer_expression : 	INTEGER MULTIPLY INTEGER |
@@ -154,15 +162,19 @@ integer_expression : 	INTEGER MULTIPLY INTEGER |
 						INTEGER MINUS INTEGER |
 						INTEGER |
 						IDENT
-
-array_reference	: 	epsilon |//terminate array reference
-					BRACKETLEFT expression BRACKETRIGHT array_reference
 		;
 
+array_reference  : IDENT array_extend
+		;
+
+array_extend     : 	BRACKETLEFT expression BRACKETRIGHT |
+					array_extend BRACKETLEFT expression BRACKETRIGHT
+		;
 expression :	MINUS BRACELEFT expression BRACERIGHT %prec UNARY_NEGATIVE | //unary expression gets highest priority
 				BRACELEFT expression BRACERIGHT |
 				literal_constant_list | //required for mathematical operation with constant
 				variable_reference | //required for mathematical operation with variable
+				array_reference |
 				function_invocation_statement | //required for mathematical operation with function
 				expression MULTIPLY expression |
 				expression DIVIDE expression |
@@ -172,7 +184,7 @@ expression :	MINUS BRACELEFT expression BRACERIGHT %prec UNARY_NEGATIVE | //unar
 				boolean_expression |
 				NOT expression |
 				expression AND  expression |
-				expression OR expression |
+				expression OR expression
 		;
 
 boolean_expression :	expression LESS expression |
@@ -180,13 +192,15 @@ boolean_expression :	expression LESS expression |
 						expression EQUAL expression |
 						expression GREATEREQUAL expression |
 						expression GREATER expression |
-						expression LESSGREATER expression |
+						expression LESSGREATER expression
 		;
 
 function_invocation_statement :	IDENT BRACELEFT expression_list BRACERIGHT
 		;
 
-expression_list : 	expression_list COMMA expression  | expression | epsilon //in order to terminate
+expression_list : 	expression_list COMMA expression  |
+					expression |
+					epsilon //in order to terminate
 		;
 
 /*2.3.3 Conditional statements*/
