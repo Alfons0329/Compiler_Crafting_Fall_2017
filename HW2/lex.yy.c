@@ -388,7 +388,7 @@ static yyconst flex_int16_t yy_accept[150] =
     {   0,
         0,    0,    0,    0,    0,    0,   63,   61,   59,   60,
        61,    4,    5,   10,    8,    1,    9,   11,   47,   47,
-        3,    2,   14,   19,   18,   46,    7,    6,   46,   46,
+        3,    2,   14,   19,   18,   46,    6,    7,   46,   46,
        46,   46,   46,   46,   46,   46,   46,   46,   46,   46,
        46,   46,   46,   58,   57,   58,   53,   54,   59,    0,
        50,   55,   52,   48,   45,    0,   47,   13,   15,   16,
@@ -904,12 +904,12 @@ YY_RULE_SETUP
 case 6:
 YY_RULE_SETUP
 #line 52 "lex.l"
-{ tokenChar(']'); return BRACKETLEFT; }
+{ tokenChar('['); return BRACKETLEFT; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
 #line 53 "lex.l"
-{ tokenChar('['); return BRACKETRIGHT; }
+{ tokenChar(']'); return BRACKETRIGHT; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP

@@ -41,184 +41,179 @@ extern char buf[256];           /* declared in lex.l */
 /*use non-capital for non terminal and capital for terminal*/
 /*2.1  Program Units */
 /*Program */
-program	: programname SEMICOLON programbody KWEND IDENT
+program	: programname SEMICOLON programbody KWEND IDENT {printf("pgrm->");}
 		;
 
-programname	: IDENT
+programname	: IDENT {printf("programname->");}
 		;
 
-programbody : var_const_decl_list  func_decl_list  compound_statement //these list should be zero or more
+programbody : var_const_decl_list  func_decl_list  compound_statement  {printf("programbody->");} //these list should be zero or more
 		;
 
-var_const_decl_list : 	var_const_decl_list var_const_decl |
-						var_const_decl |
+var_const_decl_list : 	var_const_decl_list var_const_decl {printf("1->");}|
+						var_const_decl {printf("2->");}|
 						epsilon
 		;
 
-var_const_decl :	var_decl |
-					array_decl |
-					const_decl
+var_const_decl :	var_decl {printf("4->");}|
+					array_decl {printf("5->");}|
+					const_decl {printf("6->");}
 		;
 
-func_decl_list : 	func_decl_list func_decl |
-					func_decl |
+func_decl_list : 	func_decl_list func_decl{printf("7->");}|
+					func_decl{printf("8->");}|
 					epsilon
  		;
 
 /*Function*/
-func_decl : IDENT BRACELEFT arg_lists BRACERIGHT func_type SEMICOLON  compound_statement KWEND IDENT
+func_decl : IDENT BRACELEFT arg_lists BRACERIGHT func_type SEMICOLON  compound_statement KWEND IDENT {printf("func_decl");}
 		;
 
-arg_lists : arg| arg_lists SEMICOLON arg | epsilon //zero or more formal arguments is fine
+arg_lists : arg{printf("10->");}|
+			arg_lists SEMICOLON arg{printf("11->");}|
+			epsilon //zero or more formal arguments is fine
 		;
 
-arg  : 	identifier_list COLON var_type |
-		identifier_list COLON array_decl
+arg  : 	identifier_list COLON var_type{printf("13->");}|
+		identifier_list COLON array_decl{printf("14->");}
 		;
 
-identifier_list :  	IDENT COMMA identifier_list |
-					IDENT  |
-					epsilon//identifier list for expanding more and more
+identifier_list :  	IDENT COMMA identifier_list{printf("15->");}|
+					IDENT {printf("16->");}|
+					epsilon |//identifier list for expanding more and more
 		;
 
-func_type : COLON KWINTEGER |
-			COLON KWREAL |
-			COLON KWBOOLEAN |
-			COLON KWSTRING |
-			COLON KWARRAY array_dimension_decl var_type {/*printf("parsed here");*/} |
+func_type : COLON KWINTEGER {printf("18->");}|
+			COLON KWREAL {printf("19->");}|
+			COLON KWBOOLEAN {printf("20->");}|
+			COLON KWSTRING {printf("21->");}|
+			COLON KWARRAY array_dimension_decl var_type {printf("22->");}|
 			epsilon
 		;
 /*2.2 Data Types and Declarations */
 
-var_decl : 	KWVAR identifier_list COLON var_type SEMICOLON
+var_decl : 	KWVAR identifier_list COLON var_type SEMICOLON {printf("var_decl->");}
 		;
 
-var_type : 	KWINTEGER |
-			KWREAL |
-			KWSTRING |
-			KWARRAY |
-			KWBOOLEAN |
+var_type : 	KWINTEGER{printf("23->");}|
+			KWREAL{printf("24->");}|
+			KWSTRING{printf("25->");}|
+			KWARRAY{printf("26->");}|
+			KWBOOLEAN{printf("27->");}|
 		;
 
-array_decl : KWVAR identifier_list COLON KWARRAY array_dimension_decl var_type SEMICOLON
+array_decl : KWVAR identifier_list COLON KWARRAY array_dimension_decl var_type SEMICOLON {printf("array_decl->");}
 		;
 
-array_dimension_decl :	array_dimension_decl INTEGER KWTO INTEGER KWOF more_array_or_not |
-						INTEGER KWTO INTEGER KWOF more_array_or_not
+array_dimension_decl :	array_dimension_decl INTEGER KWTO INTEGER KWOF more_array_or_not {printf("28->");}|
+						INTEGER KWTO INTEGER KWOF more_array_or_not {printf("29->");}
 		;
 
-more_array_or_not : KWARRAY |
+more_array_or_not : KWARRAY{printf("30->");}|
 					epsilon
 		;
 
-const_decl : KWVAR identifier_list COLON literal_constant_list SEMICOLON
+const_decl : KWVAR identifier_list COLON literal_constant_list SEMICOLON {printf("const_decl->");}
 		;
 
-literal_constant_list :	INTEGER |
-						REAL |
-						STRING |
-						KWTRUE |
-						KWFALSE
+literal_constant_list :	INTEGER{printf("32->");}|
+						REAL{printf("33->");}|
+						STRING{printf("34->");}|
+						KWTRUE{printf("35->");}|
+						KWFALSE{printf("36->");}
 		;
 
 /*2.3 Statements in program are listed below */
-statement_list :	statement_list statement |
-					statement |
+statement_list :	statement_list statement{printf("37->");}|
+					statement{printf("38->");}|
 					epsilon
 		;
 
-statement : 		compound_statement |
-					simple_statement SEMICOLON|
-					conditional_statement |
-					while_statement |
-					for_statement |
-					return_statement SEMICOLON |
-					function_invocation_statement SEMICOLON
+statement : 		compound_statement{printf("40->");}|
+					simple_statement SEMICOLON {printf("41->");}|
+					conditional_statement{printf("42->");}|
+					while_statement{printf("43->");}|
+					for_statement{printf("44->");}|
+					return_statement SEMICOLON{printf("45->");}|
+					function_invocation_statement SEMICOLON{printf("46->");}
 		;
 /*2.3.1 compound_statement*/
-compound_statement : KWBEGIN var_const_decl_list statement_list KWEND
+compound_statement : KWBEGIN var_const_decl_list statement_list KWEND {printf("compound_statement->");}
 		;
 
 /*2.3.2 simple statement*/
-simple_statement : 	variable_reference ASSIGN expression_list {printf("6666 \n");}|
-					variable_reference ASSIGN IDENT array_reference |
-					KWPRINT variable_reference  |
-					KWPRINT expression  |
-					KWREAD variable_reference
+simple_statement : 	//variable_reference ASSIGN array_reference{printf("48->");}|
+					variable_reference ASSIGN expression_list {printf("47->");}||
+					KWPRINT variable_reference {printf("49->");}|
+					KWPRINT expression {printf("50->");}|
+					KWREAD variable_reference {printf("51->");}
 		;
 
-ident_or_ont : 	IDENT |
-				epsilon
+variable_reference	: 	IDENT {printf("54->");} | IDENT BRACKETLEFT expression BRACKETRIGHT array_extend {printf("55->");}
 		;
 
-variable_reference	: 	IDENT  |
-					 	array_reference {printf("6667 \n");}
+integer_expression : 	INTEGER MULTIPLY INTEGER{printf("56->");}|
+						INTEGER DIVIDE INTEGER{printf("57->");}|
+						INTEGER MOD INTEGER{printf("58->");}|
+						INTEGER PLUS INTEGER{printf("59->");}|
+						INTEGER MINUS INTEGER{printf("60->");}|
+						INTEGER{printf("61->");}|
+						IDENT{printf("62->");}
 		;
 
-integer_expression : 	INTEGER MULTIPLY INTEGER |
-						INTEGER DIVIDE INTEGER |
-						INTEGER MOD INTEGER |
-						INTEGER PLUS INTEGER |
-						INTEGER MINUS INTEGER |
-						INTEGER |
-						IDENT
+array_extend     : 	BRACKETLEFT expression BRACKETRIGHT {printf("63->");}|
+					array_extend BRACKETLEFT expression BRACKETRIGHT{printf("64->");}|
+					epsilon
+		;
+expression :	MINUS expression  prec UNARY_NEGATIVE{printf("65->");}| //unary expression gets highest priority
+				BRACELEFT expression BRACERIGHT{printf("66->");}|
+				literal_constant_list{printf("67->");}| //required for mathematical operation with constant
+				variable_reference{printf("68->");}| //required for mathematical operation with variable
+				//array_reference{printf("69->");}|
+				function_invocation_statement{printf("70->");}| //required for mathematical operation with function
+				expression MULTIPLY expression{printf("71->");}|
+				expression DIVIDE expression{printf("72->");}|
+				expression MOD expression{printf("73->");}|
+				expression PLUS expression{printf("74->");}|
+				expression MINUS expression{printf("75->");}|
+				boolean_expression{printf("76->");}|
+				NOT expression{printf("77->");}|
+				expression AND  expression{printf("78->");}|
+				expression OR expression{printf("79->");}
 		;
 
-array_reference  : IDENT array_extend
+boolean_expression :	expression LESS expression{printf("80->");}|
+						expression LESSEQUAL expression{printf("81->");}|
+						expression EQUAL expression{printf("82->");}|
+						expression GREATEREQUAL expression{printf("83->");}|
+						expression GREATER expression{printf("84->");}|
+						expression LESSGREATER expression{printf("85->");}
 		;
 
-array_extend     : 	BRACKETLEFT expression BRACKETRIGHT |
-					array_extend BRACKETLEFT expression BRACKETRIGHT
-		;
-expression :	MINUS BRACELEFT expression BRACERIGHT %prec UNARY_NEGATIVE | //unary expression gets highest priority
-				BRACELEFT expression BRACERIGHT |
-				literal_constant_list | //required for mathematical operation with constant
-				variable_reference | //required for mathematical operation with variable
-				array_reference |
-				function_invocation_statement | //required for mathematical operation with function
-				expression MULTIPLY expression |
-				expression DIVIDE expression |
-				expression MOD expression |
-				expression PLUS expression |
-				expression MINUS expression |
-				boolean_expression |
-				NOT expression |
-				expression AND  expression |
-				expression OR expression
+function_invocation_statement :	IDENT BRACELEFT expression_list BRACERIGHT{printf("function_definition");}
 		;
 
-boolean_expression :	expression LESS expression |
-						expression LESSEQUAL expression |
-						expression EQUAL expression |
-						expression GREATEREQUAL expression |
-						expression GREATER expression |
-						expression LESSGREATER expression
-		;
-
-function_invocation_statement :	IDENT BRACELEFT expression_list BRACERIGHT
-		;
-
-expression_list : 	expression_list COMMA expression  |
-					expression |
+expression_list : 	expression_list COMMA expression {printf("86->");}|
+					expression{printf("87->");}|
 					epsilon //in order to terminate
 		;
 
 /*2.3.3 Conditional statements*/
-conditional_statement :	KWIF boolean_expression KWTHEN statement_list KWELSE statement_list KWEND KWIF |
-						KWIF boolean_expression KWTHEN statement_list KWEND KWIF
+conditional_statement :	KWIF boolean_expression KWTHEN statement_list KWELSE statement_list KWEND KWIF{printf("89->");}|
+						KWIF boolean_expression KWTHEN statement_list KWEND KWIF{printf("90->");}
 		;
 
 /*2.3.4 while statements*/
-while_statement : KWWHILE boolean_expression KWDO statement_list KWEND KWDO
+while_statement : KWWHILE boolean_expression KWDO statement_list KWEND KWDO{printf("91->");}
 		;
 
-for_statement : KWFOR IDENT ASSIGN INTEGER KWTO INTEGER KWDO statement_list KWEND KWDO
+for_statement : KWFOR IDENT ASSIGN INTEGER KWTO INTEGER KWDO statement_list KWEND KWDO{printf("92->");}
 		;
 
-return_statement : KWRETURN expression
+return_statement : KWRETURN expression{printf("93->");}
 		;
 
-epsilon :  /*epsilon does nothing*/
+epsilon :  {printf("TERMINATE EPSILON");}/*epsilon does nothing*/
 		;
 %%
 

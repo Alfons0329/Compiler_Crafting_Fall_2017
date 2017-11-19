@@ -30,14 +30,15 @@ begin
 
 
         var a:array 1 to 5 of integer;  //these four statements should be correct
-        var c,b:integer;
+        var c,b,multiarrref:integer;
         b := 12 ;
         c := a[a and b] ;
+        multiarrref := a[1][2][a and b][2*4+66605][3 mod 465] ;
 
         // simple statement
-        a := 1.0;
+        a := 1.0 - (-5);
         b := 2.3E-1;
-
+        multiarrref := 3456789 mod( 2- (-1) )*b[2*2*2*2*2*2];
         // compound statement
         begin
                 var c: boolean;
