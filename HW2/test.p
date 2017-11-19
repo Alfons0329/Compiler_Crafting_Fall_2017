@@ -15,7 +15,7 @@ end foo
 // main block
 begin
 
-	print foo(2/4,3);
+	print foo(2*4,3);
 
 end
 end test

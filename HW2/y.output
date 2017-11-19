@@ -1,0 +1,4005 @@
+Terminals unused in grammar
+
+   KWDEF
+   KWFALSSE
+   OCTAL
+
+
+State 5 conflicts: 1 shift/reduce
+State 8 conflicts: 1 shift/reduce
+State 27 conflicts: 1 shift/reduce
+State 47 conflicts: 8 shift/reduce, 9 reduce/reduce
+State 56 conflicts: 1 shift/reduce, 13 reduce/reduce
+State 57 conflicts: 1 shift/reduce, 14 reduce/reduce
+State 59 conflicts: 1 shift/reduce, 14 reduce/reduce
+State 60 conflicts: 1 shift/reduce, 13 reduce/reduce
+State 62 conflicts: 9 shift/reduce
+State 85 conflicts: 1 shift/reduce, 14 reduce/reduce
+State 87 conflicts: 1 shift/reduce, 19 reduce/reduce
+State 93 conflicts: 1 reduce/reduce
+State 100 conflicts: 1 shift/reduce, 15 reduce/reduce
+State 105 conflicts: 1 shift/reduce, 15 reduce/reduce
+State 119 conflicts: 1 shift/reduce, 14 reduce/reduce
+State 121 conflicts: 1 shift/reduce, 19 reduce/reduce
+State 122 conflicts: 1 shift/reduce, 19 reduce/reduce
+State 123 conflicts: 1 shift/reduce, 19 reduce/reduce
+State 124 conflicts: 1 shift/reduce, 19 reduce/reduce
+State 125 conflicts: 1 shift/reduce, 19 reduce/reduce
+State 126 conflicts: 1 shift/reduce, 19 reduce/reduce
+State 127 conflicts: 1 shift/reduce, 19 reduce/reduce
+State 128 conflicts: 1 shift/reduce, 19 reduce/reduce
+State 129 conflicts: 1 shift/reduce, 19 reduce/reduce
+State 130 conflicts: 1 shift/reduce, 19 reduce/reduce
+State 131 conflicts: 1 shift/reduce, 19 reduce/reduce
+State 132 conflicts: 1 shift/reduce, 19 reduce/reduce
+State 133 conflicts: 1 shift/reduce, 19 reduce/reduce
+State 134 conflicts: 8 shift/reduce, 10 reduce/reduce
+State 135 conflicts: 8 shift/reduce, 9 reduce/reduce
+State 143 conflicts: 1 shift/reduce
+State 163 conflicts: 10 shift/reduce
+State 164 conflicts: 9 shift/reduce
+State 165 conflicts: 1 shift/reduce, 16 reduce/reduce
+State 176 conflicts: 1 shift/reduce
+State 181 conflicts: 8 shift/reduce, 9 reduce/reduce
+State 190 conflicts: 1 shift/reduce, 14 reduce/reduce
+State 196 conflicts: 9 shift/reduce
+State 200 conflicts: 8 shift/reduce, 9 reduce/reduce
+State 203 conflicts: 9 shift/reduce
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: programname SEMICOLON programbody KWEND IDENT
+
+    2 programname: IDENT
+
+    3 programbody: var_const_decl_list func_decl_list compound_statement
+
+    4 var_const_decl_list: var_const_decl_list var_const_decl
+    5                    | var_const_decl
+    6                    | epsilon
+
+    7 var_const_decl: var_decl
+    8               | array_decl
+    9               | const_decl
+
+   10 func_decl_list: func_decl_list func_decl
+   11               | func_decl
+   12               | epsilon
+
+   13 func_decl: IDENT BRACELEFT arg_lists BRACERIGHT func_type SEMICOLON compound_statement KWEND IDENT
+
+   14 arg_lists: arg
+   15          | arg_lists SEMICOLON arg
+   16          | epsilon
+
+   17 arg: identifier_list COLON var_type
+   18    | identifier_list COLON array_decl
+
+   19 identifier_list: IDENT COMMA identifier_list
+   20                | IDENT
+   21                | epsilon
+
+   22 func_type: COLON KWINTEGER
+   23          | COLON KWREAL
+   24          | COLON KWBOOLEAN
+   25          | COLON KWSTRING
+   26          | epsilon
+
+   27 var_decl: KWVAR identifier_list COLON var_type SEMICOLON
+
+   28 var_type: KWINTEGER
+   29         | KWREAL
+   30         | KWSTRING
+   31         | KWARRAY
+   32         | KWBOOLEAN
+   33         | %empty
+
+   34 array_decl: KWVAR identifier_list COLON KWARRAY array_dimension_decl var_type SEMICOLON
+
+   35 array_dimension_decl: array_dimension_decl INTEGER KWTO INTEGER KWOF more_array_or_not
+   36                     | INTEGER KWTO INTEGER KWOF more_array_or_not
+
+   37 more_array_or_not: KWARRAY
+   38                  | epsilon
+
+   39 const_decl: KWVAR identifier_list COLON literal_constant_list SEMICOLON
+
+   40 literal_constant_list: INTEGER
+   41                      | REAL
+   42                      | STRING
+   43                      | KWTRUE
+   44                      | KWFALSE
+
+   45 statement_list: statement_list statement
+   46               | statement
+   47               | epsilon
+
+   48 statement: compound_statement
+   49          | simple_statement SEMICOLON
+   50          | conditional_statement
+   51          | while_statement
+   52          | for_statement
+   53          | return_statement SEMICOLON
+   54          | function_invocation_statement SEMICOLON
+   55          | %empty
+
+   56 compound_statement: KWBEGIN var_const_decl_list statement_list KWEND
+
+   57 simple_statement: variable_reference ASSIGN expression_list
+   58                 | KWPRINT variable_reference
+   59                 | KWPRINT expression
+   60                 | KWREAD variable_reference
+
+   61 variable_reference: IDENT
+   62                   | IDENT BRACKETLEFT integer_expression BRACKETRIGHT array_reference
+
+   63 integer_expression: INTEGER MULTIPLY INTEGER
+   64                   | INTEGER DIVIDE INTEGER
+   65                   | INTEGER MOD INTEGER
+   66                   | INTEGER PLUS INTEGER
+   67                   | INTEGER MINUS INTEGER
+   68                   | INTEGER
+   69                   | IDENT
+
+   70 array_reference: epsilon
+   71                | BRACKETLEFT expression BRACKETRIGHT array_reference
+
+   72 expression: MINUS BRACELEFT expression BRACERIGHT
+   73           | BRACELEFT expression BRACERIGHT
+   74           | literal_constant_list
+   75           | variable_reference
+   76           | function_invocation_statement
+   77           | expression MULTIPLY expression
+   78           | expression DIVIDE expression
+   79           | expression MOD expression
+   80           | expression PLUS expression
+   81           | expression MINUS expression
+   82           | boolean_expression
+   83           | NOT expression
+   84           | expression AND expression
+   85           | expression OR expression
+   86           | %empty
+
+   87 boolean_expression: expression LESS expression
+   88                   | expression LESSEQUAL expression
+   89                   | expression EQUAL expression
+   90                   | expression GREATEREQUAL expression
+   91                   | expression GREATER expression
+   92                   | expression LESSGREATER expression
+   93                   | %empty
+
+   94 function_invocation_statement: IDENT BRACELEFT expression_list BRACERIGHT
+
+   95 expression_list: expression_list COMMA expression
+   96                | expression
+   97                | epsilon
+
+   98 conditional_statement: KWIF boolean_expression KWTHEN statement_list KWELSE statement_list KWEND KWIF
+   99                      | KWIF boolean_expression KWTHEN statement_list KWEND KWIF
+
+  100 while_statement: KWWHILE boolean_expression KWDO statement_list KWEND KWDO
+
+  101 for_statement: KWFOR IDENT ASSIGN INTEGER KWTO INTEGER KWDO statement_list KWEND KWDO
+
+  102 return_statement: KWRETURN expression
+
+  103 epsilon: %empty
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+COMMA (258) 19 95
+SEMICOLON (259) 1 13 15 27 34 39 49 53 54
+COLON (260) 17 18 22 23 24 25 27 34 39
+BRACELEFT (261) 13 72 73 94
+BRACERIGHT (262) 13 72 73 94
+BRACKETLEFT (263) 62 71
+BRACKETRIGHT (264) 62 71
+ASSIGN (265) 57 101
+LESS (266) 87
+LESSEQUAL (267) 88
+LESSGREATER (268) 92
+GREATEREQUAL (269) 90
+GREATER (270) 91
+EQUAL (271) 89
+PLUS (272) 66 80
+MINUS (273) 67 72 81
+MULTIPLY (274) 63 77
+DIVIDE (275) 64 78
+MOD (276) 65 79
+NOT (277) 83
+AND (278) 84
+OR (279) 85
+UNARY_NEGATIVE (280)
+KWARRAY (281) 31 34 37
+KWBEGIN (282) 56
+KWBOOLEAN (283) 24 32
+KWDEF (284)
+KWDO (285) 100 101
+KWELSE (286) 98
+KWEND (287) 1 13 56 98 99 100 101
+KWFALSSE (288)
+KWFOR (289) 101
+KWINTEGER (290) 22 28
+KWIF (291) 98 99
+KWOF (292) 35 36
+KWPRINT (293) 58 59
+KWREAD (294) 60
+KWREAL (295) 23 29
+KWSTRING (296) 25 30
+KWTHEN (297) 98 99
+KWTO (298) 35 36 101
+KWTRUE (299) 43
+KWFALSE (300) 44
+KWRETURN (301) 102
+KWVAR (302) 27 34 39
+KWWHILE (303) 100
+OCTAL (304)
+INTEGER (305) 35 36 40 63 64 65 66 67 68 101
+REAL (306) 41
+IDENT (307) 1 2 13 19 20 61 62 69 94 101
+STRING (308) 42
+
+
+Nonterminals, with rules where they appear
+
+$accept (54)
+    on left: 0
+program (55)
+    on left: 1, on right: 0
+programname (56)
+    on left: 2, on right: 1
+programbody (57)
+    on left: 3, on right: 1
+var_const_decl_list (58)
+    on left: 4 5 6, on right: 3 4 56
+var_const_decl (59)
+    on left: 7 8 9, on right: 4 5
+func_decl_list (60)
+    on left: 10 11 12, on right: 3 10
+func_decl (61)
+    on left: 13, on right: 10 11
+arg_lists (62)
+    on left: 14 15 16, on right: 13 15
+arg (63)
+    on left: 17 18, on right: 14 15
+identifier_list (64)
+    on left: 19 20 21, on right: 17 18 19 27 34 39
+func_type (65)
+    on left: 22 23 24 25 26, on right: 13
+var_decl (66)
+    on left: 27, on right: 7
+var_type (67)
+    on left: 28 29 30 31 32 33, on right: 17 27 34
+array_decl (68)
+    on left: 34, on right: 8 18
+array_dimension_decl (69)
+    on left: 35 36, on right: 34 35
+more_array_or_not (70)
+    on left: 37 38, on right: 35 36
+const_decl (71)
+    on left: 39, on right: 9
+literal_constant_list (72)
+    on left: 40 41 42 43 44, on right: 39 74
+statement_list (73)
+    on left: 45 46 47, on right: 45 56 98 99 100 101
+statement (74)
+    on left: 48 49 50 51 52 53 54 55, on right: 45 46
+compound_statement (75)
+    on left: 56, on right: 3 13 48
+simple_statement (76)
+    on left: 57 58 59 60, on right: 49
+variable_reference (77)
+    on left: 61 62, on right: 57 58 60 75
+integer_expression (78)
+    on left: 63 64 65 66 67 68 69, on right: 62
+array_reference (79)
+    on left: 70 71, on right: 62 71
+expression (80)
+    on left: 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86, on right:
+    59 71 72 73 77 78 79 80 81 83 84 85 87 88 89 90 91 92 95 96 102
+boolean_expression (81)
+    on left: 87 88 89 90 91 92 93, on right: 82 98 99 100
+function_invocation_statement (82)
+    on left: 94, on right: 54 76
+expression_list (83)
+    on left: 95 96 97, on right: 57 94 95
+conditional_statement (84)
+    on left: 98 99, on right: 50
+while_statement (85)
+    on left: 100, on right: 51
+for_statement (86)
+    on left: 101, on right: 52
+return_statement (87)
+    on left: 102, on right: 53
+epsilon (88)
+    on left: 103, on right: 6 12 16 21 26 38 47 70 97
+
+
+State 0
+
+    0 $accept: . program $end
+
+    IDENT  shift, and go to state 1
+
+    program      go to state 2
+    programname  go to state 3
+
+
+State 1
+
+    2 programname: IDENT .
+
+    $default  reduce using rule 2 (programname)
+
+
+State 2
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 4
+
+
+State 3
+
+    1 program: programname . SEMICOLON programbody KWEND IDENT
+
+    SEMICOLON  shift, and go to state 5
+
+
+State 4
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+State 5
+
+    1 program: programname SEMICOLON . programbody KWEND IDENT
+
+    KWVAR  shift, and go to state 6
+
+    KWVAR     [reduce using rule 103 (epsilon)]
+    $default  reduce using rule 103 (epsilon)
+
+    programbody          go to state 7
+    var_const_decl_list  go to state 8
+    var_const_decl       go to state 9
+    var_decl             go to state 10
+    array_decl           go to state 11
+    const_decl           go to state 12
+    epsilon              go to state 13
+
+
+State 6
+
+   27 var_decl: KWVAR . identifier_list COLON var_type SEMICOLON
+   34 array_decl: KWVAR . identifier_list COLON KWARRAY array_dimension_decl var_type SEMICOLON
+   39 const_decl: KWVAR . identifier_list COLON literal_constant_list SEMICOLON
+
+    IDENT  shift, and go to state 14
+
+    $default  reduce using rule 103 (epsilon)
+
+    identifier_list  go to state 15
+    epsilon          go to state 16
+
+
+State 7
+
+    1 program: programname SEMICOLON programbody . KWEND IDENT
+
+    KWEND  shift, and go to state 17
+
+
+State 8
+
+    3 programbody: var_const_decl_list . func_decl_list compound_statement
+    4 var_const_decl_list: var_const_decl_list . var_const_decl
+
+    KWVAR  shift, and go to state 6
+    IDENT  shift, and go to state 18
+
+    IDENT     [reduce using rule 103 (epsilon)]
+    $default  reduce using rule 103 (epsilon)
+
+    var_const_decl  go to state 19
+    func_decl_list  go to state 20
+    func_decl       go to state 21
+    var_decl        go to state 10
+    array_decl      go to state 11
+    const_decl      go to state 12
+    epsilon         go to state 22
+
+
+State 9
+
+    5 var_const_decl_list: var_const_decl .
+
+    $default  reduce using rule 5 (var_const_decl_list)
+
+
+State 10
+
+    7 var_const_decl: var_decl .
+
+    $default  reduce using rule 7 (var_const_decl)
+
+
+State 11
+
+    8 var_const_decl: array_decl .
+
+    $default  reduce using rule 8 (var_const_decl)
+
+
+State 12
+
+    9 var_const_decl: const_decl .
+
+    $default  reduce using rule 9 (var_const_decl)
+
+
+State 13
+
+    6 var_const_decl_list: epsilon .
+
+    $default  reduce using rule 6 (var_const_decl_list)
+
+
+State 14
+
+   19 identifier_list: IDENT . COMMA identifier_list
+   20                | IDENT .
+
+    COMMA  shift, and go to state 23
+
+    $default  reduce using rule 20 (identifier_list)
+
+
+State 15
+
+   27 var_decl: KWVAR identifier_list . COLON var_type SEMICOLON
+   34 array_decl: KWVAR identifier_list . COLON KWARRAY array_dimension_decl var_type SEMICOLON
+   39 const_decl: KWVAR identifier_list . COLON literal_constant_list SEMICOLON
+
+    COLON  shift, and go to state 24
+
+
+State 16
+
+   21 identifier_list: epsilon .
+
+    $default  reduce using rule 21 (identifier_list)
+
+
+State 17
+
+    1 program: programname SEMICOLON programbody KWEND . IDENT
+
+    IDENT  shift, and go to state 25
+
+
+State 18
+
+   13 func_decl: IDENT . BRACELEFT arg_lists BRACERIGHT func_type SEMICOLON compound_statement KWEND IDENT
+
+    BRACELEFT  shift, and go to state 26
+
+
+State 19
+
+    4 var_const_decl_list: var_const_decl_list var_const_decl .
+
+    $default  reduce using rule 4 (var_const_decl_list)
+
+
+State 20
+
+    3 programbody: var_const_decl_list func_decl_list . compound_statement
+   10 func_decl_list: func_decl_list . func_decl
+
+    KWBEGIN  shift, and go to state 27
+    IDENT    shift, and go to state 18
+
+    func_decl           go to state 28
+    compound_statement  go to state 29
+
+
+State 21
+
+   11 func_decl_list: func_decl .
+
+    $default  reduce using rule 11 (func_decl_list)
+
+
+State 22
+
+   12 func_decl_list: epsilon .
+
+    $default  reduce using rule 12 (func_decl_list)
+
+
+State 23
+
+   19 identifier_list: IDENT COMMA . identifier_list
+
+    IDENT  shift, and go to state 14
+
+    $default  reduce using rule 103 (epsilon)
+
+    identifier_list  go to state 30
+    epsilon          go to state 16
+
+
+State 24
+
+   27 var_decl: KWVAR identifier_list COLON . var_type SEMICOLON
+   34 array_decl: KWVAR identifier_list COLON . KWARRAY array_dimension_decl var_type SEMICOLON
+   39 const_decl: KWVAR identifier_list COLON . literal_constant_list SEMICOLON
+
+    KWARRAY    shift, and go to state 31
+    KWBOOLEAN  shift, and go to state 32
+    KWINTEGER  shift, and go to state 33
+    KWREAL     shift, and go to state 34
+    KWSTRING   shift, and go to state 35
+    KWTRUE     shift, and go to state 36
+    KWFALSE    shift, and go to state 37
+    INTEGER    shift, and go to state 38
+    REAL       shift, and go to state 39
+    STRING     shift, and go to state 40
+
+    $default  reduce using rule 33 (var_type)
+
+    var_type               go to state 41
+    literal_constant_list  go to state 42
+
+
+State 25
+
+    1 program: programname SEMICOLON programbody KWEND IDENT .
+
+    $default  reduce using rule 1 (program)
+
+
+State 26
+
+   13 func_decl: IDENT BRACELEFT . arg_lists BRACERIGHT func_type SEMICOLON compound_statement KWEND IDENT
+
+    IDENT  shift, and go to state 14
+
+    $default  reduce using rule 103 (epsilon)
+
+    arg_lists        go to state 43
+    arg              go to state 44
+    identifier_list  go to state 45
+    epsilon          go to state 46
+
+
+State 27
+
+   56 compound_statement: KWBEGIN . var_const_decl_list statement_list KWEND
+
+    KWVAR  shift, and go to state 6
+
+    KWVAR     [reduce using rule 103 (epsilon)]
+    $default  reduce using rule 103 (epsilon)
+
+    var_const_decl_list  go to state 47
+    var_const_decl       go to state 9
+    var_decl             go to state 10
+    array_decl           go to state 11
+    const_decl           go to state 12
+    epsilon              go to state 13
+
+
+State 28
+
+   10 func_decl_list: func_decl_list func_decl .
+
+    $default  reduce using rule 10 (func_decl_list)
+
+
+State 29
+
+    3 programbody: var_const_decl_list func_decl_list compound_statement .
+
+    $default  reduce using rule 3 (programbody)
+
+
+State 30
+
+   19 identifier_list: IDENT COMMA identifier_list .
+
+    $default  reduce using rule 19 (identifier_list)
+
+
+State 31
+
+   31 var_type: KWARRAY .
+   34 array_decl: KWVAR identifier_list COLON KWARRAY . array_dimension_decl var_type SEMICOLON
+
+    INTEGER  shift, and go to state 48
+
+    $default  reduce using rule 31 (var_type)
+
+    array_dimension_decl  go to state 49
+
+
+State 32
+
+   32 var_type: KWBOOLEAN .
+
+    $default  reduce using rule 32 (var_type)
+
+
+State 33
+
+   28 var_type: KWINTEGER .
+
+    $default  reduce using rule 28 (var_type)
+
+
+State 34
+
+   29 var_type: KWREAL .
+
+    $default  reduce using rule 29 (var_type)
+
+
+State 35
+
+   30 var_type: KWSTRING .
+
+    $default  reduce using rule 30 (var_type)
+
+
+State 36
+
+   43 literal_constant_list: KWTRUE .
+
+    $default  reduce using rule 43 (literal_constant_list)
+
+
+State 37
+
+   44 literal_constant_list: KWFALSE .
+
+    $default  reduce using rule 44 (literal_constant_list)
+
+
+State 38
+
+   40 literal_constant_list: INTEGER .
+
+    $default  reduce using rule 40 (literal_constant_list)
+
+
+State 39
+
+   41 literal_constant_list: REAL .
+
+    $default  reduce using rule 41 (literal_constant_list)
+
+
+State 40
+
+   42 literal_constant_list: STRING .
+
+    $default  reduce using rule 42 (literal_constant_list)
+
+
+State 41
+
+   27 var_decl: KWVAR identifier_list COLON var_type . SEMICOLON
+
+    SEMICOLON  shift, and go to state 50
+
+
+State 42
+
+   39 const_decl: KWVAR identifier_list COLON literal_constant_list . SEMICOLON
+
+    SEMICOLON  shift, and go to state 51
+
+
+State 43
+
+   13 func_decl: IDENT BRACELEFT arg_lists . BRACERIGHT func_type SEMICOLON compound_statement KWEND IDENT
+   15 arg_lists: arg_lists . SEMICOLON arg
+
+    SEMICOLON   shift, and go to state 52
+    BRACERIGHT  shift, and go to state 53
+
+
+State 44
+
+   14 arg_lists: arg .
+
+    $default  reduce using rule 14 (arg_lists)
+
+
+State 45
+
+   17 arg: identifier_list . COLON var_type
+   18    | identifier_list . COLON array_decl
+
+    COLON  shift, and go to state 54
+
+
+State 46
+
+   16 arg_lists: epsilon .
+   21 identifier_list: epsilon .
+
+    COLON     reduce using rule 21 (identifier_list)
+    $default  reduce using rule 16 (arg_lists)
+
+
+State 47
+
+    4 var_const_decl_list: var_const_decl_list . var_const_decl
+   56 compound_statement: KWBEGIN var_const_decl_list . statement_list KWEND
+
+    KWBEGIN   shift, and go to state 27
+    KWFOR     shift, and go to state 55
+    KWIF      shift, and go to state 56
+    KWPRINT   shift, and go to state 57
+    KWREAD    shift, and go to state 58
+    KWRETURN  shift, and go to state 59
+    KWVAR     shift, and go to state 6
+    KWWHILE   shift, and go to state 60
+    IDENT     shift, and go to state 61
+
+    KWBEGIN   [reduce using rule 55 (statement)]
+    KWBEGIN   [reduce using rule 103 (epsilon)]
+    KWEND     reduce using rule 55 (statement)
+    KWEND     [reduce using rule 103 (epsilon)]
+    KWFOR     [reduce using rule 55 (statement)]
+    KWFOR     [reduce using rule 103 (epsilon)]
+    KWIF      [reduce using rule 55 (statement)]
+    KWIF      [reduce using rule 103 (epsilon)]
+    KWPRINT   [reduce using rule 55 (statement)]
+    KWPRINT   [reduce using rule 103 (epsilon)]
+    KWREAD    [reduce using rule 55 (statement)]
+    KWREAD    [reduce using rule 103 (epsilon)]
+    KWRETURN  [reduce using rule 55 (statement)]
+    KWRETURN  [reduce using rule 103 (epsilon)]
+    KWWHILE   [reduce using rule 55 (statement)]
+    KWWHILE   [reduce using rule 103 (epsilon)]
+    IDENT     [reduce using rule 55 (statement)]
+    IDENT     [reduce using rule 103 (epsilon)]
+    $default  reduce using rule 55 (statement)
+
+    var_const_decl                 go to state 19
+    var_decl                       go to state 10
+    array_decl                     go to state 11
+    const_decl                     go to state 12
+    statement_list                 go to state 62
+    statement                      go to state 63
+    compound_statement             go to state 64
+    simple_statement               go to state 65
+    variable_reference             go to state 66
+    function_invocation_statement  go to state 67
+    conditional_statement          go to state 68
+    while_statement                go to state 69
+    for_statement                  go to state 70
+    return_statement               go to state 71
+    epsilon                        go to state 72
+
+
+State 48
+
+   36 array_dimension_decl: INTEGER . KWTO INTEGER KWOF more_array_or_not
+
+    KWTO  shift, and go to state 73
+
+
+State 49
+
+   34 array_decl: KWVAR identifier_list COLON KWARRAY array_dimension_decl . var_type SEMICOLON
+   35 array_dimension_decl: array_dimension_decl . INTEGER KWTO INTEGER KWOF more_array_or_not
+
+    KWARRAY    shift, and go to state 74
+    KWBOOLEAN  shift, and go to state 32
+    KWINTEGER  shift, and go to state 33
+    KWREAL     shift, and go to state 34
+    KWSTRING   shift, and go to state 35
+    INTEGER    shift, and go to state 75
+
+    $default  reduce using rule 33 (var_type)
+
+    var_type  go to state 76
+
+
+State 50
+
+   27 var_decl: KWVAR identifier_list COLON var_type SEMICOLON .
+
+    $default  reduce using rule 27 (var_decl)
+
+
+State 51
+
+   39 const_decl: KWVAR identifier_list COLON literal_constant_list SEMICOLON .
+
+    $default  reduce using rule 39 (const_decl)
+
+
+State 52
+
+   15 arg_lists: arg_lists SEMICOLON . arg
+
+    IDENT  shift, and go to state 14
+
+    $default  reduce using rule 103 (epsilon)
+
+    arg              go to state 77
+    identifier_list  go to state 45
+    epsilon          go to state 16
+
+
+State 53
+
+   13 func_decl: IDENT BRACELEFT arg_lists BRACERIGHT . func_type SEMICOLON compound_statement KWEND IDENT
+
+    COLON  shift, and go to state 78
+
+    $default  reduce using rule 103 (epsilon)
+
+    func_type  go to state 79
+    epsilon    go to state 80
+
+
+State 54
+
+   17 arg: identifier_list COLON . var_type
+   18    | identifier_list COLON . array_decl
+
+    KWARRAY    shift, and go to state 74
+    KWBOOLEAN  shift, and go to state 32
+    KWINTEGER  shift, and go to state 33
+    KWREAL     shift, and go to state 34
+    KWSTRING   shift, and go to state 35
+    KWVAR      shift, and go to state 81
+
+    $default  reduce using rule 33 (var_type)
+
+    var_type    go to state 82
+    array_decl  go to state 83
+
+
+State 55
+
+  101 for_statement: KWFOR . IDENT ASSIGN INTEGER KWTO INTEGER KWDO statement_list KWEND KWDO
+
+    IDENT  shift, and go to state 84
+
+
+State 56
+
+   98 conditional_statement: KWIF . boolean_expression KWTHEN statement_list KWELSE statement_list KWEND KWIF
+   99                      | KWIF . boolean_expression KWTHEN statement_list KWEND KWIF
+
+    BRACELEFT  shift, and go to state 85
+    MINUS      shift, and go to state 86
+    NOT        shift, and go to state 87
+    KWTRUE     shift, and go to state 36
+    KWFALSE    shift, and go to state 37
+    INTEGER    shift, and go to state 38
+    REAL       shift, and go to state 39
+    IDENT      shift, and go to state 61
+    STRING     shift, and go to state 40
+
+    LESS          reduce using rule 86 (expression)
+    LESS          [reduce using rule 93 (boolean_expression)]
+    LESSEQUAL     reduce using rule 86 (expression)
+    LESSEQUAL     [reduce using rule 93 (boolean_expression)]
+    LESSGREATER   reduce using rule 86 (expression)
+    LESSGREATER   [reduce using rule 93 (boolean_expression)]
+    GREATEREQUAL  reduce using rule 86 (expression)
+    GREATEREQUAL  [reduce using rule 93 (boolean_expression)]
+    GREATER       reduce using rule 86 (expression)
+    GREATER       [reduce using rule 93 (boolean_expression)]
+    EQUAL         reduce using rule 86 (expression)
+    EQUAL         [reduce using rule 93 (boolean_expression)]
+    PLUS          reduce using rule 86 (expression)
+    PLUS          [reduce using rule 93 (boolean_expression)]
+    MINUS         [reduce using rule 86 (expression)]
+    MINUS         [reduce using rule 93 (boolean_expression)]
+    MULTIPLY      reduce using rule 86 (expression)
+    MULTIPLY      [reduce using rule 93 (boolean_expression)]
+    DIVIDE        reduce using rule 86 (expression)
+    DIVIDE        [reduce using rule 93 (boolean_expression)]
+    MOD           reduce using rule 86 (expression)
+    MOD           [reduce using rule 93 (boolean_expression)]
+    AND           reduce using rule 86 (expression)
+    AND           [reduce using rule 93 (boolean_expression)]
+    OR            reduce using rule 86 (expression)
+    OR            [reduce using rule 93 (boolean_expression)]
+    KWTHEN        reduce using rule 93 (boolean_expression)
+    $default      reduce using rule 86 (expression)
+
+    literal_constant_list          go to state 88
+    variable_reference             go to state 89
+    expression                     go to state 90
+    boolean_expression             go to state 91
+    function_invocation_statement  go to state 92
+
+
+State 57
+
+   58 simple_statement: KWPRINT . variable_reference
+   59                 | KWPRINT . expression
+
+    BRACELEFT  shift, and go to state 85
+    MINUS      shift, and go to state 86
+    NOT        shift, and go to state 87
+    KWTRUE     shift, and go to state 36
+    KWFALSE    shift, and go to state 37
+    INTEGER    shift, and go to state 38
+    REAL       shift, and go to state 39
+    IDENT      shift, and go to state 61
+    STRING     shift, and go to state 40
+
+    SEMICOLON     reduce using rule 86 (expression)
+    SEMICOLON     [reduce using rule 93 (boolean_expression)]
+    LESS          reduce using rule 86 (expression)
+    LESS          [reduce using rule 93 (boolean_expression)]
+    LESSEQUAL     reduce using rule 86 (expression)
+    LESSEQUAL     [reduce using rule 93 (boolean_expression)]
+    LESSGREATER   reduce using rule 86 (expression)
+    LESSGREATER   [reduce using rule 93 (boolean_expression)]
+    GREATEREQUAL  reduce using rule 86 (expression)
+    GREATEREQUAL  [reduce using rule 93 (boolean_expression)]
+    GREATER       reduce using rule 86 (expression)
+    GREATER       [reduce using rule 93 (boolean_expression)]
+    EQUAL         reduce using rule 86 (expression)
+    EQUAL         [reduce using rule 93 (boolean_expression)]
+    PLUS          reduce using rule 86 (expression)
+    PLUS          [reduce using rule 93 (boolean_expression)]
+    MINUS         [reduce using rule 86 (expression)]
+    MINUS         [reduce using rule 93 (boolean_expression)]
+    MULTIPLY      reduce using rule 86 (expression)
+    MULTIPLY      [reduce using rule 93 (boolean_expression)]
+    DIVIDE        reduce using rule 86 (expression)
+    DIVIDE        [reduce using rule 93 (boolean_expression)]
+    MOD           reduce using rule 86 (expression)
+    MOD           [reduce using rule 93 (boolean_expression)]
+    AND           reduce using rule 86 (expression)
+    AND           [reduce using rule 93 (boolean_expression)]
+    OR            reduce using rule 86 (expression)
+    OR            [reduce using rule 93 (boolean_expression)]
+    $default      reduce using rule 86 (expression)
+
+    literal_constant_list          go to state 88
+    variable_reference             go to state 93
+    expression                     go to state 94
+    boolean_expression             go to state 95
+    function_invocation_statement  go to state 92
+
+
+State 58
+
+   60 simple_statement: KWREAD . variable_reference
+
+    IDENT  shift, and go to state 96
+
+    variable_reference  go to state 97
+
+
+State 59
+
+  102 return_statement: KWRETURN . expression
+
+    BRACELEFT  shift, and go to state 85
+    MINUS      shift, and go to state 86
+    NOT        shift, and go to state 87
+    KWTRUE     shift, and go to state 36
+    KWFALSE    shift, and go to state 37
+    INTEGER    shift, and go to state 38
+    REAL       shift, and go to state 39
+    IDENT      shift, and go to state 61
+    STRING     shift, and go to state 40
+
+    SEMICOLON     reduce using rule 86 (expression)
+    SEMICOLON     [reduce using rule 93 (boolean_expression)]
+    LESS          reduce using rule 86 (expression)
+    LESS          [reduce using rule 93 (boolean_expression)]
+    LESSEQUAL     reduce using rule 86 (expression)
+    LESSEQUAL     [reduce using rule 93 (boolean_expression)]
+    LESSGREATER   reduce using rule 86 (expression)
+    LESSGREATER   [reduce using rule 93 (boolean_expression)]
+    GREATEREQUAL  reduce using rule 86 (expression)
+    GREATEREQUAL  [reduce using rule 93 (boolean_expression)]
+    GREATER       reduce using rule 86 (expression)
+    GREATER       [reduce using rule 93 (boolean_expression)]
+    EQUAL         reduce using rule 86 (expression)
+    EQUAL         [reduce using rule 93 (boolean_expression)]
+    PLUS          reduce using rule 86 (expression)
+    PLUS          [reduce using rule 93 (boolean_expression)]
+    MINUS         [reduce using rule 86 (expression)]
+    MINUS         [reduce using rule 93 (boolean_expression)]
+    MULTIPLY      reduce using rule 86 (expression)
+    MULTIPLY      [reduce using rule 93 (boolean_expression)]
+    DIVIDE        reduce using rule 86 (expression)
+    DIVIDE        [reduce using rule 93 (boolean_expression)]
+    MOD           reduce using rule 86 (expression)
+    MOD           [reduce using rule 93 (boolean_expression)]
+    AND           reduce using rule 86 (expression)
+    AND           [reduce using rule 93 (boolean_expression)]
+    OR            reduce using rule 86 (expression)
+    OR            [reduce using rule 93 (boolean_expression)]
+    $default      reduce using rule 86 (expression)
+
+    literal_constant_list          go to state 88
+    variable_reference             go to state 89
+    expression                     go to state 98
+    boolean_expression             go to state 95
+    function_invocation_statement  go to state 92
+
+
+State 60
+
+  100 while_statement: KWWHILE . boolean_expression KWDO statement_list KWEND KWDO
+
+    BRACELEFT  shift, and go to state 85
+    MINUS      shift, and go to state 86
+    NOT        shift, and go to state 87
+    KWTRUE     shift, and go to state 36
+    KWFALSE    shift, and go to state 37
+    INTEGER    shift, and go to state 38
+    REAL       shift, and go to state 39
+    IDENT      shift, and go to state 61
+    STRING     shift, and go to state 40
+
+    LESS          reduce using rule 86 (expression)
+    LESS          [reduce using rule 93 (boolean_expression)]
+    LESSEQUAL     reduce using rule 86 (expression)
+    LESSEQUAL     [reduce using rule 93 (boolean_expression)]
+    LESSGREATER   reduce using rule 86 (expression)
+    LESSGREATER   [reduce using rule 93 (boolean_expression)]
+    GREATEREQUAL  reduce using rule 86 (expression)
+    GREATEREQUAL  [reduce using rule 93 (boolean_expression)]
+    GREATER       reduce using rule 86 (expression)
+    GREATER       [reduce using rule 93 (boolean_expression)]
+    EQUAL         reduce using rule 86 (expression)
+    EQUAL         [reduce using rule 93 (boolean_expression)]
+    PLUS          reduce using rule 86 (expression)
+    PLUS          [reduce using rule 93 (boolean_expression)]
+    MINUS         [reduce using rule 86 (expression)]
+    MINUS         [reduce using rule 93 (boolean_expression)]
+    MULTIPLY      reduce using rule 86 (expression)
+    MULTIPLY      [reduce using rule 93 (boolean_expression)]
+    DIVIDE        reduce using rule 86 (expression)
+    DIVIDE        [reduce using rule 93 (boolean_expression)]
+    MOD           reduce using rule 86 (expression)
+    MOD           [reduce using rule 93 (boolean_expression)]
+    AND           reduce using rule 86 (expression)
+    AND           [reduce using rule 93 (boolean_expression)]
+    OR            reduce using rule 86 (expression)
+    OR            [reduce using rule 93 (boolean_expression)]
+    KWDO          reduce using rule 93 (boolean_expression)
+    $default      reduce using rule 86 (expression)
+
+    literal_constant_list          go to state 88
+    variable_reference             go to state 89
+    expression                     go to state 90
+    boolean_expression             go to state 99
+    function_invocation_statement  go to state 92
+
+
+State 61
+
+   61 variable_reference: IDENT .
+   62                   | IDENT . BRACKETLEFT integer_expression BRACKETRIGHT array_reference
+   94 function_invocation_statement: IDENT . BRACELEFT expression_list BRACERIGHT
+
+    BRACELEFT    shift, and go to state 100
+    BRACKETLEFT  shift, and go to state 101
+
+    $default  reduce using rule 61 (variable_reference)
+
+
+State 62
+
+   45 statement_list: statement_list . statement
+   56 compound_statement: KWBEGIN var_const_decl_list statement_list . KWEND
+
+    KWBEGIN   shift, and go to state 27
+    KWEND     shift, and go to state 102
+    KWFOR     shift, and go to state 55
+    KWIF      shift, and go to state 56
+    KWPRINT   shift, and go to state 57
+    KWREAD    shift, and go to state 58
+    KWRETURN  shift, and go to state 59
+    KWWHILE   shift, and go to state 60
+    IDENT     shift, and go to state 61
+
+    KWBEGIN   [reduce using rule 55 (statement)]
+    KWEND     [reduce using rule 55 (statement)]
+    KWFOR     [reduce using rule 55 (statement)]
+    KWIF      [reduce using rule 55 (statement)]
+    KWPRINT   [reduce using rule 55 (statement)]
+    KWREAD    [reduce using rule 55 (statement)]
+    KWRETURN  [reduce using rule 55 (statement)]
+    KWWHILE   [reduce using rule 55 (statement)]
+    IDENT     [reduce using rule 55 (statement)]
+
+    statement                      go to state 103
+    compound_statement             go to state 64
+    simple_statement               go to state 65
+    variable_reference             go to state 66
+    function_invocation_statement  go to state 67
+    conditional_statement          go to state 68
+    while_statement                go to state 69
+    for_statement                  go to state 70
+    return_statement               go to state 71
+
+
+State 63
+
+   46 statement_list: statement .
+
+    $default  reduce using rule 46 (statement_list)
+
+
+State 64
+
+   48 statement: compound_statement .
+
+    $default  reduce using rule 48 (statement)
+
+
+State 65
+
+   49 statement: simple_statement . SEMICOLON
+
+    SEMICOLON  shift, and go to state 104
+
+
+State 66
+
+   57 simple_statement: variable_reference . ASSIGN expression_list
+
+    ASSIGN  shift, and go to state 105
+
+
+State 67
+
+   54 statement: function_invocation_statement . SEMICOLON
+
+    SEMICOLON  shift, and go to state 106
+
+
+State 68
+
+   50 statement: conditional_statement .
+
+    $default  reduce using rule 50 (statement)
+
+
+State 69
+
+   51 statement: while_statement .
+
+    $default  reduce using rule 51 (statement)
+
+
+State 70
+
+   52 statement: for_statement .
+
+    $default  reduce using rule 52 (statement)
+
+
+State 71
+
+   53 statement: return_statement . SEMICOLON
+
+    SEMICOLON  shift, and go to state 107
+
+
+State 72
+
+   47 statement_list: epsilon .
+
+    $default  reduce using rule 47 (statement_list)
+
+
+State 73
+
+   36 array_dimension_decl: INTEGER KWTO . INTEGER KWOF more_array_or_not
+
+    INTEGER  shift, and go to state 108
+
+
+State 74
+
+   31 var_type: KWARRAY .
+
+    $default  reduce using rule 31 (var_type)
+
+
+State 75
+
+   35 array_dimension_decl: array_dimension_decl INTEGER . KWTO INTEGER KWOF more_array_or_not
+
+    KWTO  shift, and go to state 109
+
+
+State 76
+
+   34 array_decl: KWVAR identifier_list COLON KWARRAY array_dimension_decl var_type . SEMICOLON
+
+    SEMICOLON  shift, and go to state 110
+
+
+State 77
+
+   15 arg_lists: arg_lists SEMICOLON arg .
+
+    $default  reduce using rule 15 (arg_lists)
+
+
+State 78
+
+   22 func_type: COLON . KWINTEGER
+   23          | COLON . KWREAL
+   24          | COLON . KWBOOLEAN
+   25          | COLON . KWSTRING
+
+    KWBOOLEAN  shift, and go to state 111
+    KWINTEGER  shift, and go to state 112
+    KWREAL     shift, and go to state 113
+    KWSTRING   shift, and go to state 114
+
+
+State 79
+
+   13 func_decl: IDENT BRACELEFT arg_lists BRACERIGHT func_type . SEMICOLON compound_statement KWEND IDENT
+
+    SEMICOLON  shift, and go to state 115
+
+
+State 80
+
+   26 func_type: epsilon .
+
+    $default  reduce using rule 26 (func_type)
+
+
+State 81
+
+   34 array_decl: KWVAR . identifier_list COLON KWARRAY array_dimension_decl var_type SEMICOLON
+
+    IDENT  shift, and go to state 14
+
+    $default  reduce using rule 103 (epsilon)
+
+    identifier_list  go to state 116
+    epsilon          go to state 16
+
+
+State 82
+
+   17 arg: identifier_list COLON var_type .
+
+    $default  reduce using rule 17 (arg)
+
+
+State 83
+
+   18 arg: identifier_list COLON array_decl .
+
+    $default  reduce using rule 18 (arg)
+
+
+State 84
+
+  101 for_statement: KWFOR IDENT . ASSIGN INTEGER KWTO INTEGER KWDO statement_list KWEND KWDO
+
+    ASSIGN  shift, and go to state 117
+
+
+State 85
+
+   73 expression: BRACELEFT . expression BRACERIGHT
+
+    BRACELEFT  shift, and go to state 85
+    MINUS      shift, and go to state 86
+    NOT        shift, and go to state 87
+    KWTRUE     shift, and go to state 36
+    KWFALSE    shift, and go to state 37
+    INTEGER    shift, and go to state 38
+    REAL       shift, and go to state 39
+    IDENT      shift, and go to state 61
+    STRING     shift, and go to state 40
+
+    BRACERIGHT    reduce using rule 86 (expression)
+    BRACERIGHT    [reduce using rule 93 (boolean_expression)]
+    LESS          reduce using rule 86 (expression)
+    LESS          [reduce using rule 93 (boolean_expression)]
+    LESSEQUAL     reduce using rule 86 (expression)
+    LESSEQUAL     [reduce using rule 93 (boolean_expression)]
+    LESSGREATER   reduce using rule 86 (expression)
+    LESSGREATER   [reduce using rule 93 (boolean_expression)]
+    GREATEREQUAL  reduce using rule 86 (expression)
+    GREATEREQUAL  [reduce using rule 93 (boolean_expression)]
+    GREATER       reduce using rule 86 (expression)
+    GREATER       [reduce using rule 93 (boolean_expression)]
+    EQUAL         reduce using rule 86 (expression)
+    EQUAL         [reduce using rule 93 (boolean_expression)]
+    PLUS          reduce using rule 86 (expression)
+    PLUS          [reduce using rule 93 (boolean_expression)]
+    MINUS         [reduce using rule 86 (expression)]
+    MINUS         [reduce using rule 93 (boolean_expression)]
+    MULTIPLY      reduce using rule 86 (expression)
+    MULTIPLY      [reduce using rule 93 (boolean_expression)]
+    DIVIDE        reduce using rule 86 (expression)
+    DIVIDE        [reduce using rule 93 (boolean_expression)]
+    MOD           reduce using rule 86 (expression)
+    MOD           [reduce using rule 93 (boolean_expression)]
+    AND           reduce using rule 86 (expression)
+    AND           [reduce using rule 93 (boolean_expression)]
+    OR            reduce using rule 86 (expression)
+    OR            [reduce using rule 93 (boolean_expression)]
+    $default      reduce using rule 86 (expression)
+
+    literal_constant_list          go to state 88
+    variable_reference             go to state 89
+    expression                     go to state 118
+    boolean_expression             go to state 95
+    function_invocation_statement  go to state 92
+
+
+State 86
+
+   72 expression: MINUS . BRACELEFT expression BRACERIGHT
+
+    BRACELEFT  shift, and go to state 119
+
+
+State 87
+
+   83 expression: NOT . expression
+
+    BRACELEFT  shift, and go to state 85
+    MINUS      shift, and go to state 86
+    NOT        shift, and go to state 87
+    KWTRUE     shift, and go to state 36
+    KWFALSE    shift, and go to state 37
+    INTEGER    shift, and go to state 38
+    REAL       shift, and go to state 39
+    IDENT      shift, and go to state 61
+    STRING     shift, and go to state 40
+
+    COMMA         reduce using rule 86 (expression)
+    COMMA         [reduce using rule 93 (boolean_expression)]
+    SEMICOLON     reduce using rule 86 (expression)
+    SEMICOLON     [reduce using rule 93 (boolean_expression)]
+    BRACERIGHT    reduce using rule 86 (expression)
+    BRACERIGHT    [reduce using rule 93 (boolean_expression)]
+    BRACKETRIGHT  reduce using rule 86 (expression)
+    BRACKETRIGHT  [reduce using rule 93 (boolean_expression)]
+    LESS          reduce using rule 86 (expression)
+    LESS          [reduce using rule 93 (boolean_expression)]
+    LESSEQUAL     reduce using rule 86 (expression)
+    LESSEQUAL     [reduce using rule 93 (boolean_expression)]
+    LESSGREATER   reduce using rule 86 (expression)
+    LESSGREATER   [reduce using rule 93 (boolean_expression)]
+    GREATEREQUAL  reduce using rule 86 (expression)
+    GREATEREQUAL  [reduce using rule 93 (boolean_expression)]
+    GREATER       reduce using rule 86 (expression)
+    GREATER       [reduce using rule 93 (boolean_expression)]
+    EQUAL         reduce using rule 86 (expression)
+    EQUAL         [reduce using rule 93 (boolean_expression)]
+    PLUS          reduce using rule 86 (expression)
+    PLUS          [reduce using rule 93 (boolean_expression)]
+    MINUS         [reduce using rule 86 (expression)]
+    MINUS         [reduce using rule 93 (boolean_expression)]
+    MULTIPLY      reduce using rule 86 (expression)
+    MULTIPLY      [reduce using rule 93 (boolean_expression)]
+    DIVIDE        reduce using rule 86 (expression)
+    DIVIDE        [reduce using rule 93 (boolean_expression)]
+    MOD           reduce using rule 86 (expression)
+    MOD           [reduce using rule 93 (boolean_expression)]
+    AND           reduce using rule 86 (expression)
+    AND           [reduce using rule 93 (boolean_expression)]
+    OR            reduce using rule 86 (expression)
+    OR            [reduce using rule 93 (boolean_expression)]
+    KWDO          reduce using rule 86 (expression)
+    KWDO          [reduce using rule 93 (boolean_expression)]
+    KWTHEN        reduce using rule 86 (expression)
+    KWTHEN        [reduce using rule 93 (boolean_expression)]
+    $default      reduce using rule 86 (expression)
+
+    literal_constant_list          go to state 88
+    variable_reference             go to state 89
+    expression                     go to state 120
+    boolean_expression             go to state 95
+    function_invocation_statement  go to state 92
+
+
+State 88
+
+   74 expression: literal_constant_list .
+
+    $default  reduce using rule 74 (expression)
+
+
+State 89
+
+   75 expression: variable_reference .
+
+    $default  reduce using rule 75 (expression)
+
+
+State 90
+
+   77 expression: expression . MULTIPLY expression
+   78           | expression . DIVIDE expression
+   79           | expression . MOD expression
+   80           | expression . PLUS expression
+   81           | expression . MINUS expression
+   84           | expression . AND expression
+   85           | expression . OR expression
+   87 boolean_expression: expression . LESS expression
+   88                   | expression . LESSEQUAL expression
+   89                   | expression . EQUAL expression
+   90                   | expression . GREATEREQUAL expression
+   91                   | expression . GREATER expression
+   92                   | expression . LESSGREATER expression
+
+    LESS          shift, and go to state 121
+    LESSEQUAL     shift, and go to state 122
+    LESSGREATER   shift, and go to state 123
+    GREATEREQUAL  shift, and go to state 124
+    GREATER       shift, and go to state 125
+    EQUAL         shift, and go to state 126
+    PLUS          shift, and go to state 127
+    MINUS         shift, and go to state 128
+    MULTIPLY      shift, and go to state 129
+    DIVIDE        shift, and go to state 130
+    MOD           shift, and go to state 131
+    AND           shift, and go to state 132
+    OR            shift, and go to state 133
+
+
+State 91
+
+   82 expression: boolean_expression .
+   98 conditional_statement: KWIF boolean_expression . KWTHEN statement_list KWELSE statement_list KWEND KWIF
+   99                      | KWIF boolean_expression . KWTHEN statement_list KWEND KWIF
+
+    KWTHEN  shift, and go to state 134
+
+    $default  reduce using rule 82 (expression)
+
+
+State 92
+
+   76 expression: function_invocation_statement .
+
+    $default  reduce using rule 76 (expression)
+
+
+State 93
+
+   58 simple_statement: KWPRINT variable_reference .
+   75 expression: variable_reference .
+
+    SEMICOLON  reduce using rule 58 (simple_statement)
+    SEMICOLON  [reduce using rule 75 (expression)]
+    $default   reduce using rule 75 (expression)
+
+
+State 94
+
+   59 simple_statement: KWPRINT expression .
+   77 expression: expression . MULTIPLY expression
+   78           | expression . DIVIDE expression
+   79           | expression . MOD expression
+   80           | expression . PLUS expression
+   81           | expression . MINUS expression
+   84           | expression . AND expression
+   85           | expression . OR expression
+   87 boolean_expression: expression . LESS expression
+   88                   | expression . LESSEQUAL expression
+   89                   | expression . EQUAL expression
+   90                   | expression . GREATEREQUAL expression
+   91                   | expression . GREATER expression
+   92                   | expression . LESSGREATER expression
+
+    LESS          shift, and go to state 121
+    LESSEQUAL     shift, and go to state 122
+    LESSGREATER   shift, and go to state 123
+    GREATEREQUAL  shift, and go to state 124
+    GREATER       shift, and go to state 125
+    EQUAL         shift, and go to state 126
+    PLUS          shift, and go to state 127
+    MINUS         shift, and go to state 128
+    MULTIPLY      shift, and go to state 129
+    DIVIDE        shift, and go to state 130
+    MOD           shift, and go to state 131
+    AND           shift, and go to state 132
+    OR            shift, and go to state 133
+
+    $default  reduce using rule 59 (simple_statement)
+
+
+State 95
+
+   82 expression: boolean_expression .
+
+    $default  reduce using rule 82 (expression)
+
+
+State 96
+
+   61 variable_reference: IDENT .
+   62                   | IDENT . BRACKETLEFT integer_expression BRACKETRIGHT array_reference
+
+    BRACKETLEFT  shift, and go to state 101
+
+    $default  reduce using rule 61 (variable_reference)
+
+
+State 97
+
+   60 simple_statement: KWREAD variable_reference .
+
+    $default  reduce using rule 60 (simple_statement)
+
+
+State 98
+
+   77 expression: expression . MULTIPLY expression
+   78           | expression . DIVIDE expression
+   79           | expression . MOD expression
+   80           | expression . PLUS expression
+   81           | expression . MINUS expression
+   84           | expression . AND expression
+   85           | expression . OR expression
+   87 boolean_expression: expression . LESS expression
+   88                   | expression . LESSEQUAL expression
+   89                   | expression . EQUAL expression
+   90                   | expression . GREATEREQUAL expression
+   91                   | expression . GREATER expression
+   92                   | expression . LESSGREATER expression
+  102 return_statement: KWRETURN expression .
+
+    LESS          shift, and go to state 121
+    LESSEQUAL     shift, and go to state 122
+    LESSGREATER   shift, and go to state 123
+    GREATEREQUAL  shift, and go to state 124
+    GREATER       shift, and go to state 125
+    EQUAL         shift, and go to state 126
+    PLUS          shift, and go to state 127
+    MINUS         shift, and go to state 128
+    MULTIPLY      shift, and go to state 129
+    DIVIDE        shift, and go to state 130
+    MOD           shift, and go to state 131
+    AND           shift, and go to state 132
+    OR            shift, and go to state 133
+
+    $default  reduce using rule 102 (return_statement)
+
+
+State 99
+
+   82 expression: boolean_expression .
+  100 while_statement: KWWHILE boolean_expression . KWDO statement_list KWEND KWDO
+
+    KWDO  shift, and go to state 135
+
+    $default  reduce using rule 82 (expression)
+
+
+State 100
+
+   94 function_invocation_statement: IDENT BRACELEFT . expression_list BRACERIGHT
+
+    BRACELEFT  shift, and go to state 85
+    MINUS      shift, and go to state 86
+    NOT        shift, and go to state 87
+    KWTRUE     shift, and go to state 36
+    KWFALSE    shift, and go to state 37
+    INTEGER    shift, and go to state 38
+    REAL       shift, and go to state 39
+    IDENT      shift, and go to state 61
+    STRING     shift, and go to state 40
+
+    COMMA         reduce using rule 86 (expression)
+    COMMA         [reduce using rule 93 (boolean_expression)]
+    COMMA         [reduce using rule 103 (epsilon)]
+    BRACERIGHT    reduce using rule 86 (expression)
+    BRACERIGHT    [reduce using rule 93 (boolean_expression)]
+    BRACERIGHT    [reduce using rule 103 (epsilon)]
+    LESS          reduce using rule 86 (expression)
+    LESS          [reduce using rule 93 (boolean_expression)]
+    LESSEQUAL     reduce using rule 86 (expression)
+    LESSEQUAL     [reduce using rule 93 (boolean_expression)]
+    LESSGREATER   reduce using rule 86 (expression)
+    LESSGREATER   [reduce using rule 93 (boolean_expression)]
+    GREATEREQUAL  reduce using rule 86 (expression)
+    GREATEREQUAL  [reduce using rule 93 (boolean_expression)]
+    GREATER       reduce using rule 86 (expression)
+    GREATER       [reduce using rule 93 (boolean_expression)]
+    EQUAL         reduce using rule 86 (expression)
+    EQUAL         [reduce using rule 93 (boolean_expression)]
+    PLUS          reduce using rule 86 (expression)
+    PLUS          [reduce using rule 93 (boolean_expression)]
+    MINUS         [reduce using rule 86 (expression)]
+    MINUS         [reduce using rule 93 (boolean_expression)]
+    MULTIPLY      reduce using rule 86 (expression)
+    MULTIPLY      [reduce using rule 93 (boolean_expression)]
+    DIVIDE        reduce using rule 86 (expression)
+    DIVIDE        [reduce using rule 93 (boolean_expression)]
+    MOD           reduce using rule 86 (expression)
+    MOD           [reduce using rule 93 (boolean_expression)]
+    AND           reduce using rule 86 (expression)
+    AND           [reduce using rule 93 (boolean_expression)]
+    OR            reduce using rule 86 (expression)
+    OR            [reduce using rule 93 (boolean_expression)]
+    $default      reduce using rule 86 (expression)
+
+    literal_constant_list          go to state 88
+    variable_reference             go to state 89
+    expression                     go to state 136
+    boolean_expression             go to state 95
+    function_invocation_statement  go to state 92
+    expression_list                go to state 137
+    epsilon                        go to state 138
+
+
+State 101
+
+   62 variable_reference: IDENT BRACKETLEFT . integer_expression BRACKETRIGHT array_reference
+
+    INTEGER  shift, and go to state 139
+    IDENT    shift, and go to state 140
+
+    integer_expression  go to state 141
+
+
+State 102
+
+   56 compound_statement: KWBEGIN var_const_decl_list statement_list KWEND .
+
+    $default  reduce using rule 56 (compound_statement)
+
+
+State 103
+
+   45 statement_list: statement_list statement .
+
+    $default  reduce using rule 45 (statement_list)
+
+
+State 104
+
+   49 statement: simple_statement SEMICOLON .
+
+    $default  reduce using rule 49 (statement)
+
+
+State 105
+
+   57 simple_statement: variable_reference ASSIGN . expression_list
+
+    BRACELEFT  shift, and go to state 85
+    MINUS      shift, and go to state 86
+    NOT        shift, and go to state 87
+    KWTRUE     shift, and go to state 36
+    KWFALSE    shift, and go to state 37
+    INTEGER    shift, and go to state 38
+    REAL       shift, and go to state 39
+    IDENT      shift, and go to state 61
+    STRING     shift, and go to state 40
+
+    COMMA         reduce using rule 86 (expression)
+    COMMA         [reduce using rule 93 (boolean_expression)]
+    COMMA         [reduce using rule 103 (epsilon)]
+    SEMICOLON     reduce using rule 86 (expression)
+    SEMICOLON     [reduce using rule 93 (boolean_expression)]
+    SEMICOLON     [reduce using rule 103 (epsilon)]
+    LESS          reduce using rule 86 (expression)
+    LESS          [reduce using rule 93 (boolean_expression)]
+    LESSEQUAL     reduce using rule 86 (expression)
+    LESSEQUAL     [reduce using rule 93 (boolean_expression)]
+    LESSGREATER   reduce using rule 86 (expression)
+    LESSGREATER   [reduce using rule 93 (boolean_expression)]
+    GREATEREQUAL  reduce using rule 86 (expression)
+    GREATEREQUAL  [reduce using rule 93 (boolean_expression)]
+    GREATER       reduce using rule 86 (expression)
+    GREATER       [reduce using rule 93 (boolean_expression)]
+    EQUAL         reduce using rule 86 (expression)
+    EQUAL         [reduce using rule 93 (boolean_expression)]
+    PLUS          reduce using rule 86 (expression)
+    PLUS          [reduce using rule 93 (boolean_expression)]
+    MINUS         [reduce using rule 86 (expression)]
+    MINUS         [reduce using rule 93 (boolean_expression)]
+    MULTIPLY      reduce using rule 86 (expression)
+    MULTIPLY      [reduce using rule 93 (boolean_expression)]
+    DIVIDE        reduce using rule 86 (expression)
+    DIVIDE        [reduce using rule 93 (boolean_expression)]
+    MOD           reduce using rule 86 (expression)
+    MOD           [reduce using rule 93 (boolean_expression)]
+    AND           reduce using rule 86 (expression)
+    AND           [reduce using rule 93 (boolean_expression)]
+    OR            reduce using rule 86 (expression)
+    OR            [reduce using rule 93 (boolean_expression)]
+    $default      reduce using rule 86 (expression)
+
+    literal_constant_list          go to state 88
+    variable_reference             go to state 89
+    expression                     go to state 136
+    boolean_expression             go to state 95
+    function_invocation_statement  go to state 92
+    expression_list                go to state 142
+    epsilon                        go to state 138
+
+
+State 106
+
+   54 statement: function_invocation_statement SEMICOLON .
+
+    $default  reduce using rule 54 (statement)
+
+
+State 107
+
+   53 statement: return_statement SEMICOLON .
+
+    $default  reduce using rule 53 (statement)
+
+
+State 108
+
+   36 array_dimension_decl: INTEGER KWTO INTEGER . KWOF more_array_or_not
+
+    KWOF  shift, and go to state 143
+
+
+State 109
+
+   35 array_dimension_decl: array_dimension_decl INTEGER KWTO . INTEGER KWOF more_array_or_not
+
+    INTEGER  shift, and go to state 144
+
+
+State 110
+
+   34 array_decl: KWVAR identifier_list COLON KWARRAY array_dimension_decl var_type SEMICOLON .
+
+    $default  reduce using rule 34 (array_decl)
+
+
+State 111
+
+   24 func_type: COLON KWBOOLEAN .
+
+    $default  reduce using rule 24 (func_type)
+
+
+State 112
+
+   22 func_type: COLON KWINTEGER .
+
+    $default  reduce using rule 22 (func_type)
+
+
+State 113
+
+   23 func_type: COLON KWREAL .
+
+    $default  reduce using rule 23 (func_type)
+
+
+State 114
+
+   25 func_type: COLON KWSTRING .
+
+    $default  reduce using rule 25 (func_type)
+
+
+State 115
+
+   13 func_decl: IDENT BRACELEFT arg_lists BRACERIGHT func_type SEMICOLON . compound_statement KWEND IDENT
+
+    KWBEGIN  shift, and go to state 27
+
+    compound_statement  go to state 145
+
+
+State 116
+
+   34 array_decl: KWVAR identifier_list . COLON KWARRAY array_dimension_decl var_type SEMICOLON
+
+    COLON  shift, and go to state 146
+
+
+State 117
+
+  101 for_statement: KWFOR IDENT ASSIGN . INTEGER KWTO INTEGER KWDO statement_list KWEND KWDO
+
+    INTEGER  shift, and go to state 147
+
+
+State 118
+
+   73 expression: BRACELEFT expression . BRACERIGHT
+   77           | expression . MULTIPLY expression
+   78           | expression . DIVIDE expression
+   79           | expression . MOD expression
+   80           | expression . PLUS expression
+   81           | expression . MINUS expression
+   84           | expression . AND expression
+   85           | expression . OR expression
+   87 boolean_expression: expression . LESS expression
+   88                   | expression . LESSEQUAL expression
+   89                   | expression . EQUAL expression
+   90                   | expression . GREATEREQUAL expression
+   91                   | expression . GREATER expression
+   92                   | expression . LESSGREATER expression
+
+    BRACERIGHT    shift, and go to state 148
+    LESS          shift, and go to state 121
+    LESSEQUAL     shift, and go to state 122
+    LESSGREATER   shift, and go to state 123
+    GREATEREQUAL  shift, and go to state 124
+    GREATER       shift, and go to state 125
+    EQUAL         shift, and go to state 126
+    PLUS          shift, and go to state 127
+    MINUS         shift, and go to state 128
+    MULTIPLY      shift, and go to state 129
+    DIVIDE        shift, and go to state 130
+    MOD           shift, and go to state 131
+    AND           shift, and go to state 132
+    OR            shift, and go to state 133
+
+
+State 119
+
+   72 expression: MINUS BRACELEFT . expression BRACERIGHT
+
+    BRACELEFT  shift, and go to state 85
+    MINUS      shift, and go to state 86
+    NOT        shift, and go to state 87
+    KWTRUE     shift, and go to state 36
+    KWFALSE    shift, and go to state 37
+    INTEGER    shift, and go to state 38
+    REAL       shift, and go to state 39
+    IDENT      shift, and go to state 61
+    STRING     shift, and go to state 40
+
+    BRACERIGHT    reduce using rule 86 (expression)
+    BRACERIGHT    [reduce using rule 93 (boolean_expression)]
+    LESS          reduce using rule 86 (expression)
+    LESS          [reduce using rule 93 (boolean_expression)]
+    LESSEQUAL     reduce using rule 86 (expression)
+    LESSEQUAL     [reduce using rule 93 (boolean_expression)]
+    LESSGREATER   reduce using rule 86 (expression)
+    LESSGREATER   [reduce using rule 93 (boolean_expression)]
+    GREATEREQUAL  reduce using rule 86 (expression)
+    GREATEREQUAL  [reduce using rule 93 (boolean_expression)]
+    GREATER       reduce using rule 86 (expression)
+    GREATER       [reduce using rule 93 (boolean_expression)]
+    EQUAL         reduce using rule 86 (expression)
+    EQUAL         [reduce using rule 93 (boolean_expression)]
+    PLUS          reduce using rule 86 (expression)
+    PLUS          [reduce using rule 93 (boolean_expression)]
+    MINUS         [reduce using rule 86 (expression)]
+    MINUS         [reduce using rule 93 (boolean_expression)]
+    MULTIPLY      reduce using rule 86 (expression)
+    MULTIPLY      [reduce using rule 93 (boolean_expression)]
+    DIVIDE        reduce using rule 86 (expression)
+    DIVIDE        [reduce using rule 93 (boolean_expression)]
+    MOD           reduce using rule 86 (expression)
+    MOD           [reduce using rule 93 (boolean_expression)]
+    AND           reduce using rule 86 (expression)
+    AND           [reduce using rule 93 (boolean_expression)]
+    OR            reduce using rule 86 (expression)
+    OR            [reduce using rule 93 (boolean_expression)]
+    $default      reduce using rule 86 (expression)
+
+    literal_constant_list          go to state 88
+    variable_reference             go to state 89
+    expression                     go to state 149
+    boolean_expression             go to state 95
+    function_invocation_statement  go to state 92
+
+
+State 120
+
+   77 expression: expression . MULTIPLY expression
+   78           | expression . DIVIDE expression
+   79           | expression . MOD expression
+   80           | expression . PLUS expression
+   81           | expression . MINUS expression
+   83           | NOT expression .
+   84           | expression . AND expression
+   85           | expression . OR expression
+   87 boolean_expression: expression . LESS expression
+   88                   | expression . LESSEQUAL expression
+   89                   | expression . EQUAL expression
+   90                   | expression . GREATEREQUAL expression
+   91                   | expression . GREATER expression
+   92                   | expression . LESSGREATER expression
+
+    AND  shift, and go to state 132
+    OR   shift, and go to state 133
+
+    $default  reduce using rule 83 (expression)
+
+
+State 121
+
+   87 boolean_expression: expression LESS . expression
+
+    BRACELEFT  shift, and go to state 85
+    MINUS      shift, and go to state 86
+    NOT        shift, and go to state 87
+    KWTRUE     shift, and go to state 36
+    KWFALSE    shift, and go to state 37
+    INTEGER    shift, and go to state 38
+    REAL       shift, and go to state 39
+    IDENT      shift, and go to state 61
+    STRING     shift, and go to state 40
+
+    COMMA         reduce using rule 86 (expression)
+    COMMA         [reduce using rule 93 (boolean_expression)]
+    SEMICOLON     reduce using rule 86 (expression)
+    SEMICOLON     [reduce using rule 93 (boolean_expression)]
+    BRACERIGHT    reduce using rule 86 (expression)
+    BRACERIGHT    [reduce using rule 93 (boolean_expression)]
+    BRACKETRIGHT  reduce using rule 86 (expression)
+    BRACKETRIGHT  [reduce using rule 93 (boolean_expression)]
+    LESS          reduce using rule 86 (expression)
+    LESS          [reduce using rule 93 (boolean_expression)]
+    LESSEQUAL     reduce using rule 86 (expression)
+    LESSEQUAL     [reduce using rule 93 (boolean_expression)]
+    LESSGREATER   reduce using rule 86 (expression)
+    LESSGREATER   [reduce using rule 93 (boolean_expression)]
+    GREATEREQUAL  reduce using rule 86 (expression)
+    GREATEREQUAL  [reduce using rule 93 (boolean_expression)]
+    GREATER       reduce using rule 86 (expression)
+    GREATER       [reduce using rule 93 (boolean_expression)]
+    EQUAL         reduce using rule 86 (expression)
+    EQUAL         [reduce using rule 93 (boolean_expression)]
+    PLUS          reduce using rule 86 (expression)
+    PLUS          [reduce using rule 93 (boolean_expression)]
+    MINUS         [reduce using rule 86 (expression)]
+    MINUS         [reduce using rule 93 (boolean_expression)]
+    MULTIPLY      reduce using rule 86 (expression)
+    MULTIPLY      [reduce using rule 93 (boolean_expression)]
+    DIVIDE        reduce using rule 86 (expression)
+    DIVIDE        [reduce using rule 93 (boolean_expression)]
+    MOD           reduce using rule 86 (expression)
+    MOD           [reduce using rule 93 (boolean_expression)]
+    AND           reduce using rule 86 (expression)
+    AND           [reduce using rule 93 (boolean_expression)]
+    OR            reduce using rule 86 (expression)
+    OR            [reduce using rule 93 (boolean_expression)]
+    KWDO          reduce using rule 86 (expression)
+    KWDO          [reduce using rule 93 (boolean_expression)]
+    KWTHEN        reduce using rule 86 (expression)
+    KWTHEN        [reduce using rule 93 (boolean_expression)]
+    $default      reduce using rule 86 (expression)
+
+    literal_constant_list          go to state 88
+    variable_reference             go to state 89
+    expression                     go to state 150
+    boolean_expression             go to state 95
+    function_invocation_statement  go to state 92
+
+
+State 122
+
+   88 boolean_expression: expression LESSEQUAL . expression
+
+    BRACELEFT  shift, and go to state 85
+    MINUS      shift, and go to state 86
+    NOT        shift, and go to state 87
+    KWTRUE     shift, and go to state 36
+    KWFALSE    shift, and go to state 37
+    INTEGER    shift, and go to state 38
+    REAL       shift, and go to state 39
+    IDENT      shift, and go to state 61
+    STRING     shift, and go to state 40
+
+    COMMA         reduce using rule 86 (expression)
+    COMMA         [reduce using rule 93 (boolean_expression)]
+    SEMICOLON     reduce using rule 86 (expression)
+    SEMICOLON     [reduce using rule 93 (boolean_expression)]
+    BRACERIGHT    reduce using rule 86 (expression)
+    BRACERIGHT    [reduce using rule 93 (boolean_expression)]
+    BRACKETRIGHT  reduce using rule 86 (expression)
+    BRACKETRIGHT  [reduce using rule 93 (boolean_expression)]
+    LESS          reduce using rule 86 (expression)
+    LESS          [reduce using rule 93 (boolean_expression)]
+    LESSEQUAL     reduce using rule 86 (expression)
+    LESSEQUAL     [reduce using rule 93 (boolean_expression)]
+    LESSGREATER   reduce using rule 86 (expression)
+    LESSGREATER   [reduce using rule 93 (boolean_expression)]
+    GREATEREQUAL  reduce using rule 86 (expression)
+    GREATEREQUAL  [reduce using rule 93 (boolean_expression)]
+    GREATER       reduce using rule 86 (expression)
+    GREATER       [reduce using rule 93 (boolean_expression)]
+    EQUAL         reduce using rule 86 (expression)
+    EQUAL         [reduce using rule 93 (boolean_expression)]
+    PLUS          reduce using rule 86 (expression)
+    PLUS          [reduce using rule 93 (boolean_expression)]
+    MINUS         [reduce using rule 86 (expression)]
+    MINUS         [reduce using rule 93 (boolean_expression)]
+    MULTIPLY      reduce using rule 86 (expression)
+    MULTIPLY      [reduce using rule 93 (boolean_expression)]
+    DIVIDE        reduce using rule 86 (expression)
+    DIVIDE        [reduce using rule 93 (boolean_expression)]
+    MOD           reduce using rule 86 (expression)
+    MOD           [reduce using rule 93 (boolean_expression)]
+    AND           reduce using rule 86 (expression)
+    AND           [reduce using rule 93 (boolean_expression)]
+    OR            reduce using rule 86 (expression)
+    OR            [reduce using rule 93 (boolean_expression)]
+    KWDO          reduce using rule 86 (expression)
+    KWDO          [reduce using rule 93 (boolean_expression)]
+    KWTHEN        reduce using rule 86 (expression)
+    KWTHEN        [reduce using rule 93 (boolean_expression)]
+    $default      reduce using rule 86 (expression)
+
+    literal_constant_list          go to state 88
+    variable_reference             go to state 89
+    expression                     go to state 151
+    boolean_expression             go to state 95
+    function_invocation_statement  go to state 92
+
+
+State 123
+
+   92 boolean_expression: expression LESSGREATER . expression
+
+    BRACELEFT  shift, and go to state 85
+    MINUS      shift, and go to state 86
+    NOT        shift, and go to state 87
+    KWTRUE     shift, and go to state 36
+    KWFALSE    shift, and go to state 37
+    INTEGER    shift, and go to state 38
+    REAL       shift, and go to state 39
+    IDENT      shift, and go to state 61
+    STRING     shift, and go to state 40
+
+    COMMA         reduce using rule 86 (expression)
+    COMMA         [reduce using rule 93 (boolean_expression)]
+    SEMICOLON     reduce using rule 86 (expression)
+    SEMICOLON     [reduce using rule 93 (boolean_expression)]
+    BRACERIGHT    reduce using rule 86 (expression)
+    BRACERIGHT    [reduce using rule 93 (boolean_expression)]
+    BRACKETRIGHT  reduce using rule 86 (expression)
+    BRACKETRIGHT  [reduce using rule 93 (boolean_expression)]
+    LESS          reduce using rule 86 (expression)
+    LESS          [reduce using rule 93 (boolean_expression)]
+    LESSEQUAL     reduce using rule 86 (expression)
+    LESSEQUAL     [reduce using rule 93 (boolean_expression)]
+    LESSGREATER   reduce using rule 86 (expression)
+    LESSGREATER   [reduce using rule 93 (boolean_expression)]
+    GREATEREQUAL  reduce using rule 86 (expression)
+    GREATEREQUAL  [reduce using rule 93 (boolean_expression)]
+    GREATER       reduce using rule 86 (expression)
+    GREATER       [reduce using rule 93 (boolean_expression)]
+    EQUAL         reduce using rule 86 (expression)
+    EQUAL         [reduce using rule 93 (boolean_expression)]
+    PLUS          reduce using rule 86 (expression)
+    PLUS          [reduce using rule 93 (boolean_expression)]
+    MINUS         [reduce using rule 86 (expression)]
+    MINUS         [reduce using rule 93 (boolean_expression)]
+    MULTIPLY      reduce using rule 86 (expression)
+    MULTIPLY      [reduce using rule 93 (boolean_expression)]
+    DIVIDE        reduce using rule 86 (expression)
+    DIVIDE        [reduce using rule 93 (boolean_expression)]
+    MOD           reduce using rule 86 (expression)
+    MOD           [reduce using rule 93 (boolean_expression)]
+    AND           reduce using rule 86 (expression)
+    AND           [reduce using rule 93 (boolean_expression)]
+    OR            reduce using rule 86 (expression)
+    OR            [reduce using rule 93 (boolean_expression)]
+    KWDO          reduce using rule 86 (expression)
+    KWDO          [reduce using rule 93 (boolean_expression)]
+    KWTHEN        reduce using rule 86 (expression)
+    KWTHEN        [reduce using rule 93 (boolean_expression)]
+    $default      reduce using rule 86 (expression)
+
+    literal_constant_list          go to state 88
+    variable_reference             go to state 89
+    expression                     go to state 152
+    boolean_expression             go to state 95
+    function_invocation_statement  go to state 92
+
+
+State 124
+
+   90 boolean_expression: expression GREATEREQUAL . expression
+
+    BRACELEFT  shift, and go to state 85
+    MINUS      shift, and go to state 86
+    NOT        shift, and go to state 87
+    KWTRUE     shift, and go to state 36
+    KWFALSE    shift, and go to state 37
+    INTEGER    shift, and go to state 38
+    REAL       shift, and go to state 39
+    IDENT      shift, and go to state 61
+    STRING     shift, and go to state 40
+
+    COMMA         reduce using rule 86 (expression)
+    COMMA         [reduce using rule 93 (boolean_expression)]
+    SEMICOLON     reduce using rule 86 (expression)
+    SEMICOLON     [reduce using rule 93 (boolean_expression)]
+    BRACERIGHT    reduce using rule 86 (expression)
+    BRACERIGHT    [reduce using rule 93 (boolean_expression)]
+    BRACKETRIGHT  reduce using rule 86 (expression)
+    BRACKETRIGHT  [reduce using rule 93 (boolean_expression)]
+    LESS          reduce using rule 86 (expression)
+    LESS          [reduce using rule 93 (boolean_expression)]
+    LESSEQUAL     reduce using rule 86 (expression)
+    LESSEQUAL     [reduce using rule 93 (boolean_expression)]
+    LESSGREATER   reduce using rule 86 (expression)
+    LESSGREATER   [reduce using rule 93 (boolean_expression)]
+    GREATEREQUAL  reduce using rule 86 (expression)
+    GREATEREQUAL  [reduce using rule 93 (boolean_expression)]
+    GREATER       reduce using rule 86 (expression)
+    GREATER       [reduce using rule 93 (boolean_expression)]
+    EQUAL         reduce using rule 86 (expression)
+    EQUAL         [reduce using rule 93 (boolean_expression)]
+    PLUS          reduce using rule 86 (expression)
+    PLUS          [reduce using rule 93 (boolean_expression)]
+    MINUS         [reduce using rule 86 (expression)]
+    MINUS         [reduce using rule 93 (boolean_expression)]
+    MULTIPLY      reduce using rule 86 (expression)
+    MULTIPLY      [reduce using rule 93 (boolean_expression)]
+    DIVIDE        reduce using rule 86 (expression)
+    DIVIDE        [reduce using rule 93 (boolean_expression)]
+    MOD           reduce using rule 86 (expression)
+    MOD           [reduce using rule 93 (boolean_expression)]
+    AND           reduce using rule 86 (expression)
+    AND           [reduce using rule 93 (boolean_expression)]
+    OR            reduce using rule 86 (expression)
+    OR            [reduce using rule 93 (boolean_expression)]
+    KWDO          reduce using rule 86 (expression)
+    KWDO          [reduce using rule 93 (boolean_expression)]
+    KWTHEN        reduce using rule 86 (expression)
+    KWTHEN        [reduce using rule 93 (boolean_expression)]
+    $default      reduce using rule 86 (expression)
+
+    literal_constant_list          go to state 88
+    variable_reference             go to state 89
+    expression                     go to state 153
+    boolean_expression             go to state 95
+    function_invocation_statement  go to state 92
+
+
+State 125
+
+   91 boolean_expression: expression GREATER . expression
+
+    BRACELEFT  shift, and go to state 85
+    MINUS      shift, and go to state 86
+    NOT        shift, and go to state 87
+    KWTRUE     shift, and go to state 36
+    KWFALSE    shift, and go to state 37
+    INTEGER    shift, and go to state 38
+    REAL       shift, and go to state 39
+    IDENT      shift, and go to state 61
+    STRING     shift, and go to state 40
+
+    COMMA         reduce using rule 86 (expression)
+    COMMA         [reduce using rule 93 (boolean_expression)]
+    SEMICOLON     reduce using rule 86 (expression)
+    SEMICOLON     [reduce using rule 93 (boolean_expression)]
+    BRACERIGHT    reduce using rule 86 (expression)
+    BRACERIGHT    [reduce using rule 93 (boolean_expression)]
+    BRACKETRIGHT  reduce using rule 86 (expression)
+    BRACKETRIGHT  [reduce using rule 93 (boolean_expression)]
+    LESS          reduce using rule 86 (expression)
+    LESS          [reduce using rule 93 (boolean_expression)]
+    LESSEQUAL     reduce using rule 86 (expression)
+    LESSEQUAL     [reduce using rule 93 (boolean_expression)]
+    LESSGREATER   reduce using rule 86 (expression)
+    LESSGREATER   [reduce using rule 93 (boolean_expression)]
+    GREATEREQUAL  reduce using rule 86 (expression)
+    GREATEREQUAL  [reduce using rule 93 (boolean_expression)]
+    GREATER       reduce using rule 86 (expression)
+    GREATER       [reduce using rule 93 (boolean_expression)]
+    EQUAL         reduce using rule 86 (expression)
+    EQUAL         [reduce using rule 93 (boolean_expression)]
+    PLUS          reduce using rule 86 (expression)
+    PLUS          [reduce using rule 93 (boolean_expression)]
+    MINUS         [reduce using rule 86 (expression)]
+    MINUS         [reduce using rule 93 (boolean_expression)]
+    MULTIPLY      reduce using rule 86 (expression)
+    MULTIPLY      [reduce using rule 93 (boolean_expression)]
+    DIVIDE        reduce using rule 86 (expression)
+    DIVIDE        [reduce using rule 93 (boolean_expression)]
+    MOD           reduce using rule 86 (expression)
+    MOD           [reduce using rule 93 (boolean_expression)]
+    AND           reduce using rule 86 (expression)
+    AND           [reduce using rule 93 (boolean_expression)]
+    OR            reduce using rule 86 (expression)
+    OR            [reduce using rule 93 (boolean_expression)]
+    KWDO          reduce using rule 86 (expression)
+    KWDO          [reduce using rule 93 (boolean_expression)]
+    KWTHEN        reduce using rule 86 (expression)
+    KWTHEN        [reduce using rule 93 (boolean_expression)]
+    $default      reduce using rule 86 (expression)
+
+    literal_constant_list          go to state 88
+    variable_reference             go to state 89
+    expression                     go to state 154
+    boolean_expression             go to state 95
+    function_invocation_statement  go to state 92
+
+
+State 126
+
+   89 boolean_expression: expression EQUAL . expression
+
+    BRACELEFT  shift, and go to state 85
+    MINUS      shift, and go to state 86
+    NOT        shift, and go to state 87
+    KWTRUE     shift, and go to state 36
+    KWFALSE    shift, and go to state 37
+    INTEGER    shift, and go to state 38
+    REAL       shift, and go to state 39
+    IDENT      shift, and go to state 61
+    STRING     shift, and go to state 40
+
+    COMMA         reduce using rule 86 (expression)
+    COMMA         [reduce using rule 93 (boolean_expression)]
+    SEMICOLON     reduce using rule 86 (expression)
+    SEMICOLON     [reduce using rule 93 (boolean_expression)]
+    BRACERIGHT    reduce using rule 86 (expression)
+    BRACERIGHT    [reduce using rule 93 (boolean_expression)]
+    BRACKETRIGHT  reduce using rule 86 (expression)
+    BRACKETRIGHT  [reduce using rule 93 (boolean_expression)]
+    LESS          reduce using rule 86 (expression)
+    LESS          [reduce using rule 93 (boolean_expression)]
+    LESSEQUAL     reduce using rule 86 (expression)
+    LESSEQUAL     [reduce using rule 93 (boolean_expression)]
+    LESSGREATER   reduce using rule 86 (expression)
+    LESSGREATER   [reduce using rule 93 (boolean_expression)]
+    GREATEREQUAL  reduce using rule 86 (expression)
+    GREATEREQUAL  [reduce using rule 93 (boolean_expression)]
+    GREATER       reduce using rule 86 (expression)
+    GREATER       [reduce using rule 93 (boolean_expression)]
+    EQUAL         reduce using rule 86 (expression)
+    EQUAL         [reduce using rule 93 (boolean_expression)]
+    PLUS          reduce using rule 86 (expression)
+    PLUS          [reduce using rule 93 (boolean_expression)]
+    MINUS         [reduce using rule 86 (expression)]
+    MINUS         [reduce using rule 93 (boolean_expression)]
+    MULTIPLY      reduce using rule 86 (expression)
+    MULTIPLY      [reduce using rule 93 (boolean_expression)]
+    DIVIDE        reduce using rule 86 (expression)
+    DIVIDE        [reduce using rule 93 (boolean_expression)]
+    MOD           reduce using rule 86 (expression)
+    MOD           [reduce using rule 93 (boolean_expression)]
+    AND           reduce using rule 86 (expression)
+    AND           [reduce using rule 93 (boolean_expression)]
+    OR            reduce using rule 86 (expression)
+    OR            [reduce using rule 93 (boolean_expression)]
+    KWDO          reduce using rule 86 (expression)
+    KWDO          [reduce using rule 93 (boolean_expression)]
+    KWTHEN        reduce using rule 86 (expression)
+    KWTHEN        [reduce using rule 93 (boolean_expression)]
+    $default      reduce using rule 86 (expression)
+
+    literal_constant_list          go to state 88
+    variable_reference             go to state 89
+    expression                     go to state 155
+    boolean_expression             go to state 95
+    function_invocation_statement  go to state 92
+
+
+State 127
+
+   80 expression: expression PLUS . expression
+
+    BRACELEFT  shift, and go to state 85
+    MINUS      shift, and go to state 86
+    NOT        shift, and go to state 87
+    KWTRUE     shift, and go to state 36
+    KWFALSE    shift, and go to state 37
+    INTEGER    shift, and go to state 38
+    REAL       shift, and go to state 39
+    IDENT      shift, and go to state 61
+    STRING     shift, and go to state 40
+
+    COMMA         reduce using rule 86 (expression)
+    COMMA         [reduce using rule 93 (boolean_expression)]
+    SEMICOLON     reduce using rule 86 (expression)
+    SEMICOLON     [reduce using rule 93 (boolean_expression)]
+    BRACERIGHT    reduce using rule 86 (expression)
+    BRACERIGHT    [reduce using rule 93 (boolean_expression)]
+    BRACKETRIGHT  reduce using rule 86 (expression)
+    BRACKETRIGHT  [reduce using rule 93 (boolean_expression)]
+    LESS          reduce using rule 86 (expression)
+    LESS          [reduce using rule 93 (boolean_expression)]
+    LESSEQUAL     reduce using rule 86 (expression)
+    LESSEQUAL     [reduce using rule 93 (boolean_expression)]
+    LESSGREATER   reduce using rule 86 (expression)
+    LESSGREATER   [reduce using rule 93 (boolean_expression)]
+    GREATEREQUAL  reduce using rule 86 (expression)
+    GREATEREQUAL  [reduce using rule 93 (boolean_expression)]
+    GREATER       reduce using rule 86 (expression)
+    GREATER       [reduce using rule 93 (boolean_expression)]
+    EQUAL         reduce using rule 86 (expression)
+    EQUAL         [reduce using rule 93 (boolean_expression)]
+    PLUS          reduce using rule 86 (expression)
+    PLUS          [reduce using rule 93 (boolean_expression)]
+    MINUS         [reduce using rule 86 (expression)]
+    MINUS         [reduce using rule 93 (boolean_expression)]
+    MULTIPLY      reduce using rule 86 (expression)
+    MULTIPLY      [reduce using rule 93 (boolean_expression)]
+    DIVIDE        reduce using rule 86 (expression)
+    DIVIDE        [reduce using rule 93 (boolean_expression)]
+    MOD           reduce using rule 86 (expression)
+    MOD           [reduce using rule 93 (boolean_expression)]
+    AND           reduce using rule 86 (expression)
+    AND           [reduce using rule 93 (boolean_expression)]
+    OR            reduce using rule 86 (expression)
+    OR            [reduce using rule 93 (boolean_expression)]
+    KWDO          reduce using rule 86 (expression)
+    KWDO          [reduce using rule 93 (boolean_expression)]
+    KWTHEN        reduce using rule 86 (expression)
+    KWTHEN        [reduce using rule 93 (boolean_expression)]
+    $default      reduce using rule 86 (expression)
+
+    literal_constant_list          go to state 88
+    variable_reference             go to state 89
+    expression                     go to state 156
+    boolean_expression             go to state 95
+    function_invocation_statement  go to state 92
+
+
+State 128
+
+   81 expression: expression MINUS . expression
+
+    BRACELEFT  shift, and go to state 85
+    MINUS      shift, and go to state 86
+    NOT        shift, and go to state 87
+    KWTRUE     shift, and go to state 36
+    KWFALSE    shift, and go to state 37
+    INTEGER    shift, and go to state 38
+    REAL       shift, and go to state 39
+    IDENT      shift, and go to state 61
+    STRING     shift, and go to state 40
+
+    COMMA         reduce using rule 86 (expression)
+    COMMA         [reduce using rule 93 (boolean_expression)]
+    SEMICOLON     reduce using rule 86 (expression)
+    SEMICOLON     [reduce using rule 93 (boolean_expression)]
+    BRACERIGHT    reduce using rule 86 (expression)
+    BRACERIGHT    [reduce using rule 93 (boolean_expression)]
+    BRACKETRIGHT  reduce using rule 86 (expression)
+    BRACKETRIGHT  [reduce using rule 93 (boolean_expression)]
+    LESS          reduce using rule 86 (expression)
+    LESS          [reduce using rule 93 (boolean_expression)]
+    LESSEQUAL     reduce using rule 86 (expression)
+    LESSEQUAL     [reduce using rule 93 (boolean_expression)]
+    LESSGREATER   reduce using rule 86 (expression)
+    LESSGREATER   [reduce using rule 93 (boolean_expression)]
+    GREATEREQUAL  reduce using rule 86 (expression)
+    GREATEREQUAL  [reduce using rule 93 (boolean_expression)]
+    GREATER       reduce using rule 86 (expression)
+    GREATER       [reduce using rule 93 (boolean_expression)]
+    EQUAL         reduce using rule 86 (expression)
+    EQUAL         [reduce using rule 93 (boolean_expression)]
+    PLUS          reduce using rule 86 (expression)
+    PLUS          [reduce using rule 93 (boolean_expression)]
+    MINUS         [reduce using rule 86 (expression)]
+    MINUS         [reduce using rule 93 (boolean_expression)]
+    MULTIPLY      reduce using rule 86 (expression)
+    MULTIPLY      [reduce using rule 93 (boolean_expression)]
+    DIVIDE        reduce using rule 86 (expression)
+    DIVIDE        [reduce using rule 93 (boolean_expression)]
+    MOD           reduce using rule 86 (expression)
+    MOD           [reduce using rule 93 (boolean_expression)]
+    AND           reduce using rule 86 (expression)
+    AND           [reduce using rule 93 (boolean_expression)]
+    OR            reduce using rule 86 (expression)
+    OR            [reduce using rule 93 (boolean_expression)]
+    KWDO          reduce using rule 86 (expression)
+    KWDO          [reduce using rule 93 (boolean_expression)]
+    KWTHEN        reduce using rule 86 (expression)
+    KWTHEN        [reduce using rule 93 (boolean_expression)]
+    $default      reduce using rule 86 (expression)
+
+    literal_constant_list          go to state 88
+    variable_reference             go to state 89
+    expression                     go to state 157
+    boolean_expression             go to state 95
+    function_invocation_statement  go to state 92
+
+
+State 129
+
+   77 expression: expression MULTIPLY . expression
+
+    BRACELEFT  shift, and go to state 85
+    MINUS      shift, and go to state 86
+    NOT        shift, and go to state 87
+    KWTRUE     shift, and go to state 36
+    KWFALSE    shift, and go to state 37
+    INTEGER    shift, and go to state 38
+    REAL       shift, and go to state 39
+    IDENT      shift, and go to state 61
+    STRING     shift, and go to state 40
+
+    COMMA         reduce using rule 86 (expression)
+    COMMA         [reduce using rule 93 (boolean_expression)]
+    SEMICOLON     reduce using rule 86 (expression)
+    SEMICOLON     [reduce using rule 93 (boolean_expression)]
+    BRACERIGHT    reduce using rule 86 (expression)
+    BRACERIGHT    [reduce using rule 93 (boolean_expression)]
+    BRACKETRIGHT  reduce using rule 86 (expression)
+    BRACKETRIGHT  [reduce using rule 93 (boolean_expression)]
+    LESS          reduce using rule 86 (expression)
+    LESS          [reduce using rule 93 (boolean_expression)]
+    LESSEQUAL     reduce using rule 86 (expression)
+    LESSEQUAL     [reduce using rule 93 (boolean_expression)]
+    LESSGREATER   reduce using rule 86 (expression)
+    LESSGREATER   [reduce using rule 93 (boolean_expression)]
+    GREATEREQUAL  reduce using rule 86 (expression)
+    GREATEREQUAL  [reduce using rule 93 (boolean_expression)]
+    GREATER       reduce using rule 86 (expression)
+    GREATER       [reduce using rule 93 (boolean_expression)]
+    EQUAL         reduce using rule 86 (expression)
+    EQUAL         [reduce using rule 93 (boolean_expression)]
+    PLUS          reduce using rule 86 (expression)
+    PLUS          [reduce using rule 93 (boolean_expression)]
+    MINUS         [reduce using rule 86 (expression)]
+    MINUS         [reduce using rule 93 (boolean_expression)]
+    MULTIPLY      reduce using rule 86 (expression)
+    MULTIPLY      [reduce using rule 93 (boolean_expression)]
+    DIVIDE        reduce using rule 86 (expression)
+    DIVIDE        [reduce using rule 93 (boolean_expression)]
+    MOD           reduce using rule 86 (expression)
+    MOD           [reduce using rule 93 (boolean_expression)]
+    AND           reduce using rule 86 (expression)
+    AND           [reduce using rule 93 (boolean_expression)]
+    OR            reduce using rule 86 (expression)
+    OR            [reduce using rule 93 (boolean_expression)]
+    KWDO          reduce using rule 86 (expression)
+    KWDO          [reduce using rule 93 (boolean_expression)]
+    KWTHEN        reduce using rule 86 (expression)
+    KWTHEN        [reduce using rule 93 (boolean_expression)]
+    $default      reduce using rule 86 (expression)
+
+    literal_constant_list          go to state 88
+    variable_reference             go to state 89
+    expression                     go to state 158
+    boolean_expression             go to state 95
+    function_invocation_statement  go to state 92
+
+
+State 130
+
+   78 expression: expression DIVIDE . expression
+
+    BRACELEFT  shift, and go to state 85
+    MINUS      shift, and go to state 86
+    NOT        shift, and go to state 87
+    KWTRUE     shift, and go to state 36
+    KWFALSE    shift, and go to state 37
+    INTEGER    shift, and go to state 38
+    REAL       shift, and go to state 39
+    IDENT      shift, and go to state 61
+    STRING     shift, and go to state 40
+
+    COMMA         reduce using rule 86 (expression)
+    COMMA         [reduce using rule 93 (boolean_expression)]
+    SEMICOLON     reduce using rule 86 (expression)
+    SEMICOLON     [reduce using rule 93 (boolean_expression)]
+    BRACERIGHT    reduce using rule 86 (expression)
+    BRACERIGHT    [reduce using rule 93 (boolean_expression)]
+    BRACKETRIGHT  reduce using rule 86 (expression)
+    BRACKETRIGHT  [reduce using rule 93 (boolean_expression)]
+    LESS          reduce using rule 86 (expression)
+    LESS          [reduce using rule 93 (boolean_expression)]
+    LESSEQUAL     reduce using rule 86 (expression)
+    LESSEQUAL     [reduce using rule 93 (boolean_expression)]
+    LESSGREATER   reduce using rule 86 (expression)
+    LESSGREATER   [reduce using rule 93 (boolean_expression)]
+    GREATEREQUAL  reduce using rule 86 (expression)
+    GREATEREQUAL  [reduce using rule 93 (boolean_expression)]
+    GREATER       reduce using rule 86 (expression)
+    GREATER       [reduce using rule 93 (boolean_expression)]
+    EQUAL         reduce using rule 86 (expression)
+    EQUAL         [reduce using rule 93 (boolean_expression)]
+    PLUS          reduce using rule 86 (expression)
+    PLUS          [reduce using rule 93 (boolean_expression)]
+    MINUS         [reduce using rule 86 (expression)]
+    MINUS         [reduce using rule 93 (boolean_expression)]
+    MULTIPLY      reduce using rule 86 (expression)
+    MULTIPLY      [reduce using rule 93 (boolean_expression)]
+    DIVIDE        reduce using rule 86 (expression)
+    DIVIDE        [reduce using rule 93 (boolean_expression)]
+    MOD           reduce using rule 86 (expression)
+    MOD           [reduce using rule 93 (boolean_expression)]
+    AND           reduce using rule 86 (expression)
+    AND           [reduce using rule 93 (boolean_expression)]
+    OR            reduce using rule 86 (expression)
+    OR            [reduce using rule 93 (boolean_expression)]
+    KWDO          reduce using rule 86 (expression)
+    KWDO          [reduce using rule 93 (boolean_expression)]
+    KWTHEN        reduce using rule 86 (expression)
+    KWTHEN        [reduce using rule 93 (boolean_expression)]
+    $default      reduce using rule 86 (expression)
+
+    literal_constant_list          go to state 88
+    variable_reference             go to state 89
+    expression                     go to state 159
+    boolean_expression             go to state 95
+    function_invocation_statement  go to state 92
+
+
+State 131
+
+   79 expression: expression MOD . expression
+
+    BRACELEFT  shift, and go to state 85
+    MINUS      shift, and go to state 86
+    NOT        shift, and go to state 87
+    KWTRUE     shift, and go to state 36
+    KWFALSE    shift, and go to state 37
+    INTEGER    shift, and go to state 38
+    REAL       shift, and go to state 39
+    IDENT      shift, and go to state 61
+    STRING     shift, and go to state 40
+
+    COMMA         reduce using rule 86 (expression)
+    COMMA         [reduce using rule 93 (boolean_expression)]
+    SEMICOLON     reduce using rule 86 (expression)
+    SEMICOLON     [reduce using rule 93 (boolean_expression)]
+    BRACERIGHT    reduce using rule 86 (expression)
+    BRACERIGHT    [reduce using rule 93 (boolean_expression)]
+    BRACKETRIGHT  reduce using rule 86 (expression)
+    BRACKETRIGHT  [reduce using rule 93 (boolean_expression)]
+    LESS          reduce using rule 86 (expression)
+    LESS          [reduce using rule 93 (boolean_expression)]
+    LESSEQUAL     reduce using rule 86 (expression)
+    LESSEQUAL     [reduce using rule 93 (boolean_expression)]
+    LESSGREATER   reduce using rule 86 (expression)
+    LESSGREATER   [reduce using rule 93 (boolean_expression)]
+    GREATEREQUAL  reduce using rule 86 (expression)
+    GREATEREQUAL  [reduce using rule 93 (boolean_expression)]
+    GREATER       reduce using rule 86 (expression)
+    GREATER       [reduce using rule 93 (boolean_expression)]
+    EQUAL         reduce using rule 86 (expression)
+    EQUAL         [reduce using rule 93 (boolean_expression)]
+    PLUS          reduce using rule 86 (expression)
+    PLUS          [reduce using rule 93 (boolean_expression)]
+    MINUS         [reduce using rule 86 (expression)]
+    MINUS         [reduce using rule 93 (boolean_expression)]
+    MULTIPLY      reduce using rule 86 (expression)
+    MULTIPLY      [reduce using rule 93 (boolean_expression)]
+    DIVIDE        reduce using rule 86 (expression)
+    DIVIDE        [reduce using rule 93 (boolean_expression)]
+    MOD           reduce using rule 86 (expression)
+    MOD           [reduce using rule 93 (boolean_expression)]
+    AND           reduce using rule 86 (expression)
+    AND           [reduce using rule 93 (boolean_expression)]
+    OR            reduce using rule 86 (expression)
+    OR            [reduce using rule 93 (boolean_expression)]
+    KWDO          reduce using rule 86 (expression)
+    KWDO          [reduce using rule 93 (boolean_expression)]
+    KWTHEN        reduce using rule 86 (expression)
+    KWTHEN        [reduce using rule 93 (boolean_expression)]
+    $default      reduce using rule 86 (expression)
+
+    literal_constant_list          go to state 88
+    variable_reference             go to state 89
+    expression                     go to state 160
+    boolean_expression             go to state 95
+    function_invocation_statement  go to state 92
+
+
+State 132
+
+   84 expression: expression AND . expression
+
+    BRACELEFT  shift, and go to state 85
+    MINUS      shift, and go to state 86
+    NOT        shift, and go to state 87
+    KWTRUE     shift, and go to state 36
+    KWFALSE    shift, and go to state 37
+    INTEGER    shift, and go to state 38
+    REAL       shift, and go to state 39
+    IDENT      shift, and go to state 61
+    STRING     shift, and go to state 40
+
+    COMMA         reduce using rule 86 (expression)
+    COMMA         [reduce using rule 93 (boolean_expression)]
+    SEMICOLON     reduce using rule 86 (expression)
+    SEMICOLON     [reduce using rule 93 (boolean_expression)]
+    BRACERIGHT    reduce using rule 86 (expression)
+    BRACERIGHT    [reduce using rule 93 (boolean_expression)]
+    BRACKETRIGHT  reduce using rule 86 (expression)
+    BRACKETRIGHT  [reduce using rule 93 (boolean_expression)]
+    LESS          reduce using rule 86 (expression)
+    LESS          [reduce using rule 93 (boolean_expression)]
+    LESSEQUAL     reduce using rule 86 (expression)
+    LESSEQUAL     [reduce using rule 93 (boolean_expression)]
+    LESSGREATER   reduce using rule 86 (expression)
+    LESSGREATER   [reduce using rule 93 (boolean_expression)]
+    GREATEREQUAL  reduce using rule 86 (expression)
+    GREATEREQUAL  [reduce using rule 93 (boolean_expression)]
+    GREATER       reduce using rule 86 (expression)
+    GREATER       [reduce using rule 93 (boolean_expression)]
+    EQUAL         reduce using rule 86 (expression)
+    EQUAL         [reduce using rule 93 (boolean_expression)]
+    PLUS          reduce using rule 86 (expression)
+    PLUS          [reduce using rule 93 (boolean_expression)]
+    MINUS         [reduce using rule 86 (expression)]
+    MINUS         [reduce using rule 93 (boolean_expression)]
+    MULTIPLY      reduce using rule 86 (expression)
+    MULTIPLY      [reduce using rule 93 (boolean_expression)]
+    DIVIDE        reduce using rule 86 (expression)
+    DIVIDE        [reduce using rule 93 (boolean_expression)]
+    MOD           reduce using rule 86 (expression)
+    MOD           [reduce using rule 93 (boolean_expression)]
+    AND           reduce using rule 86 (expression)
+    AND           [reduce using rule 93 (boolean_expression)]
+    OR            reduce using rule 86 (expression)
+    OR            [reduce using rule 93 (boolean_expression)]
+    KWDO          reduce using rule 86 (expression)
+    KWDO          [reduce using rule 93 (boolean_expression)]
+    KWTHEN        reduce using rule 86 (expression)
+    KWTHEN        [reduce using rule 93 (boolean_expression)]
+    $default      reduce using rule 86 (expression)
+
+    literal_constant_list          go to state 88
+    variable_reference             go to state 89
+    expression                     go to state 161
+    boolean_expression             go to state 95
+    function_invocation_statement  go to state 92
+
+
+State 133
+
+   85 expression: expression OR . expression
+
+    BRACELEFT  shift, and go to state 85
+    MINUS      shift, and go to state 86
+    NOT        shift, and go to state 87
+    KWTRUE     shift, and go to state 36
+    KWFALSE    shift, and go to state 37
+    INTEGER    shift, and go to state 38
+    REAL       shift, and go to state 39
+    IDENT      shift, and go to state 61
+    STRING     shift, and go to state 40
+
+    COMMA         reduce using rule 86 (expression)
+    COMMA         [reduce using rule 93 (boolean_expression)]
+    SEMICOLON     reduce using rule 86 (expression)
+    SEMICOLON     [reduce using rule 93 (boolean_expression)]
+    BRACERIGHT    reduce using rule 86 (expression)
+    BRACERIGHT    [reduce using rule 93 (boolean_expression)]
+    BRACKETRIGHT  reduce using rule 86 (expression)
+    BRACKETRIGHT  [reduce using rule 93 (boolean_expression)]
+    LESS          reduce using rule 86 (expression)
+    LESS          [reduce using rule 93 (boolean_expression)]
+    LESSEQUAL     reduce using rule 86 (expression)
+    LESSEQUAL     [reduce using rule 93 (boolean_expression)]
+    LESSGREATER   reduce using rule 86 (expression)
+    LESSGREATER   [reduce using rule 93 (boolean_expression)]
+    GREATEREQUAL  reduce using rule 86 (expression)
+    GREATEREQUAL  [reduce using rule 93 (boolean_expression)]
+    GREATER       reduce using rule 86 (expression)
+    GREATER       [reduce using rule 93 (boolean_expression)]
+    EQUAL         reduce using rule 86 (expression)
+    EQUAL         [reduce using rule 93 (boolean_expression)]
+    PLUS          reduce using rule 86 (expression)
+    PLUS          [reduce using rule 93 (boolean_expression)]
+    MINUS         [reduce using rule 86 (expression)]
+    MINUS         [reduce using rule 93 (boolean_expression)]
+    MULTIPLY      reduce using rule 86 (expression)
+    MULTIPLY      [reduce using rule 93 (boolean_expression)]
+    DIVIDE        reduce using rule 86 (expression)
+    DIVIDE        [reduce using rule 93 (boolean_expression)]
+    MOD           reduce using rule 86 (expression)
+    MOD           [reduce using rule 93 (boolean_expression)]
+    AND           reduce using rule 86 (expression)
+    AND           [reduce using rule 93 (boolean_expression)]
+    OR            reduce using rule 86 (expression)
+    OR            [reduce using rule 93 (boolean_expression)]
+    KWDO          reduce using rule 86 (expression)
+    KWDO          [reduce using rule 93 (boolean_expression)]
+    KWTHEN        reduce using rule 86 (expression)
+    KWTHEN        [reduce using rule 93 (boolean_expression)]
+    $default      reduce using rule 86 (expression)
+
+    literal_constant_list          go to state 88
+    variable_reference             go to state 89
+    expression                     go to state 162
+    boolean_expression             go to state 95
+    function_invocation_statement  go to state 92
+
+
+State 134
+
+   98 conditional_statement: KWIF boolean_expression KWTHEN . statement_list KWELSE statement_list KWEND KWIF
+   99                      | KWIF boolean_expression KWTHEN . statement_list KWEND KWIF
+
+    KWBEGIN   shift, and go to state 27
+    KWFOR     shift, and go to state 55
+    KWIF      shift, and go to state 56
+    KWPRINT   shift, and go to state 57
+    KWREAD    shift, and go to state 58
+    KWRETURN  shift, and go to state 59
+    KWWHILE   shift, and go to state 60
+    IDENT     shift, and go to state 61
+
+    KWBEGIN   [reduce using rule 55 (statement)]
+    KWBEGIN   [reduce using rule 103 (epsilon)]
+    KWELSE    reduce using rule 55 (statement)
+    KWELSE    [reduce using rule 103 (epsilon)]
+    KWEND     reduce using rule 55 (statement)
+    KWEND     [reduce using rule 103 (epsilon)]
+    KWFOR     [reduce using rule 55 (statement)]
+    KWFOR     [reduce using rule 103 (epsilon)]
+    KWIF      [reduce using rule 55 (statement)]
+    KWIF      [reduce using rule 103 (epsilon)]
+    KWPRINT   [reduce using rule 55 (statement)]
+    KWPRINT   [reduce using rule 103 (epsilon)]
+    KWREAD    [reduce using rule 55 (statement)]
+    KWREAD    [reduce using rule 103 (epsilon)]
+    KWRETURN  [reduce using rule 55 (statement)]
+    KWRETURN  [reduce using rule 103 (epsilon)]
+    KWWHILE   [reduce using rule 55 (statement)]
+    KWWHILE   [reduce using rule 103 (epsilon)]
+    IDENT     [reduce using rule 55 (statement)]
+    IDENT     [reduce using rule 103 (epsilon)]
+    $default  reduce using rule 55 (statement)
+
+    statement_list                 go to state 163
+    statement                      go to state 63
+    compound_statement             go to state 64
+    simple_statement               go to state 65
+    variable_reference             go to state 66
+    function_invocation_statement  go to state 67
+    conditional_statement          go to state 68
+    while_statement                go to state 69
+    for_statement                  go to state 70
+    return_statement               go to state 71
+    epsilon                        go to state 72
+
+
+State 135
+
+  100 while_statement: KWWHILE boolean_expression KWDO . statement_list KWEND KWDO
+
+    KWBEGIN   shift, and go to state 27
+    KWFOR     shift, and go to state 55
+    KWIF      shift, and go to state 56
+    KWPRINT   shift, and go to state 57
+    KWREAD    shift, and go to state 58
+    KWRETURN  shift, and go to state 59
+    KWWHILE   shift, and go to state 60
+    IDENT     shift, and go to state 61
+
+    KWBEGIN   [reduce using rule 55 (statement)]
+    KWBEGIN   [reduce using rule 103 (epsilon)]
+    KWEND     reduce using rule 55 (statement)
+    KWEND     [reduce using rule 103 (epsilon)]
+    KWFOR     [reduce using rule 55 (statement)]
+    KWFOR     [reduce using rule 103 (epsilon)]
+    KWIF      [reduce using rule 55 (statement)]
+    KWIF      [reduce using rule 103 (epsilon)]
+    KWPRINT   [reduce using rule 55 (statement)]
+    KWPRINT   [reduce using rule 103 (epsilon)]
+    KWREAD    [reduce using rule 55 (statement)]
+    KWREAD    [reduce using rule 103 (epsilon)]
+    KWRETURN  [reduce using rule 55 (statement)]
+    KWRETURN  [reduce using rule 103 (epsilon)]
+    KWWHILE   [reduce using rule 55 (statement)]
+    KWWHILE   [reduce using rule 103 (epsilon)]
+    IDENT     [reduce using rule 55 (statement)]
+    IDENT     [reduce using rule 103 (epsilon)]
+    $default  reduce using rule 55 (statement)
+
+    statement_list                 go to state 164
+    statement                      go to state 63
+    compound_statement             go to state 64
+    simple_statement               go to state 65
+    variable_reference             go to state 66
+    function_invocation_statement  go to state 67
+    conditional_statement          go to state 68
+    while_statement                go to state 69
+    for_statement                  go to state 70
+    return_statement               go to state 71
+    epsilon                        go to state 72
+
+
+State 136
+
+   77 expression: expression . MULTIPLY expression
+   78           | expression . DIVIDE expression
+   79           | expression . MOD expression
+   80           | expression . PLUS expression
+   81           | expression . MINUS expression
+   84           | expression . AND expression
+   85           | expression . OR expression
+   87 boolean_expression: expression . LESS expression
+   88                   | expression . LESSEQUAL expression
+   89                   | expression . EQUAL expression
+   90                   | expression . GREATEREQUAL expression
+   91                   | expression . GREATER expression
+   92                   | expression . LESSGREATER expression
+   96 expression_list: expression .
+
+    LESS          shift, and go to state 121
+    LESSEQUAL     shift, and go to state 122
+    LESSGREATER   shift, and go to state 123
+    GREATEREQUAL  shift, and go to state 124
+    GREATER       shift, and go to state 125
+    EQUAL         shift, and go to state 126
+    PLUS          shift, and go to state 127
+    MINUS         shift, and go to state 128
+    MULTIPLY      shift, and go to state 129
+    DIVIDE        shift, and go to state 130
+    MOD           shift, and go to state 131
+    AND           shift, and go to state 132
+    OR            shift, and go to state 133
+
+    $default  reduce using rule 96 (expression_list)
+
+
+State 137
+
+   94 function_invocation_statement: IDENT BRACELEFT expression_list . BRACERIGHT
+   95 expression_list: expression_list . COMMA expression
+
+    COMMA       shift, and go to state 165
+    BRACERIGHT  shift, and go to state 166
+
+
+State 138
+
+   97 expression_list: epsilon .
+
+    $default  reduce using rule 97 (expression_list)
+
+
+State 139
+
+   63 integer_expression: INTEGER . MULTIPLY INTEGER
+   64                   | INTEGER . DIVIDE INTEGER
+   65                   | INTEGER . MOD INTEGER
+   66                   | INTEGER . PLUS INTEGER
+   67                   | INTEGER . MINUS INTEGER
+   68                   | INTEGER .
+
+    PLUS      shift, and go to state 167
+    MINUS     shift, and go to state 168
+    MULTIPLY  shift, and go to state 169
+    DIVIDE    shift, and go to state 170
+    MOD       shift, and go to state 171
+
+    $default  reduce using rule 68 (integer_expression)
+
+
+State 140
+
+   69 integer_expression: IDENT .
+
+    $default  reduce using rule 69 (integer_expression)
+
+
+State 141
+
+   62 variable_reference: IDENT BRACKETLEFT integer_expression . BRACKETRIGHT array_reference
+
+    BRACKETRIGHT  shift, and go to state 172
+
+
+State 142
+
+   57 simple_statement: variable_reference ASSIGN expression_list .
+   95 expression_list: expression_list . COMMA expression
+
+    COMMA  shift, and go to state 165
+
+    $default  reduce using rule 57 (simple_statement)
+
+
+State 143
+
+   36 array_dimension_decl: INTEGER KWTO INTEGER KWOF . more_array_or_not
+
+    KWARRAY  shift, and go to state 173
+
+    KWARRAY   [reduce using rule 103 (epsilon)]
+    $default  reduce using rule 103 (epsilon)
+
+    more_array_or_not  go to state 174
+    epsilon            go to state 175
+
+
+State 144
+
+   35 array_dimension_decl: array_dimension_decl INTEGER KWTO INTEGER . KWOF more_array_or_not
+
+    KWOF  shift, and go to state 176
+
+
+State 145
+
+   13 func_decl: IDENT BRACELEFT arg_lists BRACERIGHT func_type SEMICOLON compound_statement . KWEND IDENT
+
+    KWEND  shift, and go to state 177
+
+
+State 146
+
+   34 array_decl: KWVAR identifier_list COLON . KWARRAY array_dimension_decl var_type SEMICOLON
+
+    KWARRAY  shift, and go to state 178
+
+
+State 147
+
+  101 for_statement: KWFOR IDENT ASSIGN INTEGER . KWTO INTEGER KWDO statement_list KWEND KWDO
+
+    KWTO  shift, and go to state 179
+
+
+State 148
+
+   73 expression: BRACELEFT expression BRACERIGHT .
+
+    $default  reduce using rule 73 (expression)
+
+
+State 149
+
+   72 expression: MINUS BRACELEFT expression . BRACERIGHT
+   77           | expression . MULTIPLY expression
+   78           | expression . DIVIDE expression
+   79           | expression . MOD expression
+   80           | expression . PLUS expression
+   81           | expression . MINUS expression
+   84           | expression . AND expression
+   85           | expression . OR expression
+   87 boolean_expression: expression . LESS expression
+   88                   | expression . LESSEQUAL expression
+   89                   | expression . EQUAL expression
+   90                   | expression . GREATEREQUAL expression
+   91                   | expression . GREATER expression
+   92                   | expression . LESSGREATER expression
+
+    BRACERIGHT    shift, and go to state 180
+    LESS          shift, and go to state 121
+    LESSEQUAL     shift, and go to state 122
+    LESSGREATER   shift, and go to state 123
+    GREATEREQUAL  shift, and go to state 124
+    GREATER       shift, and go to state 125
+    EQUAL         shift, and go to state 126
+    PLUS          shift, and go to state 127
+    MINUS         shift, and go to state 128
+    MULTIPLY      shift, and go to state 129
+    DIVIDE        shift, and go to state 130
+    MOD           shift, and go to state 131
+    AND           shift, and go to state 132
+    OR            shift, and go to state 133
+
+
+State 150
+
+   77 expression: expression . MULTIPLY expression
+   78           | expression . DIVIDE expression
+   79           | expression . MOD expression
+   80           | expression . PLUS expression
+   81           | expression . MINUS expression
+   84           | expression . AND expression
+   85           | expression . OR expression
+   87 boolean_expression: expression . LESS expression
+   87                   | expression LESS expression .
+   88                   | expression . LESSEQUAL expression
+   89                   | expression . EQUAL expression
+   90                   | expression . GREATEREQUAL expression
+   91                   | expression . GREATER expression
+   92                   | expression . LESSGREATER expression
+
+    PLUS      shift, and go to state 127
+    MINUS     shift, and go to state 128
+    MULTIPLY  shift, and go to state 129
+    DIVIDE    shift, and go to state 130
+    MOD       shift, and go to state 131
+    AND       shift, and go to state 132
+    OR        shift, and go to state 133
+
+    $default  reduce using rule 87 (boolean_expression)
+
+
+State 151
+
+   77 expression: expression . MULTIPLY expression
+   78           | expression . DIVIDE expression
+   79           | expression . MOD expression
+   80           | expression . PLUS expression
+   81           | expression . MINUS expression
+   84           | expression . AND expression
+   85           | expression . OR expression
+   87 boolean_expression: expression . LESS expression
+   88                   | expression . LESSEQUAL expression
+   88                   | expression LESSEQUAL expression .
+   89                   | expression . EQUAL expression
+   90                   | expression . GREATEREQUAL expression
+   91                   | expression . GREATER expression
+   92                   | expression . LESSGREATER expression
+
+    PLUS      shift, and go to state 127
+    MINUS     shift, and go to state 128
+    MULTIPLY  shift, and go to state 129
+    DIVIDE    shift, and go to state 130
+    MOD       shift, and go to state 131
+    AND       shift, and go to state 132
+    OR        shift, and go to state 133
+
+    $default  reduce using rule 88 (boolean_expression)
+
+
+State 152
+
+   77 expression: expression . MULTIPLY expression
+   78           | expression . DIVIDE expression
+   79           | expression . MOD expression
+   80           | expression . PLUS expression
+   81           | expression . MINUS expression
+   84           | expression . AND expression
+   85           | expression . OR expression
+   87 boolean_expression: expression . LESS expression
+   88                   | expression . LESSEQUAL expression
+   89                   | expression . EQUAL expression
+   90                   | expression . GREATEREQUAL expression
+   91                   | expression . GREATER expression
+   92                   | expression . LESSGREATER expression
+   92                   | expression LESSGREATER expression .
+
+    PLUS      shift, and go to state 127
+    MINUS     shift, and go to state 128
+    MULTIPLY  shift, and go to state 129
+    DIVIDE    shift, and go to state 130
+    MOD       shift, and go to state 131
+    AND       shift, and go to state 132
+    OR        shift, and go to state 133
+
+    $default  reduce using rule 92 (boolean_expression)
+
+
+State 153
+
+   77 expression: expression . MULTIPLY expression
+   78           | expression . DIVIDE expression
+   79           | expression . MOD expression
+   80           | expression . PLUS expression
+   81           | expression . MINUS expression
+   84           | expression . AND expression
+   85           | expression . OR expression
+   87 boolean_expression: expression . LESS expression
+   88                   | expression . LESSEQUAL expression
+   89                   | expression . EQUAL expression
+   90                   | expression . GREATEREQUAL expression
+   90                   | expression GREATEREQUAL expression .
+   91                   | expression . GREATER expression
+   92                   | expression . LESSGREATER expression
+
+    PLUS      shift, and go to state 127
+    MINUS     shift, and go to state 128
+    MULTIPLY  shift, and go to state 129
+    DIVIDE    shift, and go to state 130
+    MOD       shift, and go to state 131
+    AND       shift, and go to state 132
+    OR        shift, and go to state 133
+
+    $default  reduce using rule 90 (boolean_expression)
+
+
+State 154
+
+   77 expression: expression . MULTIPLY expression
+   78           | expression . DIVIDE expression
+   79           | expression . MOD expression
+   80           | expression . PLUS expression
+   81           | expression . MINUS expression
+   84           | expression . AND expression
+   85           | expression . OR expression
+   87 boolean_expression: expression . LESS expression
+   88                   | expression . LESSEQUAL expression
+   89                   | expression . EQUAL expression
+   90                   | expression . GREATEREQUAL expression
+   91                   | expression . GREATER expression
+   91                   | expression GREATER expression .
+   92                   | expression . LESSGREATER expression
+
+    PLUS      shift, and go to state 127
+    MINUS     shift, and go to state 128
+    MULTIPLY  shift, and go to state 129
+    DIVIDE    shift, and go to state 130
+    MOD       shift, and go to state 131
+    AND       shift, and go to state 132
+    OR        shift, and go to state 133
+
+    $default  reduce using rule 91 (boolean_expression)
+
+
+State 155
+
+   77 expression: expression . MULTIPLY expression
+   78           | expression . DIVIDE expression
+   79           | expression . MOD expression
+   80           | expression . PLUS expression
+   81           | expression . MINUS expression
+   84           | expression . AND expression
+   85           | expression . OR expression
+   87 boolean_expression: expression . LESS expression
+   88                   | expression . LESSEQUAL expression
+   89                   | expression . EQUAL expression
+   89                   | expression EQUAL expression .
+   90                   | expression . GREATEREQUAL expression
+   91                   | expression . GREATER expression
+   92                   | expression . LESSGREATER expression
+
+    PLUS      shift, and go to state 127
+    MINUS     shift, and go to state 128
+    MULTIPLY  shift, and go to state 129
+    DIVIDE    shift, and go to state 130
+    MOD       shift, and go to state 131
+    AND       shift, and go to state 132
+    OR        shift, and go to state 133
+
+    $default  reduce using rule 89 (boolean_expression)
+
+
+State 156
+
+   77 expression: expression . MULTIPLY expression
+   78           | expression . DIVIDE expression
+   79           | expression . MOD expression
+   80           | expression . PLUS expression
+   80           | expression PLUS expression .
+   81           | expression . MINUS expression
+   84           | expression . AND expression
+   85           | expression . OR expression
+   87 boolean_expression: expression . LESS expression
+   88                   | expression . LESSEQUAL expression
+   89                   | expression . EQUAL expression
+   90                   | expression . GREATEREQUAL expression
+   91                   | expression . GREATER expression
+   92                   | expression . LESSGREATER expression
+
+    MULTIPLY  shift, and go to state 129
+    DIVIDE    shift, and go to state 130
+    MOD       shift, and go to state 131
+    AND       shift, and go to state 132
+    OR        shift, and go to state 133
+
+    $default  reduce using rule 80 (expression)
+
+
+State 157
+
+   77 expression: expression . MULTIPLY expression
+   78           | expression . DIVIDE expression
+   79           | expression . MOD expression
+   80           | expression . PLUS expression
+   81           | expression . MINUS expression
+   81           | expression MINUS expression .
+   84           | expression . AND expression
+   85           | expression . OR expression
+   87 boolean_expression: expression . LESS expression
+   88                   | expression . LESSEQUAL expression
+   89                   | expression . EQUAL expression
+   90                   | expression . GREATEREQUAL expression
+   91                   | expression . GREATER expression
+   92                   | expression . LESSGREATER expression
+
+    MULTIPLY  shift, and go to state 129
+    DIVIDE    shift, and go to state 130
+    MOD       shift, and go to state 131
+    AND       shift, and go to state 132
+    OR        shift, and go to state 133
+
+    $default  reduce using rule 81 (expression)
+
+
+State 158
+
+   77 expression: expression . MULTIPLY expression
+   77           | expression MULTIPLY expression .
+   78           | expression . DIVIDE expression
+   79           | expression . MOD expression
+   80           | expression . PLUS expression
+   81           | expression . MINUS expression
+   84           | expression . AND expression
+   85           | expression . OR expression
+   87 boolean_expression: expression . LESS expression
+   88                   | expression . LESSEQUAL expression
+   89                   | expression . EQUAL expression
+   90                   | expression . GREATEREQUAL expression
+   91                   | expression . GREATER expression
+   92                   | expression . LESSGREATER expression
+
+    AND  shift, and go to state 132
+    OR   shift, and go to state 133
+
+    $default  reduce using rule 77 (expression)
+
+
+State 159
+
+   77 expression: expression . MULTIPLY expression
+   78           | expression . DIVIDE expression
+   78           | expression DIVIDE expression .
+   79           | expression . MOD expression
+   80           | expression . PLUS expression
+   81           | expression . MINUS expression
+   84           | expression . AND expression
+   85           | expression . OR expression
+   87 boolean_expression: expression . LESS expression
+   88                   | expression . LESSEQUAL expression
+   89                   | expression . EQUAL expression
+   90                   | expression . GREATEREQUAL expression
+   91                   | expression . GREATER expression
+   92                   | expression . LESSGREATER expression
+
+    AND  shift, and go to state 132
+    OR   shift, and go to state 133
+
+    $default  reduce using rule 78 (expression)
+
+
+State 160
+
+   77 expression: expression . MULTIPLY expression
+   78           | expression . DIVIDE expression
+   79           | expression . MOD expression
+   79           | expression MOD expression .
+   80           | expression . PLUS expression
+   81           | expression . MINUS expression
+   84           | expression . AND expression
+   85           | expression . OR expression
+   87 boolean_expression: expression . LESS expression
+   88                   | expression . LESSEQUAL expression
+   89                   | expression . EQUAL expression
+   90                   | expression . GREATEREQUAL expression
+   91                   | expression . GREATER expression
+   92                   | expression . LESSGREATER expression
+
+    AND  shift, and go to state 132
+    OR   shift, and go to state 133
+
+    $default  reduce using rule 79 (expression)
+
+
+State 161
+
+   77 expression: expression . MULTIPLY expression
+   78           | expression . DIVIDE expression
+   79           | expression . MOD expression
+   80           | expression . PLUS expression
+   81           | expression . MINUS expression
+   84           | expression . AND expression
+   84           | expression AND expression .
+   85           | expression . OR expression
+   87 boolean_expression: expression . LESS expression
+   88                   | expression . LESSEQUAL expression
+   89                   | expression . EQUAL expression
+   90                   | expression . GREATEREQUAL expression
+   91                   | expression . GREATER expression
+   92                   | expression . LESSGREATER expression
+
+    $default  reduce using rule 84 (expression)
+
+
+State 162
+
+   77 expression: expression . MULTIPLY expression
+   78           | expression . DIVIDE expression
+   79           | expression . MOD expression
+   80           | expression . PLUS expression
+   81           | expression . MINUS expression
+   84           | expression . AND expression
+   85           | expression . OR expression
+   85           | expression OR expression .
+   87 boolean_expression: expression . LESS expression
+   88                   | expression . LESSEQUAL expression
+   89                   | expression . EQUAL expression
+   90                   | expression . GREATEREQUAL expression
+   91                   | expression . GREATER expression
+   92                   | expression . LESSGREATER expression
+
+    $default  reduce using rule 85 (expression)
+
+
+State 163
+
+   45 statement_list: statement_list . statement
+   98 conditional_statement: KWIF boolean_expression KWTHEN statement_list . KWELSE statement_list KWEND KWIF
+   99                      | KWIF boolean_expression KWTHEN statement_list . KWEND KWIF
+
+    KWBEGIN   shift, and go to state 27
+    KWELSE    shift, and go to state 181
+    KWEND     shift, and go to state 182
+    KWFOR     shift, and go to state 55
+    KWIF      shift, and go to state 56
+    KWPRINT   shift, and go to state 57
+    KWREAD    shift, and go to state 58
+    KWRETURN  shift, and go to state 59
+    KWWHILE   shift, and go to state 60
+    IDENT     shift, and go to state 61
+
+    KWBEGIN   [reduce using rule 55 (statement)]
+    KWELSE    [reduce using rule 55 (statement)]
+    KWEND     [reduce using rule 55 (statement)]
+    KWFOR     [reduce using rule 55 (statement)]
+    KWIF      [reduce using rule 55 (statement)]
+    KWPRINT   [reduce using rule 55 (statement)]
+    KWREAD    [reduce using rule 55 (statement)]
+    KWRETURN  [reduce using rule 55 (statement)]
+    KWWHILE   [reduce using rule 55 (statement)]
+    IDENT     [reduce using rule 55 (statement)]
+
+    statement                      go to state 103
+    compound_statement             go to state 64
+    simple_statement               go to state 65
+    variable_reference             go to state 66
+    function_invocation_statement  go to state 67
+    conditional_statement          go to state 68
+    while_statement                go to state 69
+    for_statement                  go to state 70
+    return_statement               go to state 71
+
+
+State 164
+
+   45 statement_list: statement_list . statement
+  100 while_statement: KWWHILE boolean_expression KWDO statement_list . KWEND KWDO
+
+    KWBEGIN   shift, and go to state 27
+    KWEND     shift, and go to state 183
+    KWFOR     shift, and go to state 55
+    KWIF      shift, and go to state 56
+    KWPRINT   shift, and go to state 57
+    KWREAD    shift, and go to state 58
+    KWRETURN  shift, and go to state 59
+    KWWHILE   shift, and go to state 60
+    IDENT     shift, and go to state 61
+
+    KWBEGIN   [reduce using rule 55 (statement)]
+    KWEND     [reduce using rule 55 (statement)]
+    KWFOR     [reduce using rule 55 (statement)]
+    KWIF      [reduce using rule 55 (statement)]
+    KWPRINT   [reduce using rule 55 (statement)]
+    KWREAD    [reduce using rule 55 (statement)]
+    KWRETURN  [reduce using rule 55 (statement)]
+    KWWHILE   [reduce using rule 55 (statement)]
+    IDENT     [reduce using rule 55 (statement)]
+
+    statement                      go to state 103
+    compound_statement             go to state 64
+    simple_statement               go to state 65
+    variable_reference             go to state 66
+    function_invocation_statement  go to state 67
+    conditional_statement          go to state 68
+    while_statement                go to state 69
+    for_statement                  go to state 70
+    return_statement               go to state 71
+
+
+State 165
+
+   95 expression_list: expression_list COMMA . expression
+
+    BRACELEFT  shift, and go to state 85
+    MINUS      shift, and go to state 86
+    NOT        shift, and go to state 87
+    KWTRUE     shift, and go to state 36
+    KWFALSE    shift, and go to state 37
+    INTEGER    shift, and go to state 38
+    REAL       shift, and go to state 39
+    IDENT      shift, and go to state 61
+    STRING     shift, and go to state 40
+
+    COMMA         reduce using rule 86 (expression)
+    COMMA         [reduce using rule 93 (boolean_expression)]
+    SEMICOLON     reduce using rule 86 (expression)
+    SEMICOLON     [reduce using rule 93 (boolean_expression)]
+    BRACERIGHT    reduce using rule 86 (expression)
+    BRACERIGHT    [reduce using rule 93 (boolean_expression)]
+    LESS          reduce using rule 86 (expression)
+    LESS          [reduce using rule 93 (boolean_expression)]
+    LESSEQUAL     reduce using rule 86 (expression)
+    LESSEQUAL     [reduce using rule 93 (boolean_expression)]
+    LESSGREATER   reduce using rule 86 (expression)
+    LESSGREATER   [reduce using rule 93 (boolean_expression)]
+    GREATEREQUAL  reduce using rule 86 (expression)
+    GREATEREQUAL  [reduce using rule 93 (boolean_expression)]
+    GREATER       reduce using rule 86 (expression)
+    GREATER       [reduce using rule 93 (boolean_expression)]
+    EQUAL         reduce using rule 86 (expression)
+    EQUAL         [reduce using rule 93 (boolean_expression)]
+    PLUS          reduce using rule 86 (expression)
+    PLUS          [reduce using rule 93 (boolean_expression)]
+    MINUS         [reduce using rule 86 (expression)]
+    MINUS         [reduce using rule 93 (boolean_expression)]
+    MULTIPLY      reduce using rule 86 (expression)
+    MULTIPLY      [reduce using rule 93 (boolean_expression)]
+    DIVIDE        reduce using rule 86 (expression)
+    DIVIDE        [reduce using rule 93 (boolean_expression)]
+    MOD           reduce using rule 86 (expression)
+    MOD           [reduce using rule 93 (boolean_expression)]
+    AND           reduce using rule 86 (expression)
+    AND           [reduce using rule 93 (boolean_expression)]
+    OR            reduce using rule 86 (expression)
+    OR            [reduce using rule 93 (boolean_expression)]
+    $default      reduce using rule 86 (expression)
+
+    literal_constant_list          go to state 88
+    variable_reference             go to state 89
+    expression                     go to state 184
+    boolean_expression             go to state 95
+    function_invocation_statement  go to state 92
+
+
+State 166
+
+   94 function_invocation_statement: IDENT BRACELEFT expression_list BRACERIGHT .
+
+    $default  reduce using rule 94 (function_invocation_statement)
+
+
+State 167
+
+   66 integer_expression: INTEGER PLUS . INTEGER
+
+    INTEGER  shift, and go to state 185
+
+
+State 168
+
+   67 integer_expression: INTEGER MINUS . INTEGER
+
+    INTEGER  shift, and go to state 186
+
+
+State 169
+
+   63 integer_expression: INTEGER MULTIPLY . INTEGER
+
+    INTEGER  shift, and go to state 187
+
+
+State 170
+
+   64 integer_expression: INTEGER DIVIDE . INTEGER
+
+    INTEGER  shift, and go to state 188
+
+
+State 171
+
+   65 integer_expression: INTEGER MOD . INTEGER
+
+    INTEGER  shift, and go to state 189
+
+
+State 172
+
+   62 variable_reference: IDENT BRACKETLEFT integer_expression BRACKETRIGHT . array_reference
+
+    BRACKETLEFT  shift, and go to state 190
+
+    $default  reduce using rule 103 (epsilon)
+
+    array_reference  go to state 191
+    epsilon          go to state 192
+
+
+State 173
+
+   37 more_array_or_not: KWARRAY .
+
+    $default  reduce using rule 37 (more_array_or_not)
+
+
+State 174
+
+   36 array_dimension_decl: INTEGER KWTO INTEGER KWOF more_array_or_not .
+
+    $default  reduce using rule 36 (array_dimension_decl)
+
+
+State 175
+
+   38 more_array_or_not: epsilon .
+
+    $default  reduce using rule 38 (more_array_or_not)
+
+
+State 176
+
+   35 array_dimension_decl: array_dimension_decl INTEGER KWTO INTEGER KWOF . more_array_or_not
+
+    KWARRAY  shift, and go to state 173
+
+    KWARRAY   [reduce using rule 103 (epsilon)]
+    $default  reduce using rule 103 (epsilon)
+
+    more_array_or_not  go to state 193
+    epsilon            go to state 175
+
+
+State 177
+
+   13 func_decl: IDENT BRACELEFT arg_lists BRACERIGHT func_type SEMICOLON compound_statement KWEND . IDENT
+
+    IDENT  shift, and go to state 194
+
+
+State 178
+
+   34 array_decl: KWVAR identifier_list COLON KWARRAY . array_dimension_decl var_type SEMICOLON
+
+    INTEGER  shift, and go to state 48
+
+    array_dimension_decl  go to state 49
+
+
+State 179
+
+  101 for_statement: KWFOR IDENT ASSIGN INTEGER KWTO . INTEGER KWDO statement_list KWEND KWDO
+
+    INTEGER  shift, and go to state 195
+
+
+State 180
+
+   72 expression: MINUS BRACELEFT expression BRACERIGHT .
+
+    $default  reduce using rule 72 (expression)
+
+
+State 181
+
+   98 conditional_statement: KWIF boolean_expression KWTHEN statement_list KWELSE . statement_list KWEND KWIF
+
+    KWBEGIN   shift, and go to state 27
+    KWFOR     shift, and go to state 55
+    KWIF      shift, and go to state 56
+    KWPRINT   shift, and go to state 57
+    KWREAD    shift, and go to state 58
+    KWRETURN  shift, and go to state 59
+    KWWHILE   shift, and go to state 60
+    IDENT     shift, and go to state 61
+
+    KWBEGIN   [reduce using rule 55 (statement)]
+    KWBEGIN   [reduce using rule 103 (epsilon)]
+    KWEND     reduce using rule 55 (statement)
+    KWEND     [reduce using rule 103 (epsilon)]
+    KWFOR     [reduce using rule 55 (statement)]
+    KWFOR     [reduce using rule 103 (epsilon)]
+    KWIF      [reduce using rule 55 (statement)]
+    KWIF      [reduce using rule 103 (epsilon)]
+    KWPRINT   [reduce using rule 55 (statement)]
+    KWPRINT   [reduce using rule 103 (epsilon)]
+    KWREAD    [reduce using rule 55 (statement)]
+    KWREAD    [reduce using rule 103 (epsilon)]
+    KWRETURN  [reduce using rule 55 (statement)]
+    KWRETURN  [reduce using rule 103 (epsilon)]
+    KWWHILE   [reduce using rule 55 (statement)]
+    KWWHILE   [reduce using rule 103 (epsilon)]
+    IDENT     [reduce using rule 55 (statement)]
+    IDENT     [reduce using rule 103 (epsilon)]
+    $default  reduce using rule 55 (statement)
+
+    statement_list                 go to state 196
+    statement                      go to state 63
+    compound_statement             go to state 64
+    simple_statement               go to state 65
+    variable_reference             go to state 66
+    function_invocation_statement  go to state 67
+    conditional_statement          go to state 68
+    while_statement                go to state 69
+    for_statement                  go to state 70
+    return_statement               go to state 71
+    epsilon                        go to state 72
+
+
+State 182
+
+   99 conditional_statement: KWIF boolean_expression KWTHEN statement_list KWEND . KWIF
+
+    KWIF  shift, and go to state 197
+
+
+State 183
+
+  100 while_statement: KWWHILE boolean_expression KWDO statement_list KWEND . KWDO
+
+    KWDO  shift, and go to state 198
+
+
+State 184
+
+   77 expression: expression . MULTIPLY expression
+   78           | expression . DIVIDE expression
+   79           | expression . MOD expression
+   80           | expression . PLUS expression
+   81           | expression . MINUS expression
+   84           | expression . AND expression
+   85           | expression . OR expression
+   87 boolean_expression: expression . LESS expression
+   88                   | expression . LESSEQUAL expression
+   89                   | expression . EQUAL expression
+   90                   | expression . GREATEREQUAL expression
+   91                   | expression . GREATER expression
+   92                   | expression . LESSGREATER expression
+   95 expression_list: expression_list COMMA expression .
+
+    LESS          shift, and go to state 121
+    LESSEQUAL     shift, and go to state 122
+    LESSGREATER   shift, and go to state 123
+    GREATEREQUAL  shift, and go to state 124
+    GREATER       shift, and go to state 125
+    EQUAL         shift, and go to state 126
+    PLUS          shift, and go to state 127
+    MINUS         shift, and go to state 128
+    MULTIPLY      shift, and go to state 129
+    DIVIDE        shift, and go to state 130
+    MOD           shift, and go to state 131
+    AND           shift, and go to state 132
+    OR            shift, and go to state 133
+
+    $default  reduce using rule 95 (expression_list)
+
+
+State 185
+
+   66 integer_expression: INTEGER PLUS INTEGER .
+
+    $default  reduce using rule 66 (integer_expression)
+
+
+State 186
+
+   67 integer_expression: INTEGER MINUS INTEGER .
+
+    $default  reduce using rule 67 (integer_expression)
+
+
+State 187
+
+   63 integer_expression: INTEGER MULTIPLY INTEGER .
+
+    $default  reduce using rule 63 (integer_expression)
+
+
+State 188
+
+   64 integer_expression: INTEGER DIVIDE INTEGER .
+
+    $default  reduce using rule 64 (integer_expression)
+
+
+State 189
+
+   65 integer_expression: INTEGER MOD INTEGER .
+
+    $default  reduce using rule 65 (integer_expression)
+
+
+State 190
+
+   71 array_reference: BRACKETLEFT . expression BRACKETRIGHT array_reference
+
+    BRACELEFT  shift, and go to state 85
+    MINUS      shift, and go to state 86
+    NOT        shift, and go to state 87
+    KWTRUE     shift, and go to state 36
+    KWFALSE    shift, and go to state 37
+    INTEGER    shift, and go to state 38
+    REAL       shift, and go to state 39
+    IDENT      shift, and go to state 61
+    STRING     shift, and go to state 40
+
+    BRACKETRIGHT  reduce using rule 86 (expression)
+    BRACKETRIGHT  [reduce using rule 93 (boolean_expression)]
+    LESS          reduce using rule 86 (expression)
+    LESS          [reduce using rule 93 (boolean_expression)]
+    LESSEQUAL     reduce using rule 86 (expression)
+    LESSEQUAL     [reduce using rule 93 (boolean_expression)]
+    LESSGREATER   reduce using rule 86 (expression)
+    LESSGREATER   [reduce using rule 93 (boolean_expression)]
+    GREATEREQUAL  reduce using rule 86 (expression)
+    GREATEREQUAL  [reduce using rule 93 (boolean_expression)]
+    GREATER       reduce using rule 86 (expression)
+    GREATER       [reduce using rule 93 (boolean_expression)]
+    EQUAL         reduce using rule 86 (expression)
+    EQUAL         [reduce using rule 93 (boolean_expression)]
+    PLUS          reduce using rule 86 (expression)
+    PLUS          [reduce using rule 93 (boolean_expression)]
+    MINUS         [reduce using rule 86 (expression)]
+    MINUS         [reduce using rule 93 (boolean_expression)]
+    MULTIPLY      reduce using rule 86 (expression)
+    MULTIPLY      [reduce using rule 93 (boolean_expression)]
+    DIVIDE        reduce using rule 86 (expression)
+    DIVIDE        [reduce using rule 93 (boolean_expression)]
+    MOD           reduce using rule 86 (expression)
+    MOD           [reduce using rule 93 (boolean_expression)]
+    AND           reduce using rule 86 (expression)
+    AND           [reduce using rule 93 (boolean_expression)]
+    OR            reduce using rule 86 (expression)
+    OR            [reduce using rule 93 (boolean_expression)]
+    $default      reduce using rule 86 (expression)
+
+    literal_constant_list          go to state 88
+    variable_reference             go to state 89
+    expression                     go to state 199
+    boolean_expression             go to state 95
+    function_invocation_statement  go to state 92
+
+
+State 191
+
+   62 variable_reference: IDENT BRACKETLEFT integer_expression BRACKETRIGHT array_reference .
+
+    $default  reduce using rule 62 (variable_reference)
+
+
+State 192
+
+   70 array_reference: epsilon .
+
+    $default  reduce using rule 70 (array_reference)
+
+
+State 193
+
+   35 array_dimension_decl: array_dimension_decl INTEGER KWTO INTEGER KWOF more_array_or_not .
+
+    $default  reduce using rule 35 (array_dimension_decl)
+
+
+State 194
+
+   13 func_decl: IDENT BRACELEFT arg_lists BRACERIGHT func_type SEMICOLON compound_statement KWEND IDENT .
+
+    $default  reduce using rule 13 (func_decl)
+
+
+State 195
+
+  101 for_statement: KWFOR IDENT ASSIGN INTEGER KWTO INTEGER . KWDO statement_list KWEND KWDO
+
+    KWDO  shift, and go to state 200
+
+
+State 196
+
+   45 statement_list: statement_list . statement
+   98 conditional_statement: KWIF boolean_expression KWTHEN statement_list KWELSE statement_list . KWEND KWIF
+
+    KWBEGIN   shift, and go to state 27
+    KWEND     shift, and go to state 201
+    KWFOR     shift, and go to state 55
+    KWIF      shift, and go to state 56
+    KWPRINT   shift, and go to state 57
+    KWREAD    shift, and go to state 58
+    KWRETURN  shift, and go to state 59
+    KWWHILE   shift, and go to state 60
+    IDENT     shift, and go to state 61
+
+    KWBEGIN   [reduce using rule 55 (statement)]
+    KWEND     [reduce using rule 55 (statement)]
+    KWFOR     [reduce using rule 55 (statement)]
+    KWIF      [reduce using rule 55 (statement)]
+    KWPRINT   [reduce using rule 55 (statement)]
+    KWREAD    [reduce using rule 55 (statement)]
+    KWRETURN  [reduce using rule 55 (statement)]
+    KWWHILE   [reduce using rule 55 (statement)]
+    IDENT     [reduce using rule 55 (statement)]
+
+    statement                      go to state 103
+    compound_statement             go to state 64
+    simple_statement               go to state 65
+    variable_reference             go to state 66
+    function_invocation_statement  go to state 67
+    conditional_statement          go to state 68
+    while_statement                go to state 69
+    for_statement                  go to state 70
+    return_statement               go to state 71
+
+
+State 197
+
+   99 conditional_statement: KWIF boolean_expression KWTHEN statement_list KWEND KWIF .
+
+    $default  reduce using rule 99 (conditional_statement)
+
+
+State 198
+
+  100 while_statement: KWWHILE boolean_expression KWDO statement_list KWEND KWDO .
+
+    $default  reduce using rule 100 (while_statement)
+
+
+State 199
+
+   71 array_reference: BRACKETLEFT expression . BRACKETRIGHT array_reference
+   77 expression: expression . MULTIPLY expression
+   78           | expression . DIVIDE expression
+   79           | expression . MOD expression
+   80           | expression . PLUS expression
+   81           | expression . MINUS expression
+   84           | expression . AND expression
+   85           | expression . OR expression
+   87 boolean_expression: expression . LESS expression
+   88                   | expression . LESSEQUAL expression
+   89                   | expression . EQUAL expression
+   90                   | expression . GREATEREQUAL expression
+   91                   | expression . GREATER expression
+   92                   | expression . LESSGREATER expression
+
+    BRACKETRIGHT  shift, and go to state 202
+    LESS          shift, and go to state 121
+    LESSEQUAL     shift, and go to state 122
+    LESSGREATER   shift, and go to state 123
+    GREATEREQUAL  shift, and go to state 124
+    GREATER       shift, and go to state 125
+    EQUAL         shift, and go to state 126
+    PLUS          shift, and go to state 127
+    MINUS         shift, and go to state 128
+    MULTIPLY      shift, and go to state 129
+    DIVIDE        shift, and go to state 130
+    MOD           shift, and go to state 131
+    AND           shift, and go to state 132
+    OR            shift, and go to state 133
+
+
+State 200
+
+  101 for_statement: KWFOR IDENT ASSIGN INTEGER KWTO INTEGER KWDO . statement_list KWEND KWDO
+
+    KWBEGIN   shift, and go to state 27
+    KWFOR     shift, and go to state 55
+    KWIF      shift, and go to state 56
+    KWPRINT   shift, and go to state 57
+    KWREAD    shift, and go to state 58
+    KWRETURN  shift, and go to state 59
+    KWWHILE   shift, and go to state 60
+    IDENT     shift, and go to state 61
+
+    KWBEGIN   [reduce using rule 55 (statement)]
+    KWBEGIN   [reduce using rule 103 (epsilon)]
+    KWEND     reduce using rule 55 (statement)
+    KWEND     [reduce using rule 103 (epsilon)]
+    KWFOR     [reduce using rule 55 (statement)]
+    KWFOR     [reduce using rule 103 (epsilon)]
+    KWIF      [reduce using rule 55 (statement)]
+    KWIF      [reduce using rule 103 (epsilon)]
+    KWPRINT   [reduce using rule 55 (statement)]
+    KWPRINT   [reduce using rule 103 (epsilon)]
+    KWREAD    [reduce using rule 55 (statement)]
+    KWREAD    [reduce using rule 103 (epsilon)]
+    KWRETURN  [reduce using rule 55 (statement)]
+    KWRETURN  [reduce using rule 103 (epsilon)]
+    KWWHILE   [reduce using rule 55 (statement)]
+    KWWHILE   [reduce using rule 103 (epsilon)]
+    IDENT     [reduce using rule 55 (statement)]
+    IDENT     [reduce using rule 103 (epsilon)]
+    $default  reduce using rule 55 (statement)
+
+    statement_list                 go to state 203
+    statement                      go to state 63
+    compound_statement             go to state 64
+    simple_statement               go to state 65
+    variable_reference             go to state 66
+    function_invocation_statement  go to state 67
+    conditional_statement          go to state 68
+    while_statement                go to state 69
+    for_statement                  go to state 70
+    return_statement               go to state 71
+    epsilon                        go to state 72
+
+
+State 201
+
+   98 conditional_statement: KWIF boolean_expression KWTHEN statement_list KWELSE statement_list KWEND . KWIF
+
+    KWIF  shift, and go to state 204
+
+
+State 202
+
+   71 array_reference: BRACKETLEFT expression BRACKETRIGHT . array_reference
+
+    BRACKETLEFT  shift, and go to state 190
+
+    $default  reduce using rule 103 (epsilon)
+
+    array_reference  go to state 205
+    epsilon          go to state 192
+
+
+State 203
+
+   45 statement_list: statement_list . statement
+  101 for_statement: KWFOR IDENT ASSIGN INTEGER KWTO INTEGER KWDO statement_list . KWEND KWDO
+
+    KWBEGIN   shift, and go to state 27
+    KWEND     shift, and go to state 206
+    KWFOR     shift, and go to state 55
+    KWIF      shift, and go to state 56
+    KWPRINT   shift, and go to state 57
+    KWREAD    shift, and go to state 58
+    KWRETURN  shift, and go to state 59
+    KWWHILE   shift, and go to state 60
+    IDENT     shift, and go to state 61
+
+    KWBEGIN   [reduce using rule 55 (statement)]
+    KWEND     [reduce using rule 55 (statement)]
+    KWFOR     [reduce using rule 55 (statement)]
+    KWIF      [reduce using rule 55 (statement)]
+    KWPRINT   [reduce using rule 55 (statement)]
+    KWREAD    [reduce using rule 55 (statement)]
+    KWRETURN  [reduce using rule 55 (statement)]
+    KWWHILE   [reduce using rule 55 (statement)]
+    IDENT     [reduce using rule 55 (statement)]
+
+    statement                      go to state 103
+    compound_statement             go to state 64
+    simple_statement               go to state 65
+    variable_reference             go to state 66
+    function_invocation_statement  go to state 67
+    conditional_statement          go to state 68
+    while_statement                go to state 69
+    for_statement                  go to state 70
+    return_statement               go to state 71
+
+
+State 204
+
+   98 conditional_statement: KWIF boolean_expression KWTHEN statement_list KWELSE statement_list KWEND KWIF .
+
+    $default  reduce using rule 98 (conditional_statement)
+
+
+State 205
+
+   71 array_reference: BRACKETLEFT expression BRACKETRIGHT array_reference .
+
+    $default  reduce using rule 71 (array_reference)
+
+
+State 206
+
+  101 for_statement: KWFOR IDENT ASSIGN INTEGER KWTO INTEGER KWDO statement_list KWEND . KWDO
+
+    KWDO  shift, and go to state 207
+
+
+State 207
+
+  101 for_statement: KWFOR IDENT ASSIGN INTEGER KWTO INTEGER KWDO statement_list KWEND KWDO .
+
+    $default  reduce using rule 101 (for_statement)
