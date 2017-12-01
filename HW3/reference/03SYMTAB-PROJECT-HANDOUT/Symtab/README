@@ -1,0 +1,9 @@
+This is an example of semantic check
+This example only accepts a reduced form of mini-pascal program, no function,
+no procedure, only assignment statement, and can only use integer or real variables
+You can extend this example to accept mini-pascal program, or writting
+your own semantic check procedure
+
+To compile, run ./build.sh
+To test, run ./parse < testinput.p
+
