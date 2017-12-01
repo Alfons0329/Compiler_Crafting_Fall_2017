@@ -76,13 +76,12 @@ int yyerror(char* );
 
 program		:	ID MK_SEMICOLON
 				{
-					symbol_table_entry sen;
-					sen.name=$1;
-					strdup(sen.kind,"program");
-					strdup(sen.level_str,"0(global)");
-					strdup(sen.type,"void");
-					strdup(sen.attribute,"");
-					push_symbol_table(sen,scope_depth);
+					strcpy(mysymbol_table[0].mysub_entry[0].name,$1);
+					strcpy(mysymbol_table[0].mysub_entry[0].kind,"program");
+					strcpy(mysymbol_table[0].mysub_entry[0].level_str,"0(global)");
+					strcpy(mysymbol_table[0].mysub_entry[0].type,"void");
+					strcpy(mysymbol_table[0].mysub_entry[0].attribute,"");
+					
 				}
 			  	program_body
 			  	END ID
@@ -99,13 +98,17 @@ opt_decl_list		: decl_list
 			| /* epsilon */
 			;
 
-decl_list		: decl_list decl
+decl_list		: 	decl_list
+					{
+						sub_entry_cnt++; //there is another sub_entry to be put in
+					}
+ 					decl
 			| decl
 			;
 
 decl		: VAR id_list MK_COLON scalar_type MK_SEMICOLON
 			{
-				
+				mysymbol_table[scope_depth].sub_entry[sub_entry_cnt].name
 			}       /* scalar type declaration */
 			| VAR id_list MK_COLON array_type MK_SEMICOLON        /* array type declaration */
 			| VAR id_list MK_COLON literal_const MK_SEMICOLON     /* const declaration */

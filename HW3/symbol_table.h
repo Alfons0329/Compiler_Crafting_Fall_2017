@@ -4,19 +4,17 @@
 #include <string.h>
 #define SYMBOL_TABLE_MAX_SIZE 10000
 #define SUB_ENTRY_SIZE 20
-int scope_depth;//,stack_size;
+int scope_depth;
 int sub_entry_cnt;
-/*############################################################################
+/*###############################################################################################################
 Implementation abstract;
+Use symbol table entry for each symebol table main try and the sub entry
+for situation like
+a parameter 1(local) integer   the first parsed all put into the subentry of symbol table entry
+b parameter 1(local) real [2][3] the second parsed all put into the subentry of symbol table entry
+c constant  1(local) string "hello world!" the third parsed all put into the subentry of symbol table entry
 
-
-
-
-
-
-
-
-###############################################################################*/
+###############################################################################################################*/
 struct sub_entry //the real entry for inserting the value
 {
     char* name;
@@ -48,8 +46,7 @@ void symbol_table_init()
 }
 void push_symbol_table(symbol_table_entry sen,int scope_depth)
 {
-    symbol_table_entry[scope_depth].=sen;
-    //stack_size+=1;
+    symbol_table_entry[scope_depth]=sen;
 }
 void pop_symbol_table()
 {
