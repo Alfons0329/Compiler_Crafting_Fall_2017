@@ -183,9 +183,9 @@ identifier ({letter})({letter}|{digit})*
 
 void setPseudoComment( const char *text )
 {
-	/* format : //&[A-Z][+-] */
 	switch( text[3] ) {
 	 case 'S':			/* Source code */
+	 /* format : //&[A-Z][+-] */
 		if( text[4] == '+' )
 			Opt_S = 1;
 		else if( text[4] == '-' )

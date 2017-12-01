@@ -3,6 +3,7 @@
  * Introduction to Compiler Design by Prof. Yi Ping You
  * Project 2 YACC sample
  */
+#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "symbol_table_head.h"
@@ -73,9 +74,22 @@ int yyerror(char* );
 %start program
 %%
 
-program			: ID MK_SEMICOLON
-			  program_body
-			  END ID
+program		:	ID MK_SEMICOLON
+				{
+					symbol_table_entry sen;
+					sen.name=$1;
+					strdup(sen.kind,"program");
+					strdup(sen.level_str,"0(global)");
+					strdup(sen.type,"void");
+					strdup(sen.attribute,"");
+					push_symbol_table(sen,scope_depth);
+				}
+			  	program_body
+			  	END ID
+			  	{
+					dumpsymbol();
+					pop_symbol_table();
+			  	}
 			;
 
 program_body		: opt_decl_list opt_func_decl_list compound_stmt
@@ -89,7 +103,10 @@ decl_list		: decl_list decl
 			| decl
 			;
 
-decl			: VAR id_list MK_COLON scalar_type MK_SEMICOLON       /* scalar type declaration */
+decl		: VAR id_list MK_COLON scalar_type MK_SEMICOLON
+			{
+				
+			}       /* scalar type declaration */
 			| VAR id_list MK_COLON array_type MK_SEMICOLON        /* array type declaration */
 			| VAR id_list MK_COLON literal_const MK_SEMICOLON     /* const declaration */
 			;
@@ -116,9 +133,9 @@ func_decl_list		: func_decl_list func_decl
 			| func_decl
 			;
 
-func_decl		: ID MK_LPAREN opt_param_list MK_RPAREN opt_type MK_SEMICOLON
-			  compound_stmt
-			  END ID
+func_decl	: 	ID MK_LPAREN opt_param_list MK_RPAREN opt_type MK_SEMICOLON
+			  	compound_stmt
+			  	END ID
 			;
 
 opt_param_list		: param_list
@@ -162,10 +179,18 @@ stmt			: compound_stmt
 			| proc_call_stmt
 			;
 
-compound_stmt		: BEG
-			  opt_decl_list
-			  opt_stmt_list
-			  END
+compound_stmt	: BEG
+				{
+					scope_depth++;
+				}
+			  	opt_decl_list
+			  	opt_stmt_list
+			  	END
+				{
+					scope_depth--;
+					pop_symbol_table();
+					dumpsymbol();
+				}
 			;
 
 opt_stmt_list		: stmt_list
