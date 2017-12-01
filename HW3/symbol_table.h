@@ -6,6 +6,7 @@
 #define SUB_ENTRY_SIZE 20
 int scope_depth;
 int sub_entry_cnt;
+int pre_sub_entry_cnt;
 /*###############################################################################################################
 Implementation abstract;
 Use symbol table entry for each symebol table main try and the sub entry
@@ -14,6 +15,14 @@ a parameter 1(local) integer   the first parsed all put into the subentry of sym
 b parameter 1(local) real [2][3] the second parsed all put into the subentry of symbol table entry
 c constant  1(local) string "hello world!" the third parsed all put into the subentry of symbol table entry
 
+Detail for every declarations
+1.For some of the decl_list, once the scalar_type has reached, marked all that sub_entry to be the same types
+e.g. var i, k : integer
+that is mysymbol_table[scope_depth].mysymbol_table[:sub_entry_cnt]=type and they have thier own name, but all count as variable
+2.
+var i, k : integer from pre_sub_entry_cnt=0 to sub_entry_cnt 2 (exclude 2)
+var j, m, n ,p : real from pre_sub_entry_cnt=2 to sub_entry_cnt 6(exclude6)
+that is once a var is redeclared, the pre_sub_entry_cnt<---->sub_entry_cnt symbolizes how many var ID in this segment to be parsed in one line
 ###############################################################################################################*/
 struct sub_entry //the real entry for inserting the value
 {
@@ -42,7 +51,8 @@ void symbol_table_init()
         mysymbol_table[i].level=0;
     }*/
     scope_depth=0;
-    sub_entry_cnt;
+    sub_entry_cnt=0;
+    pre_sub_entry_cnt=0;
 }
 void push_symbol_table(symbol_table_entry sen,int scope_depth)
 {
@@ -50,7 +60,7 @@ void push_symbol_table(symbol_table_entry sen,int scope_depth)
 }
 void pop_symbol_table()
 {
-    stack_size=(stack_size==0)?0:stack_size-1;
+    scope_depth=(scope_depth==0)?0:scope_depth-1;
 }
 void dumpsymbol()
 {

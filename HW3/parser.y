@@ -10,7 +10,8 @@
 extern int linenum;		/* declared in lex.l */
 extern FILE *yyin;		/* declared by lex */
 extern char *yytext;		/* declared by lex */
-extern char buf[256];		/* declared in lex.l */
+extern char *buf;		/* declared in lex.l */
+char arr_buf[100];
 extern int yylex(void);
 int yyerror(char* );
 
@@ -81,36 +82,85 @@ program		:	ID MK_SEMICOLON
 					strcpy(mysymbol_table[0].mysub_entry[0].level_str,"0(global)");
 					strcpy(mysymbol_table[0].mysub_entry[0].type,"void");
 					strcpy(mysymbol_table[0].mysub_entry[0].attribute,"");
-					
 				}
 			  	program_body
 			  	END ID
 			  	{
-					dumpsymbol();
 					pop_symbol_table();
+					dumpsymbol();
 			  	}
 			;
 
-program_body		: opt_decl_list opt_func_decl_list compound_stmt
+program_body	: opt_decl_list opt_func_decl_list compound_stmt
 			;
 
-opt_decl_list		: decl_list
-			| /* epsilon */
+opt_decl_list	: decl_list
+				| /* epsilon */
 			;
 
-decl_list		: 	decl_list
-					{
-						sub_entry_cnt++; //there is another sub_entry to be put in
-					}
- 					decl
-			| decl
+decl_list	: 	decl_list
+ 				decl
+				| 	decl
 			;
 
-decl		: VAR id_list MK_COLON scalar_type MK_SEMICOLON
+decl		: VAR
 			{
-				mysymbol_table[scope_depth].sub_entry[sub_entry_cnt].name
+				pre_sub_entry_cnt=sub_entry_cnt;
+			}
+ 			id_list MK_COLON scalar_type MK_SEMICOLON
+			{
+				for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
+				{
+					mysymbol_table[scope_depth].sub_entry[i].kind="variable";
+					char* ps_level;
+					char* depth_n;
+					if(scope_depth)
+					{
+						depth_n=scope_depth+'0';
+						ps_level="(local)";
+						strcat(depth_n,ps_level);
+					}
+					else
+					{
+						depth_n="0";
+						ps_level="(global)";
+						strcat(depth_n,ps_level);
+					}
+					mysymbol_table[scope_depth].sub_entry[i].level_str=depth_n;
+					mysymbol_table[scope_depth].sub_entry[i].type=$4;
+				}
+				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
 			}       /* scalar type declaration */
-			| VAR id_list MK_COLON array_type MK_SEMICOLON        /* array type declaration */
+			| VAR
+			{
+				pre_sub_entry_cnt=sub_entry_cnt;
+				memset(arr_buf,0,sizeof(arr_buf));
+			}
+			id_list MK_COLON array_type MK_SEMICOLON
+			{
+				for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
+				{
+					mysymbol_table[scope_depth].sub_entry[i].kind="variable";
+					char* ps_level;
+					char* depth_n;
+					if(scope_depth)
+					{
+						depth_n=scope_depth+'0';
+						ps_level="(local)";
+						strcat(depth_n,ps_level);
+					}
+					else
+					{
+						depth_n="0";
+						ps_level="(global)";
+						strcat(depth_n,ps_level);
+					}
+					mysymbol_table[scope_depth].sub_entry[i].level_str=depth_n;
+					mysymbol_table[scope_depth].sub_entry[i].type=$4;
+					strcat(mysymbol_table[scope_depth].sub_entry[i],typearr_buf); //altogether using the sprintf to concatenate multiple strings
+				}
+				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
+			}        /* array type declaration */
 			| VAR id_list MK_COLON literal_const MK_SEMICOLON     /* const declaration */
 			;
 int_const	:	INT_CONST
@@ -152,8 +202,14 @@ param_list		: param_list MK_SEMICOLON param
 param			: id_list MK_COLON type
 			;
 
-id_list			: id_list MK_COMMA ID
+id_list		: id_list MK_COMMA ID /*one ID for one sub_entry*/
+			{
+				sub_entry_cnt++;
+			}
 			| ID
+			{
+				mysymbol_table[scope_depth].mysymbol_table[sub_entry_cnt]=$1;
+			}
 			;
 
 opt_type		: MK_COLON type
@@ -164,16 +220,19 @@ type			: scalar_type
 			| array_type
 			;
 
-scalar_type		: INTEGER
+scalar_type	: INTEGER
 			| REAL
 			| BOOLEAN
 			| STRING
 			;
 
-array_type		: ARRAY int_const TO int_const OF type
+array_type	: ARRAY int_const TO int_const OF type
+			{
+				sprintf(arr_buf,"[",($4-$2+'0'),"]");
+			}
 			;
 
-stmt			: compound_stmt
+stmt		: compound_stmt
 			| simple_stmt
 			| cond_stmt
 			| while_stmt
