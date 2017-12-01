@@ -113,16 +113,16 @@ decl		: VAR
 				{
 					mysymbol_table[scope_depth].sub_entry[i].kind="variable";
 					char* ps_level;
-					char* depth_n;
+					char depth_n[100];
 					if(scope_depth)
 					{
-						depth_n=scope_depth+'0';
+						depth_n[0]=scope_depth+'0';
 						ps_level="(local)";
 						strcat(depth_n,ps_level);
 					}
 					else
 					{
-						depth_n="0";
+						depth_n[0]='0';
 						ps_level="(global)";
 						strcat(depth_n,ps_level);
 					}
@@ -156,12 +156,35 @@ decl		: VAR
 						strcat(depth_n,ps_level);
 					}
 					mysymbol_table[scope_depth].sub_entry[i].level_str=depth_n;
-					mysymbol_table[scope_depth].sub_entry[i].type=$4;
-					strcat(mysymbol_table[scope_depth].sub_entry[i],arr_buf); //altogether using the sprintf to concatenate multiple strings
+					strcat(mysymbol_table[scope_depth].sub_entry[i].array_type_buf,$4);
+					strcat(mysymbol_table[scope_depth].sub_entry[i].array_type_buf,arr_buf); //altogether using the sprintf to concatenate multiple strings
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
 			}        /* array type declaration */
-			| VAR id_list MK_COLON literal_const MK_SEMICOLON     /* const declaration */
+			| VAR id_list MK_COLON literal_const MK_SEMICOLON
+			{
+				for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
+				{
+					mysymbol_table[scope_depth].sub_entry[i].kind="variable";
+					char* ps_level;
+					char depth_n[100];
+					if(scope_depth)
+					{
+						depth_n[0]=scope_depth+'0';
+						ps_level="(local)";
+						strcat(depth_n,ps_level);
+					}
+					else
+					{
+						depth_n[0]='0';
+						ps_level="(global)";
+						strcat(depth_n,ps_level);
+					}
+					mysymbol_table[scope_depth].sub_entry[i].level_str=depth_n;
+					mysymbol_table[scope_depth].sub_entry[i].type=$4;
+				}
+				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
+			} /* const declaration */
 			;
 int_const	:	INT_CONST
 			|	OCTAL_CONST
@@ -208,7 +231,7 @@ id_list		: id_list MK_COMMA ID /*one ID for one sub_entry*/
 			}
 			| ID
 			{
-				mysymbol_table[scope_depth].mysymbol_table[sub_entry_cnt]=$1;
+				mysymbol_table[scope_depth].sub_entry[sub_entry_cnt].name=$1;
 			}
 			;
 
@@ -216,7 +239,7 @@ opt_type		: MK_COLON type
 			| /* epsilon */
 			;
 
-type			: scalar_type
+type		: scalar_type
 			| array_type
 			;
 
@@ -228,7 +251,8 @@ scalar_type	: INTEGER
 
 array_type	: ARRAY int_const TO int_const OF type
 			{
-				sprintf(arr_buf,"[",($4-$2+'0'),"]");
+				sprintf(arr_buf,"[%d",($4-$2+'0'));
+				strcat(arr_buf,"]");
 			}
 			;
 

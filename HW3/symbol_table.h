@@ -23,6 +23,7 @@ that is mysymbol_table[scope_depth].mysymbol_table[:sub_entry_cnt]=type and they
 var i, k : integer from pre_sub_entry_cnt=0 to sub_entry_cnt 2 (exclude 2)
 var j, m, n ,p : real from pre_sub_entry_cnt=2 to sub_entry_cnt 6(exclude6)
 that is once a var is redeclared, the pre_sub_entry_cnt<---->sub_entry_cnt symbolizes how many var ID in this segment to be parsed in one line
+
 ###############################################################################################################*/
 struct sub_entry //the real entry for inserting the value
 {
@@ -31,7 +32,9 @@ struct sub_entry //the real entry for inserting the value
     char* level_str;
     char* type;
     char* attribute;
+    char array_type_buf[100];
     int level;
+    bool is_array_decl;
 }
 struct symbol_table_entry
 {
