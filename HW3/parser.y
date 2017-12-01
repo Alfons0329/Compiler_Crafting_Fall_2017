@@ -142,22 +142,22 @@ decl		: VAR
 				{
 					mysymbol_table[scope_depth].sub_entry[i].kind="variable";
 					char* ps_level;
-					char* depth_n;
+					char depth_n[100];
 					if(scope_depth)
 					{
-						depth_n=scope_depth+'0';
+						depth_n[0]=scope_depth+'0';
 						ps_level="(local)";
 						strcat(depth_n,ps_level);
 					}
 					else
 					{
-						depth_n="0";
+						depth_n[0]='0';
 						ps_level="(global)";
 						strcat(depth_n,ps_level);
 					}
 					mysymbol_table[scope_depth].sub_entry[i].level_str=depth_n;
 					mysymbol_table[scope_depth].sub_entry[i].type=$4;
-					strcat(mysymbol_table[scope_depth].sub_entry[i],typearr_buf); //altogether using the sprintf to concatenate multiple strings
+					strcat(mysymbol_table[scope_depth].sub_entry[i],arr_buf); //altogether using the sprintf to concatenate multiple strings
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
 			}        /* array type declaration */
