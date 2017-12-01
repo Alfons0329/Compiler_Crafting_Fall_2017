@@ -7,7 +7,7 @@
 
 #include <string.h>
 #include "y.tab.h"
-
+#include "symbol_table_head.h"
 #define LIST strcat( buf, yytext )
 #define token(t) { LIST; if (Opt_T) printf("<%s>\n", #t );}
 #define tokenChar(t) { LIST; if (Opt_T) printf("<%c>\n", t );}
@@ -21,6 +21,7 @@
 
 int Opt_S = 1;				/* list source code option */
 int Opt_T = 1;				/* list token option */
+int Opt_D = 1;
 int linenum = 1;			/* line number */
 char buf[MAX_LINE_LENG];		/* source code line buffer */
 char strContent[MAX_LINE_LENG];		/* string buffer */
@@ -160,8 +161,8 @@ identifier ({letter})({letter}|{digit})*
 				  LIST;
 				}
 
-{whitespace}			{ 
-				  LIST; 
+{whitespace}			{
+				  LIST;
 				}
 
 \n 				{
@@ -196,9 +197,13 @@ void setPseudoComment( const char *text )
 		else if( text[4] == '-' )
 			Opt_T = 0;
 	 	break;
+	case 'D'//dumo the symbol table
+		if( text[4] == '+' )
+			Opt_D = 1;
+		else if( text[4] == '-' )
+			Opt_D = 0;
 	 default:
 	 	break;
 	}
 
 }
-
