@@ -53,15 +53,17 @@ struct symbol_table_entry
 extern struct symbol_table mysymbol_table[SYMBOL_TABLE_MAX_SIZE];
 void symbol_table_init()
 {
-    /*for(int i=0;i<SYMBOL_TABLE_MAX_SIZE;i++)
+    for(int i=0;i<SYMBOL_TABLE_MAX_SIZE;i++)
     {
-        memset(mysymbol_table[i].name,0,sizeof(mysymbol_table.name));
-        memset(mysymbol_table[i].kind,0,sizeof(mysymbol_table.kind));
-        memset(mysymbol_table[i].level_str,0,sizeof(mysymbol_table.level_str));
-        memset(mysymbol_table[i].type,0,sizeof(mysymbol_table.type));
-        memset(mysymbol_table[i].attribute,0,sizeof(mysymbol_table.attribute));
-        mysymbol_table[i].level=0;
-    }*/
+        for(int j=0;j<SUB_ENTRY_SIZE;j++)
+        {
+            memset(mysymbol_table[i].attri_type_buf,0,sizeof(mysymbol_table.name));
+            memset(mysymbol_table[i].array_type_buf,0,sizeof(mysymbol_table.kind));
+            memset(mysymbol_table[i].param_type_buf,0,sizeof(mysymbol_table.level_str));
+            memset(mysymbol_table[i].type,0,sizeof(mysymbol_table.type));
+            memset(mysymbol_table[i].attribute,0,sizeof(mysymbol_table.attribute));
+        }
+    }
     scope_depth=0;
     sub_entry_cnt=0;
     pre_sub_entry_cnt=0;
@@ -83,24 +85,18 @@ void dumpsymbol()
     for(i=0;i<110;i++)
     {
         printf("=");
+    }
+    printf("\n");
+    printf("%-33s%-11s%-11s%-17s%-11s\n","Name","Kind","Level","Type","Attribute");
+    printf("\n");
+    for(int i=0;i<SUB_ENTRY_SIZE;i++)
+    {
+        printf("%-33s",mysymbol_table[scope_depth].sub_entry[i].name);
+        printf("%-11s",mysymbol_table[scope_depth].sub_entry[i].kind);
+        printf("%-10s",mysymbol_table[scope_depth].sub_entry[i].level_str);
+        printf("%-17s",(mysymbol_table[scope_depth].sub_entry[i].is_array_decl)?:);
+        printf("%-11s",mysymbol_table[scope_depth].sub_entry[i].name);
         printf("\n");
-        printf("%-33s%-11s%-11s%-17s%-11s\n","Name","Kind","Level","Type","Attribute");
-        for(i=0;i<stack_size;i++)
-        {
-            for(j=0;j<110;j++)
-            {
-                printf("-");
-                printf("\n");
-                {
-                    printf("%-33s",) ;
-                    printf("%-11s",);
-                    printf("%d%-10s",);
-                    printf("%-17s",);
-                    printf("%-11s",);
-                    printf("\n");
-                }
-            }
-        }
     }
     for(i=0;i< 110;i++)
         printf("-");

@@ -113,7 +113,7 @@ decl		: VAR	/* scalar type declaration */
 			{
 				for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
 				{
-					mysymbol_table[scope_depth].sub_entry[i].kind="variable";
+					mysymbol_table[scope_depth].mysub_entry[i].kind="variable";
 					char* ps_level;
 					char depth_n[100];
 					if(scope_depth)
@@ -128,8 +128,8 @@ decl		: VAR	/* scalar type declaration */
 						ps_level="(global)";
 						strcat(depth_n,ps_level);
 					}
-					mysymbol_table[scope_depth].sub_entry[i].level_str=depth_n;
-					mysymbol_table[scope_depth].sub_entry[i].type=$5;
+					mysymbol_table[scope_depth].mysub_entry[i].level_str=depth_n;
+					mysymbol_table[scope_depth].mysub_entry[i].type=$5;
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
 			}
@@ -143,7 +143,7 @@ decl		: VAR	/* scalar type declaration */
 				//strcat(mysymbol_table[scope_depth].sub_entry[i].array_type_buf,$5); //array type just need to be done once
 				for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
 				{
-					mysymbol_table[scope_depth].sub_entry[i].kind="variable";
+					mysymbol_table[scope_depth].mysub_entry[i].kind="variable";
 					char* ps_level;
 					char depth_n[100];
 					if(scope_depth)
@@ -158,9 +158,9 @@ decl		: VAR	/* scalar type declaration */
 						ps_level="(global)";
 						strcat(depth_n,ps_level);
 					}
-					mysymbol_table[scope_depth].sub_entry[i].level_str=depth_n;
-					strcat(mysymbol_table[scope_depth].sub_entry[i].array_type_buf,arr_buf); //altogether using the sprintf to concatenate multiple strings
-					mysymbol_table[scope_depth].sub_entry[i].is_array_decl=true;
+					mysymbol_table[scope_depth].mysub_entry[i].level_str=depth_n;
+					strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,arr_buf); //altogether using the sprintf to concatenate multiple strings
+					mysymbol_table[scope_depth].mysub_entry[i].is_array_decl=true;
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
 				is_array=0;//end matching an array, turn off the flag
@@ -169,7 +169,7 @@ decl		: VAR	/* scalar type declaration */
 			{
 				for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
 				{
-					mysymbol_table[scope_depth].sub_entry[i].kind="constant";
+					mysymbol_table[scope_depth].mysub_entry[i].kind="constant";
 					char* ps_level;
 					char depth_n[100];
 					if(scope_depth)
@@ -184,8 +184,8 @@ decl		: VAR	/* scalar type declaration */
 						ps_level="(global)";
 						strcat(depth_n,ps_level);
 					}
-					mysymbol_table[scope_depth].sub_entry[i].level_str=depth_n;
-					strcat(mysymbol_table[scope_depth].sub_entry[i].attri_type_buf,$4);
+					mysymbol_table[scope_depth].mysub_entry[i].level_str=depth_n;
+					strcat(mysymbol_table[scope_depth].mysub_entry[i].attri_type_buf,$4);
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
 			} /* const declaration */
@@ -220,7 +220,18 @@ func_decl	: 	ID MK_LPAREN opt_param_list MK_RPAREN opt_type MK_SEMICOLON
 					//scope_depth--;
 					for(int i=0;i<SUB_ENTRY_SIZE;i++)
 					{
-						mysymbol_table[0].sub_entry[i]=;
+						//find the fucking parameter
+						if(mysymbol_table[1].mysub_entry[i].kind=="parameter")
+						{
+							if(mysymbol_table[1].mysub_entry[i].is_array_decl)
+							{
+								strcat(mysymbol_table[0].sub_entry.param_type_buf,array_type_buf);
+							}
+							else
+							{
+								strcat(mysymbol_table[0].sub_entry.param_type_buf,type);
+							}
+						}
 					}
 					pop_symbol_table();
 					dumpsymbol();
@@ -241,7 +252,7 @@ param		: id_list MK_COLON type
 				param_or_decl=1;
 				for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
 				{
-					mysymbol_table[scope_depth].sub_entry[i].kind="parameter";
+					mysymbol_table[scope_depth].mysub_entry[i].kind="parameter";
 					char* ps_level;
 					char depth_n[100];
 					if(scope_depth)
@@ -250,14 +261,15 @@ param		: id_list MK_COLON type
 						ps_level="(local)";
 						strcat(depth_n,ps_level);
 					}
-					mysymbol_table[scope_depth].sub_entry[i].level_str=depth_n;
+					mysymbol_table[scope_depth].mysub_entry[i].level_str=depth_n;
 					if(is_array)
 					{
-						strcat(mysymbol_table[scope_depth].sub_entry[i].array_type_buf,arr_buf);
+						strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,arr_buf);
+						mysymbol_table[scope_depth].mysub_entry[i].is_array_decl=true;
 					}
 					else
 					{
-						mysymbol_table[scope_depth].sub_entry[i].type=$3;
+						mysymbol_table[scope_depth].mysub_entry[i].type=$3;
 					}
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
@@ -270,7 +282,7 @@ id_list		: id_list MK_COMMA ID /*one ID for one sub_entry*/
 			}
 			| ID
 			{
-				mysymbol_table[scope_depth].sub_entry[sub_entry_cnt].name=$1;
+				mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name=$1;
 			}
 			;
 
@@ -288,7 +300,7 @@ scalar_type	: INTEGER
 				{
 					for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
 					{
-						strcat(mysymbol_table[scope_depth].sub_entry[i].array_type_buf,"integer ");
+						strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,"integer ");
 					}
 				}
 			}
@@ -298,7 +310,7 @@ scalar_type	: INTEGER
 				{
 					for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
 					{
-						strcat(mysymbol_table[scope_depth].sub_entry[i].array_type_buf,"real ");
+						strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,"real ");
 					}
 				}
 			}
@@ -308,7 +320,7 @@ scalar_type	: INTEGER
 				{
 					for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
 					{
-						strcat(mysymbol_table[scope_depth].sub_entry[i].array_type_buf,"boolean ");
+						strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,"boolean ");
 					}
 				}
 			}
@@ -318,7 +330,7 @@ scalar_type	: INTEGER
 				{
 					for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
 					{
-						strcat(mysymbol_table[scope_depth].sub_entry[i].array_type_buf,"string ");
+						strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,"string ");
 					}
 				}
 			}
