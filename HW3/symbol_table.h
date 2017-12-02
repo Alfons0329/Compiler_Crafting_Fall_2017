@@ -4,6 +4,9 @@
 #include <string.h>
 #define SYMBOL_TABLE_MAX_SIZE 10000
 #define SUB_ENTRY_SIZE 20
+#define ARRAY_BUF_SIZE 100
+#define PARAM_BUF_SIZE 100
+#define ATTRI_BUF_SIZE 100
 int scope_depth;
 int sub_entry_cnt;
 int pre_sub_entry_cnt;
@@ -23,7 +26,12 @@ that is mysymbol_table[scope_depth].mysymbol_table[:sub_entry_cnt]=type and they
 var i, k : integer from pre_sub_entry_cnt=0 to sub_entry_cnt 2 (exclude 2)
 var j, m, n ,p : real from pre_sub_entry_cnt=2 to sub_entry_cnt 6(exclude6)
 that is once a var is redeclared, the pre_sub_entry_cnt<---->sub_entry_cnt symbolizes how many var ID in this segment to be parsed in one line
-
+3.
+func_decl
+4.
+If it is an array type, say b:array 1 to 2 of array 2 to 4 of real
+than after parsing the array token. mark the array boolean to be true and after reach the end of scalar type
+strcat all the type in same buf
 ###############################################################################################################*/
 struct sub_entry //the real entry for inserting the value
 {
@@ -31,8 +39,9 @@ struct sub_entry //the real entry for inserting the value
     char* kind;
     char* level_str;
     char* type;
-    char* attribute;
-    char array_type_buf[100];
+    char attri_type_buf[ATTRI_BUF_SIZE];
+    char array_type_buf[ARRAY_BUF_SIZE];
+    char param_type_buf[PARAM_BUF_SIZE];
     int level;
     bool is_array_decl;
 }
@@ -96,4 +105,21 @@ void dumpsymbol()
     for(i=0;i< 110;i++)
         printf("-");
     printf("\n");
+}
+void error_detection() //no hashing, just naive solution
+{
+    char error_msg[100];
+    strcat(error_msg,"symbol '");
+    for(int i=0;i<SUB_ENTRY_SIZE;i++)
+    {
+        for(int j=i+1;j<SUB_ENTRY_SIZE;j++)
+        {
+            if(mysymbol_table[scope_depth].sub_entry[i].name==mysymbol_table[scope_depth].sub_entry[j].name)
+            {
+                strcat(error_msg,mysymbol_table[scope_depth].sub_entry[i].name);
+                strcat(error_msg,"' is redeclared");
+                printf("<Error> found in Line %d: %s\n", linenum, error_msg);
+            }
+        }
+    }
 }
