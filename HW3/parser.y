@@ -144,6 +144,7 @@ decl		: VAR	/* scalar type declaration */
 					mysymbol_table[scope_depth].mysub_entry[i].kind="variable";
 					char* ps_level;
 					char depth_n[100];
+					memset(depth_n,0,sizeof(depth_n));
 					if(scope_depth)
 					{
 						depth_n[0]=scope_depth+'0';
@@ -176,6 +177,7 @@ decl		: VAR	/* scalar type declaration */
 					mysymbol_table[scope_depth].mysub_entry[i].kind="variable";
 					char* ps_level;
 					char depth_n[100];
+					memset(depth_n,0,sizeof(depth_n));
 					if(scope_depth)
 					{
 						depth_n[0]=scope_depth+'0';
@@ -218,6 +220,7 @@ decl		: VAR	/* scalar type declaration */
 					mysymbol_table[scope_depth].mysub_entry[i].kind="constant";
 					char* ps_level;
 					char depth_n[100];
+					memset(depth_n,0,sizeof(depth_n));
 					if(scope_depth)
 					{
 						depth_n[0]=scope_depth+'0';
@@ -236,6 +239,7 @@ decl		: VAR	/* scalar type declaration */
 					printf("S4 %s \n",$4);
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
+				dumpsymbol();
 			} /* const declaration */
 			;
 
