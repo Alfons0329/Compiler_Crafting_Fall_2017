@@ -91,11 +91,13 @@ printf("0->")
 
 program		:	ID
 				{
-					printf("Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d \n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt);
+					//printf("Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d \n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt);
+					puts(yytext);
+					mysymbol_table[0].mysub_entry[0].name=yytext;
+					printf("program name %s",mysymbol_table[0].mysub_entry[0].name);
 				}
 				MK_SEMICOLON
 				{
-					printf("%s\n",$1);
 					mysymbol_table[0].mysub_entry[0].kind="program";
 					mysymbol_table[0].mysub_entry[0].level_str="0(global)";
 					mysymbol_table[0].mysub_entry[0].type="void";
@@ -313,6 +315,7 @@ id_list		: id_list MK_COMMA ID /*one ID for one sub_entry*/
 				printf("ID is %s",yytext);
 				mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name=yytext;
 				$$=yytext;
+				printf("13245 %s\n",$$);
 			}
 			;
 
