@@ -1,15 +1,15 @@
 TARGET   = parser
 OBJECT   = lex.yy.c y.tab.c y.output parser y.tab.h
 CC       = gcc
-CFLAGS   = -Wall -Wextra -pedantic -g3
+CCFLAGS   = -Wall -Wextra -pedantic -g3
 LEX      = flex
 YACC     = yacc -v -t
 YACCFLAG = -d
 LIBS     = -lfl
 
 all: $(TARGET)
-	
-$(TARGET): y.tab.c lex.yy.c main.c
+
+$(TARGET): y.tab.c lex.yy.c main.c symbol_table.c
 	$(CC) $^ -o $(TARGET) $(CCFLAGS) $(LIBS)
 
 y.tab.c: parser.y

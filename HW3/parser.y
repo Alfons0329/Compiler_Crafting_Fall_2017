@@ -8,16 +8,23 @@
 #include <stdlib.h>
 #include "symbol_table.h"
 extern FILE *yyin;		/* declared by lex */
+
 extern char *yytext;		/* declared by lex */
 extern char *buf;		/* declared in lex.l */
+
 char* array_scalar_type;
 char arr_buf[50];
+
 extern int yylex(void);
 extern int Opt_D; /* declared in lex.l */
 extern int linenum;		/* declared in lex.l */
+
 int yyerror(char* );
 int param_or_decl; //0 decl 1 param
 int is_array; //0 no 1 yes
+
+
+
 %}
 /* tokens */
 %token ARRAY
@@ -484,30 +491,4 @@ int yyerror( char *msg )
 	fprintf( stderr, "| Unmatched token: %s\n", yytext );
 	fprintf( stderr, "|--------------------------------------------------------------------------\n" );
 	exit(-1);
-}
-
-int  main( int argc, char **argv )
-{
-	if( argc != 2 ) {
-		fprintf(  stdout,  "Usage:  ./parser  [filename]\n"  );
-		exit(0);
-	}
-
-	FILE *fp = fopen( argv[1], "r" );
-
-	if( fp == NULL )  {
-		fprintf( stdout, "Open  file  error\n" );
-		exit(-1);
-	}
-
-	yyin = fp;
-	param_or_decl = 0; //0 param 1 decl
-	is_array = 0; //0 no 1 yes
-	symbol_table_init();
-	yyparse();
-	fprintf( stdout, "\n" );
-	fprintf( stdout, "|--------------------------------|\n" );
-	fprintf( stdout, "|  There is no syntactic error!  |\n" );
-	fprintf( stdout, "|--------------------------------|\n" );
-	exit(0);
 }

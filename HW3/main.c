@@ -5,9 +5,14 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "symbol_table.h"
 
+extern void symbol_table_init();
 extern int yyparse();	/* declared by yacc */
+extern int param_or_decl;
+extern int is_array;
 extern FILE* yyin;	/* declared by lex */
+
 
 int  main( int argc, char **argv )
 {
@@ -22,13 +27,15 @@ int  main( int argc, char **argv )
 		fprintf( stdout, "Open  file  error\n" );
 		exit(-1);
 	}
-	
+
 	yyin = fp;
-	yyparse();	/* primary procedure of parser */
-	
-	fprintf( stdout, "\n|--------------------------------|\n" );
+	param_or_decl = 0; //0 param 1 decl
+	is_array = 0; //0 no 1 yes
+	symbol_table_init();
+	yyparse();
+	fprintf( stdout, "\n" );
+	fprintf( stdout, "|--------------------------------|\n" );
 	fprintf( stdout, "|  There is no syntactic error!  |\n" );
 	fprintf( stdout, "|--------------------------------|\n" );
 	exit(0);
 }
-

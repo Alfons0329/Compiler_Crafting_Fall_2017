@@ -574,7 +574,7 @@ char *yytext;
 
 #include <string.h>
 #include "y.tab.h"
-#include "symbol_table_head.h"
+#include "symbol_table.h"
 #define LIST strcat( buf, yytext )
 #define token(t) { LIST; if (Opt_T) printf("<%s>\n", #t );}
 #define tokenChar(t) { LIST; if (Opt_T) printf("<%c>\n", t );}
