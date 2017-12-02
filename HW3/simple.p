@@ -1,7 +1,7 @@
 test;
 func( a:integer ; b:array 1 to 2 of array 2 to 4 of real ): boolean;
 begin
-    var c: "hello world!";
+    var c: -125;
     begin
         var d: real;
         return (b[1][4] >= 1.0);

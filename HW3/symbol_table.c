@@ -72,9 +72,10 @@ void error_detection() //no hashing, just naive solution
 }
 void parse_constant()
 {
+    memset(const_buf,0,sizeof(const_buf));
     switch(const_type)
     {
-        memset(const_buf,0,sizeof(const_buf));
+
         case 1:
         {
             strcpy(const_buf,yytext);
@@ -119,6 +120,7 @@ void parse_constant()
             break;
         }
     }
+
 }
 void assign_constant_type(int scope_depth,int index)
 {
@@ -151,4 +153,5 @@ void assign_constant_type(int scope_depth,int index)
             break;
         }
     }
+    strcpy(mysymbol_table[scope_depth].mysub_entry[index].attri_type_buf,const_buf);
 }

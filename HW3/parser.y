@@ -133,13 +133,8 @@ decl_list	: 	decl_list {printf("3->");}
 decl		: VAR	/* scalar type declaration */
 			{
 				{printf("6->");}
-				pre_sub_entry_cnt=sub_entry_cnt;
 			}
  			id_list MK_COLON scalar_type
-			{
-				printf("after scalar \n");
-			}
-			MK_SEMICOLON
 			{
 				{printf("7->");}
 
@@ -162,15 +157,16 @@ decl		: VAR	/* scalar type declaration */
 						strcat(depth_n,ps_level);
 					}
 					mysymbol_table[scope_depth].mysub_entry[i].level_str=depth_n;
+					printf("8888888888888888888888888 \n");
 					mysymbol_table[scope_depth].mysub_entry[i].type=$5;
+					printf("8888888888888888888888888 \n");
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
 			}
+			MK_SEMICOLON
 			| VAR    /* array type declaration */
 			{
-
 				{printf("8->");}
-				pre_sub_entry_cnt=sub_entry_cnt;
 			}
 			id_list MK_COLON array_type MK_SEMICOLON
 			{
@@ -238,8 +234,8 @@ decl		: VAR	/* scalar type declaration */
 						strcat(depth_n,ps_level);
 					}
 					mysymbol_table[scope_depth].mysub_entry[i].level_str=depth_n;
-					strcat(mysymbol_table[scope_depth].mysub_entry[i].attri_type_buf,$4);
 					assign_constant_type(scope_depth,i);
+					strcpy(mysymbol_table[scope_depth].mysub_entry[i].attri_type_buf,const_buf);
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
 
@@ -252,15 +248,15 @@ int_const	:	INT_CONST {$$=yytext;}
 			|	OCTAL_CONST {$$=yytext;}
 			;
 
-literal_const	: int_const {$$=yytext; const_type=1;}
-				| OP_SUB int_const {$$=yytext; const_type=2;}
-				| FLOAT_CONST {$$=yytext; const_type=3;}
-				| OP_SUB FLOAT_CONST {$$=yytext; const_type=4;}
-				| SCIENTIFIC {$$=yytext; const_type=5;}
-				| OP_SUB SCIENTIFIC {$$=yytext; const_type=6;}
-				| STR_CONST {$$=yytext; const_type=7;}
-				| TRUE {$$=yytext; const_type=8;}
-				| FALSE {$$=yytext; const_type=8;}
+literal_const	: int_const {$$=yytext; const_type=1; parse_constant();}
+				| OP_SUB int_const {$$=yytext; const_type=2; parse_constant();}
+				| FLOAT_CONST {$$=yytext; const_type=3; parse_constant();}
+				| OP_SUB FLOAT_CONST {$$=yytext; const_type=4; parse_constant();}
+				| SCIENTIFIC {$$=yytext; const_type=5; parse_constant();}
+				| OP_SUB SCIENTIFIC {$$=yytext; const_type=6; parse_constant();}
+				| STR_CONST {$$=yytext; const_type=7; parse_constant();}
+				| TRUE {$$=yytext; const_type=8; parse_constant();}
+				| FALSE {$$=yytext; const_type=8; parse_constant();}
 			;
 
 opt_func_decl_list	: func_decl_list
