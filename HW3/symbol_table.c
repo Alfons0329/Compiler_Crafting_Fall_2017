@@ -2,9 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-extern int scope_depth;
-extern int pre_sub_entry_cnt;
-extern int sub_entry_cnt;
+
 void symbol_table_init()
 {
     for(int i=0;i<SYMBOL_TABLE_MAX_SIZE;i++)
@@ -69,6 +67,88 @@ void error_detection() //no hashing, just naive solution
                 strcat(error_msg,"' is redeclared");
                 printf("<Error> found in Line %d: %s\n", linenum, error_msg);
             }
+        }
+    }
+}
+void parse_constant()
+{
+    switch(const_type)
+    {
+        memset(const_buf,0,sizeof(const_buf));
+        case 1:
+        {
+            strcpy(const_buf,yytext);
+            break;
+        }
+        case 2:
+        {
+            strcat(const_buf,"-");
+            strcat(const_buf,yytext);
+            break;
+        }
+        case 3:
+        {
+            strcat(const_buf,yytext);
+            break;
+        }
+        case 4:
+        {
+            strcat(const_buf,"-");
+            strcat(const_buf,yytext);
+            break;
+        }
+        case 5:
+        {
+            strcat(const_buf,yytext);
+            break;
+        }
+        case 6:
+        {
+            strcat(const_buf,"-");
+            strcat(const_buf,yytext);
+            break;
+        }
+        case 7:
+        {
+            strcat(const_buf,yytext);
+            break;
+        }
+        case 8:
+        {
+            strcat(const_buf,yytext);
+            break;
+        }
+    }
+}
+void assign_constant_type(int scope_depth,int index)
+{
+    switch(const_type)
+    {
+
+        case 1 ... 2:
+        {
+            mysymbol_table[scope_depth].mysub_entry[index].type="integer";
+            break;
+        }
+        case 3 ... 4:
+        {
+            mysymbol_table[scope_depth].mysub_entry[index].type="float";
+            break;
+        }
+        case 5 ... 6:
+        {
+            mysymbol_table[scope_depth].mysub_entry[index].type="scientific";
+            break;
+        }
+        case 7:
+        {
+            mysymbol_table[scope_depth].mysub_entry[index].type="string";
+            break;
+        }
+        case 8:
+        {
+            mysymbol_table[scope_depth].mysub_entry[index].type="boolean";
+            break;
         }
     }
 }

@@ -55,8 +55,14 @@ struct symbol_table_entry
     struct sub_entry mysub_entry[SUB_ENTRY_SIZE];
 };
 struct symbol_table_entry mysymbol_table[SYMBOL_TABLE_MAX_SIZE];
-
+extern int scope_depth;
+extern int pre_sub_entry_cnt;
+extern int sub_entry_cnt;
+extern int const_type;
+extern char *yytext;
+extern char const_buf[50];
 void symbol_table_init();
 void pop_symbol_table();
 void dumpsymbol();
 void error_detection(); //no hashing, just naive solution
+void parse_constant();

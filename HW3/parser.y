@@ -7,14 +7,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "symbol_table.h"
+#define BUF_SIZE 50
 extern FILE *yyin;		/* declared by lex */
 
 extern char *yytext;		/* declared by lex */
 extern char *buf;		/* declared in lex.l */
 
 char* array_scalar_type;
-char arr_buf[50];
-char reverse_arr_buf[50];
+char arr_buf[BUF_SIZE];
+char reverse_arr_buf[BUF_SIZE];
+char const_buf[BUF_SIZE];
 extern int yylex(void);
 extern int Opt_D; /* declared in lex.l */
 extern int linenum;		/* declared in lex.l */
@@ -23,6 +25,7 @@ int yyerror(char* );
 int param_or_decl; //0 decl 1 param
 int is_array; //0 no 1 yes
 int is_function;
+int const_type=0; //0 not constant, 1 int 2 -int  3 float 4 -float 5 scientific 6 -scientific 7 string 8 bool
 /*
 printf template for debugging
 
@@ -97,6 +100,7 @@ program		:	ID
 					strcpy(mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name,yytext);
 					printf("program name %s",mysymbol_table[0].mysub_entry[0].name);
 					is_function=0;
+					const_type=0;
 				}
 				MK_SEMICOLON
 				{
@@ -211,7 +215,7 @@ decl		: VAR	/* scalar type declaration */
 				memset(arr_buf,0,sizeof(arr_buf));
 				is_array=0;//end matching an array, turn off the flag
 			}
-			| VAR id_list MK_COLON literal_const MK_SEMICOLON
+			| VAR id_list MK_COLON literal_const
 			{
 				{printf("10->");}
 
@@ -234,28 +238,29 @@ decl		: VAR	/* scalar type declaration */
 						strcat(depth_n,ps_level);
 					}
 					mysymbol_table[scope_depth].mysub_entry[i].level_str=depth_n;
-					printf("S4 %s \n",$4);
 					strcat(mysymbol_table[scope_depth].mysub_entry[i].attri_type_buf,$4);
-					printf("S4 %s \n",$4);
+					assign_constant_type(scope_depth,i);
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
+
 				dumpsymbol();
 			} /* const declaration */
+			MK_SEMICOLON
 			;
 
 int_const	:	INT_CONST {$$=yytext;}
 			|	OCTAL_CONST {$$=yytext;}
 			;
 
-literal_const	: int_const {$$=yytext;}
-				| OP_SUB int_const {$$=yytext;}
-				| FLOAT_CONST {$$=yytext;}
-				| OP_SUB FLOAT_CONST {$$=yytext;}
-				| SCIENTIFIC {$$=yytext;}
-				| OP_SUB SCIENTIFIC {$$=yytext;}
-				| STR_CONST {$$=yytext;}
-				| TRUE {$$=yytext;}
-				| FALSE {$$=yytext;}
+literal_const	: int_const {$$=yytext; const_type=1;}
+				| OP_SUB int_const {$$=yytext; const_type=2;}
+				| FLOAT_CONST {$$=yytext; const_type=3;}
+				| OP_SUB FLOAT_CONST {$$=yytext; const_type=4;}
+				| SCIENTIFIC {$$=yytext; const_type=5;}
+				| OP_SUB SCIENTIFIC {$$=yytext; const_type=6;}
+				| STR_CONST {$$=yytext; const_type=7;}
+				| TRUE {$$=yytext; const_type=8;}
+				| FALSE {$$=yytext; const_type=8;}
 			;
 
 opt_func_decl_list	: func_decl_list
