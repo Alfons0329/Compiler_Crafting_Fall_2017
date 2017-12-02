@@ -13,6 +13,7 @@ extern char *buf;		/* declared in lex.l */
 char* array_scalar_type;
 char arr_buf[50];
 extern int yylex(void);
+extern int Opt_D; /* declared in lex.l */
 extern int linenum;		/* declared in lex.l */
 int yyerror(char* );
 int param_or_decl; //0 decl 1 param
@@ -80,10 +81,9 @@ int is_array; //0 no 1 yes
 program		:	ID MK_SEMICOLON
 				{
 					strcpy(mysymbol_table[0].mysub_entry[0].name,$1);
-					strcpy(mysymbol_table[0].mysub_entry[0].kind,"program");
-					strcpy(mysymbol_table[0].mysub_entry[0].level_str,"0(global)");
-					strcpy(mysymbol_table[0].mysub_entry[0].type,"void");
-					strcpy(mysymbol_table[0].mysub_entry[0].attribute,"");
+					mysymbol_table[0].mysub_entry[0].kind="program";
+					mysymbol_table[0].mysub_entry[0].level_str="0(global)";
+					mysymbol_table[0].mysub_entry[0].type="void";
 				}
 			  	program_body
 			  	END ID
@@ -133,7 +133,6 @@ decl		: VAR	/* scalar type declaration */
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
 			}
-
 			| VAR    /* array type declaration */
 			{
 				pre_sub_entry_cnt=sub_entry_cnt;
@@ -225,11 +224,11 @@ func_decl	: 	ID MK_LPAREN opt_param_list MK_RPAREN opt_type MK_SEMICOLON
 						{
 							if(mysymbol_table[1].mysub_entry[i].is_array_decl)
 							{
-								strcat(mysymbol_table[0].sub_entry.param_type_buf,array_type_buf);
+								strcat(mysymbol_table[0].mysub_entry[sub_entry_cnt].attri_type_buf,arr_buf);
 							}
 							else
 							{
-								strcat(mysymbol_table[0].sub_entry.param_type_buf,type);
+								strcat(mysymbol_table[0].mysub_entry[sub_entry_cnt].attri_type_buf,$5);
 							}
 						}
 					}
@@ -504,8 +503,8 @@ int  main( int argc, char **argv )
 	yyin = fp;
 	param_or_decl = 0; //0 param 1 decl
 	is_array = 0; //0 no 1 yes
+	symbol_table_init();
 	yyparse();
-
 	fprintf( stdout, "\n" );
 	fprintf( stdout, "|--------------------------------|\n" );
 	fprintf( stdout, "|  There is no syntactic error!  |\n" );

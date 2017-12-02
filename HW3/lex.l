@@ -22,7 +22,7 @@
 int Opt_S = 1;				/* list source code option */
 int Opt_T = 1;				/* list token option */
 int Opt_D = 1;
-extern int linenum = 1;			/* line number */
+int linenum = 1;			/* line number */
 char buf[MAX_LINE_LENG];		/* source code line buffer */
 char strContent[MAX_LINE_LENG];		/* string buffer */
 
@@ -197,11 +197,12 @@ void setPseudoComment( const char *text )
 		else if( text[4] == '-' )
 			Opt_T = 0;
 	 	break;
-	case 'D'//dumo the symbol table
+	case 'D'://dumo the symbol table
 		if( text[4] == '+' )
 			Opt_D = 1;
 		else if( text[4] == '-' )
 			Opt_D = 0;
+		break;
 	 default:
 	 	break;
 	}
