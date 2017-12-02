@@ -2,7 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+extern int scope_depth;
+extern int pre_sub_entry_cnt;
+extern int sub_entry_cnt;
 void symbol_table_init()
 {
     for(int i=0;i<SYMBOL_TABLE_MAX_SIZE;i++)
@@ -26,6 +28,7 @@ void pop_symbol_table()
 }
 void dumpsymbol()
 {
+    printf("Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d \n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt);
     if(!Opt_D)
         return;
 

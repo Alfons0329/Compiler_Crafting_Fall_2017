@@ -22,10 +22,10 @@ extern int linenum;		/* declared in lex.l */
 int yyerror(char* );
 int param_or_decl; //0 decl 1 param
 int is_array; //0 no 1 yes
-
+int is_function;
 /*
 printf template for debugging
-printf("Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d \n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt);
+
 printf("0->")
 */
 
@@ -91,18 +91,19 @@ printf("0->")
 
 program		:	ID
 				{
-					//printf("Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d \n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt);
+					//
 					printf("1->");
 					puts(yytext);
 					strcpy(mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name,yytext);
 					printf("program name %s",mysymbol_table[0].mysub_entry[0].name);
+					is_function=0;
 				}
 				MK_SEMICOLON
 				{
 					mysymbol_table[0].mysub_entry[0].kind="program";
 					mysymbol_table[0].mysub_entry[0].level_str="0(global)";
 					mysymbol_table[0].mysub_entry[0].type="void";
-					printf("Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d \n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt);
+
 					dumpsymbol();
 				}
 			  	program_body
@@ -137,6 +138,7 @@ decl		: VAR	/* scalar type declaration */
 			MK_SEMICOLON
 			{
 				{printf("7->");}
+
 				for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
 				{
 					mysymbol_table[scope_depth].mysub_entry[i].kind="variable";
@@ -168,6 +170,7 @@ decl		: VAR	/* scalar type declaration */
 			id_list MK_COLON array_type MK_SEMICOLON
 			{
 				{printf("9->");}
+
 				for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
 				{
 					mysymbol_table[scope_depth].mysub_entry[i].kind="variable";
@@ -209,6 +212,7 @@ decl		: VAR	/* scalar type declaration */
 			| VAR id_list MK_COLON literal_const MK_SEMICOLON
 			{
 				{printf("10->");}
+
 				for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
 				{
 					mysymbol_table[scope_depth].mysub_entry[i].kind="constant";
@@ -227,7 +231,9 @@ decl		: VAR	/* scalar type declaration */
 						strcat(depth_n,ps_level);
 					}
 					mysymbol_table[scope_depth].mysub_entry[i].level_str=depth_n;
+					printf("S4 %s \n",$4);
 					strcat(mysymbol_table[scope_depth].mysub_entry[i].attri_type_buf,$4);
+					printf("S4 %s \n",$4);
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
 			} /* const declaration */
@@ -237,15 +243,15 @@ int_const	:	INT_CONST {$$=yytext;}
 			|	OCTAL_CONST {$$=yytext;}
 			;
 
-literal_const	: int_const {$$=$1;}
+literal_const	: int_const {$$=yytext;}
 				| OP_SUB int_const {$$=yytext;}
-				| FLOAT_CONST {$$=$1;}
+				| FLOAT_CONST {$$=yytext;}
 				| OP_SUB FLOAT_CONST {$$=yytext;}
-				| SCIENTIFIC {$$=$1;}
+				| SCIENTIFIC {$$=yytext;}
 				| OP_SUB SCIENTIFIC {$$=yytext;}
-				| STR_CONST {$$=$1;}
-				| TRUE {$$=$1;}
-				| FALSE {$$=$1;}
+				| STR_CONST {$$=yytext;}
+				| TRUE {$$=yytext;}
+				| FALSE {$$=yytext;}
 			;
 
 opt_func_decl_list	: func_decl_list
@@ -263,7 +269,7 @@ func_decl	: 	ID
 					sub_entry_cnt=0;
 					pre_sub_entry_cnt=0;
 					printf("compound_stmt begin\n");
-					printf("Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d \n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt);
+					is_function=1;
 
 				}
  				MK_LPAREN opt_param_list MK_RPAREN opt_type MK_SEMICOLON
@@ -306,6 +312,7 @@ param		: id_list MK_COLON type
 				param_or_decl=1;
 
 				{printf("13->");}
+
 				for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
 				{
 					mysymbol_table[scope_depth].mysub_entry[i].kind="parameter";
@@ -364,7 +371,7 @@ id_list		: id_list MK_COMMA ID /*one ID for one sub_entry*/
 				$$=yytext;
 				printf(" AND PASSED IN ID NAME %s \n",mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name);
 				sub_entry_cnt++;
-				printf("Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d \n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt);
+
 				dumpsymbol();
 			}
 			;
@@ -462,11 +469,15 @@ stmt		: compound_stmt
 compound_stmt	: BEG
 				{
 					{printf("22->");}
-					scope_depth++;
-					sub_entry_cnt=0;
-					pre_sub_entry_cnt=0;
+					if(!is_function)
+					{
+						sub_entry_cnt=0;
+						pre_sub_entry_cnt=0;
+						scope_depth++;
+					}
+					is_function=0;
 					printf("compound_stmt begin\n");
-					printf("Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d \n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt);
+
 				}
 			  	opt_decl_list
 			  	opt_stmt_list
@@ -474,7 +485,7 @@ compound_stmt	: BEG
 				{
 					{printf("23->");}
 					printf("compound_stmt end\n");
-					printf("Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d \n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt);
+
 					pop_symbol_table();
 					dumpsymbol();
 				}
