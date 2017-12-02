@@ -553,16 +553,16 @@ static const yytype_uint8 yytranslate[] =
 static const yytype_uint16 yyrline[] =
 {
        0,    93,    93,    97,    92,   112,   115,   116,   119,   119,
-     121,   125,   124,   155,   154,   187,   214,   215,   218,   219,
-     220,   221,   222,   223,   224,   225,   226,   229,   230,   233,
-     234,   238,   244,   237,   268,   269,   272,   273,   276,   306,
-     311,   318,   319,   322,   323,   326,   337,   348,   359,   373,
-     372,   386,   387,   388,   389,   390,   391,   392,   396,   395,
-     412,   413,   416,   417,   420,   421,   422,   425,   428,   433,
-     436,   441,   446,   449,   450,   453,   454,   457,   458,   461,
-     462,   465,   466,   469,   470,   473,   474,   475,   476,   477,
-     478,   481,   482,   485,   486,   489,   490,   493,   494,   495,
-     498,   499,   500,   501,   502,   503,   504,   507,   508,   511
+     121,   125,   124,   155,   154,   186,   213,   214,   217,   218,
+     219,   220,   221,   222,   223,   224,   225,   228,   229,   232,
+     233,   237,   243,   236,   267,   268,   271,   272,   275,   305,
+     310,   319,   320,   323,   324,   327,   340,   353,   366,   382,
+     381,   395,   396,   397,   398,   399,   400,   401,   405,   404,
+     421,   422,   425,   426,   429,   430,   431,   434,   437,   442,
+     445,   450,   455,   458,   459,   462,   463,   466,   467,   470,
+     471,   474,   475,   478,   479,   482,   483,   484,   485,   486,
+     487,   490,   491,   494,   495,   498,   499,   502,   503,   504,
+     507,   508,   509,   510,   511,   512,   513,   516,   517,   520
 };
 #endif
 
@@ -1483,7 +1483,7 @@ yyreduce:
   case 3:
 #line 97 "parser.y" /* yacc.c:1646  */
     {
-					strcpy(mysymbol_table[0].mysub_entry[0].name,(yyvsp[-2]));
+					printf("%s\n",(yyvsp[-2]));
 					mysymbol_table[0].mysub_entry[0].kind="program";
 					mysymbol_table[0].mysub_entry[0].level_str="0(global)";
 					mysymbol_table[0].mysub_entry[0].type="void";
@@ -1581,7 +1581,6 @@ yyreduce:
   case 14:
 #line 160 "parser.y" /* yacc.c:1646  */
     {
-				//strcat(mysymbol_table[scope_depth].sub_entry[i].array_type_buf,$5); //array type just need to be done once
 				{printf("9->");}
 				for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
 				{
@@ -1607,11 +1606,11 @@ yyreduce:
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
 				is_array=0;//end matching an array, turn off the flag
 			}
-#line 1611 "y.tab.c" /* yacc.c:1646  */
+#line 1610 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 188 "parser.y" /* yacc.c:1646  */
+#line 187 "parser.y" /* yacc.c:1646  */
     {
 				{printf("10->");}
 				for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
@@ -1636,19 +1635,19 @@ yyreduce:
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
 			}
-#line 1640 "y.tab.c" /* yacc.c:1646  */
+#line 1639 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 238 "parser.y" /* yacc.c:1646  */
+#line 237 "parser.y" /* yacc.c:1646  */
     {
 					{printf("11->");}
 				}
-#line 1648 "y.tab.c" /* yacc.c:1646  */
+#line 1647 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 244 "parser.y" /* yacc.c:1646  */
+#line 243 "parser.y" /* yacc.c:1646  */
     {
 					//scope_depth--;
 					{printf("12->");}
@@ -1670,11 +1669,11 @@ yyreduce:
 					pop_symbol_table();
 					dumpsymbol();
 				}
-#line 1674 "y.tab.c" /* yacc.c:1646  */
+#line 1673 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 277 "parser.y" /* yacc.c:1646  */
+#line 276 "parser.y" /* yacc.c:1646  */
     {
 				param_or_decl=1;
 				{printf("13->");}
@@ -1702,31 +1701,47 @@ yyreduce:
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
 			}
-#line 1706 "y.tab.c" /* yacc.c:1646  */
+#line 1705 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 307 "parser.y" /* yacc.c:1646  */
+#line 306 "parser.y" /* yacc.c:1646  */
     {
 				{printf("14->");}
 				sub_entry_cnt++;
 			}
-#line 1715 "y.tab.c" /* yacc.c:1646  */
+#line 1714 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 312 "parser.y" /* yacc.c:1646  */
+#line 311 "parser.y" /* yacc.c:1646  */
     {
 				{printf("15->");}
-				mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name=(yyvsp[0]);
+				printf("ID is %s",yytext);
+				mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name=yytext;
+				(yyval)=yytext;
 			}
-#line 1724 "y.tab.c" /* yacc.c:1646  */
+#line 1725 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 43:
+#line 323 "parser.y" /* yacc.c:1646  */
+    {(yyval)=(yyvsp[0]);}
+#line 1731 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 44:
+#line 324 "parser.y" /* yacc.c:1646  */
+    {(yyval)=(yyvsp[0]);}
+#line 1737 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 327 "parser.y" /* yacc.c:1646  */
+#line 328 "parser.y" /* yacc.c:1646  */
     {
 				{printf("16->");}
+				printf("TYPE is %s",yytext);
+				(yyval)="integer";
 				if(is_array)
 				{
 					for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
@@ -1735,13 +1750,15 @@ yyreduce:
 					}
 				}
 			}
-#line 1739 "y.tab.c" /* yacc.c:1646  */
+#line 1754 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 338 "parser.y" /* yacc.c:1646  */
+#line 341 "parser.y" /* yacc.c:1646  */
     {
 				{printf("17->");}
+				printf("TYPE is %s",yytext);
+				(yyval)="real";
 				if(is_array)
 				{
 					for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
@@ -1750,13 +1767,15 @@ yyreduce:
 					}
 				}
 			}
-#line 1754 "y.tab.c" /* yacc.c:1646  */
+#line 1771 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 349 "parser.y" /* yacc.c:1646  */
+#line 354 "parser.y" /* yacc.c:1646  */
     {
 				{printf("18->");}
+				printf("TYPE is %s",yytext);
+				(yyval)="boolean";
 				if(is_array)
 				{
 					for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
@@ -1765,13 +1784,15 @@ yyreduce:
 					}
 				}
 			}
-#line 1769 "y.tab.c" /* yacc.c:1646  */
+#line 1788 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 360 "parser.y" /* yacc.c:1646  */
+#line 367 "parser.y" /* yacc.c:1646  */
     {
 				{printf("19->");}
+				printf("TYPE is %s",yytext);
+				(yyval)="string";
 				if(is_array)
 				{
 					for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
@@ -1780,52 +1801,52 @@ yyreduce:
 					}
 				}
 			}
-#line 1784 "y.tab.c" /* yacc.c:1646  */
+#line 1805 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 49:
-#line 373 "parser.y" /* yacc.c:1646  */
+#line 382 "parser.y" /* yacc.c:1646  */
     {
 				{printf("20->");}
 				is_array=1;
 				memset(arr_buf,0,sizeof(arr_buf));
 			}
-#line 1794 "y.tab.c" /* yacc.c:1646  */
+#line 1815 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 50:
-#line 379 "parser.y" /* yacc.c:1646  */
+#line 388 "parser.y" /* yacc.c:1646  */
     {
 				{printf("21->");}
 				sprintf(arr_buf,"[%d",((yyvsp[-3])-(yyvsp[-5])+'0'));
 				strcat(arr_buf,"]");
 			}
-#line 1804 "y.tab.c" /* yacc.c:1646  */
+#line 1825 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 58:
-#line 396 "parser.y" /* yacc.c:1646  */
+#line 405 "parser.y" /* yacc.c:1646  */
     {
 					{printf("22->");}
 					scope_depth++;
 					sub_entry_cnt=0;
 					pre_sub_entry_cnt=0;
 				}
-#line 1815 "y.tab.c" /* yacc.c:1646  */
+#line 1836 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 59:
-#line 405 "parser.y" /* yacc.c:1646  */
+#line 414 "parser.y" /* yacc.c:1646  */
     {
 					{printf("23->");}
 					pop_symbol_table();
 					dumpsymbol();
 				}
-#line 1825 "y.tab.c" /* yacc.c:1646  */
+#line 1846 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1829 "y.tab.c" /* yacc.c:1646  */
+#line 1850 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2053,7 +2074,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 514 "parser.y" /* yacc.c:1906  */
+#line 523 "parser.y" /* yacc.c:1906  */
 
 
 int yyerror( char *msg )

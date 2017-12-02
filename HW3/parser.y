@@ -95,7 +95,7 @@ program		:	ID
 				}
 				MK_SEMICOLON
 				{
-					strcpy(mysymbol_table[0].mysub_entry[0].name,$1);
+					printf("%s\n",$1);
 					mysymbol_table[0].mysub_entry[0].kind="program";
 					mysymbol_table[0].mysub_entry[0].level_str="0(global)";
 					mysymbol_table[0].mysub_entry[0].type="void";
@@ -268,7 +268,7 @@ opt_param_list		: param_list
 					| /* epsilon */
 			;
 
-param_list	: param_list MK_SEMICOLON param
+	param_list	: param_list MK_SEMICOLON param
 			| param
 			;
 
@@ -310,7 +310,9 @@ id_list		: id_list MK_COMMA ID /*one ID for one sub_entry*/
 			| ID
 			{
 				{printf("15->");}
-				mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name=$1;
+				printf("ID is %s",yytext);
+				mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name=yytext;
+				$$=yytext;
 			}
 			;
 
@@ -318,13 +320,15 @@ opt_type	: MK_COLON type
 			| /* epsilon */
 			;
 
-type		: scalar_type
-			| array_type
+type		: scalar_type {$$=$1;} /*type transmittion*/
+			| array_type {$$=$1;} /*type transmittion*/
 			;
 
 scalar_type	: INTEGER
 			{
 				{printf("16->");}
+				printf("TYPE is %s",yytext);
+				$$="integer";
 				if(is_array)
 				{
 					for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
@@ -336,6 +340,8 @@ scalar_type	: INTEGER
 			| REAL
 			{
 				{printf("17->");}
+				printf("TYPE is %s",yytext);
+				$$="real";
 				if(is_array)
 				{
 					for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
@@ -347,6 +353,8 @@ scalar_type	: INTEGER
 			| BOOLEAN
 			{
 				{printf("18->");}
+				printf("TYPE is %s",yytext);
+				$$="boolean";
 				if(is_array)
 				{
 					for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
@@ -358,6 +366,8 @@ scalar_type	: INTEGER
 			| STRING
 			{
 				{printf("19->");}
+				printf("TYPE is %s",yytext);
+				$$="string";
 				if(is_array)
 				{
 					for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
