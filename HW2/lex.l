@@ -1,12 +1,12 @@
 /**
  * Introduction to Compiler Design by Prof. Yi Ping You
- * Project 1 Sample
+ * Project 2 Lex Sample
  */
 
 %{
-#include "y.tab.h"
-#include <string.h>
 
+#include <string.h>
+#include "y.tab.h"
 #define LIST strcat( buf, yytext )
 #define token(t) { LIST; if (Opt_T) printf("<%s>\n", #t );}
 #define tokenChar(t) { LIST; if (Opt_T) printf("<%c>\n", t );}
@@ -16,11 +16,11 @@
 #define tokenScientific(t, s) { LIST; if ( Opt_T ) printf("<%s: %s>\n", t, s); }
 #define tokenString(t, s) { LIST; if (Opt_T) printf("<%s: %s>\n", t, s); }
 
-
 #define  MAX_LINE_LENG  256
 
 int Opt_S = 1;				/* list source code option */
 int Opt_T = 1;				/* list token option */
+int Opt_D = 1;
 int linenum = 1;			/* line number */
 char buf[MAX_LINE_LENG];		/* source code line buffer */
 char strContent[MAX_LINE_LENG];		/* string buffer */
@@ -33,7 +33,7 @@ letter [A-Za-z]
 digit [0-9]
 integer 0|[1-9][0-9]*
 octal 0[0-7]+
-fraction 0|[0-9]*
+fraction 0|[0-9]*[1-9]
 float {integer}"."{fraction}
 scientific ({integer}|{float}|{octal})[Ee][+-]?({integer}|{octal})
 identifier ({letter})({letter}|{digit})*
@@ -44,60 +44,60 @@ identifier ({letter})({letter}|{digit})*
 
 %%
 
-<INITIAL>","				{ tokenChar(','); return COMMA; }
-<INITIAL>";"				{ tokenChar(';'); return SEMICOLON; }
-<INITIAL>":"				{ tokenChar(':'); return COLON; }
-<INITIAL>"("				{ tokenChar('('); return BRACELEFT; }
-<INITIAL>")"				{ tokenChar(')'); return BRACERIGHT; }
-<INITIAL>"["				{ tokenChar('['); return BRACKETLEFT; }
-<INITIAL>"]"				{ tokenChar(']'); return BRACKETRIGHT; }
+","				{ tokenChar(','); return MK_COMMA; }
+";"				{ tokenChar(';'); return MK_SEMICOLON; }
+":"				{ tokenChar(':'); return MK_COLON; }
+")"				{ tokenChar(')'); return MK_RPAREN; }
+"("				{ tokenChar('('); return MK_LPAREN; }
+"["				{ tokenChar('['); return MK_LB;}
+"]"				{ tokenChar(']'); return MK_RB; }
 
-<INITIAL>"+"				{ tokenChar('+'); return PLUS; }
-<INITIAL>"-"				{ tokenChar('-'); return MINUS; }
-<INITIAL>"*"				{ tokenChar('*'); return MULTIPLY; }
-<INITIAL>"/"				{ tokenChar('/'); return DIVIDE; }
-<INITIAL>"mod"			{ token(mod); return MOD; }
-<INITIAL>":="			{ token(:=); return ASSIGN; }
-<INITIAL>"<"				{ tokenChar('<'); return LESS; }
-<INITIAL>"<="			{ token(<=); return LESSEQUAL; }
-<INITIAL>"<>"			{ token(<>); return LESSGREATER; }
-<INITIAL>">="			{ token(>=); return GREATEREQUAL; }
-<INITIAL>">"				{ tokenChar('>'); return GREATER; }
-<INITIAL>"="				{ tokenChar('='); return EQUAL; }
-<INITIAL>"and"			{ token(and); return AND; }
-<INITIAL>"or"			{ token(or); return OR; }
-<INITIAL>"not"			{ token(not); return NOT; }
+"+"				{ tokenChar('+'); return OP_ADD; }
+"-"				{ tokenChar('-'); return OP_SUB; }
+"*"				{ tokenChar('*'); return OP_MUL; }
+"/"				{ tokenChar('/'); return OP_DIV; }
+"mod"				{ token(mod); return OP_MOD; }
+":="				{ token(:=); return OP_ASSIGN; }
+"<"				{ token(<); return OP_LT; }
+"<="				{ token(<=); return OP_LE; }
+"<>"				{ token(<>); return OP_NE; }
+">="				{ token(>=); return OP_GE; }
+">"				{ token(>); return OP_GT; }
+"="				{ token(=); return OP_EQ; }
+"and"				{ token(and); return OP_AND; }
+"or"				{ token(or); return OP_OR; }
+"not"				{ token(not); return OP_NOT; }
 
-<INITIAL>"array"			{ token(KWarray); return KWARRAY; }
-<INITIAL>"begin"			{ token(KWbegin); return KWBEGIN; }
-<INITIAL>"boolean"		{ token(KWboolean); return KWBOOLEAN; }
-<INITIAL>"def"			{ token(KWdef); return KWDEF; }
-<INITIAL>"do"			{ token(KWdo); return KWDO; }
-<INITIAL>"else"			{ token(KWelse); return KWELSE; }
-<INITIAL>"end"			{ token(KWend); return KWEND; }
-<INITIAL>"false"			{ token(KWfalse); return KWFALSE; }
-<INITIAL>"for"			{ token(KWfor); return KWFOR; }
-<INITIAL>"integer"		{ token(KWinteger); return KWINTEGER; }
-<INITIAL>"if"			{ token(KWif); return KWIF; }
-<INITIAL>"of"			{ token(KWof); return KWOF; }
-<INITIAL>"print"			{ token(KWprint); return KWPRINT; }
-<INITIAL>"read"			{ token(KWread); return KWREAD; }
-<INITIAL>"real"			{ token(KWreal); return KWREAL; }
-<INITIAL>"string"		{ token(KWstring); return KWSTRING; }
-<INITIAL>"then"			{ token(KWthen); return KWTHEN; }
-<INITIAL>"to"			{ token(KWto); return KWTO; }
-<INITIAL>"true"			{ token(KWtrue); return KWTRUE; }
-<INITIAL>"return"		{ token(KWreturn); return KWRETURN; }
-<INITIAL>"var"			{ token(KWvar); return KWVAR; }
-<INITIAL>"while"			{ token(KWwhile); return KWWHILE; }
+"array"				{ token(KWarray); return ARRAY; }
+"begin"				{ token(KWbegin); return BEG; }
+"boolean"			{ token(KWboolean); return BOOLEAN; }
+"def"				{ token(KWdef); return DEF; }
+"do"				{ token(KWdo); return DO; }
+"else"				{ token(KWelse); return ELSE; }
+"end"				{ token(KWend); return END; }
+"false"				{ token(KWfalse); return FALSE; }
+"for"				{ token(KWfor); return FOR; }
+"integer"			{ token(KWinteger); return INTEGER; }
+"if"				{ token(KWif); return IF; }
+"of"				{ token(KWof); return OF; }
+"print"				{ token(KWprint); return PRINT; }
+"read"				{ token(KWread); return READ; }
+"real"				{ token(KWreal); return REAL; }
+"return"			{ token(KWreturn); return RETURN; }
+"string"			{ token(KWstring); return STRING; }
+"then"				{ token(KWthen); return THEN; }
+"to"				{ token(KWto); return TO; }
+"true"				{ token(KWtrue); return TRUE; }
+"var"				{ token(KWvar); return VAR; }
+"while"				{ token(KWwhile); return WHILE; }
 
-<INITIAL>{octal} { tokenOctInteger("oct_integer",yytext); return OCTAL; }
-<INITIAL>{identifier}			{ tokenString("id",yytext); return IDENT; }
-<INITIAL>{integer}			{ tokenInteger("integer",atoi(yytext)); return INTEGER; }
-<INITIAL>{float}				{ tokenFloat("float",yytext); return REAL; }
-<INITIAL>{scientific}			{ tokenScientific("scientific", yytext); return REAL; }
+{octal}				{ tokenOctInteger("oct_integer",yytext);return OCTAL_CONST;}
+{identifier}			{ tokenString("id",yytext); return ID; }
+{integer}			{ tokenInteger("integer",atoi(yytext)); return INT_CONST; }
+{float}				{ tokenFloat("float",yytext); return FLOAT_CONST; }
+{scientific}			{ tokenScientific("scientific", yytext); return SCIENTIFIC; }
 
-<STRING>\"((\"\")|[^\"\n])*\"	{
+\"((\"\")|[^\"\n])*\"	{
 				LIST;
 				if (Opt_T){
 					size_t wrt_idx = 0;
@@ -107,7 +107,7 @@ identifier ({letter})({letter}|{digit})*
 						if( yytext[rd_idx] == '\"' ){
 							if( quote )
 								strContent[wrt_idx++] = '\"';
-							quote = ~quote;
+							quote = 1 - quote;
 						}
 						else
 							strContent[wrt_idx++] = yytext[rd_idx];
@@ -116,7 +116,7 @@ identifier ({letter})({letter}|{digit})*
 					strContent[wrt_idx] = '\0';
 					printf("<%s: %s>\n", "string", strContent);
 				}
-				return STRING;
+				return STR_CONST;
 			}
 
 "//&"[A-Z][+-][^\n]*		{ /* pseudo comment */
@@ -124,6 +124,7 @@ identifier ({letter})({letter}|{digit})*
 				  setPseudoComment( yytext );
 				}
 "//"				{ /* C++ stype comment */
+					
 				  LIST;
 				  BEGIN COMMENT_CPP;
 				}
@@ -161,6 +162,7 @@ identifier ({letter})({letter}|{digit})*
 				}
 
 {whitespace}			{
+
 				  LIST;
 				}
 
@@ -182,20 +184,26 @@ identifier ({letter})({letter}|{digit})*
 
 void setPseudoComment( const char *text )
 {
-	/* format : //&[A-Z][+-] */
 	switch( text[3] ) {
-	 case 'S':
+	 case 'S':			/* Source code */
+	 /* format : //&[A-Z][+-] */
 		if( text[4] == '+' )
 			Opt_S = 1;
 		else if( text[4] == '-' )
 			Opt_S = 0;
 		break;
-	 case 'T':
+	 case 'T':			/* Tokens */
 		if( text[4] == '+' )
 			Opt_T = 1;
 		else if( text[4] == '-' )
 			Opt_T = 0;
 	 	break;
+	case 'D'://dumo the symbol table
+		if( text[4] == '+' )
+			Opt_D = 1;
+		else if( text[4] == '-' )
+			Opt_D = 0;
+		break;
 	 default:
 	 	break;
 	}

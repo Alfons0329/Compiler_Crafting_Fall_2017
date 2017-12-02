@@ -23,7 +23,11 @@ int yyerror(char* );
 int param_or_decl; //0 decl 1 param
 int is_array; //0 no 1 yes
 
-
+/*
+printf template for debugging
+printf("Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d \n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt);
+printf("0->")
+*/
 
 %}
 /* tokens */
@@ -85,12 +89,17 @@ int is_array; //0 no 1 yes
 %start program
 %%
 
-program		:	ID MK_SEMICOLON
+program		:	ID
+				{
+					printf("Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d \n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt);
+				}
+				MK_SEMICOLON
 				{
 					strcpy(mysymbol_table[0].mysub_entry[0].name,$1);
 					mysymbol_table[0].mysub_entry[0].kind="program";
 					mysymbol_table[0].mysub_entry[0].level_str="0(global)";
 					mysymbol_table[0].mysub_entry[0].type="void";
+					printf("Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d \n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt);
 				}
 			  	program_body
 			  	END ID
@@ -100,24 +109,26 @@ program		:	ID MK_SEMICOLON
 			  	}
 			;
 
-program_body	: opt_decl_list opt_func_decl_list compound_stmt
+program_body	: opt_decl_list opt_func_decl_list compound_stmt {printf("1->");}
 			;
 
-opt_decl_list	: decl_list
+opt_decl_list	: decl_list {printf("2->");}
 				| /* epsilon */
 			;
 
-decl_list	: 	decl_list
- 				decl
-			| 	decl
+decl_list	: 	decl_list {printf("3->");}
+ 				decl {printf("4->");}
+			| 	decl {printf("5->");}
 			;
 
 decl		: VAR	/* scalar type declaration */
 			{
+				{printf("6->");}
 				pre_sub_entry_cnt=sub_entry_cnt;
 			}
  			id_list MK_COLON scalar_type MK_SEMICOLON
 			{
+				{printf("7->");}
 				for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
 				{
 					mysymbol_table[scope_depth].mysub_entry[i].kind="variable";
@@ -142,11 +153,12 @@ decl		: VAR	/* scalar type declaration */
 			}
 			| VAR    /* array type declaration */
 			{
+				{printf("8->");}
 				pre_sub_entry_cnt=sub_entry_cnt;
 			}
 			id_list MK_COLON array_type MK_SEMICOLON
 			{
-				//strcat(mysymbol_table[scope_depth].sub_entry[i].array_type_buf,$5); //array type just need to be done once
+				{printf("9->");}
 				for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
 				{
 					mysymbol_table[scope_depth].mysub_entry[i].kind="variable";
@@ -173,6 +185,7 @@ decl		: VAR	/* scalar type declaration */
 			}
 			| VAR id_list MK_COLON literal_const MK_SEMICOLON
 			{
+				{printf("10->");}
 				for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
 				{
 					mysymbol_table[scope_depth].mysub_entry[i].kind="constant";
@@ -196,6 +209,7 @@ decl		: VAR	/* scalar type declaration */
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
 			} /* const declaration */
 			;
+
 int_const	:	INT_CONST
 			|	OCTAL_CONST
 			;
@@ -219,11 +233,16 @@ func_decl_list		: func_decl_list func_decl
 					| func_decl
 			;
 
-func_decl	: 	ID MK_LPAREN opt_param_list MK_RPAREN opt_type MK_SEMICOLON
+func_decl	: 	ID
+				{
+					{printf("11->");}
+				}
+ 				MK_LPAREN opt_param_list MK_RPAREN opt_type MK_SEMICOLON
 			  	compound_stmt
 			  	END
 				{
 					//scope_depth--;
+					{printf("12->");}
 					for(int i=0;i<SUB_ENTRY_SIZE;i++)
 					{
 						//find the fucking parameter
@@ -256,6 +275,7 @@ param_list	: param_list MK_SEMICOLON param
 param		: id_list MK_COLON type
 			{
 				param_or_decl=1;
+				{printf("13->");}
 				for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
 				{
 					mysymbol_table[scope_depth].mysub_entry[i].kind="parameter";
@@ -284,10 +304,12 @@ param		: id_list MK_COLON type
 
 id_list		: id_list MK_COMMA ID /*one ID for one sub_entry*/
 			{
+				{printf("14->");}
 				sub_entry_cnt++;
 			}
 			| ID
 			{
+				{printf("15->");}
 				mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name=$1;
 			}
 			;
@@ -302,6 +324,7 @@ type		: scalar_type
 
 scalar_type	: INTEGER
 			{
+				{printf("16->");}
 				if(is_array)
 				{
 					for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
@@ -312,6 +335,7 @@ scalar_type	: INTEGER
 			}
 			| REAL
 			{
+				{printf("17->");}
 				if(is_array)
 				{
 					for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
@@ -322,6 +346,7 @@ scalar_type	: INTEGER
 			}
 			| BOOLEAN
 			{
+				{printf("18->");}
 				if(is_array)
 				{
 					for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
@@ -332,6 +357,7 @@ scalar_type	: INTEGER
 			}
 			| STRING
 			{
+				{printf("19->");}
 				if(is_array)
 				{
 					for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
@@ -344,11 +370,13 @@ scalar_type	: INTEGER
 
 array_type	: ARRAY
 			{
+				{printf("20->");}
 				is_array=1;
 				memset(arr_buf,0,sizeof(arr_buf));
 			}
  			int_const TO int_const OF type
 			{
+				{printf("21->");}
 				sprintf(arr_buf,"[%d",($4-$2+'0'));
 				strcat(arr_buf,"]");
 			}
@@ -365,6 +393,7 @@ stmt		: compound_stmt
 
 compound_stmt	: BEG
 				{
+					{printf("22->");}
 					scope_depth++;
 					sub_entry_cnt=0;
 					pre_sub_entry_cnt=0;
@@ -373,6 +402,7 @@ compound_stmt	: BEG
 			  	opt_stmt_list
 			  	END
 				{
+					{printf("23->");}
 					pop_symbol_table();
 					dumpsymbol();
 				}

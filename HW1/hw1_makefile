@@ -1,4 +1,4 @@
-lex lextemplate.l
+lex lex.l
 gcc -o scanner lex.yy.c -lfl
 
 ./scanner test.txt
