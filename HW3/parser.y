@@ -235,10 +235,9 @@ decl		: VAR	/* scalar type declaration */
 					}
 					mysymbol_table[scope_depth].mysub_entry[i].level_str=depth_n;
 					assign_constant_type(scope_depth,i);
-					strcpy(mysymbol_table[scope_depth].mysub_entry[i].attri_type_buf,const_buf);
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
-
+				error_detection();
 				dumpsymbol();
 			} /* const declaration */
 			MK_SEMICOLON
@@ -366,6 +365,13 @@ param		: id_list MK_COLON type
 id_list		: id_list MK_COMMA ID /*one ID for one sub_entry*/
 			{
 				{printf("14->");}
+				printf("ID is %s",yytext);
+				strcpy(mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name,yytext);
+				$$=yytext;
+				printf(" AND PASSED IN ID NAME %s \n",mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name);
+				sub_entry_cnt++;
+
+				dumpsymbol();
 			}
 			| ID
 			{

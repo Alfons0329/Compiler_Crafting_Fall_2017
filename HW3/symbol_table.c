@@ -56,20 +56,70 @@ void dumpsymbol()
 void error_detection() //no hashing, just naive solution
 {
     char error_msg[100];
-    strcat(error_msg,"symbol '");
+    char redeclared_var[100];
+    memset(error_msg,0,sizeof(error_msg));
+    memset(redeclared_var,0,sizeof(redeclared_var));
+    int redeclared_index=0,is_error=0,is_parsed=0,pre_redeclared_index=0;
     for(int i=0;i<SUB_ENTRY_SIZE;i++)
     {
+        if(mysymbol_table[scope_depth].mysub_entry[i].name[0]==0)
+            break;
         for(int j=i+1;j<SUB_ENTRY_SIZE;j++)
         {
-            if(mysymbol_table[scope_depth].mysub_entry[i].name==mysymbol_table[scope_depth].mysub_entry[j].name)
+            if(!strcmp(mysymbol_table[scope_depth].mysub_entry[i].name,mysymbol_table[scope_depth].mysub_entry[j].name))
             {
-                strcat(error_msg,mysymbol_table[scope_depth].mysub_entry[i].name);
-                strcat(error_msg,"' is redeclared");
-                printf("<Error> found in Line %d: %s\n", linenum, error_msg);
+
+                for(;mysymbol_table[scope_depth].mysub_entry[i].name[pre_redeclared_index]!=0;)
+                {
+
+                    printf("push name %c\n",mysymbol_table[scope_depth].mysub_entry[i].name[pre_redeclared_index]);
+                    redeclared_var[redeclared_index]=mysymbol_table[scope_depth].mysub_entry[i].name[pre_redeclared_index];
+                    pre_redeclared_index+=1;
+                    redeclared_index+=1;
+                    printf("same at i %d redeclared_index %d\n",i,redeclared_index);
+                }
+                redeclared_var[redeclared_index]=',';
+                redeclared_index+=1;
+                pre_redeclared_index=0;
+                is_error=1;
+                break;
             }
         }
     }
+    printf("Redeclaration string :");
+    for(int i=0;i<100;i++)
+    {
+        printf("%c",redeclared_var[i]);
+    }
+    printf("\n");
+    if(is_error)
+    {
+        for(int i=0;redeclared_var[i]!=0;)
+        {
+            memset(error_msg,0,sizeof(error_msg));
+            strcat(error_msg,"symbol '");
+
+            for(int j=i,cnt=0;redeclared_var[j]!=',';j++,cnt++) //cnt for substring parsing index
+            {
+                error_msg[cnt+8]=redeclared_var[j];  //parse the redeclaration ID string
+                i=j;
+                is_parsed=1; //error messgae parsed successfully
+            }
+            i+=1;
+            printf("Redclared to be parsed %c\n",redeclared_var[i]);
+            if(redeclared_var[i]==0)
+                break;
+            strcat(error_msg,"' is redeclared");
+            if(is_parsed)
+                printf("<Error> found in Line %d: %s\n", linenum, error_msg);
+
+            is_parsed=0;
+        }
+        is_error=0;
+    }
+
 }
+
 void parse_constant()
 {
     memset(const_buf,0,sizeof(const_buf));
