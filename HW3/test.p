@@ -1,21 +1,21 @@
-/**
- * test.p: simple P language example
- */
-//&T-
 test;
+//&T-
+// no global declaration(s)
 
-var a: integer;		// global variable
-
-foo( a, b: integer ): integer;
+func( a: integer ; b: array 1 to 2 of array 2 to 4 of real ): boolean;
 begin
-	return a+b;
+        var c: "hello world!";
+        begin
+                var d: real;
+                return (b[1][4] >= 1.0);
+        end
 end
-end foo
+end func
 
-// main block
 begin
-
-	print foo(2*4,3);
-
+        var a: integer;
+        begin
+                var a: boolean; // outer 'a' has been hidden in this scope
+        end
 end
 end test

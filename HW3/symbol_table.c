@@ -68,7 +68,7 @@ void error_detection() //no hashing, just naive solution
         {
             if(!strcmp(mysymbol_table[scope_depth].mysub_entry[i].name,mysymbol_table[scope_depth].mysub_entry[j].name))
             {
-
+                mysymbol_table[scope_depth].mysub_entry[j].name[0]=0;
                 for(;mysymbol_table[scope_depth].mysub_entry[i].name[pre_redeclared_index]!=0;)
                 {
 
@@ -106,7 +106,6 @@ void error_detection() //no hashing, just naive solution
                 is_parsed=1; //error messgae parsed successfully
             }
             i+=1;
-            printf("Redclared to be parsed %c\n",redeclared_var[i]);
             if(redeclared_var[i]==0)
                 break;
             strcat(error_msg,"' is redeclared");
