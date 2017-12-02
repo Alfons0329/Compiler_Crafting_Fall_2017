@@ -92,6 +92,7 @@ printf("0->")
 program		:	ID
 				{
 					//printf("Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d \n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt);
+					printf("1->");
 					puts(yytext);
 					mysymbol_table[0].mysub_entry[0].name=yytext;
 					printf("program name %s",mysymbol_table[0].mysub_entry[0].name);
@@ -102,6 +103,7 @@ program		:	ID
 					mysymbol_table[0].mysub_entry[0].level_str="0(global)";
 					mysymbol_table[0].mysub_entry[0].type="void";
 					printf("Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d \n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt);
+					dumpsymbol();
 				}
 			  	program_body
 			  	END ID
@@ -128,7 +130,11 @@ decl		: VAR	/* scalar type declaration */
 				{printf("6->");}
 				pre_sub_entry_cnt=sub_entry_cnt;
 			}
- 			id_list MK_COLON scalar_type MK_SEMICOLON
+ 			id_list MK_COLON scalar_type
+			{
+				printf("after scalar \n");
+			}
+			MK_SEMICOLON
 			{
 				{printf("7->");}
 				for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
@@ -155,6 +161,7 @@ decl		: VAR	/* scalar type declaration */
 			}
 			| VAR    /* array type declaration */
 			{
+
 				{printf("8->");}
 				pre_sub_entry_cnt=sub_entry_cnt;
 			}
@@ -179,10 +186,12 @@ decl		: VAR	/* scalar type declaration */
 						strcat(depth_n,ps_level);
 					}
 					mysymbol_table[scope_depth].mysub_entry[i].level_str=depth_n;
+					printf("arr buf %s \n",arr_buf);
 					strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,arr_buf); //altogether using the sprintf to concatenate multiple strings
 					mysymbol_table[scope_depth].mysub_entry[i].is_array_decl=true;
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
+				memset(arr_buf,0,sizeof(arr_buf));
 				is_array=0;//end matching an array, turn off the flag
 			}
 			| VAR id_list MK_COLON literal_const MK_SEMICOLON
@@ -212,19 +221,19 @@ decl		: VAR	/* scalar type declaration */
 			} /* const declaration */
 			;
 
-int_const	:	INT_CONST
-			|	OCTAL_CONST
+int_const	:	INT_CONST {$$=yytext;}
+			|	OCTAL_CONST {$$=yytext;}
 			;
 
-literal_const	: int_const
-				| OP_SUB int_const
-				| FLOAT_CONST
-				| OP_SUB FLOAT_CONST
-				| SCIENTIFIC
-				| OP_SUB SCIENTIFIC
-				| STR_CONST
-				| TRUE
-				| FALSE
+literal_const	: int_const {$$=$1;}
+				| OP_SUB int_const {$$=yytext;}
+				| FLOAT_CONST {$$=$1;}
+				| OP_SUB FLOAT_CONST {$$=yytext;}
+				| SCIENTIFIC {$$=$1;}
+				| OP_SUB SCIENTIFIC {$$=yytext;}
+				| STR_CONST {$$=$1;}
+				| TRUE {$$=$1;}
+				| FALSE {$$=$1;}
 			;
 
 opt_func_decl_list	: func_decl_list
@@ -238,6 +247,12 @@ func_decl_list		: func_decl_list func_decl
 func_decl	: 	ID
 				{
 					{printf("11->");}
+					scope_depth++;
+					sub_entry_cnt=0;
+					pre_sub_entry_cnt=0;
+					printf("compound_stmt begin\n");
+					printf("Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d \n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt);
+
 				}
  				MK_LPAREN opt_param_list MK_RPAREN opt_type MK_SEMICOLON
 			  	compound_stmt
@@ -270,28 +285,34 @@ opt_param_list		: param_list
 					| /* epsilon */
 			;
 
-	param_list	: param_list MK_SEMICOLON param
+param_list	: param_list MK_SEMICOLON param
 			| param
 			;
 
 param		: id_list MK_COLON type
 			{
 				param_or_decl=1;
+
 				{printf("13->");}
 				for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
 				{
 					mysymbol_table[scope_depth].mysub_entry[i].kind="parameter";
+					printf("i is now %d and name %s\n",i,mysymbol_table[scope_depth].mysub_entry[i].name);
 					char* ps_level;
 					char depth_n[100];
+					memset(depth_n,0,sizeof(depth_n));
 					if(scope_depth)
 					{
 						depth_n[0]=scope_depth+'0';
 						ps_level="(local)";
 						strcat(depth_n,ps_level);
+						printf("Depth n %s \n",depth_n);
 					}
 					mysymbol_table[scope_depth].mysub_entry[i].level_str=depth_n;
 					if(is_array)
 					{
+						printf("Found an array parameter passed in \n");
+						printf("arr buf %s \n",arr_buf);
 						strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,arr_buf);
 						mysymbol_table[scope_depth].mysub_entry[i].is_array_decl=true;
 					}
@@ -301,21 +322,26 @@ param		: id_list MK_COLON type
 					}
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
+				printf("parsing parameter done dump symbol table\n");
+				memset(arr_buf,0,sizeof(arr_buf));
+				dumpsymbol();
 			}
 			;
 
 id_list		: id_list MK_COMMA ID /*one ID for one sub_entry*/
 			{
 				{printf("14->");}
-				sub_entry_cnt++;
 			}
 			| ID
 			{
+
 				{printf("15->");}
 				printf("ID is %s",yytext);
 				mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name=yytext;
 				$$=yytext;
-				printf("13245 %s\n",$$);
+				printf(" AND PASSED IN ID NAME %s \n",mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name);
+				sub_entry_cnt++;
+				printf("Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d \n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt);
 			}
 			;
 
@@ -339,6 +365,7 @@ scalar_type	: INTEGER
 						strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,"integer ");
 					}
 				}
+				printf("match $$:%s \n",$$);
 			}
 			| REAL
 			{
@@ -385,13 +412,17 @@ array_type	: ARRAY
 			{
 				{printf("20->");}
 				is_array=1;
-				memset(arr_buf,0,sizeof(arr_buf));
+
 			}
  			int_const TO int_const OF type
 			{
 				{printf("21->");}
-				sprintf(arr_buf,"[%d",($4-$2+'0'));
+
+				int delta=atol($5)-atol($3)+1;
+				printf("array dim FROM %s to %s delta is %d\n",$3,$5,delta);
+				sprintf(arr_buf,"[%d",delta);
 				strcat(arr_buf,"]");
+				printf("Array buf %s \n",arr_buf);
 			}
 			;
 
@@ -410,12 +441,16 @@ compound_stmt	: BEG
 					scope_depth++;
 					sub_entry_cnt=0;
 					pre_sub_entry_cnt=0;
+					printf("compound_stmt begin\n");
+					printf("Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d \n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt);
 				}
 			  	opt_decl_list
 			  	opt_stmt_list
 			  	END
 				{
 					{printf("23->");}
+					printf("compound_stmt end\n");
+					printf("Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d \n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt);
 					pop_symbol_table();
 					dumpsymbol();
 				}

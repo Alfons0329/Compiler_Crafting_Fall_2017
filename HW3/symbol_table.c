@@ -38,11 +38,13 @@ void dumpsymbol()
     printf("\n");
     for(int i=0;i<SUB_ENTRY_SIZE;i++)
     {
-        printf("%-33s",mysymbol_table[scope_depth].mysub_entry[i].name);
-        printf("%-11s",mysymbol_table[scope_depth].mysub_entry[i].kind);
-        printf("%-10s",mysymbol_table[scope_depth].mysub_entry[i].level_str);
-        printf("%-17s",(mysymbol_table[scope_depth].mysub_entry[i].is_array_decl)?mysymbol_table[scope_depth].mysub_entry[i].array_type_buf:mysymbol_table[scope_depth].mysub_entry[i].type);
-        printf("%-11s",mysymbol_table[scope_depth].mysub_entry[i].attri_type_buf);
+        if(mysymbol_table[scope_depth].mysub_entry[i].name==NULL)
+            continue;
+        printf("%-33s//",mysymbol_table[scope_depth].mysub_entry[i].name);
+        printf("%-11s//",mysymbol_table[scope_depth].mysub_entry[i].kind);
+        printf("%-10s//",mysymbol_table[scope_depth].mysub_entry[i].level_str);
+        printf("%-17s//",(mysymbol_table[scope_depth].mysub_entry[i].is_array_decl)?mysymbol_table[scope_depth].mysub_entry[i].array_type_buf:mysymbol_table[scope_depth].mysub_entry[i].type);
+        printf("%-11s//",mysymbol_table[scope_depth].mysub_entry[i].attri_type_buf);
         printf("\n");
     }
     for(i=0;i< 110;i++)
