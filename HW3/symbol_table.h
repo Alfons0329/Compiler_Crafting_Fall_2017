@@ -4,6 +4,8 @@
 #include <string.h>
 #include <stdbool.h>
 #define SYMBOL_TABLE_MAX_SIZE 10000
+#define NAME_SIZE 32
+#define TYPE_SIZE 40
 #define SUB_ENTRY_SIZE 20
 #define ARRAY_BUF_SIZE 100
 #define PARAM_BUF_SIZE 100
@@ -38,7 +40,7 @@ strcat all the type in same buf
 ###############################################################################################################*/
 struct sub_entry //the real entry for inserting the value
 {
-    char* name;
+    char name[NAME_SIZE];
     char* kind;
     char* level_str;
     char* type;

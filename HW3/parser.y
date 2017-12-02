@@ -14,7 +14,7 @@ extern char *buf;		/* declared in lex.l */
 
 char* array_scalar_type;
 char arr_buf[50];
-
+char reverse_arr_buf[50];
 extern int yylex(void);
 extern int Opt_D; /* declared in lex.l */
 extern int linenum;		/* declared in lex.l */
@@ -94,7 +94,7 @@ program		:	ID
 					//printf("Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d \n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt);
 					printf("1->");
 					puts(yytext);
-					mysymbol_table[0].mysub_entry[0].name=yytext;
+					strcpy(mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name,yytext);
 					printf("program name %s",mysymbol_table[0].mysub_entry[0].name);
 				}
 				MK_SEMICOLON
@@ -187,7 +187,19 @@ decl		: VAR	/* scalar type declaration */
 					}
 					mysymbol_table[scope_depth].mysub_entry[i].level_str=depth_n;
 					printf("arr buf %s \n",arr_buf);
-					strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,arr_buf); //altogether using the sprintf to concatenate multiple strings
+					memset(reverse_arr_buf,0,sizeof(reverse_arr_buf));
+					for(int i=49,j=0;i>=0;i--)
+					{
+						if(arr_buf[i]!=0)
+						{
+							reverse_arr_buf[j]='[';
+							reverse_arr_buf[j+1]=arr_buf[i];
+							reverse_arr_buf[j+2]=']';
+							j+=3;
+						}
+					}
+					strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,reverse_arr_buf); //altogether using the sprintf to concatenate multiple strings
+
 					mysymbol_table[scope_depth].mysub_entry[i].is_array_decl=true;
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
@@ -313,7 +325,18 @@ param		: id_list MK_COLON type
 					{
 						printf("Found an array parameter passed in \n");
 						printf("arr buf %s \n",arr_buf);
-						strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,arr_buf);
+						memset(reverse_arr_buf,0,sizeof(reverse_arr_buf));
+						for(int i=49,j=0;i>=0;i--)
+						{
+							if(arr_buf[i]!=0)
+							{
+								reverse_arr_buf[j]='[';
+								reverse_arr_buf[j+1]=arr_buf[i];
+								reverse_arr_buf[j+2]=']';
+								j+=3;
+							}
+						}
+						strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,reverse_arr_buf);
 						mysymbol_table[scope_depth].mysub_entry[i].is_array_decl=true;
 					}
 					else
@@ -337,11 +360,12 @@ id_list		: id_list MK_COMMA ID /*one ID for one sub_entry*/
 
 				{printf("15->");}
 				printf("ID is %s",yytext);
-				mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name=yytext;
+				strcpy(mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name,yytext);
 				$$=yytext;
 				printf(" AND PASSED IN ID NAME %s \n",mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name);
 				sub_entry_cnt++;
 				printf("Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d \n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt);
+				dumpsymbol();
 			}
 			;
 
@@ -412,16 +436,16 @@ array_type	: ARRAY
 			{
 				{printf("20->");}
 				is_array=1;
-
 			}
  			int_const TO int_const OF type
 			{
 				{printf("21->");}
 
 				int delta=atol($5)-atol($3)+1;
-				printf("array dim FROM %s to %s delta is %d\n",$3,$5,delta);
-				sprintf(arr_buf,"[%d",delta);
-				strcat(arr_buf,"]");
+				char tmp[10];
+				printf("\narray dim FROM %s to %s delta is %d\n",$3,$5,delta);
+				sprintf(tmp,"%d",delta);
+				strcat(arr_buf,tmp);
 				printf("Array buf %s \n",arr_buf);
 			}
 			;
