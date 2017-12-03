@@ -202,10 +202,10 @@ decl		: VAR	/* scalar type declaration */
 
 							if(arr_buf[i]==',')
 							{
-								printf("i at %d \n",i);
+
 								for(int k=i-1;;k--)
 								{
-									printf("k at %d \n",k);
+
 									if(arr_buf[k]==',')
 									{
 										comma_pos=k;
@@ -262,10 +262,10 @@ decl		: VAR	/* scalar type declaration */
 
 							if(arr_buf[i]==',')
 							{
-								printf("i at %d \n",i);
+
 								for(int k=i-1;;k--)
 								{
-									printf("k at %d \n",k);
+
 									if(arr_buf[k]==',')
 									{
 										comma_pos=k;
@@ -468,10 +468,10 @@ param		: id_list MK_COLON type
 
 							if(arr_buf[i]==',')
 							{
-								printf("i at %d \n",i);
+
 								for(int k=i-1;;k--)
 								{
-									printf("k at %d \n",k);
+
 									if(arr_buf[k]==',')
 									{
 										comma_pos=k;
