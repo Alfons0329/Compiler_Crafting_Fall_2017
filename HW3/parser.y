@@ -380,14 +380,14 @@ param		: id_list MK_COLON type
 						array_dimension_parser();
 						strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,reverse_arr_buf);
 						strcat(funct_attri_buf,mysymbol_table[scope_depth].mysub_entry[i].array_type_buf);
-						strcat(funct_attri_buf," "); //for indentation
+						strcat(funct_attri_buf,","); //for indentation
 						mysymbol_table[scope_depth].mysub_entry[i].is_array_decl=true;
 					}
 					else
 					{
 						mysymbol_table[scope_depth].mysub_entry[i].type=$3;
 						strcat(funct_attri_buf,mysymbol_table[scope_depth].mysub_entry[i].type);
-						strcat(funct_attri_buf," "); //for indentation
+						strcat(funct_attri_buf,","); //for indentation
 					}
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
@@ -578,9 +578,23 @@ while_stmt	: WHILE boolean_expr DO
 			  END DO
 			;
 
-for_stmt	: FOR ID OP_ASSIGN int_const TO int_const DO
-			  opt_stmt_list
-			  END DO
+for_stmt	: 	FOR ID
+				/*if(scope_depth==0) //global declaration
+				{
+					strcpy(mysymbol_table[0].mysub_entry[global_sub_entry_cnt+1].name,yytext);
+
+					global_sub_entry_cnt++;
+				}
+				else //non global declaration
+				{
+					strcpy(mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt+1].name,yytext);
+					sub_entry_cnt++;
+				}
+				printf(" AND PASSED IN ID NAME %s \n",mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name);
+				dumpsymbol();*/
+ 			  	OP_ASSIGN int_const TO int_const DO
+			  	opt_stmt_list
+			  	END DO
 			;
 
 return_stmt	: RETURN boolean_expr MK_SEMICOLON

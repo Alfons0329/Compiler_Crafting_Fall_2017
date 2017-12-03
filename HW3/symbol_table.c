@@ -5,6 +5,11 @@
 
 void symbol_table_init()
 {
+    for(int i=0;i<ITERATOR_TABLE_SIZE;i++)
+    {
+        memset(myiter_table[i].iterator_name,0,sizeof(myiter_table[i].iterator_name));
+        myiter_table[i].iterator_level=0;
+    }
     for(int i=0;i<SYMBOL_TABLE_MAX_SIZE;i++)
     {
         for(int j=0;j<SUB_ENTRY_SIZE;j++)
@@ -54,6 +59,10 @@ void dumpsymbol()
     }
     printf("\n");
     printf("%-33s%-11s%-11s%-17s%-11s\n","Name","Kind","Level","Type","Attribute");
+    for(i=0;i<110;i++)
+    {
+        printf("-");
+    }
     printf("\n");
     for(int i=0;i<SUB_ENTRY_SIZE;i++)
     {
@@ -86,7 +95,13 @@ void dumpsymbol()
         {
             printf("%-17s",mysymbol_table[scope_depth].mysub_entry[i].type);
         }
-        printf("%-11s",mysymbol_table[scope_depth].mysub_entry[i].attri_type_buf);
+        for(int j=0;j<ATTRI_BUF_SIZE;j++)
+        {
+            if(mysymbol_table[scope_depth].mysub_entry[i].attri_type_buf[j]==','&&mysymbol_table[scope_depth].mysub_entry[i].attri_type_buf[j+1]==0)
+             break;
+
+            printf("%c",mysymbol_table[scope_depth].mysub_entry[i].attri_type_buf[j]);
+        }
         printf("\n");
     }
     for(i=0;i< 110;i++)
@@ -263,8 +278,8 @@ void assign_constant_type(int scope_depth,int index)
 }
 void assign_scalar_type(char* type_in)
 {
-    printf("type in %s FUNCTION OR NOTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT %d\n",type_in,is_function);
-    printf("(In dump function)Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d global_pre_sub_entry_cnt %d global_sub_entry_cnt %d\n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt,global_pre_sub_entry_cnt,global_sub_entry_cnt);
+    //printf("type in %s FUNCTION OR NOTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT %d\n",type_in,is_function);
+    //printf("(In dump function)Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d global_pre_sub_entry_cnt %d global_sub_entry_cnt %d\n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt,global_pre_sub_entry_cnt,global_sub_entry_cnt);
     if(scope_depth==0)
     {
         if(is_function)

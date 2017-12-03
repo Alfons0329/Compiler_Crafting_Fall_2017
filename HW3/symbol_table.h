@@ -5,6 +5,8 @@
 #include <stdbool.h>
 #define SYMBOL_TABLE_MAX_SIZE 10000
 #define SUB_ENTRY_SIZE 20
+#define ITERATOR_TABLE_SIZE 100
+#define ITER_NAME_SIZE 32
 #define NAME_SIZE 32
 #define TYPE_SIZE 40
 #define LEVEL_STR_SIZE 20
@@ -68,6 +70,12 @@ struct symbol_table_entry
     struct sub_entry mysub_entry[SUB_ENTRY_SIZE];
 };
 struct symbol_table_entry mysymbol_table[SYMBOL_TABLE_MAX_SIZE];
+struct loop_iterator
+{
+    char iterator_name[ITER_NAME_SIZE];
+    int iterator_level;
+};
+struct loop_iterator myiter_table[ITERATOR_TABLE_SIZE];
 void symbol_table_init();
 void pop_symbol_table();
 void dumpsymbol();

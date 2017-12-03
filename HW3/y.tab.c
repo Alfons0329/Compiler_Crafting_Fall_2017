@@ -556,11 +556,11 @@ static const yytype_uint16 yyrline[] =
      357,   400,   418,   439,   440,   443,   444,   447,   453,   460,
      467,   477,   476,   495,   496,   497,   498,   499,   500,   501,
      505,   504,   552,   553,   556,   557,   560,   561,   562,   565,
-     568,   573,   576,   581,   586,   589,   590,   593,   594,   597,
-     598,   601,   602,   605,   606,   609,   610,   613,   614,   615,
-     616,   617,   618,   621,   622,   625,   626,   629,   630,   633,
-     634,   635,   638,   639,   640,   641,   642,   643,   644,   647,
-     648,   651
+     568,   573,   576,   581,   600,   603,   604,   607,   608,   611,
+     612,   615,   616,   619,   620,   623,   624,   627,   628,   629,
+     630,   631,   632,   635,   636,   639,   640,   643,   644,   647,
+     648,   649,   652,   653,   654,   655,   656,   657,   658,   661,
+     662,   665
 };
 #endif
 
@@ -1847,14 +1847,14 @@ yyreduce:
 						array_dimension_parser();
 						strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,reverse_arr_buf);
 						strcat(funct_attri_buf,mysymbol_table[scope_depth].mysub_entry[i].array_type_buf);
-						strcat(funct_attri_buf," "); //for indentation
+						strcat(funct_attri_buf,","); //for indentation
 						mysymbol_table[scope_depth].mysub_entry[i].is_array_decl=true;
 					}
 					else
 					{
 						mysymbol_table[scope_depth].mysub_entry[i].type=(yyvsp[0]);
 						strcat(funct_attri_buf,mysymbol_table[scope_depth].mysub_entry[i].type);
-						strcat(funct_attri_buf," "); //for indentation
+						strcat(funct_attri_buf,","); //for indentation
 					}
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
@@ -2271,7 +2271,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 654 "parser.y" /* yacc.c:1906  */
+#line 668 "parser.y" /* yacc.c:1906  */
 
 
 int yyerror( char *msg )
