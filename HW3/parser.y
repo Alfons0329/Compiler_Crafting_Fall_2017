@@ -105,7 +105,7 @@ program		:	ID
 				MK_SEMICOLON
 				{
 					mysymbol_table[0].mysub_entry[0].kind="program";
-					mysymbol_table[0].mysub_entry[0].level_str="0(global)";
+					strcpy(mysymbol_table[0].mysub_entry[0].level_str,"0(global)");
 					mysymbol_table[0].mysub_entry[0].type="void";
 
 					dumpsymbol();
@@ -131,9 +131,6 @@ decl_list	: 	decl_list {printf("3->");}
 			;
 
 decl		: VAR	/* scalar type declaration */
-			{
-				{printf("6->");}
-			}
  			id_list MK_COLON scalar_type
 			{
 				{printf("7->");}
@@ -156,18 +153,17 @@ decl		: VAR	/* scalar type declaration */
 						ps_level="(global)";
 						strcat(depth_n,ps_level);
 					}
-					mysymbol_table[scope_depth].mysub_entry[i].level_str=depth_n;
+					strcpy(mysymbol_table[scope_depth].mysub_entry[i].level_str,depth_n);
 					printf("8888888888888888888888888 \n");
-					mysymbol_table[scope_depth].mysub_entry[i].type=$5;
+					mysymbol_table[scope_depth].mysub_entry[i].type=$4;
 					printf("8888888888888888888888888 \n");
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
+				error_detection();
+				dumpsymbol();
 			}
 			MK_SEMICOLON
 			| VAR    /* array type declaration */
-			{
-				{printf("8->");}
-			}
 			id_list MK_COLON array_type MK_SEMICOLON
 			{
 				{printf("9->");}
@@ -190,7 +186,7 @@ decl		: VAR	/* scalar type declaration */
 						ps_level="(global)";
 						strcat(depth_n,ps_level);
 					}
-					mysymbol_table[scope_depth].mysub_entry[i].level_str=depth_n;
+					strcpy(mysymbol_table[scope_depth].mysub_entry[i].level_str,depth_n);
 					printf("arr buf %s \n",arr_buf);
 					memset(reverse_arr_buf,0,sizeof(reverse_arr_buf));
 					for(int i=49,j=0;i>=0;i--)
@@ -233,7 +229,7 @@ decl		: VAR	/* scalar type declaration */
 						ps_level="(global)";
 						strcat(depth_n,ps_level);
 					}
-					mysymbol_table[scope_depth].mysub_entry[i].level_str=depth_n;
+					strcpy(mysymbol_table[scope_depth].mysub_entry[i].level_str,depth_n);
 					assign_constant_type(scope_depth,i);
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
@@ -331,7 +327,7 @@ param		: id_list MK_COLON type
 						strcat(depth_n,ps_level);
 						printf("Depth n %s \n",depth_n);
 					}
-					mysymbol_table[scope_depth].mysub_entry[i].level_str=depth_n;
+					strcpy(mysymbol_table[scope_depth].mysub_entry[i].level_str,depth_n);
 					if(is_array)
 					{
 						printf("Found an array parameter passed in \n");

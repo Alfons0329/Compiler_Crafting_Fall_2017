@@ -4,12 +4,13 @@
 #include <string.h>
 #include <stdbool.h>
 #define SYMBOL_TABLE_MAX_SIZE 10000
+#define SUB_ENTRY_SIZE 20
 #define NAME_SIZE 32
 #define TYPE_SIZE 40
-#define SUB_ENTRY_SIZE 20
+#define LEVEL_STR_SIZE 20
+#define ATTRI_BUF_SIZE 100
 #define ARRAY_BUF_SIZE 100
 #define PARAM_BUF_SIZE 100
-#define ATTRI_BUF_SIZE 100
 extern int linenum;		/* declared in lex.l */
 extern int Opt_D;
 int scope_depth;
@@ -42,7 +43,7 @@ struct sub_entry //the real entry for inserting the value
 {
     char name[NAME_SIZE];
     char* kind;
-    char* level_str;
+    char level_str[LEVEL_STR_SIZE];
     char* type;
     char attri_type_buf[ATTRI_BUF_SIZE];
     char array_type_buf[ARRAY_BUF_SIZE];
