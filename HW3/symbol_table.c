@@ -204,13 +204,13 @@ void parse_constant()
         }
         case 5:
         {
-            strcat(const_buf,yytext);
+            scientific_converter(yytext);
             break;
         }
         case 6:
         {
             strcat(const_buf,"-");
-            strcat(const_buf,yytext);
+            scientific_converter(yytext);
             break;
         }
         case 7:
@@ -356,7 +356,6 @@ void radix_converter(char* octal_in)
     int count = 0;
     int octal_number=atoi(octal_in);
     char tmp[20];
-    printf("OCTAL IN is %sand octal number is %d\n",octal_in,octal_number);
     while(octal_number > 0)
     {
         remainder = octal_number % 10;
@@ -367,5 +366,12 @@ void radix_converter(char* octal_in)
     memset(tmp,0,sizeof(tmp));
     sprintf(tmp,"%d",decimal_number);
     strcat(const_buf,tmp);
-    printf("COnstbuf become %s \n",const_buf);
+}
+void scientific_converter(char* scientific_in)
+{
+    float float_converted=atof(scientific_in);
+    char tmp[20];
+    memset(tmp,0,sizeof(tmp));
+    sprintf(tmp,"%f",float_converted);
+    strcat(const_buf,tmp);
 }
