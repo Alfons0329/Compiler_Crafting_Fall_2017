@@ -33,9 +33,5 @@ int  main( int argc, char **argv )
 	is_array = 0; //0 no 1 yes
 	symbol_table_init();
 	yyparse();
-	fprintf( stdout, "\n" );
-	fprintf( stdout, "|--------------------------------|\n" );
-	fprintf( stdout, "|  There is no syntactic error!  |\n" );
-	fprintf( stdout, "|--------------------------------|\n" );
 	exit(0);
 }
