@@ -24,7 +24,7 @@ extern int Opt_D; /* declared in lex.l */
 extern int linenum;		/* declared in lex.l */
 
 int yyerror(char* );
-//0 not constant, 1 int 2 -int  3 float 4 -float 5 scientific 6 -scientific 7 string 8 bool
+//0 not constant, 1 int 2 -int  3 float 4 -float 5 scientific 6 -scientific 7 string 8 bool 9 OCTAL 10 -OCTAL
 /*
 printf template for debugging
 
@@ -353,12 +353,12 @@ decl		: VAR	/* scalar type declaration */
 			MK_SEMICOLON
 			;
 
-int_const	:	INT_CONST {$$=yytext;}
-			|	OCTAL_CONST {$$=yytext;}
+int_const	:	INT_CONST {$$=yytext; const_type=1;}
+			|	OCTAL_CONST {$$=yytext; const_type=9;}
 			;
 
-literal_const	: int_const {$$=yytext; const_type=1; parse_constant();}
-				| OP_SUB int_const {$$=yytext; const_type=2; parse_constant();}
+literal_const	: int_const {$$=yytext; const_type=(const_type==1)?1:9; parse_constant();}
+				| OP_SUB int_const {$$=yytext; const_type=(const_type==1)?2:10; parse_constant();}
 				| FLOAT_CONST {$$=yytext; const_type=3; parse_constant();}
 				| OP_SUB FLOAT_CONST {$$=yytext; const_type=4; parse_constant();}
 				| SCIENTIFIC {$$=yytext; const_type=5; parse_constant();}

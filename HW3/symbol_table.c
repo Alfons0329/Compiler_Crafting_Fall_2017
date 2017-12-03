@@ -209,6 +209,17 @@ void parse_constant()
             strcat(const_buf,yytext);
             break;
         }
+        case 9:
+        {
+            strcat(const_buf,yytext);
+            break;
+        }
+        case 10:
+        {
+            strcat(const_buf,"-");
+            strcat(const_buf,yytext);
+            break;
+        }
     }
 
 }
@@ -240,6 +251,11 @@ void assign_constant_type(int scope_depth,int index)
         case 8:
         {
             mysymbol_table[scope_depth].mysub_entry[index].type="boolean";
+            break;
+        }
+        case 9 ... 10:
+        {
+            mysymbol_table[scope_depth].mysub_entry[index].type="octal";
             break;
         }
     }

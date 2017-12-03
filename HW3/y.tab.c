@@ -89,7 +89,7 @@ extern int Opt_D; /* declared in lex.l */
 extern int linenum;		/* declared in lex.l */
 
 int yyerror(char* );
-//0 not constant, 1 int 2 -int  3 float 4 -float 5 scientific 6 -scientific 7 string 8 bool
+//0 not constant, 1 int 2 -int  3 float 4 -float 5 scientific 6 -scientific 7 string 8 bool 9 OCTAL 10 -OCTAL
 /*
 printf template for debugging
 
@@ -1774,25 +1774,25 @@ yyreduce:
 
   case 16:
 #line 356 "parser.y" /* yacc.c:1646  */
-    {(yyval)=yytext;}
+    {(yyval)=yytext; const_type=1;}
 #line 1779 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 17:
 #line 357 "parser.y" /* yacc.c:1646  */
-    {(yyval)=yytext;}
+    {(yyval)=yytext; const_type=9;}
 #line 1785 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
 #line 360 "parser.y" /* yacc.c:1646  */
-    {(yyval)=yytext; const_type=1; parse_constant();}
+    {(yyval)=yytext; const_type=(const_type==1)?1:9; parse_constant();}
 #line 1791 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
 #line 361 "parser.y" /* yacc.c:1646  */
-    {(yyval)=yytext; const_type=2; parse_constant();}
+    {(yyval)=yytext; const_type=(const_type==1)?2:10; parse_constant();}
 #line 1797 "y.tab.c" /* yacc.c:1646  */
     break;
 
