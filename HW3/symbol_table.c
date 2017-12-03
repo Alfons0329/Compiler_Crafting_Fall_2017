@@ -48,6 +48,12 @@ void pop_symbol_table()
         mysymbol_table[scope_depth].mysub_entry[i].is_iterator=false;
     }
     scope_depth=(scope_depth==0)?0:scope_depth-1; //shirnk the level
+    //clean the iterator table
+    for(int i=0;i<ITERATOR_TABLE_SIZE;i++)
+    {
+        memset(myiter_table[i].iterator_name,0,sizeof(myiter_table[i].iterator_name));
+        myiter_table[i].iterator_level=0;
+    }
 }
 void dumpsymbol()
 {
@@ -171,10 +177,10 @@ void error_detection() //no hashing, just naive solution
         }
         is_error=0;
     }
+    //variable-iterator detection
     redeclared_index=0,is_error=0,is_parsed=0,pre_redeclared_index=0;
     memset(error_msg,0,sizeof(error_msg));
     memset(redeclared_var,0,sizeof(redeclared_var));
-    //variable-iterator detection
     for(int i=0;i<SUB_ENTRY_SIZE;i++)
     {
         if(mysymbol_table[scope_depth].mysub_entry[i].name[0]==0)
@@ -184,17 +190,17 @@ void error_detection() //no hashing, just naive solution
             if(!strncmp(mysymbol_table[scope_depth].mysub_entry[i].name,myiter_table[j].iterator_name,32)&&
             scope_depth==myiter_table[j].iterator_level)
             {
-                printf("Found iter same with variable!!\n");
-                mysymbol_table[scope_depth].mysub_entry[i].name[0]=0;//mark the error table as not print
+
                 for(;mysymbol_table[scope_depth].mysub_entry[i].name[pre_redeclared_index]!=0&&pre_redeclared_index<33;)
                 {
-
+                    printf("Found iter same with variable!! name is %s\n",mysymbol_table[scope_depth].mysub_entry[i].name);
                     printf("push name %c\n",mysymbol_table[scope_depth].mysub_entry[i].name[pre_redeclared_index]);
                     redeclared_var[redeclared_index]=mysymbol_table[scope_depth].mysub_entry[i].name[pre_redeclared_index];
                     pre_redeclared_index+=1;
                     redeclared_index+=1;
                     printf("same at i %d redeclared_index %d\n",i,redeclared_index);
                 }
+                mysymbol_table[scope_depth].mysub_entry[i].name[0]=0;//mark the error table as not print
                 redeclared_var[redeclared_index]=',';
                 redeclared_index+=1;
                 pre_redeclared_index=0;
@@ -205,11 +211,11 @@ void error_detection() //no hashing, just naive solution
     }
     if(is_error)
     {
+        printf("Error with iter-variable \n");
         for(int i=0;redeclared_var[i]!=0;)
         {
             memset(error_msg,0,sizeof(error_msg));
             strcat(error_msg,"symbol '");
-
             for(int j=i,cnt=0;redeclared_var[j]!=',';j++,cnt++) //cnt for substring parsing index
             {
                 error_msg[cnt+8]=redeclared_var[j];  //parse the redeclaration ID string
@@ -492,4 +498,15 @@ void scientific_converter(char* scientific_in)
     memset(tmp,0,sizeof(tmp));
     sprintf(tmp,"%f",float_converted);
     strcat(const_buf,tmp);
+}
+void dumpiterator()
+{
+    printf("---------ITERATOR TABLE --------\n");
+    for(int i=0;i<ITERATOR_TABLE_SIZE;i++)
+    {
+        if(myiter_table[i].iterator_name[0]==0)
+            break;
+        printf("%s and depth %d\n",myiter_table[i].iterator_name,myiter_table[i].iterator_level);
+    }
+    printf("---------ITERATOR TABLE --------\n");
 }

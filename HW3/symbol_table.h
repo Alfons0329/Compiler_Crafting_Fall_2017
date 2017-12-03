@@ -6,7 +6,7 @@
 #include <math.h>
 #define SYMBOL_TABLE_MAX_SIZE 10000
 #define SUB_ENTRY_SIZE 20
-#define ITERATOR_TABLE_SIZE 100
+#define ITERATOR_TABLE_SIZE 50
 #define ITER_NAME_SIZE 32
 #define NAME_SIZE 40
 #define TYPE_SIZE 40
@@ -87,3 +87,4 @@ void assign_scalar_type(char* );
 void array_dimension_parser();
 void radix_converter();
 void scientific_converter();
+void dumpiterator();

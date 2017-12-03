@@ -556,11 +556,11 @@ static const yytype_uint16 yyrline[] =
      357,   400,   418,   439,   440,   443,   444,   447,   453,   460,
      467,   477,   476,   495,   496,   497,   498,   499,   500,   501,
      505,   504,   552,   553,   556,   557,   560,   561,   562,   565,
-     568,   573,   576,   582,   581,   596,   599,   600,   603,   604,
-     607,   608,   611,   612,   615,   616,   619,   620,   623,   624,
-     625,   626,   627,   628,   631,   632,   635,   636,   639,   640,
-     643,   644,   645,   648,   649,   650,   651,   652,   653,   654,
-     657,   658,   661
+     568,   573,   576,   582,   581,   598,   601,   602,   605,   606,
+     609,   610,   613,   614,   617,   618,   621,   622,   625,   626,
+     627,   628,   629,   630,   633,   634,   637,   638,   641,   642,
+     645,   646,   647,   650,   651,   652,   653,   654,   655,   656,
+     659,   660,   663
 };
 #endif
 
@@ -2049,20 +2049,22 @@ yyreduce:
 					myiter_table[iterator_cnt].iterator_level=scope_depth+1;
 					printf("Loop scope depth %d and name %s\n",scope_depth,yytext);
 					error_detection();
+					dumpiterator();
+					iterator_cnt++;
 				}
-#line 2054 "y.tab.c" /* yacc.c:1646  */
+#line 2056 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 74:
-#line 591 "parser.y" /* yacc.c:1646  */
+#line 593 "parser.y" /* yacc.c:1646  */
     {
-					error_detection();
+					dumpiterator();
 				}
-#line 2062 "y.tab.c" /* yacc.c:1646  */
+#line 2064 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 2066 "y.tab.c" /* yacc.c:1646  */
+#line 2068 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2290,7 +2292,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 664 "parser.y" /* yacc.c:1906  */
+#line 666 "parser.y" /* yacc.c:1906  */
 
 
 int yyerror( char *msg )

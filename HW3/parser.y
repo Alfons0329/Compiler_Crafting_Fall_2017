@@ -584,12 +584,14 @@ for_stmt	: 	FOR ID
 					myiter_table[iterator_cnt].iterator_level=scope_depth+1;
 					printf("Loop scope depth %d and name %s\n",scope_depth,yytext);
 					error_detection();
+					dumpiterator();
+					iterator_cnt++;
 				}
  			  	OP_ASSIGN int_const TO int_const DO
 			  	opt_stmt_list
 			  	END DO
 				{
-					error_detection();
+					dumpiterator();
 				}
 			;
 
