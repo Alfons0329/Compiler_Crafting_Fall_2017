@@ -97,6 +97,7 @@ program		:	ID
 					global_pre_sub_entry_cnt=global_sub_entry_cnt;
 					is_array = 0;
 					is_function=0;
+					is_loop=0;
 					const_type=0;
 				}
 				MK_SEMICOLON
@@ -528,14 +529,14 @@ compound_stmt	: BEG
 					if(is_function&&scope_depth>1) //prevernt double popping
 					{
 						//printf("pop type 1 function controller is '%d' \n",is_function);
-						error_detection();
+						//error_detection();
 						dumpsymbol();
 						pop_symbol_table();
 					}
-					else /*if(!is_function) *///normal like
+					else if(!is_loop)/*if(!is_function) *///normal like
 					{
 						//printf("pop type 1 function controller is '%d' \n",is_function);
-						error_detection();
+						//error_detection();
 						dumpsymbol();
 						pop_symbol_table();
 					}
@@ -590,10 +591,14 @@ for_stmt	: 	FOR ID
 					error_detection();
 					//dumpiterator();
 					iterator_cnt++;
+					is_loop=1;
 				}
  			  	OP_ASSIGN int_const TO int_const DO
 			  	opt_stmt_list
 			  	END DO
+				{
+					is_loop=0;
+				}
 			;
 
 return_stmt	: RETURN boolean_expr MK_SEMICOLON

@@ -1,5 +1,4 @@
 <id: test>
-test
 <;>
 1: test;
 2: //&T-
@@ -47,6 +46,6 @@ a                                variable   1(local)   integer
 Name                             Kind       Level      Type             Attribute  
 --------------------------------------------------------------------------------------------------------------
 test                             program    0(global)  void             
-func                             function   0(global)  boolean          integer ,real [2][3]
+func                             function   0(global)  boolean          integer, real [2][3]
 --------------------------------------------------------------------------------------------------------------
 21: end test

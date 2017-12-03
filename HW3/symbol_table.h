@@ -30,6 +30,7 @@ int pre_sub_entry_cnt;
 int iterator_cnt;
 int is_function;
 int is_array;
+int is_loop;
 int const_type;
 /*###############################################################################################################
 Implementation abstract;
