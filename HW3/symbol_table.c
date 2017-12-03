@@ -20,6 +20,8 @@ void symbol_table_init()
         }
     }
     scope_depth=0;
+    global_sub_entry_cnt=0;
+    global_pre_sub_entry_cnt=0;
     sub_entry_cnt=0;
     pre_sub_entry_cnt=0;
 }
@@ -106,7 +108,7 @@ void error_detection() //no hashing, just naive solution
         {
             if(!strcmp(mysymbol_table[scope_depth].mysub_entry[i].name,mysymbol_table[scope_depth].mysub_entry[j].name))
             {
-                mysymbol_table[scope_depth].mysub_entry[j].name[0]=0;
+                mysymbol_table[scope_depth].mysub_entry[j].name[0]=0;//mark the error table as not print
                 for(;mysymbol_table[scope_depth].mysub_entry[i].name[pre_redeclared_index]!=0;)
                 {
 

@@ -18,6 +18,7 @@ extern char const_buf[50];
 extern int linenum;		/* declared in lex.l */
 extern int Opt_D;
 int scope_depth;
+int global_pre_sub_entry_cnt;
 int global_sub_entry_cnt;
 int sub_entry_cnt;
 int pre_sub_entry_cnt;

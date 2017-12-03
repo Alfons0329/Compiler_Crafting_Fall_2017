@@ -134,108 +134,164 @@ decl		: VAR	/* scalar type declaration */
  			id_list MK_COLON scalar_type
 			{
 				{printf("7->");}
-
-				for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
+				if(scope_depth==0) //global declaration
 				{
-					mysymbol_table[scope_depth].mysub_entry[i].kind="variable";
-					char* ps_level;
-					char depth_n[100];
-					memset(depth_n,0,sizeof(depth_n));
-					if(scope_depth)
+					for(int i=pre_sub_entry_cnt;i<global_sub_entry_cnt;i++)
 					{
-						depth_n[0]=scope_depth+'0';
-						ps_level="(local)";
-						strcat(depth_n,ps_level);
-					}
-					else
-					{
+						mysymbol_table[scope_depth].mysub_entry[i].kind="variable";
+						char* ps_level;
+						char depth_n[100];
+						memset(depth_n,0,sizeof(depth_n));
+
 						depth_n[0]='0';
 						ps_level="(global)";
 						strcat(depth_n,ps_level);
+
+						strcpy(mysymbol_table[scope_depth].mysub_entry[i].level_str,depth_n);
+						mysymbol_table[scope_depth].mysub_entry[i].type=$4;
 					}
-					strcpy(mysymbol_table[scope_depth].mysub_entry[i].level_str,depth_n);
-					printf("8888888888888888888888888 \n");
-					mysymbol_table[scope_depth].mysub_entry[i].type=$4;
-					printf("8888888888888888888888888 \n");
+					global_pre_sub_entry_cnt=global_sub_entry_cnt; //update it for next segment
+					error_detection();
+					dumpsymbol();
 				}
-				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
-				error_detection();
-				dumpsymbol();
+				else //non global declaration
+				{
+					for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
+					{
+						mysymbol_table[scope_depth].mysub_entry[i].kind="variable";
+						char* ps_level;
+						char depth_n[100];
+						memset(depth_n,0,sizeof(depth_n));
+
+						depth_n[0]=scope_depth+'0';
+						ps_level="(local)";
+						strcat(depth_n,ps_level);
+
+						strcpy(mysymbol_table[scope_depth].mysub_entry[i].level_str,depth_n);
+						mysymbol_table[scope_depth].mysub_entry[i].type=$4;
+					}
+					pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
+					error_detection();
+					dumpsymbol();
+				}
+
 			}
 			MK_SEMICOLON
 			| VAR    /* array type declaration */
 			id_list MK_COLON array_type MK_SEMICOLON
 			{
 				{printf("9->");}
-
-				for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
+				if(scope_depth==0) //global declaration
 				{
-					mysymbol_table[scope_depth].mysub_entry[i].kind="variable";
-					char* ps_level;
-					char depth_n[100];
-					memset(depth_n,0,sizeof(depth_n));
-					if(scope_depth)
+					for(int i=global_pre_sub_entry_cnt;i<global_sub_entry_cnt;i++)
 					{
-						depth_n[0]=scope_depth+'0';
-						ps_level="(local)";
-						strcat(depth_n,ps_level);
-					}
-					else
-					{
+						mysymbol_table[scope_depth].mysub_entry[i].kind="variable";
+						char* ps_level;
+						char depth_n[100];
+						memset(depth_n,0,sizeof(depth_n));
+
 						depth_n[0]='0';
 						ps_level="(global)";
 						strcat(depth_n,ps_level);
-					}
-					strcpy(mysymbol_table[scope_depth].mysub_entry[i].level_str,depth_n);
-					printf("arr buf %s \n",arr_buf);
-					memset(reverse_arr_buf,0,sizeof(reverse_arr_buf));
-					for(int i=49,j=0;i>=0;i--)
-					{
-						if(arr_buf[i]!=0)
+						strcpy(mysymbol_table[scope_depth].mysub_entry[i].level_str,depth_n);
+						printf("arr buf %s \n",arr_buf);
+						memset(reverse_arr_buf,0,sizeof(reverse_arr_buf));
+						for(int i=49,j=0;i>=0;i--)
 						{
-							reverse_arr_buf[j]='[';
-							reverse_arr_buf[j+1]=arr_buf[i];
-							reverse_arr_buf[j+2]=']';
-							j+=3;
+							if(arr_buf[i]!=0)
+							{
+								reverse_arr_buf[j]='[';
+								reverse_arr_buf[j+1]=arr_buf[i];
+								reverse_arr_buf[j+2]=']';
+								j+=3;
+							}
 						}
+						strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,reverse_arr_buf); //altogether using the sprintf to concatenate multiple strings
+						mysymbol_table[scope_depth].mysub_entry[i].is_array_decl=true;
 					}
-					strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,reverse_arr_buf); //altogether using the sprintf to concatenate multiple strings
-
-					mysymbol_table[scope_depth].mysub_entry[i].is_array_decl=true;
+					global_pre_sub_entry_cnt=global_sub_entry_cnt;
+					error_detection();
 				}
-				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
+				else //non global declaration
+				{
+					for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
+					{
+						mysymbol_table[scope_depth].mysub_entry[i].kind="variable";
+						char* ps_level;
+						char depth_n[100];
+						memset(depth_n,0,sizeof(depth_n));
+
+						depth_n[0]=scope_depth+'0';
+						ps_level="(local)";
+						strcat(depth_n,ps_level);
+
+						strcpy(mysymbol_table[scope_depth].mysub_entry[i].level_str,depth_n);
+						printf("arr buf %s \n",arr_buf);
+						memset(reverse_arr_buf,0,sizeof(reverse_arr_buf));
+						for(int i=49,j=0;i>=0;i--)
+						{
+							if(arr_buf[i]!=0)
+							{
+								reverse_arr_buf[j]='[';
+								reverse_arr_buf[j+1]=arr_buf[i];
+								reverse_arr_buf[j+2]=']';
+								j+=3;
+							}
+						}
+						strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,reverse_arr_buf); //altogether using the sprintf to concatenate multiple strings
+						mysymbol_table[scope_depth].mysub_entry[i].is_array_decl=true;
+					}
+					pre_sub_entry_cnt=sub_entry_cnt;
+					error_detection();
+				}
+				 //update it for next segment
 				memset(arr_buf,0,sizeof(arr_buf));
 				is_array=0;//end matching an array, turn off the flag
-				error_detection();
+
 			}
 			| VAR id_list MK_COLON literal_const
 			{
 				{printf("10->");}
-
-				for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
+				if(scope_depth==0) //global declaration
 				{
-					mysymbol_table[scope_depth].mysub_entry[i].kind="constant";
-					char* ps_level;
-					char depth_n[100];
-					memset(depth_n,0,sizeof(depth_n));
-					if(scope_depth)
+					for(int i=global_pre_sub_entry_cnt;i<global_sub_entry_cnt;i++)
 					{
-						depth_n[0]=scope_depth+'0';
-						ps_level="(local)";
-						strcat(depth_n,ps_level);
-					}
-					else
-					{
+						mysymbol_table[scope_depth].mysub_entry[i].kind="constant";
+						char* ps_level;
+						char depth_n[100];
+						memset(depth_n,0,sizeof(depth_n));
+
 						depth_n[0]='0';
 						ps_level="(global)";
 						strcat(depth_n,ps_level);
+
+						strcpy(mysymbol_table[scope_depth].mysub_entry[i].level_str,depth_n);
+						assign_constant_type(scope_depth,i);
 					}
-					strcpy(mysymbol_table[scope_depth].mysub_entry[i].level_str,depth_n);
-					assign_constant_type(scope_depth,i);
+					global_pre_sub_entry_cnt=global_sub_entry_cnt; //update it for next segment
+					error_detection();
+					dumpsymbol();
 				}
-				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
-				error_detection();
-				dumpsymbol();
+				else //non-global declaration
+				{
+					for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
+					{
+						mysymbol_table[scope_depth].mysub_entry[i].kind="constant";
+						char* ps_level;
+						char depth_n[100];
+						memset(depth_n,0,sizeof(depth_n));
+
+						depth_n[0]=scope_depth+'0';
+						ps_level="(local)";
+						strcat(depth_n,ps_level);
+
+						strcpy(mysymbol_table[scope_depth].mysub_entry[i].level_str,depth_n);
+						assign_constant_type(scope_depth,i);
+					}
+					pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
+					error_detection();
+					dumpsymbol();
+				}
 			} /* const declaration */
 			MK_SEMICOLON
 			;
