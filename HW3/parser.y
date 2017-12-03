@@ -99,6 +99,7 @@ program		:	ID
 					strcpy(mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name,yytext);
 					printf("program name %s",mysymbol_table[0].mysub_entry[0].name);
 					global_sub_entry_cnt=1;
+					global_pre_sub_entry_cnt=global_sub_entry_cnt;
 					is_array = 0;
 					is_function=0;
 					const_type=0;
@@ -135,7 +136,7 @@ decl		: VAR	/* scalar type declaration */
 				{printf("7->");}
 				if(scope_depth==0) //global declaration
 				{
-					for(int i=pre_sub_entry_cnt;i<global_sub_entry_cnt;i++)
+					for(int i=global_pre_sub_entry_cnt;i<global_sub_entry_cnt;i++)
 					{
 						mysymbol_table[scope_depth].mysub_entry[i].kind="variable";
 						char* ps_level;
@@ -193,17 +194,46 @@ decl		: VAR	/* scalar type declaration */
 						ps_level="(global)";
 						strcat(depth_n,ps_level);
 						strcpy(mysymbol_table[scope_depth].mysub_entry[i].level_str,depth_n);
-						printf("arr buf %s \n",arr_buf);
+						printf("arr buf %s and table arr type buf %s\n",arr_buf,mysymbol_table[scope_depth].mysub_entry[i].array_type_buf);
 						memset(reverse_arr_buf,0,sizeof(reverse_arr_buf));
-						for(int i=49,j=0;i>=0;i--)
+						int comma_pos=0,reverse_pos=0,quit_parsing_arr_size=0;
+						for(int i=49,rev_index=0;i>=0;)
 						{
-							if(arr_buf[i]!=0)
+
+							if(arr_buf[i]==',')
 							{
-								reverse_arr_buf[j]='[';
-								reverse_arr_buf[j+1]=arr_buf[i];
-								reverse_arr_buf[j+2]=']';
-								j+=3;
+								printf("i at %d \n",i);
+								for(int k=i-1;;k--)
+								{
+									printf("k at %d \n",k);
+									if(arr_buf[k]==',')
+									{
+										comma_pos=k;
+										break;
+									}
+									else if(k==0)
+									{
+										comma_pos=-1; //headtype
+										quit_parsing_arr_size=1;
+										break;
+									}
+								}
+								reverse_arr_buf[reverse_pos]='[';
+								reverse_pos++;
+								for(int j=comma_pos+1;arr_buf[j]!=',';)
+								{
+									reverse_arr_buf[reverse_pos]=arr_buf[j];
+									reverse_pos++;
+									j++;
+								}
+								reverse_arr_buf[reverse_pos]=']';
+								reverse_pos++;
+								i=comma_pos+1;
 							}
+							if(quit_parsing_arr_size)
+								break;
+							else
+								i--;
 						}
 						strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,reverse_arr_buf); //altogether using the sprintf to concatenate multiple strings
 						mysymbol_table[scope_depth].mysub_entry[i].is_array_decl=true;
@@ -223,19 +253,47 @@ decl		: VAR	/* scalar type declaration */
 						depth_n[0]=scope_depth+'0';
 						ps_level="(local)";
 						strcat(depth_n,ps_level);
-
 						strcpy(mysymbol_table[scope_depth].mysub_entry[i].level_str,depth_n);
-						printf("arr buf %s \n",arr_buf);
+						printf("arr buf %s and table arr type buf %s\n",arr_buf,mysymbol_table[scope_depth].mysub_entry[i].array_type_buf);
 						memset(reverse_arr_buf,0,sizeof(reverse_arr_buf));
-						for(int i=49,j=0;i>=0;i--)
+						int comma_pos=0,reverse_pos=0,quit_parsing_arr_size=0;
+						for(int i=49,rev_index=0;i>=0;)
 						{
-							if(arr_buf[i]!=0)
+
+							if(arr_buf[i]==',')
 							{
-								reverse_arr_buf[j]='[';
-								reverse_arr_buf[j+1]=arr_buf[i];
-								reverse_arr_buf[j+2]=']';
-								j+=3;
+								printf("i at %d \n",i);
+								for(int k=i-1;;k--)
+								{
+									printf("k at %d \n",k);
+									if(arr_buf[k]==',')
+									{
+										comma_pos=k;
+										break;
+									}
+									else if(k==0)
+									{
+										comma_pos=-1; //headtype
+										quit_parsing_arr_size=1;
+										break;
+									}
+								}
+								reverse_arr_buf[reverse_pos]='[';
+								reverse_pos++;
+								for(int j=comma_pos+1;arr_buf[j]!=',';)
+								{
+									reverse_arr_buf[reverse_pos]=arr_buf[j];
+									reverse_pos++;
+									j++;
+								}
+								reverse_arr_buf[reverse_pos]=']';
+								reverse_pos++;
+								i=comma_pos+1;
 							}
+							if(quit_parsing_arr_size)
+								break;
+							else
+								i--;
 						}
 						strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,reverse_arr_buf); //altogether using the sprintf to concatenate multiple strings
 						mysymbol_table[scope_depth].mysub_entry[i].is_array_decl=true;
@@ -404,15 +462,44 @@ param		: id_list MK_COLON type
 						printf("Found an array parameter passed in \n");
 						printf("arr buf %s \n",arr_buf);
 						memset(reverse_arr_buf,0,sizeof(reverse_arr_buf));
-						for(int i=49,j=0;i>=0;i--)
+						int comma_pos=0,reverse_pos=0,quit_parsing_arr_size=0;
+						for(int i=49,rev_index=0;i>=0;)
 						{
-							if(arr_buf[i]!=0)
+
+							if(arr_buf[i]==',')
 							{
-								reverse_arr_buf[j]='[';
-								reverse_arr_buf[j+1]=arr_buf[i];
-								reverse_arr_buf[j+2]=']';
-								j+=3;
+								printf("i at %d \n",i);
+								for(int k=i-1;;k--)
+								{
+									printf("k at %d \n",k);
+									if(arr_buf[k]==',')
+									{
+										comma_pos=k;
+										break;
+									}
+									else if(k==0)
+									{
+										comma_pos=-1; //headtype
+										quit_parsing_arr_size=1;
+										break;
+									}
+								}
+								reverse_arr_buf[reverse_pos]='[';
+								reverse_pos++;
+								for(int j=comma_pos+1;arr_buf[j]!=',';)
+								{
+									reverse_arr_buf[reverse_pos]=arr_buf[j];
+									reverse_pos++;
+									j++;
+								}
+								reverse_arr_buf[reverse_pos]=']';
+								reverse_pos++;
+								i=comma_pos+1;
 							}
+							if(quit_parsing_arr_size)
+								break;
+							else
+								i--;
 						}
 						strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,reverse_arr_buf);
 						strcat(funct_attri_buf,mysymbol_table[scope_depth].mysub_entry[i].array_type_buf);
@@ -565,6 +652,7 @@ array_type	: ARRAY
 				printf("\narray dim FROM %s to %s delta is %d\n",$3,$5,delta);
 				sprintf(tmp,"%d",delta);
 				strcat(arr_buf,tmp);
+				strcat(arr_buf,",");
 				printf("Array buf %s \n",arr_buf);
 			}
 			;
