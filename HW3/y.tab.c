@@ -1492,9 +1492,9 @@ yyreduce:
   case 3:
 #line 103 "parser.y" /* yacc.c:1646  */
     {
-					mysymbol_table[0].mysub_entry[0].kind="program";
+					strcpy(mysymbol_table[0].mysub_entry[0].kind,"program");
 					strcpy(mysymbol_table[0].mysub_entry[0].level_str,"0(global)");
-					mysymbol_table[0].mysub_entry[0].type="void";
+					strcpy(mysymbol_table[0].mysub_entry[0].type,"void");
 				}
 #line 1500 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1546,7 +1546,7 @@ yyreduce:
 				{
 					for(int i=global_pre_sub_entry_cnt;i<global_sub_entry_cnt;i++)
 					{
-						mysymbol_table[scope_depth].mysub_entry[i].kind="variable";
+						strcpy(mysymbol_table[scope_depth].mysub_entry[i].kind,"variable");
 						char* ps_level;
 						char depth_n[100];
 						memset(depth_n,0,sizeof(depth_n));
@@ -1556,7 +1556,7 @@ yyreduce:
 						strcat(depth_n,ps_level);
 
 						strcpy(mysymbol_table[scope_depth].mysub_entry[i].level_str,depth_n);
-						mysymbol_table[scope_depth].mysub_entry[i].type=(yyvsp[0]);
+						strcpy(mysymbol_table[scope_depth].mysub_entry[i].type,(yyvsp[0]));
 					}
 					global_pre_sub_entry_cnt=global_sub_entry_cnt; //update it for next segment
 					error_detection();
@@ -1566,7 +1566,7 @@ yyreduce:
 				{
 					for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
 					{
-						mysymbol_table[scope_depth].mysub_entry[i].kind="variable";
+						strcpy(mysymbol_table[scope_depth].mysub_entry[i].kind,"variable");
 						char* ps_level;
 						char depth_n[100];
 						memset(depth_n,0,sizeof(depth_n));
@@ -1576,7 +1576,7 @@ yyreduce:
 						strcat(depth_n,ps_level);
 
 						strcpy(mysymbol_table[scope_depth].mysub_entry[i].level_str,depth_n);
-						mysymbol_table[scope_depth].mysub_entry[i].type=(yyvsp[0]);
+						strcpy(mysymbol_table[scope_depth].mysub_entry[i].type,(yyvsp[0]));
 					}
 					pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
 					error_detection();
@@ -1595,7 +1595,7 @@ yyreduce:
 				{
 					for(int i=global_pre_sub_entry_cnt;i<global_sub_entry_cnt;i++)
 					{
-						mysymbol_table[scope_depth].mysub_entry[i].kind="variable";
+						strcpy(mysymbol_table[scope_depth].mysub_entry[i].kind,"variable");
 						char* ps_level;
 						char depth_n[100];
 						memset(depth_n,0,sizeof(depth_n));
@@ -1616,7 +1616,7 @@ yyreduce:
 				{
 					for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
 					{
-						mysymbol_table[scope_depth].mysub_entry[i].kind="variable";
+						strcpy(mysymbol_table[scope_depth].mysub_entry[i].kind,"variable");
 						char* ps_level;
 						char depth_n[100];
 						memset(depth_n,0,sizeof(depth_n));
@@ -1649,7 +1649,7 @@ yyreduce:
 				{
 					for(int i=global_pre_sub_entry_cnt;i<global_sub_entry_cnt;i++)
 					{
-						mysymbol_table[scope_depth].mysub_entry[i].kind="constant";
+						strcpy(mysymbol_table[scope_depth].mysub_entry[i].kind,"constant");
 						char* ps_level;
 						char depth_n[100];
 						memset(depth_n,0,sizeof(depth_n));
@@ -1669,7 +1669,7 @@ yyreduce:
 				{
 					for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
 					{
-						mysymbol_table[scope_depth].mysub_entry[i].kind="constant";
+						strcpy(mysymbol_table[scope_depth].mysub_entry[i].kind,"constant");
 						char* ps_level;
 						char depth_n[100];
 						memset(depth_n,0,sizeof(depth_n));
@@ -1764,7 +1764,7 @@ yyreduce:
 					scope_depth+=1;
 
 					strcat(mysymbol_table[0].mysub_entry[global_sub_entry_cnt].name,yytext);
-					mysymbol_table[0].mysub_entry[global_sub_entry_cnt].kind="function";
+					strcpy(mysymbol_table[0].mysub_entry[global_sub_entry_cnt].kind,"function");
 					strcpy(mysymbol_table[0].mysub_entry[global_sub_entry_cnt].level_str,"0(global)");
 					printf("Global entry count %d \n",global_sub_entry_cnt);
 					mysymbol_table[0].mysub_entry[global_sub_entry_cnt].is_funct_decl=1;
@@ -1827,7 +1827,7 @@ yyreduce:
 
 				for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
 				{
-					mysymbol_table[scope_depth].mysub_entry[i].kind="parameter";
+					strcpy(mysymbol_table[scope_depth].mysub_entry[i].kind,"parameter");
 					printf("i is now %d and name %s\n",i,mysymbol_table[scope_depth].mysub_entry[i].name);
 					char* ps_level;
 					char depth_n[100];
@@ -1852,7 +1852,7 @@ yyreduce:
 					}
 					else
 					{
-						mysymbol_table[scope_depth].mysub_entry[i].type=(yyvsp[0]);
+						strcpy(mysymbol_table[scope_depth].mysub_entry[i].type,(yyvsp[0]));
 						strcat(funct_attri_buf,mysymbol_table[scope_depth].mysub_entry[i].type);
 						strcat(funct_attri_buf,","); //for indentation
 					}

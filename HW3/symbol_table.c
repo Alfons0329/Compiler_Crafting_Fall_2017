@@ -15,8 +15,8 @@ void symbol_table_init()
         for(int j=0;j<SUB_ENTRY_SIZE;j++)
         {
             memset(mysymbol_table[i].mysub_entry[j].name,0,sizeof(mysymbol_table[i].mysub_entry[j].name));
-            mysymbol_table[i].mysub_entry[j].kind=NULL;
-            mysymbol_table[i].mysub_entry[j].type=NULL;
+            memset(mysymbol_table[i].mysub_entry[j].kind,0,sizeof(mysymbol_table[i].mysub_entry[j].kind));
+            memset(mysymbol_table[i].mysub_entry[j].type,0,sizeof(mysymbol_table[i].mysub_entry[j].type));
             memset(mysymbol_table[i].mysub_entry[j].funct_type_buf,0,sizeof(mysymbol_table[i].mysub_entry[j].funct_type_buf));
             memset(mysymbol_table[i].mysub_entry[j].attri_type_buf,0,sizeof(mysymbol_table[i].mysub_entry[j].attri_type_buf));
             memset(mysymbol_table[i].mysub_entry[j].array_type_buf,0,sizeof(mysymbol_table[i].mysub_entry[j].array_type_buf));
@@ -76,7 +76,7 @@ void dumpsymbol()
         {
             for(int j=0;j<32;j++)
             {
-                printf("%c",mysymbol_table[scope_depth].mysub_entry[i].name[j]); //cool method lolol
+                printf("%c",mysymbol_table[scope_depth].mysub_entry[i].name[j]==0?32:mysymbol_table[scope_depth].mysub_entry[i].name[j]); //cool method lolol
             }
             printf(" ");
         }
@@ -248,32 +248,32 @@ void assign_constant_type(int scope_depth,int index)
 
         case 1 ... 2:
         {
-            mysymbol_table[scope_depth].mysub_entry[index].type="integer";
+            strcpy(mysymbol_table[scope_depth].mysub_entry[index].type,"integer");
             break;
         }
         case 3 ... 4:
         {
-            mysymbol_table[scope_depth].mysub_entry[index].type="real";
+            strcpy(mysymbol_table[scope_depth].mysub_entry[index].type,"real");
             break;
         }
         case 5 ... 6:
         {
-            mysymbol_table[scope_depth].mysub_entry[index].type="real";
+            strcpy(mysymbol_table[scope_depth].mysub_entry[index].type,"real");
             break;
         }
         case 7:
         {
-            mysymbol_table[scope_depth].mysub_entry[index].type="string";
+            strcpy(mysymbol_table[scope_depth].mysub_entry[index].type,"string");
             break;
         }
         case 8:
         {
-            mysymbol_table[scope_depth].mysub_entry[index].type="boolean";
+            strcpy(mysymbol_table[scope_depth].mysub_entry[index].type,"boolean");
             break;
         }
         case 9 ... 10:
         {
-            mysymbol_table[scope_depth].mysub_entry[index].type="integer";
+            strcpy(mysymbol_table[scope_depth].mysub_entry[index].type,"integer");
             break;
         }
     }

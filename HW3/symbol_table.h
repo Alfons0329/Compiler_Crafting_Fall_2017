@@ -57,9 +57,9 @@ strcat all the type in same buf
 struct sub_entry //the real entry for inserting the value
 {
     char name[NAME_SIZE];
-    char* kind;
+    char kind[11];
     char level_str[LEVEL_STR_SIZE];
-    char* type;
+    char type[17];
     char funct_type_buf[FUNCT_BUF_SIZE];
     char attri_type_buf[ATTRI_BUF_SIZE];
     char array_type_buf[ARRAY_BUF_SIZE];
