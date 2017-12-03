@@ -9,13 +9,13 @@
 #include "y.tab.h"
 #include "symbol_table.h"
 #define LIST strcat( buf, yytext )
-#define token(t) { LIST; if (Opt_T) printf("<%s>\n", #t );}
-#define tokenChar(t) { LIST; if (Opt_T) printf("<%c>\n", t );}
-#define tokenInteger(t, i) { LIST; if (Opt_T) printf("<%s: %d>\n", t, i); }
-#define tokenOctInteger(t, i) { LIST; if (Opt_T) printf("<%s: %s>\n", t, i); }
-#define tokenFloat(t, i) { LIST; if (Opt_T) printf("<%s: %s>\n", t, i ); }
-#define tokenScientific(t, s) { LIST; if ( Opt_T ) printf("<%s: %s>\n", t, s); }
-#define tokenString(t, s) { LIST; if (Opt_T) printf("<%s: %s>\n", t, s); }
+#define token(t) { LIST; if (Opt_T)printf("<%s>\n", #t );}
+#define tokenChar(t) { LIST; if (Opt_T)printf("<%c>\n", t );}
+#define tokenInteger(t, i) { LIST; if (Opt_T)printf("<%s: %d>\n", t, i); }
+#define tokenOctInteger(t, i) { LIST; if (Opt_T)printf("<%s: %s>\n", t, i); }
+#define tokenFloat(t, i) { LIST; if (Opt_T)printf("<%s: %s>\n", t, i ); }
+#define tokenScientific(t, s) { LIST; if ( Opt_T )printf("<%s: %s>\n", t, s); }
+#define tokenString(t, s) { LIST; if (Opt_T)printf("<%s: %s>\n", t, s); }
 
 #define  MAX_LINE_LENG  256
 int Opt_D = 1;
@@ -184,7 +184,6 @@ void setPseudoComment( const char *text )
 	switch( text[3] )
 	{
 	 case 'S':			/* Source code */
-	 /* format : //&[A-Z][+-] */
 		if( text[4] == '+' )
 			Opt_S = 1;
 		else if( text[4] == '-' )
@@ -194,7 +193,9 @@ void setPseudoComment( const char *text )
 		if( text[4] == '+' )
 			Opt_T = 1;
 		else if( text[4] == '-' )
+		{
 			Opt_T = 0;
+		}
 	 	break;
 	case 'D'://dumo the symbol table
 		if( text[4] == '+' )
