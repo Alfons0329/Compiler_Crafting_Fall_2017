@@ -122,10 +122,12 @@ void error_detection() //no hashing, just naive solution
     int redeclared_index=0,is_error=0,is_parsed=0,pre_redeclared_index=0;
     for(int i=0;i<SUB_ENTRY_SIZE;i++)
     {
+        printf("\ni now %dname first %s ",i,mysymbol_table[scope_depth].mysub_entry[i].name);
         if(mysymbol_table[scope_depth].mysub_entry[i].name[0]==0)
-            break;
+            continue;
         for(int j=i+1;j<SUB_ENTRY_SIZE;j++)
         {
+            printf("j now %dand %s \n",j,mysymbol_table[scope_depth].mysub_entry[j].name);
             if(!strncmp(mysymbol_table[scope_depth].mysub_entry[i].name,mysymbol_table[scope_depth].mysub_entry[j].name,32))
             {
                 mysymbol_table[scope_depth].mysub_entry[j].name[0]=0;//mark the error table as not print

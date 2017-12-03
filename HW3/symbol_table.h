@@ -8,7 +8,7 @@
 #define SUB_ENTRY_SIZE 20
 #define ITERATOR_TABLE_SIZE 100
 #define ITER_NAME_SIZE 32
-#define NAME_SIZE 32
+#define NAME_SIZE 40
 #define TYPE_SIZE 40
 #define LEVEL_STR_SIZE 20
 #define FUNCT_BUF_SIZE 100
