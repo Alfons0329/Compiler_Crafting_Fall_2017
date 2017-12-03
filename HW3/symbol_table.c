@@ -261,3 +261,23 @@ void assign_constant_type(int scope_depth,int index)
     }
     strcpy(mysymbol_table[scope_depth].mysub_entry[index].attri_type_buf,const_buf);
 }
+void assign_scalar_type(char* type_in)
+{
+    printf("type in %s \n",type_in);
+    if(scope_depth==0)
+    {
+        for(int i=global_pre_sub_entry_cnt;i<global_sub_entry_cnt;i++)
+        {
+            strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,type_in);
+            printf("assigned attribute type buf %s\n",mysymbol_table[scope_depth].mysub_entry[i].array_type_buf);
+        }
+    }
+    else
+    {
+        for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
+        {
+            strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,type_in);
+            printf("assigned attribute type buf %s\n",mysymbol_table[scope_depth].mysub_entry[i].array_type_buf);
+        }
+    }
+}

@@ -25,11 +25,6 @@ extern int linenum;		/* declared in lex.l */
 
 int yyerror(char* );
 //0 not constant, 1 int 2 -int  3 float 4 -float 5 scientific 6 -scientific 7 string 8 bool 9 OCTAL 10 -OCTAL
-/*
-printf template for debugging
-
-printf("0->")
-*/
 
 %}
 /* tokens */
@@ -570,71 +565,29 @@ type		: scalar_type {$$=$1;} /*type transmittion*/
 scalar_type	: INTEGER
 			{
 				{printf("16->");}
-				printf("TYPE is %s",yytext);
 				$$="integer";
-				if(is_array)
-				{
-					for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
-					{
-						strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,"integer ");
-					}
-				}
-				else if(is_function)
-				{
-					strcat(funct_type_buf_parser,"integer ");
-				}
-				printf("match $$:%s \n",$$);
+				assign_scalar_type($$);
 			}
 			| REAL
 			{
 				{printf("17->");}
 				printf("TYPE is %s",yytext);
 				$$="real";
-				if(is_array)
-				{
-					for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
-					{
-						strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,"real ");
-					}
-				}
-				else if(is_function)
-				{
-					strcat(funct_type_buf_parser,"real ");
-				}
+				assign_scalar_type($$);
 			}
 			| BOOLEAN
 			{
 				{printf("18->");}
 				printf("TYPE is %s",yytext);
 				$$="boolean";
-				if(is_array)
-				{
-					for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
-					{
-						strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,"boolean ");
-					}
-				}
-				else if(is_function)
-				{
-					strcat(funct_type_buf_parser,"boolean ");
-				}
+				assign_scalar_type($$);
 			}
 			| STRING
 			{
 				{printf("19->");}
 				printf("TYPE is %s",yytext);
 				$$="string";
-				if(is_array)
-				{
-					for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
-					{
-						strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,"string ");
-					}
-				}
-				else if(is_function)
-				{
-					strcat(funct_type_buf_parser,"string ");
-				}
+				assign_scalar_type($$);
 			}
 			;
 
