@@ -1,8 +1,8 @@
 test;
+// no global declaration(s)
 func( a:integer ; b:array 1 to 2 of array 2 to 4 of real ): boolean;
 begin
-    var KAc, kr: "hello world";
-    var KAc, kr: "hell";
+    var c: "hello world!";
     begin
         var d: real;
         return (b[1][4] >= 1.0);

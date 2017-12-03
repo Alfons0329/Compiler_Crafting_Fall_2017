@@ -108,7 +108,7 @@ program		:	ID
 					strcpy(mysymbol_table[0].mysub_entry[0].level_str,"0(global)");
 					mysymbol_table[0].mysub_entry[0].type="void";
 
-					dumpsymbol();
+					//dumpsymbol();
 				}
 			  	program_body
 			  	END ID
@@ -160,7 +160,7 @@ decl		: VAR	/* scalar type declaration */
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
 				error_detection();
-				dumpsymbol();
+				//dumpsymbol();
 			}
 			MK_SEMICOLON
 			| VAR    /* array type declaration */
@@ -206,6 +206,7 @@ decl		: VAR	/* scalar type declaration */
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
 				memset(arr_buf,0,sizeof(arr_buf));
 				is_array=0;//end matching an array, turn off the flag
+				error_detection();
 			}
 			| VAR id_list MK_COLON literal_const
 			{
@@ -234,7 +235,7 @@ decl		: VAR	/* scalar type declaration */
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
 				error_detection();
-				dumpsymbol();
+				//dumpsymbol();
 			} /* const declaration */
 			MK_SEMICOLON
 			;
@@ -265,18 +266,19 @@ func_decl_list		: func_decl_list func_decl
 func_decl	: 	ID
 				{
 					{printf("11->");}
-					scope_depth++;
 					sub_entry_cnt=0;
 					pre_sub_entry_cnt=0;
 					printf("compound_stmt begin\n");
+					scope_depth+=1;
 					is_function=1;
-
 				}
  				MK_LPAREN opt_param_list MK_RPAREN opt_type MK_SEMICOLON
+				{
+					scope_depth-=1;
+				}
 			  	compound_stmt
 			  	END
 				{
-					//scope_depth--;
 					{printf("12->");}
 					for(int i=0;i<SUB_ENTRY_SIZE;i++)
 					{
@@ -285,16 +287,17 @@ func_decl	: 	ID
 						{
 							if(mysymbol_table[1].mysub_entry[i].is_array_decl)
 							{
-								strcat(mysymbol_table[0].mysub_entry[sub_entry_cnt].attri_type_buf,arr_buf);
+								strcat(mysymbol_table[1].mysub_entry[sub_entry_cnt].attri_type_buf,arr_buf);
 							}
 							else
 							{
-								strcat(mysymbol_table[0].mysub_entry[sub_entry_cnt].attri_type_buf,$5);
+								strcat(mysymbol_table[1].mysub_entry[sub_entry_cnt].attri_type_buf,$5);
 							}
 						}
 					}
-					pop_symbol_table();
 					dumpsymbol();
+					pop_symbol_table(); //function pop itself
+					is_function=0;
 				}
 				ID
 			;
@@ -476,14 +479,18 @@ stmt		: compound_stmt
 compound_stmt	: BEG
 				{
 					{printf("22->");}
-					if(!is_function)
+					if(scope_depth==0)
 					{
-						sub_entry_cnt=0;
-						pre_sub_entry_cnt=0;
 						scope_depth++;
 					}
-					is_function=0;
+					else
+					{
+						scope_depth++;
+						sub_entry_cnt=0;
+						pre_sub_entry_cnt=0;
+					}
 					printf("compound_stmt begin\n");
+					printf("Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d \n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt);
 
 				}
 			  	opt_decl_list
@@ -492,9 +499,11 @@ compound_stmt	: BEG
 				{
 					{printf("23->");}
 					printf("compound_stmt end\n");
-
-					pop_symbol_table();
-					dumpsymbol();
+					if(scope_depth>1) //prevernt double popping
+					{
+						pop_symbol_table();
+						dumpsymbol();
+					}
 				}
 			;
 
