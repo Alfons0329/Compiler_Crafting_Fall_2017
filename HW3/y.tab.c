@@ -561,12 +561,12 @@ static const yytype_uint16 yyrline[] =
      263,   267,   276,   281,   266,   305,   306,   309,   310,   313,
      364,   375,   389,   390,   393,   394,   397,   411,   424,   437,
      453,   452,   470,   471,   472,   473,   474,   475,   476,   480,
-     479,   525,   526,   529,   530,   533,   534,   535,   538,   541,
-     546,   549,   554,   559,   562,   563,   566,   567,   570,   571,
-     574,   575,   578,   579,   582,   583,   586,   587,   588,   589,
-     590,   591,   594,   595,   598,   599,   602,   603,   606,   607,
-     608,   611,   612,   613,   614,   615,   616,   617,   620,   621,
-     624
+     479,   527,   528,   531,   532,   535,   536,   537,   540,   543,
+     548,   551,   556,   561,   564,   565,   568,   569,   572,   573,
+     576,   577,   580,   581,   584,   585,   588,   589,   590,   591,
+     592,   593,   596,   597,   600,   601,   604,   605,   608,   609,
+     610,   613,   614,   615,   616,   617,   618,   619,   622,   623,
+     626
 };
 #endif
 
@@ -1654,7 +1654,7 @@ yyreduce:
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
 				error_detection();
-				//dumpsymbol();
+				dumpsymbol();
 			}
 #line 1660 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1750,7 +1750,7 @@ yyreduce:
 #line 281 "parser.y" /* yacc.c:1646  */
     {
 					{printf("12->");}
-					for(int i=0;i<SUB_ENTRY_SIZE;i++)
+					/*for(int i=0;i<SUB_ENTRY_SIZE;i++)
 					{
 						//find the fucking parameter
 						if(mysymbol_table[1].mysub_entry[i].kind=="parameter")
@@ -1761,10 +1761,10 @@ yyreduce:
 							}
 							else
 							{
-								strcat(mysymbol_table[1].mysub_entry[sub_entry_cnt].attri_type_buf,(yyvsp[-5]));
+								strcat(mysymbol_table[1].mysub_entry[sub_entry_cnt].attri_type_buf,$5);
 							}
 						}
-					}
+					}*/
 					dumpsymbol();
 					pop_symbol_table(); //function pop itself
 					is_function=0;
@@ -1965,7 +1965,7 @@ yyreduce:
 #line 480 "parser.y" /* yacc.c:1646  */
     {
 					{printf("22->");}
-					if(scope_depth==0)
+					if(scope_depth==0&&is_function)
 					{
 						scope_depth++;
 					}
@@ -1990,10 +1990,16 @@ yyreduce:
 					printf("Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d \n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt);
 					if(is_function&&scope_depth>1) //prevernt double popping
 					{
+						printf("pop type 1 function controller is '%d' \n",is_function);
 						dumpsymbol();
 						pop_symbol_table();
 					}
 					else if(!is_function) //normal like
+					{
+						printf("pop type 1 function controller is '%d' \n",is_function);
+						dumpsymbol();
+						pop_symbol_table();
+					}
 					/*
 					begin
 					    var a: integer;
@@ -2003,16 +2009,12 @@ yyreduce:
 					// outer ’a’ has been hidden in this scope
 					end just directly popping, rather than waiting till the end test!
 					*/
-					{
-						dumpsymbol();
-						pop_symbol_table();
-					}
 				}
-#line 2012 "y.tab.c" /* yacc.c:1646  */
+#line 2014 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 2016 "y.tab.c" /* yacc.c:1646  */
+#line 2018 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2240,7 +2242,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 627 "parser.y" /* yacc.c:1906  */
+#line 629 "parser.y" /* yacc.c:1906  */
 
 
 int yyerror( char *msg )

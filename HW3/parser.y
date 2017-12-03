@@ -235,7 +235,7 @@ decl		: VAR	/* scalar type declaration */
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
 				error_detection();
-				//dumpsymbol();
+				dumpsymbol();
 			} /* const declaration */
 			MK_SEMICOLON
 			;
@@ -280,7 +280,7 @@ func_decl	: 	ID
 			  	END
 				{
 					{printf("12->");}
-					for(int i=0;i<SUB_ENTRY_SIZE;i++)
+					/*for(int i=0;i<SUB_ENTRY_SIZE;i++)
 					{
 						//find the fucking parameter
 						if(mysymbol_table[1].mysub_entry[i].kind=="parameter")
@@ -294,7 +294,7 @@ func_decl	: 	ID
 								strcat(mysymbol_table[1].mysub_entry[sub_entry_cnt].attri_type_buf,$5);
 							}
 						}
-					}
+					}*/
 					dumpsymbol();
 					pop_symbol_table(); //function pop itself
 					is_function=0;
@@ -479,7 +479,7 @@ stmt		: compound_stmt
 compound_stmt	: BEG
 				{
 					{printf("22->");}
-					if(scope_depth==0)
+					if(scope_depth==0&&is_function)
 					{
 						scope_depth++;
 					}
@@ -502,10 +502,16 @@ compound_stmt	: BEG
 					printf("Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d \n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt);
 					if(is_function&&scope_depth>1) //prevernt double popping
 					{
+						printf("pop type 1 function controller is '%d' \n",is_function);
 						dumpsymbol();
 						pop_symbol_table();
 					}
 					else if(!is_function) //normal like
+					{
+						printf("pop type 1 function controller is '%d' \n",is_function);
+						dumpsymbol();
+						pop_symbol_table();
+					}
 					/*
 					begin
 					    var a: integer;
@@ -515,10 +521,6 @@ compound_stmt	: BEG
 					// outer ’a’ has been hidden in this scope
 					end just directly popping, rather than waiting till the end test!
 					*/
-					{
-						dumpsymbol();
-						pop_symbol_table();
-					}
 				}
 			;
 
