@@ -13,8 +13,9 @@
 #define ARRAY_BUF_SIZE 100
 #define PARAM_BUF_SIZE 100
 extern char *yytext;
+extern char arr_buf[50];
+extern char reverse_arr_buf[50];
 extern char const_buf[50];
-
 extern int linenum;		/* declared in lex.l */
 extern int Opt_D;
 int scope_depth;
@@ -72,3 +73,4 @@ void dumpsymbol();
 void error_detection(); //no hashing, just naive solution
 void parse_constant();
 void assign_scalar_type(char* );
+void array_dimension_parser();

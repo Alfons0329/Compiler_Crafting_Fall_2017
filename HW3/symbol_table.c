@@ -281,3 +281,46 @@ void assign_scalar_type(char* type_in)
         }
     }
 }
+void array_dimension_parser()
+{
+    memset(reverse_arr_buf,0,sizeof(reverse_arr_buf));
+    int comma_pos=0,reverse_pos=0,quit_parsing_arr_size=0;
+    for(int i=49,rev_index=0;i>=0;)
+    {
+
+        if(arr_buf[i]==',')
+        {
+
+            for(int k=i-1;;k--)
+            {
+
+                if(arr_buf[k]==',')
+                {
+                    comma_pos=k;
+                    break;
+                }
+                else if(k==0)
+                {
+                    comma_pos=-1; //headtype
+                    quit_parsing_arr_size=1;
+                    break;
+                }
+            }
+            reverse_arr_buf[reverse_pos]='[';
+            reverse_pos++;
+            for(int j=comma_pos+1;arr_buf[j]!=',';)
+            {
+                reverse_arr_buf[reverse_pos]=arr_buf[j];
+                reverse_pos++;
+                j++;
+            }
+            reverse_arr_buf[reverse_pos]=']';
+            reverse_pos++;
+            i=comma_pos+1;
+        }
+        if(quit_parsing_arr_size)
+            break;
+        else
+            i--;
+    }
+}

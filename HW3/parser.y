@@ -190,46 +190,7 @@ decl		: VAR	/* scalar type declaration */
 						strcat(depth_n,ps_level);
 						strcpy(mysymbol_table[scope_depth].mysub_entry[i].level_str,depth_n);
 						printf("arr buf %s and table arr type buf %s\n",arr_buf,mysymbol_table[scope_depth].mysub_entry[i].array_type_buf);
-						memset(reverse_arr_buf,0,sizeof(reverse_arr_buf));
-						int comma_pos=0,reverse_pos=0,quit_parsing_arr_size=0;
-						for(int i=49,rev_index=0;i>=0;)
-						{
-
-							if(arr_buf[i]==',')
-							{
-
-								for(int k=i-1;;k--)
-								{
-
-									if(arr_buf[k]==',')
-									{
-										comma_pos=k;
-										break;
-									}
-									else if(k==0)
-									{
-										comma_pos=-1; //headtype
-										quit_parsing_arr_size=1;
-										break;
-									}
-								}
-								reverse_arr_buf[reverse_pos]='[';
-								reverse_pos++;
-								for(int j=comma_pos+1;arr_buf[j]!=',';)
-								{
-									reverse_arr_buf[reverse_pos]=arr_buf[j];
-									reverse_pos++;
-									j++;
-								}
-								reverse_arr_buf[reverse_pos]=']';
-								reverse_pos++;
-								i=comma_pos+1;
-							}
-							if(quit_parsing_arr_size)
-								break;
-							else
-								i--;
-						}
+						array_dimension_parser();
 						strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,reverse_arr_buf); //altogether using the sprintf to concatenate multiple strings
 						mysymbol_table[scope_depth].mysub_entry[i].is_array_decl=true;
 					}
@@ -250,46 +211,7 @@ decl		: VAR	/* scalar type declaration */
 						strcat(depth_n,ps_level);
 						strcpy(mysymbol_table[scope_depth].mysub_entry[i].level_str,depth_n);
 						printf("arr buf %s and table arr type buf %s\n",arr_buf,mysymbol_table[scope_depth].mysub_entry[i].array_type_buf);
-						memset(reverse_arr_buf,0,sizeof(reverse_arr_buf));
-						int comma_pos=0,reverse_pos=0,quit_parsing_arr_size=0;
-						for(int i=49,rev_index=0;i>=0;)
-						{
-
-							if(arr_buf[i]==',')
-							{
-
-								for(int k=i-1;;k--)
-								{
-
-									if(arr_buf[k]==',')
-									{
-										comma_pos=k;
-										break;
-									}
-									else if(k==0)
-									{
-										comma_pos=-1; //headtype
-										quit_parsing_arr_size=1;
-										break;
-									}
-								}
-								reverse_arr_buf[reverse_pos]='[';
-								reverse_pos++;
-								for(int j=comma_pos+1;arr_buf[j]!=',';)
-								{
-									reverse_arr_buf[reverse_pos]=arr_buf[j];
-									reverse_pos++;
-									j++;
-								}
-								reverse_arr_buf[reverse_pos]=']';
-								reverse_pos++;
-								i=comma_pos+1;
-							}
-							if(quit_parsing_arr_size)
-								break;
-							else
-								i--;
-						}
+						array_dimension_parser();
 						strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,reverse_arr_buf); //altogether using the sprintf to concatenate multiple strings
 						mysymbol_table[scope_depth].mysub_entry[i].is_array_decl=true;
 					}
@@ -456,46 +378,7 @@ param		: id_list MK_COLON type
 					{
 						printf("Found an array parameter passed in \n");
 						printf("arr buf %s \n",arr_buf);
-						memset(reverse_arr_buf,0,sizeof(reverse_arr_buf));
-						int comma_pos=0,reverse_pos=0,quit_parsing_arr_size=0;
-						for(int i=49,rev_index=0;i>=0;)
-						{
-
-							if(arr_buf[i]==',')
-							{
-
-								for(int k=i-1;;k--)
-								{
-
-									if(arr_buf[k]==',')
-									{
-										comma_pos=k;
-										break;
-									}
-									else if(k==0)
-									{
-										comma_pos=-1; //headtype
-										quit_parsing_arr_size=1;
-										break;
-									}
-								}
-								reverse_arr_buf[reverse_pos]='[';
-								reverse_pos++;
-								for(int j=comma_pos+1;arr_buf[j]!=',';)
-								{
-									reverse_arr_buf[reverse_pos]=arr_buf[j];
-									reverse_pos++;
-									j++;
-								}
-								reverse_arr_buf[reverse_pos]=']';
-								reverse_pos++;
-								i=comma_pos+1;
-							}
-							if(quit_parsing_arr_size)
-								break;
-							else
-								i--;
-						}
+						array_dimension_parser();
 						strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,reverse_arr_buf);
 						strcat(funct_attri_buf,mysymbol_table[scope_depth].mysub_entry[i].array_type_buf);
 						strcat(funct_attri_buf," "); //for indentation
