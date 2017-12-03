@@ -80,7 +80,7 @@ void dumpsymbol()
         }
         else if(mysymbol_table[scope_depth].mysub_entry[i].is_funct_decl)
         {
-            printf("%-17s",mysymbol_table[scope_depth].mysub_entry[i].funct_type_buf);
+            printf("%-17s",mysymbol_table[scope_depth].mysub_entry[i].funct_type_buf[0]==0?"void":mysymbol_table[scope_depth].mysub_entry[i].funct_type_buf);
         }
         else
         {
@@ -263,21 +263,32 @@ void assign_constant_type(int scope_depth,int index)
 }
 void assign_scalar_type(char* type_in)
 {
-    printf("type in %s \n",type_in);
+    printf("type in %s FUNCTION OR NOTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT %d\n",type_in,is_function);
+    printf("(In dump function)Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d global_pre_sub_entry_cnt %d global_sub_entry_cnt %d\n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt,global_pre_sub_entry_cnt,global_sub_entry_cnt);
     if(scope_depth==0)
     {
-        for(int i=global_pre_sub_entry_cnt;i<global_sub_entry_cnt;i++)
+        if(is_function)
         {
-            strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,type_in);
-            printf("assigned attribute type buf %s\n",mysymbol_table[scope_depth].mysub_entry[i].array_type_buf);
+            printf("TYPE IN LOOP %s \n\n",type_in);
+            for(int i=global_pre_sub_entry_cnt;i<global_sub_entry_cnt;i++)
+            {
+                strcat(mysymbol_table[scope_depth].mysub_entry[i].funct_type_buf,type_in);
+            }
         }
+        else
+        {
+            for(int i=global_pre_sub_entry_cnt;i<global_sub_entry_cnt;i++)
+            {
+                strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,type_in);
+            }
+        }
+
     }
     else
     {
         for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
         {
             strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,type_in);
-            printf("assigned attribute type buf %s\n",mysymbol_table[scope_depth].mysub_entry[i].array_type_buf);
         }
     }
 }

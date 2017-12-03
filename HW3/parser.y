@@ -305,35 +305,33 @@ func_decl	: 	ID
 					strcpy(mysymbol_table[0].mysub_entry[global_sub_entry_cnt].level_str,"0(global)");
 					printf("Global entry count %d \n",global_sub_entry_cnt);
 					mysymbol_table[0].mysub_entry[global_sub_entry_cnt].is_funct_decl=1;
-					memset(funct_type_buf_parser,0,sizeof(funct_type_buf_parser));
+					//memset(funct_type_buf_parser,0,sizeof(funct_type_buf_parser));
 					memset(funct_attri_buf,0,sizeof(funct_attri_buf));
 
 				}
  				MK_LPAREN opt_param_list MK_RPAREN
 				{
 					is_function=1;
+					scope_depth-=1;
+					global_sub_entry_cnt++;
 				}
 				opt_type MK_SEMICOLON
 				{
 					 //is_function=1 here will be better
-					scope_depth-=1;
+
 					//setting the function type
 					if(is_array)
 					{
-						strcat(mysymbol_table[0].mysub_entry[global_sub_entry_cnt].funct_type_buf,funct_type_buf_parser);
-						strcat(mysymbol_table[0].mysub_entry[global_sub_entry_cnt].funct_type_buf,arr_buf);
-					}
-					else
-					{
-						strcat(mysymbol_table[0].mysub_entry[global_sub_entry_cnt].funct_type_buf,funct_type_buf_parser);
+						strcat(mysymbol_table[0].mysub_entry[global_sub_entry_cnt-1].funct_type_buf,arr_buf);
 					}
 					//setting the function attribute(parameter which passed in)
-					strcat(mysymbol_table[0].mysub_entry[global_sub_entry_cnt].attri_type_buf,funct_attri_buf);
-					printf("Function attribute %s after parsing and function type %s \n",mysymbol_table[0].mysub_entry[global_sub_entry_cnt].attri_type_buf,mysymbol_table[0].mysub_entry[global_sub_entry_cnt].funct_type_buf);
+					strcat(mysymbol_table[0].mysub_entry[global_sub_entry_cnt-1].attri_type_buf,funct_attri_buf);
+					printf("Function attribute %s after parsing and function type %s \n",mysymbol_table[0].mysub_entry[global_sub_entry_cnt-1].attri_type_buf,mysymbol_table[0].mysub_entry[global_sub_entry_cnt-1].funct_type_buf);
 					printf("dump function symbol test \n");
 					dumpsymbol();
+					global_pre_sub_entry_cnt=global_sub_entry_cnt;
 					is_array=0;
-					global_sub_entry_cnt++; //global function end by 1
+					 //global function end by 1
 				}
 			  	compound_stmt
 			  	END

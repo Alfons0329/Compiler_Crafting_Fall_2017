@@ -16,6 +16,7 @@ extern char *yytext;
 extern char arr_buf[50];
 extern char reverse_arr_buf[50];
 extern char const_buf[50];
+extern char funct_type_buf_parser[50];
 extern int linenum;		/* declared in lex.l */
 extern int Opt_D;
 int scope_depth;
