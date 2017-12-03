@@ -579,19 +579,11 @@ while_stmt	: WHILE boolean_expr DO
 			;
 
 for_stmt	: 	FOR ID
-				/*if(scope_depth==0) //global declaration
 				{
-					strcpy(mysymbol_table[0].mysub_entry[global_sub_entry_cnt+1].name,yytext);
-
-					global_sub_entry_cnt++;
+					strcpy(myiter_table[iterator_cnt].iterator_name,yytext);
+					myiter_table[iterator_cnt].iterator_level=scope_depth;
+					printf("Loop scope depth %d and name %s\n",scope_depth,yytext);
 				}
-				else //non global declaration
-				{
-					strcpy(mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt+1].name,yytext);
-					sub_entry_cnt++;
-				}
-				printf(" AND PASSED IN ID NAME %s \n",mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name);
-				dumpsymbol();*/
  			  	OP_ASSIGN int_const TO int_const DO
 			  	opt_stmt_list
 			  	END DO

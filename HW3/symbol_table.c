@@ -15,6 +15,8 @@ void symbol_table_init()
         for(int j=0;j<SUB_ENTRY_SIZE;j++)
         {
             memset(mysymbol_table[i].mysub_entry[j].name,0,sizeof(mysymbol_table[i].mysub_entry[j].name));
+            mysymbol_table[i].mysub_entry[j].kind=NULL;
+            mysymbol_table[i].mysub_entry[j].type=NULL;
             memset(mysymbol_table[i].mysub_entry[j].funct_type_buf,0,sizeof(mysymbol_table[i].mysub_entry[j].funct_type_buf));
             memset(mysymbol_table[i].mysub_entry[j].attri_type_buf,0,sizeof(mysymbol_table[i].mysub_entry[j].attri_type_buf));
             memset(mysymbol_table[i].mysub_entry[j].array_type_buf,0,sizeof(mysymbol_table[i].mysub_entry[j].array_type_buf));
@@ -29,6 +31,7 @@ void symbol_table_init()
     global_pre_sub_entry_cnt=0;
     sub_entry_cnt=0;
     pre_sub_entry_cnt=0;
+    iterator_cnt=0;
 }
 void pop_symbol_table()
 {
@@ -69,19 +72,21 @@ void dumpsymbol()
         if(mysymbol_table[scope_depth].mysub_entry[i].name[0]==0)
             continue;
 
-        if(mysymbol_table[scope_depth].mysub_entry[i].name[35]!=0)
+        if(mysymbol_table[scope_depth].mysub_entry[i].name[33]!=0)
         {
-            for(int j=0;j<33;j++)
+            for(int j=0;j<32;j++)
             {
                 printf("%c",mysymbol_table[scope_depth].mysub_entry[i].name[j]); //cool method lolol
             }
+            printf(" ");
         }
         else
         {
             printf("%-33s",mysymbol_table[scope_depth].mysub_entry[i].name);
         }
+        if(mysymbol_table[scope_depth].mysub_entry[i].kind)
+            printf("%-11s",mysymbol_table[scope_depth].mysub_entry[i].kind);
 
-        printf("%-11s",mysymbol_table[scope_depth].mysub_entry[i].kind);
         printf("%-11s",mysymbol_table[scope_depth].mysub_entry[i].level_str);
         if(mysymbol_table[scope_depth].mysub_entry[i].is_array_decl)
         {
@@ -121,10 +126,10 @@ void error_detection() //no hashing, just naive solution
             break;
         for(int j=i+1;j<SUB_ENTRY_SIZE;j++)
         {
-            if(!strcmp(mysymbol_table[scope_depth].mysub_entry[i].name,mysymbol_table[scope_depth].mysub_entry[j].name))
+            if(!strncmp(mysymbol_table[scope_depth].mysub_entry[i].name,mysymbol_table[scope_depth].mysub_entry[j].name,32))
             {
                 mysymbol_table[scope_depth].mysub_entry[j].name[0]=0;//mark the error table as not print
-                for(;mysymbol_table[scope_depth].mysub_entry[i].name[pre_redeclared_index]!=0;)
+                for(;mysymbol_table[scope_depth].mysub_entry[i].name[pre_redeclared_index]!=0&&pre_redeclared_index<33;)
                 {
 
                     printf("push name %c\n",mysymbol_table[scope_depth].mysub_entry[i].name[pre_redeclared_index]);

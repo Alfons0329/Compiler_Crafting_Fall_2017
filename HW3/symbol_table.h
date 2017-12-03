@@ -27,6 +27,7 @@ int global_pre_sub_entry_cnt;
 int global_sub_entry_cnt;
 int sub_entry_cnt;
 int pre_sub_entry_cnt;
+int iterator_cnt;
 int is_function;
 int is_array;
 int const_type;
