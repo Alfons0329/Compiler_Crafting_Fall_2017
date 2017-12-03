@@ -277,7 +277,7 @@ func_decl	: 	ID
 					mysymbol_table[0].mysub_entry[global_sub_entry_cnt].is_funct_decl=1;
 					memset(funct_type_buf_parser,0,sizeof(funct_type_buf_parser));
 					memset(funct_attri_buf,0,sizeof(funct_attri_buf));
-					global_sub_entry_cnt++;
+
 				}
  				MK_LPAREN opt_param_list MK_RPAREN
 				{
@@ -303,6 +303,7 @@ func_decl	: 	ID
 					printf("dump function symbol test \n");
 					dumpsymbol();
 					is_array=0;
+					global_sub_entry_cnt++; //global function end by 1
 				}
 			  	compound_stmt
 			  	END
@@ -382,10 +383,18 @@ id_list		: id_list MK_COMMA ID /*one ID for one sub_entry*/
 			{
 				{printf("14->");}
 				printf("ID is %s",yytext);
-				strcpy(mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name,yytext);
+				if(scope_depth==0) //global declaration
+				{
+					strcpy(mysymbol_table[0].mysub_entry[global_sub_entry_cnt].name,yytext);
+					global_sub_entry_cnt++;
+				}
+				else //non global declaration
+				{
+					strcpy(mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name,yytext);
+					sub_entry_cnt++;
+				}
 				$$=yytext;
 				printf(" AND PASSED IN ID NAME %s \n",mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name);
-				sub_entry_cnt++;
 				dumpsymbol();
 			}
 			| ID
@@ -393,10 +402,18 @@ id_list		: id_list MK_COMMA ID /*one ID for one sub_entry*/
 
 				{printf("15->");}
 				printf("ID is %s",yytext);
-				strcpy(mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name,yytext);
+				if(scope_depth==0) //global declaration
+				{
+					strcpy(mysymbol_table[0].mysub_entry[global_sub_entry_cnt].name,yytext);
+					global_sub_entry_cnt++;
+				}
+				else //non global declaration
+				{
+					strcpy(mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name,yytext);
+					sub_entry_cnt++;
+				}
 				$$=yytext;
 				printf(" AND PASSED IN ID NAME %s \n",mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name);
-				sub_entry_cnt++;
 				dumpsymbol();
 			}
 			;

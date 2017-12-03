@@ -58,7 +58,7 @@ struct sub_entry //the real entry for inserting the value
     char array_type_buf[ARRAY_BUF_SIZE];
     char param_type_buf[PARAM_BUF_SIZE];
     int level;
-    bool is_array_decl,is_funct_decl;
+    bool is_array_decl,is_funct_decl,is_iterator;
 };
 struct symbol_table_entry
 {
