@@ -17,15 +17,14 @@ char* array_scalar_type;
 char arr_buf[BUF_SIZE];
 char reverse_arr_buf[BUF_SIZE];
 char const_buf[BUF_SIZE];
+char func_attri_buf[BUF_SIZE];
+
 extern int yylex(void);
 extern int Opt_D; /* declared in lex.l */
 extern int linenum;		/* declared in lex.l */
 
 int yyerror(char* );
-int param_or_decl; //0 decl 1 param
-int is_array; //0 no 1 yes
-int is_function;
-int const_type=0; //0 not constant, 1 int 2 -int  3 float 4 -float 5 scientific 6 -scientific 7 string 8 bool
+//0 not constant, 1 int 2 -int  3 float 4 -float 5 scientific 6 -scientific 7 string 8 bool
 /*
 printf template for debugging
 
@@ -99,6 +98,7 @@ program		:	ID
 					puts(yytext);
 					strcpy(mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name,yytext);
 					printf("program name %s",mysymbol_table[0].mysub_entry[0].name);
+					is_array = 0;
 					is_function=0;
 					const_type=0;
 				}
@@ -312,8 +312,6 @@ param_list	: param_list MK_SEMICOLON param
 
 param		: id_list MK_COLON type
 			{
-				param_or_decl=1;
-
 				{printf("13->");}
 
 				for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)

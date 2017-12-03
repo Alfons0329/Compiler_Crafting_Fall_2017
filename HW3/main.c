@@ -29,7 +29,6 @@ int  main( int argc, char **argv )
 	}
 
 	yyin = fp;
-	param_or_decl = 0; //0 param 1 decl
 	is_array = 0; //0 no 1 yes
 	symbol_table_init();
 	yyparse();

@@ -11,11 +11,17 @@
 #define ATTRI_BUF_SIZE 100
 #define ARRAY_BUF_SIZE 100
 #define PARAM_BUF_SIZE 100
+extern char *yytext;
+extern char const_buf[50];
+
 extern int linenum;		/* declared in lex.l */
 extern int Opt_D;
 int scope_depth;
 int sub_entry_cnt;
 int pre_sub_entry_cnt;
+int is_function;
+int is_array;
+int const_type;
 /*###############################################################################################################
 Implementation abstract;
 Use symbol table entry for each symebol table main try and the sub entry
@@ -56,12 +62,6 @@ struct symbol_table_entry
     struct sub_entry mysub_entry[SUB_ENTRY_SIZE];
 };
 struct symbol_table_entry mysymbol_table[SYMBOL_TABLE_MAX_SIZE];
-extern int scope_depth;
-extern int pre_sub_entry_cnt;
-extern int sub_entry_cnt;
-extern int const_type;
-extern char *yytext;
-extern char const_buf[50];
 void symbol_table_init();
 void pop_symbol_table();
 void dumpsymbol();
