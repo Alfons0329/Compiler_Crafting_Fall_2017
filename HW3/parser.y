@@ -108,7 +108,6 @@ program		:	ID
 					mysymbol_table[0].mysub_entry[0].kind="program";
 					strcpy(mysymbol_table[0].mysub_entry[0].level_str,"0(global)");
 					mysymbol_table[0].mysub_entry[0].type="void";
-					dumpsymbol();
 				}
 			  	program_body
 			  	END ID
@@ -210,7 +209,7 @@ decl		: VAR	/* scalar type declaration */
 						mysymbol_table[scope_depth].mysub_entry[i].is_array_decl=true;
 					}
 					global_pre_sub_entry_cnt=global_sub_entry_cnt;
-					error_detection();
+					//error_detection();
 				}
 				else //non global declaration
 				{
@@ -368,7 +367,6 @@ func_decl	: 	ID
 					//set the function attribute and type after all declared
 					dumpsymbol();
 					pop_symbol_table(); //function pop itself
-
 					is_function=0;
 				}
 				ID

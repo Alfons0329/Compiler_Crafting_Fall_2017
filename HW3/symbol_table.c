@@ -43,7 +43,7 @@ void pop_symbol_table()
 }
 void dumpsymbol()
 {
-    printf("(In dump function)Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d \n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt);
+    printf("(In dump function)Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d global_pre_sub_entry_cnt %d global_sub_entry_cnt %d\n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt,global_pre_sub_entry_cnt,global_sub_entry_cnt);
     if(!Opt_D)
         return;
 
@@ -106,7 +106,8 @@ void error_detection() //no hashing, just naive solution
             break;
         for(int j=i+1;j<SUB_ENTRY_SIZE;j++)
         {
-            if(!strcmp(mysymbol_table[scope_depth].mysub_entry[i].name,mysymbol_table[scope_depth].mysub_entry[j].name))
+            if(!strcmp(mysymbol_table[scope_depth].mysub_entry[i].name,mysymbol_table[scope_depth].mysub_entry[j].name)&&
+            !strcmp(mysymbol_table[scope_depth].mysub_entry[i].type,mysymbol_table[scope_depth].mysub_entry[j].type))
             {
                 mysymbol_table[scope_depth].mysub_entry[j].name[0]=0;//mark the error table as not print
                 for(;mysymbol_table[scope_depth].mysub_entry[i].name[pre_redeclared_index]!=0;)
