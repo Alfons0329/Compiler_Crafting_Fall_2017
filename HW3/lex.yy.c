@@ -1231,7 +1231,7 @@ YY_RULE_SETUP
 {
 				  LIST;
 				  if  (Opt_S)
-				  	printf("LINENUM: %d: %s||",  linenum,  buf);
+				  	printf("%d: %s",  linenum,  buf);
 				  linenum++;
 				  buf[0] = '\0';
 		   		}
@@ -2258,7 +2258,8 @@ void yyfree (void * ptr )
 
 void setPseudoComment( const char *text )
 {
-	switch( text[3] ) {
+	switch( text[3] )
+	{
 	 case 'S':			/* Source code */
 	 /* format : //&[A-Z][+-] */
 		if( text[4] == '+' )

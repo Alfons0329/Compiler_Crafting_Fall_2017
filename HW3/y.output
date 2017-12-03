@@ -18,38 +18,38 @@ Grammar
     5 opt_decl_list: decl_list
     6              | %empty
 
-    7 $@3: %empty
+    7 decl_list: decl_list decl
+    8          | decl
 
-    8 decl_list: decl_list $@3 decl
-    9          | decl
+    9 $@3: %empty
 
-   10 $@4: %empty
+   10 decl: VAR id_list MK_COLON scalar_type $@3 MK_SEMICOLON
+   11     | VAR id_list MK_COLON array_type MK_SEMICOLON
 
-   11 decl: VAR id_list MK_COLON scalar_type $@4 MK_SEMICOLON
-   12     | VAR id_list MK_COLON array_type MK_SEMICOLON
+   12 $@4: %empty
 
-   13 $@5: %empty
+   13 decl: VAR id_list MK_COLON literal_const $@4 MK_SEMICOLON
 
-   14 decl: VAR id_list MK_COLON literal_const $@5 MK_SEMICOLON
+   14 int_const: INT_CONST
+   15          | OCTAL_CONST
 
-   15 int_const: INT_CONST
-   16          | OCTAL_CONST
+   16 literal_const: int_const
+   17              | OP_SUB int_const
+   18              | FLOAT_CONST
+   19              | OP_SUB FLOAT_CONST
+   20              | SCIENTIFIC
+   21              | OP_SUB SCIENTIFIC
+   22              | STR_CONST
+   23              | TRUE
+   24              | FALSE
 
-   17 literal_const: int_const
-   18              | OP_SUB int_const
-   19              | FLOAT_CONST
-   20              | OP_SUB FLOAT_CONST
-   21              | SCIENTIFIC
-   22              | OP_SUB SCIENTIFIC
-   23              | STR_CONST
-   24              | TRUE
-   25              | FALSE
+   25 opt_func_decl_list: func_decl_list
+   26                   | %empty
 
-   26 opt_func_decl_list: func_decl_list
-   27                   | %empty
+   27 func_decl_list: func_decl_list func_decl
+   28               | func_decl
 
-   28 func_decl_list: func_decl_list func_decl
-   29               | func_decl
+   29 $@5: %empty
 
    30 $@6: %empty
 
@@ -57,47 +57,47 @@ Grammar
 
    32 $@8: %empty
 
-   33 $@9: %empty
+   33 func_decl: ID $@5 MK_LPAREN opt_param_list MK_RPAREN $@6 opt_type MK_SEMICOLON $@7 compound_stmt END $@8 ID
 
-   34 func_decl: ID $@6 MK_LPAREN opt_param_list MK_RPAREN $@7 opt_type MK_SEMICOLON $@8 compound_stmt END $@9 ID
+   34 opt_param_list: param_list
+   35               | %empty
 
-   35 opt_param_list: param_list
-   36               | %empty
+   36 param_list: param_list MK_SEMICOLON param
+   37           | param
 
-   37 param_list: param_list MK_SEMICOLON param
-   38           | param
+   38 param: id_list MK_COLON type
 
-   39 param: id_list MK_COLON type
+   39 id_list: id_list MK_COMMA ID
+   40        | ID
 
-   40 id_list: id_list MK_COMMA ID
-   41        | ID
+   41 opt_type: MK_COLON type
+   42         | %empty
 
-   42 opt_type: MK_COLON type
-   43         | %empty
+   43 type: scalar_type
+   44     | array_type
 
-   44 type: scalar_type
-   45     | array_type
+   45 scalar_type: INTEGER
+   46            | REAL
+   47            | BOOLEAN
+   48            | STRING
 
-   46 scalar_type: INTEGER
-   47            | REAL
-   48            | BOOLEAN
-   49            | STRING
+   49 $@9: %empty
 
-   50 $@10: %empty
+   50 array_type: ARRAY $@9 int_const TO int_const OF type
 
-   51 array_type: ARRAY $@10 int_const TO int_const OF type
+   51 stmt: compound_stmt
+   52     | simple_stmt
+   53     | cond_stmt
+   54     | while_stmt
+   55     | for_stmt
+   56     | return_stmt
+   57     | proc_call_stmt
 
-   52 stmt: compound_stmt
-   53     | simple_stmt
-   54     | cond_stmt
-   55     | while_stmt
-   56     | for_stmt
-   57     | return_stmt
-   58     | proc_call_stmt
+   58 $@10: %empty
 
    59 $@11: %empty
 
-   60 compound_stmt: BEG $@11 opt_decl_list opt_stmt_list END
+   60 compound_stmt: BEG $@10 opt_decl_list opt_stmt_list $@11 END
 
    61 opt_stmt_list: stmt_list
    62              | %empty
@@ -178,36 +178,36 @@ Terminals, with rules where they appear
 
 $end (0) 0
 error (256)
-ARRAY (258) 51
+ARRAY (258) 50
 BEG (259) 60
-BOOLEAN (260) 48
+BOOLEAN (260) 47
 DEF (261)
 DO (262) 71 73
 ELSE (263) 69
-END (264) 3 34 60 69 70 71 73
-FALSE (265) 25
+END (264) 3 33 60 69 70 71 73
+FALSE (265) 24
 FOR (266) 73
-INTEGER (267) 46
+INTEGER (267) 45
 IF (268) 69 70
-OF (269) 51
+OF (269) 50
 PRINT (270) 66
 READ (271) 67
-REAL (272) 47
+REAL (272) 46
 RETURN (273) 74
-STRING (274) 49
+STRING (274) 48
 THEN (275) 69 70
-TO (276) 51 73
-TRUE (277) 24
-VAR (278) 11 12 14
+TO (276) 50 73
+TRUE (277) 23
+VAR (278) 10 11 13
 WHILE (279) 71
-ID (280) 3 34 40 41 68 73 106 107 109
-OCTAL_CONST (281) 16
-INT_CONST (282) 15
-FLOAT_CONST (283) 19 20
-SCIENTIFIC (284) 21 22
-STR_CONST (285) 23
+ID (280) 3 33 39 40 68 73 106 107 109
+OCTAL_CONST (281) 15
+INT_CONST (282) 14
+FLOAT_CONST (283) 18 19
+SCIENTIFIC (284) 20 21
+STR_CONST (285) 22
 OP_ADD (286) 95
-OP_SUB (287) 18 20 22 96 103 105 107
+OP_SUB (287) 17 19 21 96 103 105 107
 OP_MUL (288) 99
 OP_DIV (289) 100
 OP_MOD (290) 101
@@ -221,11 +221,11 @@ OP_LE (297) 88
 OP_AND (298) 81
 OP_OR (299) 79
 OP_NOT (300) 83
-MK_COMMA (301) 40 77
-MK_COLON (302) 11 12 14 39 42
-MK_SEMICOLON (303) 3 11 12 14 34 37 65 66 67 68 74
-MK_LPAREN (304) 34 68 104 105 106 107
-MK_RPAREN (305) 34 68 104 105 106 107
+MK_COMMA (301) 39 77
+MK_COLON (302) 10 11 13 38 41
+MK_SEMICOLON (303) 3 10 11 13 33 36 65 66 67 68 74
+MK_LPAREN (304) 33 68 104 105 106 107
+MK_RPAREN (305) 33 68 104 105 106 107
 MK_LB (306) 111
 MK_RB (307) 111
 
@@ -245,55 +245,55 @@ program_body (57)
 opt_decl_list (58)
     on left: 5 6, on right: 4 60
 decl_list (59)
-    on left: 8 9, on right: 5 8
-$@3 (60)
-    on left: 7, on right: 8
-decl (61)
-    on left: 11 12 14, on right: 8 9
+    on left: 7 8, on right: 5 7
+decl (60)
+    on left: 10 11 13, on right: 7 8
+$@3 (61)
+    on left: 9, on right: 10
 $@4 (62)
-    on left: 10, on right: 11
-$@5 (63)
-    on left: 13, on right: 14
-int_const (64)
-    on left: 15 16, on right: 17 18 51 73
-literal_const (65)
-    on left: 17 18 19 20 21 22 23 24 25, on right: 14 108
-opt_func_decl_list (66)
-    on left: 26 27, on right: 4
-func_decl_list (67)
-    on left: 28 29, on right: 26 28
-func_decl (68)
-    on left: 34, on right: 28 29
+    on left: 12, on right: 13
+int_const (63)
+    on left: 14 15, on right: 16 17 50 73
+literal_const (64)
+    on left: 16 17 18 19 20 21 22 23 24, on right: 13 108
+opt_func_decl_list (65)
+    on left: 25 26, on right: 4
+func_decl_list (66)
+    on left: 27 28, on right: 25 27
+func_decl (67)
+    on left: 33, on right: 27 28
+$@5 (68)
+    on left: 29, on right: 33
 $@6 (69)
-    on left: 30, on right: 34
+    on left: 30, on right: 33
 $@7 (70)
-    on left: 31, on right: 34
+    on left: 31, on right: 33
 $@8 (71)
-    on left: 32, on right: 34
-$@9 (72)
-    on left: 33, on right: 34
-opt_param_list (73)
-    on left: 35 36, on right: 34
-param_list (74)
-    on left: 37 38, on right: 35 37
-param (75)
-    on left: 39, on right: 37 38
-id_list (76)
-    on left: 40 41, on right: 11 12 14 39 40
-opt_type (77)
-    on left: 42 43, on right: 34
-type (78)
-    on left: 44 45, on right: 39 42 51
-scalar_type (79)
-    on left: 46 47 48 49, on right: 11 44
-array_type (80)
-    on left: 51, on right: 12 45
-$@10 (81)
-    on left: 50, on right: 51
-stmt (82)
-    on left: 52 53 54 55 56 57 58, on right: 63 64
-compound_stmt (83)
-    on left: 60, on right: 4 34 52
+    on left: 32, on right: 33
+opt_param_list (72)
+    on left: 34 35, on right: 33
+param_list (73)
+    on left: 36 37, on right: 34 36
+param (74)
+    on left: 38, on right: 36 37
+id_list (75)
+    on left: 39 40, on right: 10 11 13 38 39
+opt_type (76)
+    on left: 41 42, on right: 33
+type (77)
+    on left: 43 44, on right: 38 41 50
+scalar_type (78)
+    on left: 45 46 47 48, on right: 10 43
+array_type (79)
+    on left: 50, on right: 11 44
+$@9 (80)
+    on left: 49, on right: 50
+stmt (81)
+    on left: 51 52 53 54 55 56 57, on right: 63 64
+compound_stmt (82)
+    on left: 60, on right: 4 33 51
+$@10 (83)
+    on left: 58, on right: 60
 $@11 (84)
     on left: 59, on right: 60
 opt_stmt_list (85)
@@ -301,19 +301,19 @@ opt_stmt_list (85)
 stmt_list (86)
     on left: 63 64, on right: 61 63
 simple_stmt (87)
-    on left: 65 66 67, on right: 53
+    on left: 65 66 67, on right: 52
 proc_call_stmt (88)
-    on left: 68, on right: 58
+    on left: 68, on right: 57
 cond_stmt (89)
-    on left: 69 70, on right: 54
+    on left: 69 70, on right: 53
 while_stmt (90)
-    on left: 71, on right: 55
+    on left: 71, on right: 54
 for_stmt (91)
-    on left: 73, on right: 56
+    on left: 73, on right: 55
 $@12 (92)
     on left: 72, on right: 73
 return_stmt (93)
-    on left: 74, on right: 57
+    on left: 74, on right: 56
 opt_boolean_expr_list (94)
     on left: 75 76, on right: 68 106 107
 boolean_expr_list (95)
@@ -409,9 +409,9 @@ State 6
 
 State 7
 
-   11 decl: VAR . id_list MK_COLON scalar_type $@4 MK_SEMICOLON
-   12     | VAR . id_list MK_COLON array_type MK_SEMICOLON
-   14     | VAR . id_list MK_COLON literal_const $@5 MK_SEMICOLON
+   10 decl: VAR . id_list MK_COLON scalar_type $@3 MK_SEMICOLON
+   11     | VAR . id_list MK_COLON array_type MK_SEMICOLON
+   13     | VAR . id_list MK_COLON literal_const $@4 MK_SEMICOLON
 
     ID  shift, and go to state 12
 
@@ -431,7 +431,7 @@ State 9
 
     ID  shift, and go to state 15
 
-    $default  reduce using rule 27 (opt_func_decl_list)
+    $default  reduce using rule 26 (opt_func_decl_list)
 
     opt_func_decl_list  go to state 16
     func_decl_list      go to state 17
@@ -441,34 +441,35 @@ State 9
 State 10
 
     5 opt_decl_list: decl_list .
-    8 decl_list: decl_list . $@3 decl
+    7 decl_list: decl_list . decl
 
-    VAR       reduce using rule 7 ($@3)
+    VAR  shift, and go to state 7
+
     $default  reduce using rule 5 (opt_decl_list)
 
-    $@3  go to state 19
+    decl  go to state 19
 
 
 State 11
 
-    9 decl_list: decl .
+    8 decl_list: decl .
 
-    $default  reduce using rule 9 (decl_list)
+    $default  reduce using rule 8 (decl_list)
 
 
 State 12
 
-   41 id_list: ID .
+   40 id_list: ID .
 
-    $default  reduce using rule 41 (id_list)
+    $default  reduce using rule 40 (id_list)
 
 
 State 13
 
-   11 decl: VAR id_list . MK_COLON scalar_type $@4 MK_SEMICOLON
-   12     | VAR id_list . MK_COLON array_type MK_SEMICOLON
-   14     | VAR id_list . MK_COLON literal_const $@5 MK_SEMICOLON
-   40 id_list: id_list . MK_COMMA ID
+   10 decl: VAR id_list . MK_COLON scalar_type $@3 MK_SEMICOLON
+   11     | VAR id_list . MK_COLON array_type MK_SEMICOLON
+   13     | VAR id_list . MK_COLON literal_const $@4 MK_SEMICOLON
+   39 id_list: id_list . MK_COMMA ID
 
     MK_COMMA  shift, and go to state 20
     MK_COLON  shift, and go to state 21
@@ -483,11 +484,11 @@ State 14
 
 State 15
 
-   34 func_decl: ID . $@6 MK_LPAREN opt_param_list MK_RPAREN $@7 opt_type MK_SEMICOLON $@8 compound_stmt END $@9 ID
+   33 func_decl: ID . $@5 MK_LPAREN opt_param_list MK_RPAREN $@6 opt_type MK_SEMICOLON $@7 compound_stmt END $@8 ID
 
-    $default  reduce using rule 30 ($@6)
+    $default  reduce using rule 29 ($@5)
 
-    $@6  go to state 23
+    $@5  go to state 23
 
 
 State 16
@@ -501,63 +502,61 @@ State 16
 
 State 17
 
-   26 opt_func_decl_list: func_decl_list .
-   28 func_decl_list: func_decl_list . func_decl
+   25 opt_func_decl_list: func_decl_list .
+   27 func_decl_list: func_decl_list . func_decl
 
     ID  shift, and go to state 15
 
-    $default  reduce using rule 26 (opt_func_decl_list)
+    $default  reduce using rule 25 (opt_func_decl_list)
 
     func_decl  go to state 26
 
 
 State 18
 
-   29 func_decl_list: func_decl .
+   28 func_decl_list: func_decl .
 
-    $default  reduce using rule 29 (func_decl_list)
+    $default  reduce using rule 28 (func_decl_list)
 
 
 State 19
 
-    8 decl_list: decl_list $@3 . decl
+    7 decl_list: decl_list decl .
 
-    VAR  shift, and go to state 7
-
-    decl  go to state 27
+    $default  reduce using rule 7 (decl_list)
 
 
 State 20
 
-   40 id_list: id_list MK_COMMA . ID
+   39 id_list: id_list MK_COMMA . ID
 
-    ID  shift, and go to state 28
+    ID  shift, and go to state 27
 
 
 State 21
 
-   11 decl: VAR id_list MK_COLON . scalar_type $@4 MK_SEMICOLON
-   12     | VAR id_list MK_COLON . array_type MK_SEMICOLON
-   14     | VAR id_list MK_COLON . literal_const $@5 MK_SEMICOLON
+   10 decl: VAR id_list MK_COLON . scalar_type $@3 MK_SEMICOLON
+   11     | VAR id_list MK_COLON . array_type MK_SEMICOLON
+   13     | VAR id_list MK_COLON . literal_const $@4 MK_SEMICOLON
 
-    ARRAY        shift, and go to state 29
-    BOOLEAN      shift, and go to state 30
-    FALSE        shift, and go to state 31
-    INTEGER      shift, and go to state 32
-    REAL         shift, and go to state 33
-    STRING       shift, and go to state 34
-    TRUE         shift, and go to state 35
-    OCTAL_CONST  shift, and go to state 36
-    INT_CONST    shift, and go to state 37
-    FLOAT_CONST  shift, and go to state 38
-    SCIENTIFIC   shift, and go to state 39
-    STR_CONST    shift, and go to state 40
-    OP_SUB       shift, and go to state 41
+    ARRAY        shift, and go to state 28
+    BOOLEAN      shift, and go to state 29
+    FALSE        shift, and go to state 30
+    INTEGER      shift, and go to state 31
+    REAL         shift, and go to state 32
+    STRING       shift, and go to state 33
+    TRUE         shift, and go to state 34
+    OCTAL_CONST  shift, and go to state 35
+    INT_CONST    shift, and go to state 36
+    FLOAT_CONST  shift, and go to state 37
+    SCIENTIFIC   shift, and go to state 38
+    STR_CONST    shift, and go to state 39
+    OP_SUB       shift, and go to state 40
 
-    int_const      go to state 42
-    literal_const  go to state 43
-    scalar_type    go to state 44
-    array_type     go to state 45
+    int_const      go to state 41
+    literal_const  go to state 42
+    scalar_type    go to state 43
+    array_type     go to state 44
 
 
 State 22
@@ -569,18 +568,18 @@ State 22
 
 State 23
 
-   34 func_decl: ID $@6 . MK_LPAREN opt_param_list MK_RPAREN $@7 opt_type MK_SEMICOLON $@8 compound_stmt END $@9 ID
+   33 func_decl: ID $@5 . MK_LPAREN opt_param_list MK_RPAREN $@6 opt_type MK_SEMICOLON $@7 compound_stmt END $@8 ID
 
-    MK_LPAREN  shift, and go to state 46
+    MK_LPAREN  shift, and go to state 45
 
 
 State 24
 
-   60 compound_stmt: BEG . $@11 opt_decl_list opt_stmt_list END
+   60 compound_stmt: BEG . $@10 opt_decl_list opt_stmt_list $@11 END
 
-    $default  reduce using rule 59 ($@11)
+    $default  reduce using rule 58 ($@10)
 
-    $@11  go to state 47
+    $@10  go to state 46
 
 
 State 25
@@ -592,1062 +591,1057 @@ State 25
 
 State 26
 
-   28 func_decl_list: func_decl_list func_decl .
+   27 func_decl_list: func_decl_list func_decl .
 
-    $default  reduce using rule 28 (func_decl_list)
+    $default  reduce using rule 27 (func_decl_list)
 
 
 State 27
 
-    8 decl_list: decl_list $@3 decl .
+   39 id_list: id_list MK_COMMA ID .
 
-    $default  reduce using rule 8 (decl_list)
+    $default  reduce using rule 39 (id_list)
 
 
 State 28
 
-   40 id_list: id_list MK_COMMA ID .
+   50 array_type: ARRAY . $@9 int_const TO int_const OF type
 
-    $default  reduce using rule 40 (id_list)
+    $default  reduce using rule 49 ($@9)
+
+    $@9  go to state 47
 
 
 State 29
 
-   51 array_type: ARRAY . $@10 int_const TO int_const OF type
+   47 scalar_type: BOOLEAN .
 
-    $default  reduce using rule 50 ($@10)
-
-    $@10  go to state 48
+    $default  reduce using rule 47 (scalar_type)
 
 
 State 30
 
-   48 scalar_type: BOOLEAN .
+   24 literal_const: FALSE .
 
-    $default  reduce using rule 48 (scalar_type)
+    $default  reduce using rule 24 (literal_const)
 
 
 State 31
 
-   25 literal_const: FALSE .
+   45 scalar_type: INTEGER .
 
-    $default  reduce using rule 25 (literal_const)
+    $default  reduce using rule 45 (scalar_type)
 
 
 State 32
 
-   46 scalar_type: INTEGER .
+   46 scalar_type: REAL .
 
     $default  reduce using rule 46 (scalar_type)
 
 
 State 33
 
-   47 scalar_type: REAL .
+   48 scalar_type: STRING .
 
-    $default  reduce using rule 47 (scalar_type)
+    $default  reduce using rule 48 (scalar_type)
 
 
 State 34
 
-   49 scalar_type: STRING .
-
-    $default  reduce using rule 49 (scalar_type)
-
-
-State 35
-
-   24 literal_const: TRUE .
-
-    $default  reduce using rule 24 (literal_const)
-
-
-State 36
-
-   16 int_const: OCTAL_CONST .
-
-    $default  reduce using rule 16 (int_const)
-
-
-State 37
-
-   15 int_const: INT_CONST .
-
-    $default  reduce using rule 15 (int_const)
-
-
-State 38
-
-   19 literal_const: FLOAT_CONST .
-
-    $default  reduce using rule 19 (literal_const)
-
-
-State 39
-
-   21 literal_const: SCIENTIFIC .
-
-    $default  reduce using rule 21 (literal_const)
-
-
-State 40
-
-   23 literal_const: STR_CONST .
+   23 literal_const: TRUE .
 
     $default  reduce using rule 23 (literal_const)
 
 
+State 35
+
+   15 int_const: OCTAL_CONST .
+
+    $default  reduce using rule 15 (int_const)
+
+
+State 36
+
+   14 int_const: INT_CONST .
+
+    $default  reduce using rule 14 (int_const)
+
+
+State 37
+
+   18 literal_const: FLOAT_CONST .
+
+    $default  reduce using rule 18 (literal_const)
+
+
+State 38
+
+   20 literal_const: SCIENTIFIC .
+
+    $default  reduce using rule 20 (literal_const)
+
+
+State 39
+
+   22 literal_const: STR_CONST .
+
+    $default  reduce using rule 22 (literal_const)
+
+
+State 40
+
+   17 literal_const: OP_SUB . int_const
+   19              | OP_SUB . FLOAT_CONST
+   21              | OP_SUB . SCIENTIFIC
+
+    OCTAL_CONST  shift, and go to state 35
+    INT_CONST    shift, and go to state 36
+    FLOAT_CONST  shift, and go to state 48
+    SCIENTIFIC   shift, and go to state 49
+
+    int_const  go to state 50
+
+
 State 41
 
-   18 literal_const: OP_SUB . int_const
-   20              | OP_SUB . FLOAT_CONST
-   22              | OP_SUB . SCIENTIFIC
+   16 literal_const: int_const .
 
-    OCTAL_CONST  shift, and go to state 36
-    INT_CONST    shift, and go to state 37
-    FLOAT_CONST  shift, and go to state 49
-    SCIENTIFIC   shift, and go to state 50
-
-    int_const  go to state 51
+    $default  reduce using rule 16 (literal_const)
 
 
 State 42
 
-   17 literal_const: int_const .
+   13 decl: VAR id_list MK_COLON literal_const . $@4 MK_SEMICOLON
 
-    $default  reduce using rule 17 (literal_const)
+    $default  reduce using rule 12 ($@4)
+
+    $@4  go to state 51
 
 
 State 43
 
-   14 decl: VAR id_list MK_COLON literal_const . $@5 MK_SEMICOLON
+   10 decl: VAR id_list MK_COLON scalar_type . $@3 MK_SEMICOLON
 
-    $default  reduce using rule 13 ($@5)
+    $default  reduce using rule 9 ($@3)
 
-    $@5  go to state 52
+    $@3  go to state 52
 
 
 State 44
 
-   11 decl: VAR id_list MK_COLON scalar_type . $@4 MK_SEMICOLON
+   11 decl: VAR id_list MK_COLON array_type . MK_SEMICOLON
 
-    $default  reduce using rule 10 ($@4)
-
-    $@4  go to state 53
+    MK_SEMICOLON  shift, and go to state 53
 
 
 State 45
 
-   12 decl: VAR id_list MK_COLON array_type . MK_SEMICOLON
+   33 func_decl: ID $@5 MK_LPAREN . opt_param_list MK_RPAREN $@6 opt_type MK_SEMICOLON $@7 compound_stmt END $@8 ID
 
-    MK_SEMICOLON  shift, and go to state 54
+    ID  shift, and go to state 12
+
+    $default  reduce using rule 35 (opt_param_list)
+
+    opt_param_list  go to state 54
+    param_list      go to state 55
+    param           go to state 56
+    id_list         go to state 57
 
 
 State 46
 
-   34 func_decl: ID $@6 MK_LPAREN . opt_param_list MK_RPAREN $@7 opt_type MK_SEMICOLON $@8 compound_stmt END $@9 ID
-
-    ID  shift, and go to state 12
-
-    $default  reduce using rule 36 (opt_param_list)
-
-    opt_param_list  go to state 55
-    param_list      go to state 56
-    param           go to state 57
-    id_list         go to state 58
-
-
-State 47
-
-   60 compound_stmt: BEG $@11 . opt_decl_list opt_stmt_list END
+   60 compound_stmt: BEG $@10 . opt_decl_list opt_stmt_list $@11 END
 
     VAR  shift, and go to state 7
 
     $default  reduce using rule 6 (opt_decl_list)
 
-    opt_decl_list  go to state 59
+    opt_decl_list  go to state 58
     decl_list      go to state 10
     decl           go to state 11
 
 
+State 47
+
+   50 array_type: ARRAY $@9 . int_const TO int_const OF type
+
+    OCTAL_CONST  shift, and go to state 35
+    INT_CONST    shift, and go to state 36
+
+    int_const  go to state 59
+
+
 State 48
 
-   51 array_type: ARRAY $@10 . int_const TO int_const OF type
+   19 literal_const: OP_SUB FLOAT_CONST .
 
-    OCTAL_CONST  shift, and go to state 36
-    INT_CONST    shift, and go to state 37
-
-    int_const  go to state 60
+    $default  reduce using rule 19 (literal_const)
 
 
 State 49
 
-   20 literal_const: OP_SUB FLOAT_CONST .
+   21 literal_const: OP_SUB SCIENTIFIC .
 
-    $default  reduce using rule 20 (literal_const)
+    $default  reduce using rule 21 (literal_const)
 
 
 State 50
 
-   22 literal_const: OP_SUB SCIENTIFIC .
+   17 literal_const: OP_SUB int_const .
 
-    $default  reduce using rule 22 (literal_const)
+    $default  reduce using rule 17 (literal_const)
 
 
 State 51
 
-   18 literal_const: OP_SUB int_const .
+   13 decl: VAR id_list MK_COLON literal_const $@4 . MK_SEMICOLON
 
-    $default  reduce using rule 18 (literal_const)
+    MK_SEMICOLON  shift, and go to state 60
 
 
 State 52
 
-   14 decl: VAR id_list MK_COLON literal_const $@5 . MK_SEMICOLON
+   10 decl: VAR id_list MK_COLON scalar_type $@3 . MK_SEMICOLON
 
     MK_SEMICOLON  shift, and go to state 61
 
 
 State 53
 
-   11 decl: VAR id_list MK_COLON scalar_type $@4 . MK_SEMICOLON
-
-    MK_SEMICOLON  shift, and go to state 62
-
-
-State 54
-
-   12 decl: VAR id_list MK_COLON array_type MK_SEMICOLON .
-
-    $default  reduce using rule 12 (decl)
-
-
-State 55
-
-   34 func_decl: ID $@6 MK_LPAREN opt_param_list . MK_RPAREN $@7 opt_type MK_SEMICOLON $@8 compound_stmt END $@9 ID
-
-    MK_RPAREN  shift, and go to state 63
-
-
-State 56
-
-   35 opt_param_list: param_list .
-   37 param_list: param_list . MK_SEMICOLON param
-
-    MK_SEMICOLON  shift, and go to state 64
-
-    $default  reduce using rule 35 (opt_param_list)
-
-
-State 57
-
-   38 param_list: param .
-
-    $default  reduce using rule 38 (param_list)
-
-
-State 58
-
-   39 param: id_list . MK_COLON type
-   40 id_list: id_list . MK_COMMA ID
-
-    MK_COMMA  shift, and go to state 20
-    MK_COLON  shift, and go to state 65
-
-
-State 59
-
-   60 compound_stmt: BEG $@11 opt_decl_list . opt_stmt_list END
-
-    BEG     shift, and go to state 24
-    FOR     shift, and go to state 66
-    IF      shift, and go to state 67
-    PRINT   shift, and go to state 68
-    READ    shift, and go to state 69
-    RETURN  shift, and go to state 70
-    WHILE   shift, and go to state 71
-    ID      shift, and go to state 72
-
-    $default  reduce using rule 62 (opt_stmt_list)
-
-    stmt            go to state 73
-    compound_stmt   go to state 74
-    opt_stmt_list   go to state 75
-    stmt_list       go to state 76
-    simple_stmt     go to state 77
-    proc_call_stmt  go to state 78
-    cond_stmt       go to state 79
-    while_stmt      go to state 80
-    for_stmt        go to state 81
-    return_stmt     go to state 82
-    var_ref         go to state 83
-
-
-State 60
-
-   51 array_type: ARRAY $@10 int_const . TO int_const OF type
-
-    TO  shift, and go to state 84
-
-
-State 61
-
-   14 decl: VAR id_list MK_COLON literal_const $@5 MK_SEMICOLON .
-
-    $default  reduce using rule 14 (decl)
-
-
-State 62
-
-   11 decl: VAR id_list MK_COLON scalar_type $@4 MK_SEMICOLON .
+   11 decl: VAR id_list MK_COLON array_type MK_SEMICOLON .
 
     $default  reduce using rule 11 (decl)
 
 
+State 54
+
+   33 func_decl: ID $@5 MK_LPAREN opt_param_list . MK_RPAREN $@6 opt_type MK_SEMICOLON $@7 compound_stmt END $@8 ID
+
+    MK_RPAREN  shift, and go to state 62
+
+
+State 55
+
+   34 opt_param_list: param_list .
+   36 param_list: param_list . MK_SEMICOLON param
+
+    MK_SEMICOLON  shift, and go to state 63
+
+    $default  reduce using rule 34 (opt_param_list)
+
+
+State 56
+
+   37 param_list: param .
+
+    $default  reduce using rule 37 (param_list)
+
+
+State 57
+
+   38 param: id_list . MK_COLON type
+   39 id_list: id_list . MK_COMMA ID
+
+    MK_COMMA  shift, and go to state 20
+    MK_COLON  shift, and go to state 64
+
+
+State 58
+
+   60 compound_stmt: BEG $@10 opt_decl_list . opt_stmt_list $@11 END
+
+    BEG     shift, and go to state 24
+    FOR     shift, and go to state 65
+    IF      shift, and go to state 66
+    PRINT   shift, and go to state 67
+    READ    shift, and go to state 68
+    RETURN  shift, and go to state 69
+    WHILE   shift, and go to state 70
+    ID      shift, and go to state 71
+
+    $default  reduce using rule 62 (opt_stmt_list)
+
+    stmt            go to state 72
+    compound_stmt   go to state 73
+    opt_stmt_list   go to state 74
+    stmt_list       go to state 75
+    simple_stmt     go to state 76
+    proc_call_stmt  go to state 77
+    cond_stmt       go to state 78
+    while_stmt      go to state 79
+    for_stmt        go to state 80
+    return_stmt     go to state 81
+    var_ref         go to state 82
+
+
+State 59
+
+   50 array_type: ARRAY $@9 int_const . TO int_const OF type
+
+    TO  shift, and go to state 83
+
+
+State 60
+
+   13 decl: VAR id_list MK_COLON literal_const $@4 MK_SEMICOLON .
+
+    $default  reduce using rule 13 (decl)
+
+
+State 61
+
+   10 decl: VAR id_list MK_COLON scalar_type $@3 MK_SEMICOLON .
+
+    $default  reduce using rule 10 (decl)
+
+
+State 62
+
+   33 func_decl: ID $@5 MK_LPAREN opt_param_list MK_RPAREN . $@6 opt_type MK_SEMICOLON $@7 compound_stmt END $@8 ID
+
+    $default  reduce using rule 30 ($@6)
+
+    $@6  go to state 84
+
+
 State 63
 
-   34 func_decl: ID $@6 MK_LPAREN opt_param_list MK_RPAREN . $@7 opt_type MK_SEMICOLON $@8 compound_stmt END $@9 ID
+   36 param_list: param_list MK_SEMICOLON . param
 
-    $default  reduce using rule 31 ($@7)
+    ID  shift, and go to state 12
 
-    $@7  go to state 85
+    param    go to state 85
+    id_list  go to state 57
 
 
 State 64
 
-   37 param_list: param_list MK_SEMICOLON . param
+   38 param: id_list MK_COLON . type
 
-    ID  shift, and go to state 12
+    ARRAY    shift, and go to state 28
+    BOOLEAN  shift, and go to state 29
+    INTEGER  shift, and go to state 31
+    REAL     shift, and go to state 32
+    STRING   shift, and go to state 33
 
-    param    go to state 86
-    id_list  go to state 58
+    type         go to state 86
+    scalar_type  go to state 87
+    array_type   go to state 88
 
 
 State 65
 
-   39 param: id_list MK_COLON . type
+   73 for_stmt: FOR . ID $@12 OP_ASSIGN int_const TO int_const DO opt_stmt_list END DO
 
-    ARRAY    shift, and go to state 29
-    BOOLEAN  shift, and go to state 30
-    INTEGER  shift, and go to state 32
-    REAL     shift, and go to state 33
-    STRING   shift, and go to state 34
-
-    type         go to state 87
-    scalar_type  go to state 88
-    array_type   go to state 89
+    ID  shift, and go to state 89
 
 
 State 66
 
-   73 for_stmt: FOR . ID $@12 OP_ASSIGN int_const TO int_const DO opt_stmt_list END DO
+   69 cond_stmt: IF . boolean_expr THEN opt_stmt_list ELSE opt_stmt_list END IF
+   70          | IF . boolean_expr THEN opt_stmt_list END IF
 
-    ID  shift, and go to state 90
+    FALSE        shift, and go to state 30
+    TRUE         shift, and go to state 34
+    ID           shift, and go to state 90
+    OCTAL_CONST  shift, and go to state 35
+    INT_CONST    shift, and go to state 36
+    FLOAT_CONST  shift, and go to state 37
+    SCIENTIFIC   shift, and go to state 38
+    STR_CONST    shift, and go to state 39
+    OP_SUB       shift, and go to state 91
+    OP_NOT       shift, and go to state 92
+    MK_LPAREN    shift, and go to state 93
+
+    int_const       go to state 41
+    literal_const   go to state 94
+    boolean_expr    go to state 95
+    boolean_term    go to state 96
+    boolean_factor  go to state 97
+    relop_expr      go to state 98
+    expr            go to state 99
+    term            go to state 100
+    factor          go to state 101
+    var_ref         go to state 102
 
 
 State 67
 
-   69 cond_stmt: IF . boolean_expr THEN opt_stmt_list ELSE opt_stmt_list END IF
-   70          | IF . boolean_expr THEN opt_stmt_list END IF
+   66 simple_stmt: PRINT . boolean_expr MK_SEMICOLON
 
-    FALSE        shift, and go to state 31
-    TRUE         shift, and go to state 35
-    ID           shift, and go to state 91
-    OCTAL_CONST  shift, and go to state 36
-    INT_CONST    shift, and go to state 37
-    FLOAT_CONST  shift, and go to state 38
-    SCIENTIFIC   shift, and go to state 39
-    STR_CONST    shift, and go to state 40
-    OP_SUB       shift, and go to state 92
-    OP_NOT       shift, and go to state 93
-    MK_LPAREN    shift, and go to state 94
+    FALSE        shift, and go to state 30
+    TRUE         shift, and go to state 34
+    ID           shift, and go to state 90
+    OCTAL_CONST  shift, and go to state 35
+    INT_CONST    shift, and go to state 36
+    FLOAT_CONST  shift, and go to state 37
+    SCIENTIFIC   shift, and go to state 38
+    STR_CONST    shift, and go to state 39
+    OP_SUB       shift, and go to state 91
+    OP_NOT       shift, and go to state 92
+    MK_LPAREN    shift, and go to state 93
 
-    int_const       go to state 42
-    literal_const   go to state 95
-    boolean_expr    go to state 96
-    boolean_term    go to state 97
-    boolean_factor  go to state 98
-    relop_expr      go to state 99
-    expr            go to state 100
-    term            go to state 101
-    factor          go to state 102
-    var_ref         go to state 103
+    int_const       go to state 41
+    literal_const   go to state 94
+    boolean_expr    go to state 103
+    boolean_term    go to state 96
+    boolean_factor  go to state 97
+    relop_expr      go to state 98
+    expr            go to state 99
+    term            go to state 100
+    factor          go to state 101
+    var_ref         go to state 102
 
 
 State 68
 
-   66 simple_stmt: PRINT . boolean_expr MK_SEMICOLON
+   67 simple_stmt: READ . boolean_expr MK_SEMICOLON
 
-    FALSE        shift, and go to state 31
-    TRUE         shift, and go to state 35
-    ID           shift, and go to state 91
-    OCTAL_CONST  shift, and go to state 36
-    INT_CONST    shift, and go to state 37
-    FLOAT_CONST  shift, and go to state 38
-    SCIENTIFIC   shift, and go to state 39
-    STR_CONST    shift, and go to state 40
-    OP_SUB       shift, and go to state 92
-    OP_NOT       shift, and go to state 93
-    MK_LPAREN    shift, and go to state 94
+    FALSE        shift, and go to state 30
+    TRUE         shift, and go to state 34
+    ID           shift, and go to state 90
+    OCTAL_CONST  shift, and go to state 35
+    INT_CONST    shift, and go to state 36
+    FLOAT_CONST  shift, and go to state 37
+    SCIENTIFIC   shift, and go to state 38
+    STR_CONST    shift, and go to state 39
+    OP_SUB       shift, and go to state 91
+    OP_NOT       shift, and go to state 92
+    MK_LPAREN    shift, and go to state 93
 
-    int_const       go to state 42
-    literal_const   go to state 95
+    int_const       go to state 41
+    literal_const   go to state 94
     boolean_expr    go to state 104
-    boolean_term    go to state 97
-    boolean_factor  go to state 98
-    relop_expr      go to state 99
-    expr            go to state 100
-    term            go to state 101
-    factor          go to state 102
-    var_ref         go to state 103
+    boolean_term    go to state 96
+    boolean_factor  go to state 97
+    relop_expr      go to state 98
+    expr            go to state 99
+    term            go to state 100
+    factor          go to state 101
+    var_ref         go to state 102
 
 
 State 69
 
-   67 simple_stmt: READ . boolean_expr MK_SEMICOLON
+   74 return_stmt: RETURN . boolean_expr MK_SEMICOLON
 
-    FALSE        shift, and go to state 31
-    TRUE         shift, and go to state 35
-    ID           shift, and go to state 91
-    OCTAL_CONST  shift, and go to state 36
-    INT_CONST    shift, and go to state 37
-    FLOAT_CONST  shift, and go to state 38
-    SCIENTIFIC   shift, and go to state 39
-    STR_CONST    shift, and go to state 40
-    OP_SUB       shift, and go to state 92
-    OP_NOT       shift, and go to state 93
-    MK_LPAREN    shift, and go to state 94
+    FALSE        shift, and go to state 30
+    TRUE         shift, and go to state 34
+    ID           shift, and go to state 90
+    OCTAL_CONST  shift, and go to state 35
+    INT_CONST    shift, and go to state 36
+    FLOAT_CONST  shift, and go to state 37
+    SCIENTIFIC   shift, and go to state 38
+    STR_CONST    shift, and go to state 39
+    OP_SUB       shift, and go to state 91
+    OP_NOT       shift, and go to state 92
+    MK_LPAREN    shift, and go to state 93
 
-    int_const       go to state 42
-    literal_const   go to state 95
+    int_const       go to state 41
+    literal_const   go to state 94
     boolean_expr    go to state 105
-    boolean_term    go to state 97
-    boolean_factor  go to state 98
-    relop_expr      go to state 99
-    expr            go to state 100
-    term            go to state 101
-    factor          go to state 102
-    var_ref         go to state 103
+    boolean_term    go to state 96
+    boolean_factor  go to state 97
+    relop_expr      go to state 98
+    expr            go to state 99
+    term            go to state 100
+    factor          go to state 101
+    var_ref         go to state 102
 
 
 State 70
 
-   74 return_stmt: RETURN . boolean_expr MK_SEMICOLON
+   71 while_stmt: WHILE . boolean_expr DO opt_stmt_list END DO
 
-    FALSE        shift, and go to state 31
-    TRUE         shift, and go to state 35
-    ID           shift, and go to state 91
-    OCTAL_CONST  shift, and go to state 36
-    INT_CONST    shift, and go to state 37
-    FLOAT_CONST  shift, and go to state 38
-    SCIENTIFIC   shift, and go to state 39
-    STR_CONST    shift, and go to state 40
-    OP_SUB       shift, and go to state 92
-    OP_NOT       shift, and go to state 93
-    MK_LPAREN    shift, and go to state 94
+    FALSE        shift, and go to state 30
+    TRUE         shift, and go to state 34
+    ID           shift, and go to state 90
+    OCTAL_CONST  shift, and go to state 35
+    INT_CONST    shift, and go to state 36
+    FLOAT_CONST  shift, and go to state 37
+    SCIENTIFIC   shift, and go to state 38
+    STR_CONST    shift, and go to state 39
+    OP_SUB       shift, and go to state 91
+    OP_NOT       shift, and go to state 92
+    MK_LPAREN    shift, and go to state 93
 
-    int_const       go to state 42
-    literal_const   go to state 95
+    int_const       go to state 41
+    literal_const   go to state 94
     boolean_expr    go to state 106
-    boolean_term    go to state 97
-    boolean_factor  go to state 98
-    relop_expr      go to state 99
-    expr            go to state 100
-    term            go to state 101
-    factor          go to state 102
-    var_ref         go to state 103
+    boolean_term    go to state 96
+    boolean_factor  go to state 97
+    relop_expr      go to state 98
+    expr            go to state 99
+    term            go to state 100
+    factor          go to state 101
+    var_ref         go to state 102
 
 
 State 71
 
-   71 while_stmt: WHILE . boolean_expr DO opt_stmt_list END DO
-
-    FALSE        shift, and go to state 31
-    TRUE         shift, and go to state 35
-    ID           shift, and go to state 91
-    OCTAL_CONST  shift, and go to state 36
-    INT_CONST    shift, and go to state 37
-    FLOAT_CONST  shift, and go to state 38
-    SCIENTIFIC   shift, and go to state 39
-    STR_CONST    shift, and go to state 40
-    OP_SUB       shift, and go to state 92
-    OP_NOT       shift, and go to state 93
-    MK_LPAREN    shift, and go to state 94
-
-    int_const       go to state 42
-    literal_const   go to state 95
-    boolean_expr    go to state 107
-    boolean_term    go to state 97
-    boolean_factor  go to state 98
-    relop_expr      go to state 99
-    expr            go to state 100
-    term            go to state 101
-    factor          go to state 102
-    var_ref         go to state 103
-
-
-State 72
-
    68 proc_call_stmt: ID . MK_LPAREN opt_boolean_expr_list MK_RPAREN MK_SEMICOLON
   109 var_ref: ID .
 
-    MK_LPAREN  shift, and go to state 108
+    MK_LPAREN  shift, and go to state 107
 
     $default  reduce using rule 109 (var_ref)
 
 
-State 73
+State 72
 
    64 stmt_list: stmt .
 
     $default  reduce using rule 64 (stmt_list)
 
 
+State 73
+
+   51 stmt: compound_stmt .
+
+    $default  reduce using rule 51 (stmt)
+
+
 State 74
 
-   52 stmt: compound_stmt .
+   60 compound_stmt: BEG $@10 opt_decl_list opt_stmt_list . $@11 END
 
-    $default  reduce using rule 52 (stmt)
+    $default  reduce using rule 59 ($@11)
+
+    $@11  go to state 108
 
 
 State 75
-
-   60 compound_stmt: BEG $@11 opt_decl_list opt_stmt_list . END
-
-    END  shift, and go to state 109
-
-
-State 76
 
    61 opt_stmt_list: stmt_list .
    63 stmt_list: stmt_list . stmt
 
     BEG     shift, and go to state 24
-    FOR     shift, and go to state 66
-    IF      shift, and go to state 67
-    PRINT   shift, and go to state 68
-    READ    shift, and go to state 69
-    RETURN  shift, and go to state 70
-    WHILE   shift, and go to state 71
-    ID      shift, and go to state 72
+    FOR     shift, and go to state 65
+    IF      shift, and go to state 66
+    PRINT   shift, and go to state 67
+    READ    shift, and go to state 68
+    RETURN  shift, and go to state 69
+    WHILE   shift, and go to state 70
+    ID      shift, and go to state 71
 
     $default  reduce using rule 61 (opt_stmt_list)
 
-    stmt            go to state 110
-    compound_stmt   go to state 74
-    simple_stmt     go to state 77
-    proc_call_stmt  go to state 78
-    cond_stmt       go to state 79
-    while_stmt      go to state 80
-    for_stmt        go to state 81
-    return_stmt     go to state 82
-    var_ref         go to state 83
+    stmt            go to state 109
+    compound_stmt   go to state 73
+    simple_stmt     go to state 76
+    proc_call_stmt  go to state 77
+    cond_stmt       go to state 78
+    while_stmt      go to state 79
+    for_stmt        go to state 80
+    return_stmt     go to state 81
+    var_ref         go to state 82
+
+
+State 76
+
+   52 stmt: simple_stmt .
+
+    $default  reduce using rule 52 (stmt)
 
 
 State 77
 
-   53 stmt: simple_stmt .
+   57 stmt: proc_call_stmt .
 
-    $default  reduce using rule 53 (stmt)
+    $default  reduce using rule 57 (stmt)
 
 
 State 78
 
-   58 stmt: proc_call_stmt .
+   53 stmt: cond_stmt .
 
-    $default  reduce using rule 58 (stmt)
+    $default  reduce using rule 53 (stmt)
 
 
 State 79
 
-   54 stmt: cond_stmt .
+   54 stmt: while_stmt .
 
     $default  reduce using rule 54 (stmt)
 
 
 State 80
 
-   55 stmt: while_stmt .
+   55 stmt: for_stmt .
 
     $default  reduce using rule 55 (stmt)
 
 
 State 81
 
-   56 stmt: for_stmt .
+   56 stmt: return_stmt .
 
     $default  reduce using rule 56 (stmt)
 
 
 State 82
 
-   57 stmt: return_stmt .
+   65 simple_stmt: var_ref . OP_ASSIGN boolean_expr MK_SEMICOLON
+  110 var_ref: var_ref . dim
 
-    $default  reduce using rule 57 (stmt)
+    OP_ASSIGN  shift, and go to state 110
+    MK_LB      shift, and go to state 111
+
+    dim  go to state 112
 
 
 State 83
 
-   65 simple_stmt: var_ref . OP_ASSIGN boolean_expr MK_SEMICOLON
-  110 var_ref: var_ref . dim
+   50 array_type: ARRAY $@9 int_const TO . int_const OF type
 
-    OP_ASSIGN  shift, and go to state 111
-    MK_LB      shift, and go to state 112
+    OCTAL_CONST  shift, and go to state 35
+    INT_CONST    shift, and go to state 36
 
-    dim  go to state 113
+    int_const  go to state 113
 
 
 State 84
 
-   51 array_type: ARRAY $@10 int_const TO . int_const OF type
+   33 func_decl: ID $@5 MK_LPAREN opt_param_list MK_RPAREN $@6 . opt_type MK_SEMICOLON $@7 compound_stmt END $@8 ID
 
-    OCTAL_CONST  shift, and go to state 36
-    INT_CONST    shift, and go to state 37
+    MK_COLON  shift, and go to state 114
 
-    int_const  go to state 114
+    $default  reduce using rule 42 (opt_type)
+
+    opt_type  go to state 115
 
 
 State 85
 
-   34 func_decl: ID $@6 MK_LPAREN opt_param_list MK_RPAREN $@7 . opt_type MK_SEMICOLON $@8 compound_stmt END $@9 ID
+   36 param_list: param_list MK_SEMICOLON param .
 
-    MK_COLON  shift, and go to state 115
-
-    $default  reduce using rule 43 (opt_type)
-
-    opt_type  go to state 116
+    $default  reduce using rule 36 (param_list)
 
 
 State 86
 
-   37 param_list: param_list MK_SEMICOLON param .
+   38 param: id_list MK_COLON type .
 
-    $default  reduce using rule 37 (param_list)
+    $default  reduce using rule 38 (param)
 
 
 State 87
 
-   39 param: id_list MK_COLON type .
+   43 type: scalar_type .
 
-    $default  reduce using rule 39 (param)
+    $default  reduce using rule 43 (type)
 
 
 State 88
 
-   44 type: scalar_type .
+   44 type: array_type .
 
     $default  reduce using rule 44 (type)
 
 
 State 89
 
-   45 type: array_type .
-
-    $default  reduce using rule 45 (type)
-
-
-State 90
-
    73 for_stmt: FOR ID . $@12 OP_ASSIGN int_const TO int_const DO opt_stmt_list END DO
 
     $default  reduce using rule 72 ($@12)
 
-    $@12  go to state 117
+    $@12  go to state 116
 
 
-State 91
+State 90
 
   106 factor: ID . MK_LPAREN opt_boolean_expr_list MK_RPAREN
   109 var_ref: ID .
 
-    MK_LPAREN  shift, and go to state 118
+    MK_LPAREN  shift, and go to state 117
 
     $default  reduce using rule 109 (var_ref)
 
 
-State 92
+State 91
 
-   18 literal_const: OP_SUB . int_const
-   20              | OP_SUB . FLOAT_CONST
-   22              | OP_SUB . SCIENTIFIC
+   17 literal_const: OP_SUB . int_const
+   19              | OP_SUB . FLOAT_CONST
+   21              | OP_SUB . SCIENTIFIC
   103 factor: OP_SUB . var_ref
   105       | OP_SUB . MK_LPAREN boolean_expr MK_RPAREN
   107       | OP_SUB . ID MK_LPAREN opt_boolean_expr_list MK_RPAREN
 
-    ID           shift, and go to state 119
-    OCTAL_CONST  shift, and go to state 36
-    INT_CONST    shift, and go to state 37
-    FLOAT_CONST  shift, and go to state 49
-    SCIENTIFIC   shift, and go to state 50
-    MK_LPAREN    shift, and go to state 120
+    ID           shift, and go to state 118
+    OCTAL_CONST  shift, and go to state 35
+    INT_CONST    shift, and go to state 36
+    FLOAT_CONST  shift, and go to state 48
+    SCIENTIFIC   shift, and go to state 49
+    MK_LPAREN    shift, and go to state 119
 
-    int_const  go to state 51
-    var_ref    go to state 121
+    int_const  go to state 50
+    var_ref    go to state 120
+
+
+State 92
+
+   83 boolean_factor: OP_NOT . boolean_factor
+
+    FALSE        shift, and go to state 30
+    TRUE         shift, and go to state 34
+    ID           shift, and go to state 90
+    OCTAL_CONST  shift, and go to state 35
+    INT_CONST    shift, and go to state 36
+    FLOAT_CONST  shift, and go to state 37
+    SCIENTIFIC   shift, and go to state 38
+    STR_CONST    shift, and go to state 39
+    OP_SUB       shift, and go to state 91
+    OP_NOT       shift, and go to state 92
+    MK_LPAREN    shift, and go to state 93
+
+    int_const       go to state 41
+    literal_const   go to state 94
+    boolean_factor  go to state 121
+    relop_expr      go to state 98
+    expr            go to state 99
+    term            go to state 100
+    factor          go to state 101
+    var_ref         go to state 102
 
 
 State 93
 
-   83 boolean_factor: OP_NOT . boolean_factor
+  104 factor: MK_LPAREN . boolean_expr MK_RPAREN
 
-    FALSE        shift, and go to state 31
-    TRUE         shift, and go to state 35
-    ID           shift, and go to state 91
-    OCTAL_CONST  shift, and go to state 36
-    INT_CONST    shift, and go to state 37
-    FLOAT_CONST  shift, and go to state 38
-    SCIENTIFIC   shift, and go to state 39
-    STR_CONST    shift, and go to state 40
-    OP_SUB       shift, and go to state 92
-    OP_NOT       shift, and go to state 93
-    MK_LPAREN    shift, and go to state 94
+    FALSE        shift, and go to state 30
+    TRUE         shift, and go to state 34
+    ID           shift, and go to state 90
+    OCTAL_CONST  shift, and go to state 35
+    INT_CONST    shift, and go to state 36
+    FLOAT_CONST  shift, and go to state 37
+    SCIENTIFIC   shift, and go to state 38
+    STR_CONST    shift, and go to state 39
+    OP_SUB       shift, and go to state 91
+    OP_NOT       shift, and go to state 92
+    MK_LPAREN    shift, and go to state 93
 
-    int_const       go to state 42
-    literal_const   go to state 95
-    boolean_factor  go to state 122
-    relop_expr      go to state 99
-    expr            go to state 100
-    term            go to state 101
-    factor          go to state 102
-    var_ref         go to state 103
+    int_const       go to state 41
+    literal_const   go to state 94
+    boolean_expr    go to state 122
+    boolean_term    go to state 96
+    boolean_factor  go to state 97
+    relop_expr      go to state 98
+    expr            go to state 99
+    term            go to state 100
+    factor          go to state 101
+    var_ref         go to state 102
 
 
 State 94
-
-  104 factor: MK_LPAREN . boolean_expr MK_RPAREN
-
-    FALSE        shift, and go to state 31
-    TRUE         shift, and go to state 35
-    ID           shift, and go to state 91
-    OCTAL_CONST  shift, and go to state 36
-    INT_CONST    shift, and go to state 37
-    FLOAT_CONST  shift, and go to state 38
-    SCIENTIFIC   shift, and go to state 39
-    STR_CONST    shift, and go to state 40
-    OP_SUB       shift, and go to state 92
-    OP_NOT       shift, and go to state 93
-    MK_LPAREN    shift, and go to state 94
-
-    int_const       go to state 42
-    literal_const   go to state 95
-    boolean_expr    go to state 123
-    boolean_term    go to state 97
-    boolean_factor  go to state 98
-    relop_expr      go to state 99
-    expr            go to state 100
-    term            go to state 101
-    factor          go to state 102
-    var_ref         go to state 103
-
-
-State 95
 
   108 factor: literal_const .
 
     $default  reduce using rule 108 (factor)
 
 
-State 96
+State 95
 
    69 cond_stmt: IF boolean_expr . THEN opt_stmt_list ELSE opt_stmt_list END IF
    70          | IF boolean_expr . THEN opt_stmt_list END IF
    79 boolean_expr: boolean_expr . OP_OR boolean_term
 
-    THEN   shift, and go to state 124
-    OP_OR  shift, and go to state 125
+    THEN   shift, and go to state 123
+    OP_OR  shift, and go to state 124
 
 
-State 97
+State 96
 
    80 boolean_expr: boolean_term .
    81 boolean_term: boolean_term . OP_AND boolean_factor
 
-    OP_AND  shift, and go to state 126
+    OP_AND  shift, and go to state 125
 
     $default  reduce using rule 80 (boolean_expr)
 
 
-State 98
+State 97
 
    82 boolean_term: boolean_factor .
 
     $default  reduce using rule 82 (boolean_term)
 
 
-State 99
+State 98
 
    84 boolean_factor: relop_expr .
 
     $default  reduce using rule 84 (boolean_factor)
 
 
-State 100
+State 99
 
    85 relop_expr: expr . rel_op expr
    86           | expr .
    93 expr: expr . add_op term
 
-    OP_ADD  shift, and go to state 127
-    OP_SUB  shift, and go to state 128
-    OP_EQ   shift, and go to state 129
-    OP_NE   shift, and go to state 130
-    OP_GT   shift, and go to state 131
-    OP_LT   shift, and go to state 132
-    OP_GE   shift, and go to state 133
-    OP_LE   shift, and go to state 134
+    OP_ADD  shift, and go to state 126
+    OP_SUB  shift, and go to state 127
+    OP_EQ   shift, and go to state 128
+    OP_NE   shift, and go to state 129
+    OP_GT   shift, and go to state 130
+    OP_LT   shift, and go to state 131
+    OP_GE   shift, and go to state 132
+    OP_LE   shift, and go to state 133
 
     $default  reduce using rule 86 (relop_expr)
 
-    rel_op  go to state 135
-    add_op  go to state 136
+    rel_op  go to state 134
+    add_op  go to state 135
 
 
-State 101
+State 100
 
    94 expr: term .
    97 term: term . mul_op factor
 
-    OP_MUL  shift, and go to state 137
-    OP_DIV  shift, and go to state 138
-    OP_MOD  shift, and go to state 139
+    OP_MUL  shift, and go to state 136
+    OP_DIV  shift, and go to state 137
+    OP_MOD  shift, and go to state 138
 
     $default  reduce using rule 94 (expr)
 
-    mul_op  go to state 140
+    mul_op  go to state 139
 
 
-State 102
+State 101
 
    98 term: factor .
 
     $default  reduce using rule 98 (term)
 
 
-State 103
+State 102
 
   102 factor: var_ref .
   110 var_ref: var_ref . dim
 
-    MK_LB  shift, and go to state 112
+    MK_LB  shift, and go to state 111
 
     $default  reduce using rule 102 (factor)
 
-    dim  go to state 113
+    dim  go to state 112
 
 
-State 104
+State 103
 
    66 simple_stmt: PRINT boolean_expr . MK_SEMICOLON
    79 boolean_expr: boolean_expr . OP_OR boolean_term
 
-    OP_OR         shift, and go to state 125
+    OP_OR         shift, and go to state 124
+    MK_SEMICOLON  shift, and go to state 140
+
+
+State 104
+
+   67 simple_stmt: READ boolean_expr . MK_SEMICOLON
+   79 boolean_expr: boolean_expr . OP_OR boolean_term
+
+    OP_OR         shift, and go to state 124
     MK_SEMICOLON  shift, and go to state 141
 
 
 State 105
 
-   67 simple_stmt: READ boolean_expr . MK_SEMICOLON
+   74 return_stmt: RETURN boolean_expr . MK_SEMICOLON
    79 boolean_expr: boolean_expr . OP_OR boolean_term
 
-    OP_OR         shift, and go to state 125
+    OP_OR         shift, and go to state 124
     MK_SEMICOLON  shift, and go to state 142
 
 
 State 106
 
-   74 return_stmt: RETURN boolean_expr . MK_SEMICOLON
+   71 while_stmt: WHILE boolean_expr . DO opt_stmt_list END DO
    79 boolean_expr: boolean_expr . OP_OR boolean_term
 
-    OP_OR         shift, and go to state 125
-    MK_SEMICOLON  shift, and go to state 143
+    DO     shift, and go to state 143
+    OP_OR  shift, and go to state 124
 
 
 State 107
 
-   71 while_stmt: WHILE boolean_expr . DO opt_stmt_list END DO
-   79 boolean_expr: boolean_expr . OP_OR boolean_term
+   68 proc_call_stmt: ID MK_LPAREN . opt_boolean_expr_list MK_RPAREN MK_SEMICOLON
 
-    DO     shift, and go to state 144
-    OP_OR  shift, and go to state 125
+    FALSE        shift, and go to state 30
+    TRUE         shift, and go to state 34
+    ID           shift, and go to state 90
+    OCTAL_CONST  shift, and go to state 35
+    INT_CONST    shift, and go to state 36
+    FLOAT_CONST  shift, and go to state 37
+    SCIENTIFIC   shift, and go to state 38
+    STR_CONST    shift, and go to state 39
+    OP_SUB       shift, and go to state 91
+    OP_NOT       shift, and go to state 92
+    MK_LPAREN    shift, and go to state 93
+
+    $default  reduce using rule 76 (opt_boolean_expr_list)
+
+    int_const              go to state 41
+    literal_const          go to state 94
+    opt_boolean_expr_list  go to state 144
+    boolean_expr_list      go to state 145
+    boolean_expr           go to state 146
+    boolean_term           go to state 96
+    boolean_factor         go to state 97
+    relop_expr             go to state 98
+    expr                   go to state 99
+    term                   go to state 100
+    factor                 go to state 101
+    var_ref                go to state 102
 
 
 State 108
 
-   68 proc_call_stmt: ID MK_LPAREN . opt_boolean_expr_list MK_RPAREN MK_SEMICOLON
+   60 compound_stmt: BEG $@10 opt_decl_list opt_stmt_list $@11 . END
 
-    FALSE        shift, and go to state 31
-    TRUE         shift, and go to state 35
-    ID           shift, and go to state 91
-    OCTAL_CONST  shift, and go to state 36
-    INT_CONST    shift, and go to state 37
-    FLOAT_CONST  shift, and go to state 38
-    SCIENTIFIC   shift, and go to state 39
-    STR_CONST    shift, and go to state 40
-    OP_SUB       shift, and go to state 92
-    OP_NOT       shift, and go to state 93
-    MK_LPAREN    shift, and go to state 94
-
-    $default  reduce using rule 76 (opt_boolean_expr_list)
-
-    int_const              go to state 42
-    literal_const          go to state 95
-    opt_boolean_expr_list  go to state 145
-    boolean_expr_list      go to state 146
-    boolean_expr           go to state 147
-    boolean_term           go to state 97
-    boolean_factor         go to state 98
-    relop_expr             go to state 99
-    expr                   go to state 100
-    term                   go to state 101
-    factor                 go to state 102
-    var_ref                go to state 103
+    END  shift, and go to state 147
 
 
 State 109
-
-   60 compound_stmt: BEG $@11 opt_decl_list opt_stmt_list END .
-
-    $default  reduce using rule 60 (compound_stmt)
-
-
-State 110
 
    63 stmt_list: stmt_list stmt .
 
     $default  reduce using rule 63 (stmt_list)
 
 
-State 111
+State 110
 
    65 simple_stmt: var_ref OP_ASSIGN . boolean_expr MK_SEMICOLON
 
-    FALSE        shift, and go to state 31
-    TRUE         shift, and go to state 35
-    ID           shift, and go to state 91
-    OCTAL_CONST  shift, and go to state 36
-    INT_CONST    shift, and go to state 37
-    FLOAT_CONST  shift, and go to state 38
-    SCIENTIFIC   shift, and go to state 39
-    STR_CONST    shift, and go to state 40
-    OP_SUB       shift, and go to state 92
-    OP_NOT       shift, and go to state 93
-    MK_LPAREN    shift, and go to state 94
+    FALSE        shift, and go to state 30
+    TRUE         shift, and go to state 34
+    ID           shift, and go to state 90
+    OCTAL_CONST  shift, and go to state 35
+    INT_CONST    shift, and go to state 36
+    FLOAT_CONST  shift, and go to state 37
+    SCIENTIFIC   shift, and go to state 38
+    STR_CONST    shift, and go to state 39
+    OP_SUB       shift, and go to state 91
+    OP_NOT       shift, and go to state 92
+    MK_LPAREN    shift, and go to state 93
 
-    int_const       go to state 42
-    literal_const   go to state 95
+    int_const       go to state 41
+    literal_const   go to state 94
     boolean_expr    go to state 148
-    boolean_term    go to state 97
-    boolean_factor  go to state 98
-    relop_expr      go to state 99
-    expr            go to state 100
-    term            go to state 101
-    factor          go to state 102
-    var_ref         go to state 103
+    boolean_term    go to state 96
+    boolean_factor  go to state 97
+    relop_expr      go to state 98
+    expr            go to state 99
+    term            go to state 100
+    factor          go to state 101
+    var_ref         go to state 102
 
 
-State 112
+State 111
 
   111 dim: MK_LB . boolean_expr MK_RB
 
-    FALSE        shift, and go to state 31
-    TRUE         shift, and go to state 35
-    ID           shift, and go to state 91
-    OCTAL_CONST  shift, and go to state 36
-    INT_CONST    shift, and go to state 37
-    FLOAT_CONST  shift, and go to state 38
-    SCIENTIFIC   shift, and go to state 39
-    STR_CONST    shift, and go to state 40
-    OP_SUB       shift, and go to state 92
-    OP_NOT       shift, and go to state 93
-    MK_LPAREN    shift, and go to state 94
+    FALSE        shift, and go to state 30
+    TRUE         shift, and go to state 34
+    ID           shift, and go to state 90
+    OCTAL_CONST  shift, and go to state 35
+    INT_CONST    shift, and go to state 36
+    FLOAT_CONST  shift, and go to state 37
+    SCIENTIFIC   shift, and go to state 38
+    STR_CONST    shift, and go to state 39
+    OP_SUB       shift, and go to state 91
+    OP_NOT       shift, and go to state 92
+    MK_LPAREN    shift, and go to state 93
 
-    int_const       go to state 42
-    literal_const   go to state 95
+    int_const       go to state 41
+    literal_const   go to state 94
     boolean_expr    go to state 149
-    boolean_term    go to state 97
-    boolean_factor  go to state 98
-    relop_expr      go to state 99
-    expr            go to state 100
-    term            go to state 101
-    factor          go to state 102
-    var_ref         go to state 103
+    boolean_term    go to state 96
+    boolean_factor  go to state 97
+    relop_expr      go to state 98
+    expr            go to state 99
+    term            go to state 100
+    factor          go to state 101
+    var_ref         go to state 102
 
 
-State 113
+State 112
 
   110 var_ref: var_ref dim .
 
     $default  reduce using rule 110 (var_ref)
 
 
-State 114
+State 113
 
-   51 array_type: ARRAY $@10 int_const TO int_const . OF type
+   50 array_type: ARRAY $@9 int_const TO int_const . OF type
 
     OF  shift, and go to state 150
 
 
-State 115
+State 114
 
-   42 opt_type: MK_COLON . type
+   41 opt_type: MK_COLON . type
 
-    ARRAY    shift, and go to state 29
-    BOOLEAN  shift, and go to state 30
-    INTEGER  shift, and go to state 32
-    REAL     shift, and go to state 33
-    STRING   shift, and go to state 34
+    ARRAY    shift, and go to state 28
+    BOOLEAN  shift, and go to state 29
+    INTEGER  shift, and go to state 31
+    REAL     shift, and go to state 32
+    STRING   shift, and go to state 33
 
     type         go to state 151
-    scalar_type  go to state 88
-    array_type   go to state 89
+    scalar_type  go to state 87
+    array_type   go to state 88
 
 
-State 116
+State 115
 
-   34 func_decl: ID $@6 MK_LPAREN opt_param_list MK_RPAREN $@7 opt_type . MK_SEMICOLON $@8 compound_stmt END $@9 ID
+   33 func_decl: ID $@5 MK_LPAREN opt_param_list MK_RPAREN $@6 opt_type . MK_SEMICOLON $@7 compound_stmt END $@8 ID
 
     MK_SEMICOLON  shift, and go to state 152
 
 
-State 117
+State 116
 
    73 for_stmt: FOR ID $@12 . OP_ASSIGN int_const TO int_const DO opt_stmt_list END DO
 
     OP_ASSIGN  shift, and go to state 153
 
 
-State 118
+State 117
 
   106 factor: ID MK_LPAREN . opt_boolean_expr_list MK_RPAREN
 
-    FALSE        shift, and go to state 31
-    TRUE         shift, and go to state 35
-    ID           shift, and go to state 91
-    OCTAL_CONST  shift, and go to state 36
-    INT_CONST    shift, and go to state 37
-    FLOAT_CONST  shift, and go to state 38
-    SCIENTIFIC   shift, and go to state 39
-    STR_CONST    shift, and go to state 40
-    OP_SUB       shift, and go to state 92
-    OP_NOT       shift, and go to state 93
-    MK_LPAREN    shift, and go to state 94
+    FALSE        shift, and go to state 30
+    TRUE         shift, and go to state 34
+    ID           shift, and go to state 90
+    OCTAL_CONST  shift, and go to state 35
+    INT_CONST    shift, and go to state 36
+    FLOAT_CONST  shift, and go to state 37
+    SCIENTIFIC   shift, and go to state 38
+    STR_CONST    shift, and go to state 39
+    OP_SUB       shift, and go to state 91
+    OP_NOT       shift, and go to state 92
+    MK_LPAREN    shift, and go to state 93
 
     $default  reduce using rule 76 (opt_boolean_expr_list)
 
-    int_const              go to state 42
-    literal_const          go to state 95
+    int_const              go to state 41
+    literal_const          go to state 94
     opt_boolean_expr_list  go to state 154
-    boolean_expr_list      go to state 146
-    boolean_expr           go to state 147
-    boolean_term           go to state 97
-    boolean_factor         go to state 98
-    relop_expr             go to state 99
-    expr                   go to state 100
-    term                   go to state 101
-    factor                 go to state 102
-    var_ref                go to state 103
+    boolean_expr_list      go to state 145
+    boolean_expr           go to state 146
+    boolean_term           go to state 96
+    boolean_factor         go to state 97
+    relop_expr             go to state 98
+    expr                   go to state 99
+    term                   go to state 100
+    factor                 go to state 101
+    var_ref                go to state 102
 
 
-State 119
+State 118
 
   107 factor: OP_SUB ID . MK_LPAREN opt_boolean_expr_list MK_RPAREN
   109 var_ref: ID .
@@ -1657,344 +1651,344 @@ State 119
     $default  reduce using rule 109 (var_ref)
 
 
-State 120
+State 119
 
   105 factor: OP_SUB MK_LPAREN . boolean_expr MK_RPAREN
 
-    FALSE        shift, and go to state 31
-    TRUE         shift, and go to state 35
-    ID           shift, and go to state 91
-    OCTAL_CONST  shift, and go to state 36
-    INT_CONST    shift, and go to state 37
-    FLOAT_CONST  shift, and go to state 38
-    SCIENTIFIC   shift, and go to state 39
-    STR_CONST    shift, and go to state 40
-    OP_SUB       shift, and go to state 92
-    OP_NOT       shift, and go to state 93
-    MK_LPAREN    shift, and go to state 94
+    FALSE        shift, and go to state 30
+    TRUE         shift, and go to state 34
+    ID           shift, and go to state 90
+    OCTAL_CONST  shift, and go to state 35
+    INT_CONST    shift, and go to state 36
+    FLOAT_CONST  shift, and go to state 37
+    SCIENTIFIC   shift, and go to state 38
+    STR_CONST    shift, and go to state 39
+    OP_SUB       shift, and go to state 91
+    OP_NOT       shift, and go to state 92
+    MK_LPAREN    shift, and go to state 93
 
-    int_const       go to state 42
-    literal_const   go to state 95
+    int_const       go to state 41
+    literal_const   go to state 94
     boolean_expr    go to state 156
-    boolean_term    go to state 97
-    boolean_factor  go to state 98
-    relop_expr      go to state 99
-    expr            go to state 100
-    term            go to state 101
-    factor          go to state 102
-    var_ref         go to state 103
+    boolean_term    go to state 96
+    boolean_factor  go to state 97
+    relop_expr      go to state 98
+    expr            go to state 99
+    term            go to state 100
+    factor          go to state 101
+    var_ref         go to state 102
 
 
-State 121
+State 120
 
   103 factor: OP_SUB var_ref .
   110 var_ref: var_ref . dim
 
-    MK_LB  shift, and go to state 112
+    MK_LB  shift, and go to state 111
 
     $default  reduce using rule 103 (factor)
 
-    dim  go to state 113
+    dim  go to state 112
 
 
-State 122
+State 121
 
    83 boolean_factor: OP_NOT boolean_factor .
 
     $default  reduce using rule 83 (boolean_factor)
 
 
-State 123
+State 122
 
    79 boolean_expr: boolean_expr . OP_OR boolean_term
   104 factor: MK_LPAREN boolean_expr . MK_RPAREN
 
-    OP_OR      shift, and go to state 125
+    OP_OR      shift, and go to state 124
     MK_RPAREN  shift, and go to state 157
 
 
-State 124
+State 123
 
    69 cond_stmt: IF boolean_expr THEN . opt_stmt_list ELSE opt_stmt_list END IF
    70          | IF boolean_expr THEN . opt_stmt_list END IF
 
     BEG     shift, and go to state 24
-    FOR     shift, and go to state 66
-    IF      shift, and go to state 67
-    PRINT   shift, and go to state 68
-    READ    shift, and go to state 69
-    RETURN  shift, and go to state 70
-    WHILE   shift, and go to state 71
-    ID      shift, and go to state 72
+    FOR     shift, and go to state 65
+    IF      shift, and go to state 66
+    PRINT   shift, and go to state 67
+    READ    shift, and go to state 68
+    RETURN  shift, and go to state 69
+    WHILE   shift, and go to state 70
+    ID      shift, and go to state 71
 
     $default  reduce using rule 62 (opt_stmt_list)
 
-    stmt            go to state 73
-    compound_stmt   go to state 74
+    stmt            go to state 72
+    compound_stmt   go to state 73
     opt_stmt_list   go to state 158
-    stmt_list       go to state 76
-    simple_stmt     go to state 77
-    proc_call_stmt  go to state 78
-    cond_stmt       go to state 79
-    while_stmt      go to state 80
-    for_stmt        go to state 81
-    return_stmt     go to state 82
-    var_ref         go to state 83
+    stmt_list       go to state 75
+    simple_stmt     go to state 76
+    proc_call_stmt  go to state 77
+    cond_stmt       go to state 78
+    while_stmt      go to state 79
+    for_stmt        go to state 80
+    return_stmt     go to state 81
+    var_ref         go to state 82
+
+
+State 124
+
+   79 boolean_expr: boolean_expr OP_OR . boolean_term
+
+    FALSE        shift, and go to state 30
+    TRUE         shift, and go to state 34
+    ID           shift, and go to state 90
+    OCTAL_CONST  shift, and go to state 35
+    INT_CONST    shift, and go to state 36
+    FLOAT_CONST  shift, and go to state 37
+    SCIENTIFIC   shift, and go to state 38
+    STR_CONST    shift, and go to state 39
+    OP_SUB       shift, and go to state 91
+    OP_NOT       shift, and go to state 92
+    MK_LPAREN    shift, and go to state 93
+
+    int_const       go to state 41
+    literal_const   go to state 94
+    boolean_term    go to state 159
+    boolean_factor  go to state 97
+    relop_expr      go to state 98
+    expr            go to state 99
+    term            go to state 100
+    factor          go to state 101
+    var_ref         go to state 102
 
 
 State 125
 
-   79 boolean_expr: boolean_expr OP_OR . boolean_term
+   81 boolean_term: boolean_term OP_AND . boolean_factor
 
-    FALSE        shift, and go to state 31
-    TRUE         shift, and go to state 35
-    ID           shift, and go to state 91
-    OCTAL_CONST  shift, and go to state 36
-    INT_CONST    shift, and go to state 37
-    FLOAT_CONST  shift, and go to state 38
-    SCIENTIFIC   shift, and go to state 39
-    STR_CONST    shift, and go to state 40
-    OP_SUB       shift, and go to state 92
-    OP_NOT       shift, and go to state 93
-    MK_LPAREN    shift, and go to state 94
+    FALSE        shift, and go to state 30
+    TRUE         shift, and go to state 34
+    ID           shift, and go to state 90
+    OCTAL_CONST  shift, and go to state 35
+    INT_CONST    shift, and go to state 36
+    FLOAT_CONST  shift, and go to state 37
+    SCIENTIFIC   shift, and go to state 38
+    STR_CONST    shift, and go to state 39
+    OP_SUB       shift, and go to state 91
+    OP_NOT       shift, and go to state 92
+    MK_LPAREN    shift, and go to state 93
 
-    int_const       go to state 42
-    literal_const   go to state 95
-    boolean_term    go to state 159
-    boolean_factor  go to state 98
-    relop_expr      go to state 99
-    expr            go to state 100
-    term            go to state 101
-    factor          go to state 102
-    var_ref         go to state 103
+    int_const       go to state 41
+    literal_const   go to state 94
+    boolean_factor  go to state 160
+    relop_expr      go to state 98
+    expr            go to state 99
+    term            go to state 100
+    factor          go to state 101
+    var_ref         go to state 102
 
 
 State 126
-
-   81 boolean_term: boolean_term OP_AND . boolean_factor
-
-    FALSE        shift, and go to state 31
-    TRUE         shift, and go to state 35
-    ID           shift, and go to state 91
-    OCTAL_CONST  shift, and go to state 36
-    INT_CONST    shift, and go to state 37
-    FLOAT_CONST  shift, and go to state 38
-    SCIENTIFIC   shift, and go to state 39
-    STR_CONST    shift, and go to state 40
-    OP_SUB       shift, and go to state 92
-    OP_NOT       shift, and go to state 93
-    MK_LPAREN    shift, and go to state 94
-
-    int_const       go to state 42
-    literal_const   go to state 95
-    boolean_factor  go to state 160
-    relop_expr      go to state 99
-    expr            go to state 100
-    term            go to state 101
-    factor          go to state 102
-    var_ref         go to state 103
-
-
-State 127
 
    95 add_op: OP_ADD .
 
     $default  reduce using rule 95 (add_op)
 
 
-State 128
+State 127
 
    96 add_op: OP_SUB .
 
     $default  reduce using rule 96 (add_op)
 
 
-State 129
+State 128
 
    89 rel_op: OP_EQ .
 
     $default  reduce using rule 89 (rel_op)
 
 
-State 130
+State 129
 
    92 rel_op: OP_NE .
 
     $default  reduce using rule 92 (rel_op)
 
 
-State 131
+State 130
 
    91 rel_op: OP_GT .
 
     $default  reduce using rule 91 (rel_op)
 
 
-State 132
+State 131
 
    87 rel_op: OP_LT .
 
     $default  reduce using rule 87 (rel_op)
 
 
-State 133
+State 132
 
    90 rel_op: OP_GE .
 
     $default  reduce using rule 90 (rel_op)
 
 
-State 134
+State 133
 
    88 rel_op: OP_LE .
 
     $default  reduce using rule 88 (rel_op)
 
 
-State 135
+State 134
 
    85 relop_expr: expr rel_op . expr
 
-    FALSE        shift, and go to state 31
-    TRUE         shift, and go to state 35
-    ID           shift, and go to state 91
-    OCTAL_CONST  shift, and go to state 36
-    INT_CONST    shift, and go to state 37
-    FLOAT_CONST  shift, and go to state 38
-    SCIENTIFIC   shift, and go to state 39
-    STR_CONST    shift, and go to state 40
-    OP_SUB       shift, and go to state 92
-    MK_LPAREN    shift, and go to state 94
+    FALSE        shift, and go to state 30
+    TRUE         shift, and go to state 34
+    ID           shift, and go to state 90
+    OCTAL_CONST  shift, and go to state 35
+    INT_CONST    shift, and go to state 36
+    FLOAT_CONST  shift, and go to state 37
+    SCIENTIFIC   shift, and go to state 38
+    STR_CONST    shift, and go to state 39
+    OP_SUB       shift, and go to state 91
+    MK_LPAREN    shift, and go to state 93
 
-    int_const      go to state 42
-    literal_const  go to state 95
+    int_const      go to state 41
+    literal_const  go to state 94
     expr           go to state 161
-    term           go to state 101
-    factor         go to state 102
-    var_ref        go to state 103
+    term           go to state 100
+    factor         go to state 101
+    var_ref        go to state 102
 
 
-State 136
+State 135
 
    93 expr: expr add_op . term
 
-    FALSE        shift, and go to state 31
-    TRUE         shift, and go to state 35
-    ID           shift, and go to state 91
-    OCTAL_CONST  shift, and go to state 36
-    INT_CONST    shift, and go to state 37
-    FLOAT_CONST  shift, and go to state 38
-    SCIENTIFIC   shift, and go to state 39
-    STR_CONST    shift, and go to state 40
-    OP_SUB       shift, and go to state 92
-    MK_LPAREN    shift, and go to state 94
+    FALSE        shift, and go to state 30
+    TRUE         shift, and go to state 34
+    ID           shift, and go to state 90
+    OCTAL_CONST  shift, and go to state 35
+    INT_CONST    shift, and go to state 36
+    FLOAT_CONST  shift, and go to state 37
+    SCIENTIFIC   shift, and go to state 38
+    STR_CONST    shift, and go to state 39
+    OP_SUB       shift, and go to state 91
+    MK_LPAREN    shift, and go to state 93
 
-    int_const      go to state 42
-    literal_const  go to state 95
+    int_const      go to state 41
+    literal_const  go to state 94
     term           go to state 162
-    factor         go to state 102
-    var_ref        go to state 103
+    factor         go to state 101
+    var_ref        go to state 102
 
 
-State 137
+State 136
 
    99 mul_op: OP_MUL .
 
     $default  reduce using rule 99 (mul_op)
 
 
-State 138
+State 137
 
   100 mul_op: OP_DIV .
 
     $default  reduce using rule 100 (mul_op)
 
 
-State 139
+State 138
 
   101 mul_op: OP_MOD .
 
     $default  reduce using rule 101 (mul_op)
 
 
-State 140
+State 139
 
    97 term: term mul_op . factor
 
-    FALSE        shift, and go to state 31
-    TRUE         shift, and go to state 35
-    ID           shift, and go to state 91
-    OCTAL_CONST  shift, and go to state 36
-    INT_CONST    shift, and go to state 37
-    FLOAT_CONST  shift, and go to state 38
-    SCIENTIFIC   shift, and go to state 39
-    STR_CONST    shift, and go to state 40
-    OP_SUB       shift, and go to state 92
-    MK_LPAREN    shift, and go to state 94
+    FALSE        shift, and go to state 30
+    TRUE         shift, and go to state 34
+    ID           shift, and go to state 90
+    OCTAL_CONST  shift, and go to state 35
+    INT_CONST    shift, and go to state 36
+    FLOAT_CONST  shift, and go to state 37
+    SCIENTIFIC   shift, and go to state 38
+    STR_CONST    shift, and go to state 39
+    OP_SUB       shift, and go to state 91
+    MK_LPAREN    shift, and go to state 93
 
-    int_const      go to state 42
-    literal_const  go to state 95
+    int_const      go to state 41
+    literal_const  go to state 94
     factor         go to state 163
-    var_ref        go to state 103
+    var_ref        go to state 102
 
 
-State 141
+State 140
 
    66 simple_stmt: PRINT boolean_expr MK_SEMICOLON .
 
     $default  reduce using rule 66 (simple_stmt)
 
 
-State 142
+State 141
 
    67 simple_stmt: READ boolean_expr MK_SEMICOLON .
 
     $default  reduce using rule 67 (simple_stmt)
 
 
-State 143
+State 142
 
    74 return_stmt: RETURN boolean_expr MK_SEMICOLON .
 
     $default  reduce using rule 74 (return_stmt)
 
 
-State 144
+State 143
 
    71 while_stmt: WHILE boolean_expr DO . opt_stmt_list END DO
 
     BEG     shift, and go to state 24
-    FOR     shift, and go to state 66
-    IF      shift, and go to state 67
-    PRINT   shift, and go to state 68
-    READ    shift, and go to state 69
-    RETURN  shift, and go to state 70
-    WHILE   shift, and go to state 71
-    ID      shift, and go to state 72
+    FOR     shift, and go to state 65
+    IF      shift, and go to state 66
+    PRINT   shift, and go to state 67
+    READ    shift, and go to state 68
+    RETURN  shift, and go to state 69
+    WHILE   shift, and go to state 70
+    ID      shift, and go to state 71
 
     $default  reduce using rule 62 (opt_stmt_list)
 
-    stmt            go to state 73
-    compound_stmt   go to state 74
+    stmt            go to state 72
+    compound_stmt   go to state 73
     opt_stmt_list   go to state 164
-    stmt_list       go to state 76
-    simple_stmt     go to state 77
-    proc_call_stmt  go to state 78
-    cond_stmt       go to state 79
-    while_stmt      go to state 80
-    for_stmt        go to state 81
-    return_stmt     go to state 82
-    var_ref         go to state 83
+    stmt_list       go to state 75
+    simple_stmt     go to state 76
+    proc_call_stmt  go to state 77
+    cond_stmt       go to state 78
+    while_stmt      go to state 79
+    for_stmt        go to state 80
+    return_stmt     go to state 81
+    var_ref         go to state 82
 
 
-State 145
+State 144
 
    68 proc_call_stmt: ID MK_LPAREN opt_boolean_expr_list . MK_RPAREN MK_SEMICOLON
 
     MK_RPAREN  shift, and go to state 165
 
 
-State 146
+State 145
 
    75 opt_boolean_expr_list: boolean_expr_list .
    77 boolean_expr_list: boolean_expr_list . MK_COMMA boolean_expr
@@ -2004,14 +1998,21 @@ State 146
     $default  reduce using rule 75 (opt_boolean_expr_list)
 
 
-State 147
+State 146
 
    78 boolean_expr_list: boolean_expr .
    79 boolean_expr: boolean_expr . OP_OR boolean_term
 
-    OP_OR  shift, and go to state 125
+    OP_OR  shift, and go to state 124
 
     $default  reduce using rule 78 (boolean_expr_list)
+
+
+State 147
+
+   60 compound_stmt: BEG $@10 opt_decl_list opt_stmt_list $@11 END .
+
+    $default  reduce using rule 60 (compound_stmt)
 
 
 State 148
@@ -2019,7 +2020,7 @@ State 148
    65 simple_stmt: var_ref OP_ASSIGN boolean_expr . MK_SEMICOLON
    79 boolean_expr: boolean_expr . OP_OR boolean_term
 
-    OP_OR         shift, and go to state 125
+    OP_OR         shift, and go to state 124
     MK_SEMICOLON  shift, and go to state 167
 
 
@@ -2028,47 +2029,47 @@ State 149
    79 boolean_expr: boolean_expr . OP_OR boolean_term
   111 dim: MK_LB boolean_expr . MK_RB
 
-    OP_OR  shift, and go to state 125
+    OP_OR  shift, and go to state 124
     MK_RB  shift, and go to state 168
 
 
 State 150
 
-   51 array_type: ARRAY $@10 int_const TO int_const OF . type
+   50 array_type: ARRAY $@9 int_const TO int_const OF . type
 
-    ARRAY    shift, and go to state 29
-    BOOLEAN  shift, and go to state 30
-    INTEGER  shift, and go to state 32
-    REAL     shift, and go to state 33
-    STRING   shift, and go to state 34
+    ARRAY    shift, and go to state 28
+    BOOLEAN  shift, and go to state 29
+    INTEGER  shift, and go to state 31
+    REAL     shift, and go to state 32
+    STRING   shift, and go to state 33
 
     type         go to state 169
-    scalar_type  go to state 88
-    array_type   go to state 89
+    scalar_type  go to state 87
+    array_type   go to state 88
 
 
 State 151
 
-   42 opt_type: MK_COLON type .
+   41 opt_type: MK_COLON type .
 
-    $default  reduce using rule 42 (opt_type)
+    $default  reduce using rule 41 (opt_type)
 
 
 State 152
 
-   34 func_decl: ID $@6 MK_LPAREN opt_param_list MK_RPAREN $@7 opt_type MK_SEMICOLON . $@8 compound_stmt END $@9 ID
+   33 func_decl: ID $@5 MK_LPAREN opt_param_list MK_RPAREN $@6 opt_type MK_SEMICOLON . $@7 compound_stmt END $@8 ID
 
-    $default  reduce using rule 32 ($@8)
+    $default  reduce using rule 31 ($@7)
 
-    $@8  go to state 170
+    $@7  go to state 170
 
 
 State 153
 
    73 for_stmt: FOR ID $@12 OP_ASSIGN . int_const TO int_const DO opt_stmt_list END DO
 
-    OCTAL_CONST  shift, and go to state 36
-    INT_CONST    shift, and go to state 37
+    OCTAL_CONST  shift, and go to state 35
+    INT_CONST    shift, and go to state 36
 
     int_const  go to state 171
 
@@ -2084,32 +2085,32 @@ State 155
 
   107 factor: OP_SUB ID MK_LPAREN . opt_boolean_expr_list MK_RPAREN
 
-    FALSE        shift, and go to state 31
-    TRUE         shift, and go to state 35
-    ID           shift, and go to state 91
-    OCTAL_CONST  shift, and go to state 36
-    INT_CONST    shift, and go to state 37
-    FLOAT_CONST  shift, and go to state 38
-    SCIENTIFIC   shift, and go to state 39
-    STR_CONST    shift, and go to state 40
-    OP_SUB       shift, and go to state 92
-    OP_NOT       shift, and go to state 93
-    MK_LPAREN    shift, and go to state 94
+    FALSE        shift, and go to state 30
+    TRUE         shift, and go to state 34
+    ID           shift, and go to state 90
+    OCTAL_CONST  shift, and go to state 35
+    INT_CONST    shift, and go to state 36
+    FLOAT_CONST  shift, and go to state 37
+    SCIENTIFIC   shift, and go to state 38
+    STR_CONST    shift, and go to state 39
+    OP_SUB       shift, and go to state 91
+    OP_NOT       shift, and go to state 92
+    MK_LPAREN    shift, and go to state 93
 
     $default  reduce using rule 76 (opt_boolean_expr_list)
 
-    int_const              go to state 42
-    literal_const          go to state 95
+    int_const              go to state 41
+    literal_const          go to state 94
     opt_boolean_expr_list  go to state 173
-    boolean_expr_list      go to state 146
-    boolean_expr           go to state 147
-    boolean_term           go to state 97
-    boolean_factor         go to state 98
-    relop_expr             go to state 99
-    expr                   go to state 100
-    term                   go to state 101
-    factor                 go to state 102
-    var_ref                go to state 103
+    boolean_expr_list      go to state 145
+    boolean_expr           go to state 146
+    boolean_term           go to state 96
+    boolean_factor         go to state 97
+    relop_expr             go to state 98
+    expr                   go to state 99
+    term                   go to state 100
+    factor                 go to state 101
+    var_ref                go to state 102
 
 
 State 156
@@ -2117,7 +2118,7 @@ State 156
    79 boolean_expr: boolean_expr . OP_OR boolean_term
   105 factor: OP_SUB MK_LPAREN boolean_expr . MK_RPAREN
 
-    OP_OR      shift, and go to state 125
+    OP_OR      shift, and go to state 124
     MK_RPAREN  shift, and go to state 174
 
 
@@ -2142,7 +2143,7 @@ State 159
    79 boolean_expr: boolean_expr OP_OR boolean_term .
    81 boolean_term: boolean_term . OP_AND boolean_factor
 
-    OP_AND  shift, and go to state 126
+    OP_AND  shift, and go to state 125
 
     $default  reduce using rule 79 (boolean_expr)
 
@@ -2159,12 +2160,12 @@ State 161
    85 relop_expr: expr rel_op expr .
    93 expr: expr . add_op term
 
-    OP_ADD  shift, and go to state 127
-    OP_SUB  shift, and go to state 128
+    OP_ADD  shift, and go to state 126
+    OP_SUB  shift, and go to state 127
 
     $default  reduce using rule 85 (relop_expr)
 
-    add_op  go to state 136
+    add_op  go to state 135
 
 
 State 162
@@ -2172,13 +2173,13 @@ State 162
    93 expr: expr add_op term .
    97 term: term . mul_op factor
 
-    OP_MUL  shift, and go to state 137
-    OP_DIV  shift, and go to state 138
-    OP_MOD  shift, and go to state 139
+    OP_MUL  shift, and go to state 136
+    OP_DIV  shift, and go to state 137
+    OP_MOD  shift, and go to state 138
 
     $default  reduce using rule 93 (expr)
 
-    mul_op  go to state 140
+    mul_op  go to state 139
 
 
 State 163
@@ -2206,28 +2207,28 @@ State 166
 
    77 boolean_expr_list: boolean_expr_list MK_COMMA . boolean_expr
 
-    FALSE        shift, and go to state 31
-    TRUE         shift, and go to state 35
-    ID           shift, and go to state 91
-    OCTAL_CONST  shift, and go to state 36
-    INT_CONST    shift, and go to state 37
-    FLOAT_CONST  shift, and go to state 38
-    SCIENTIFIC   shift, and go to state 39
-    STR_CONST    shift, and go to state 40
-    OP_SUB       shift, and go to state 92
-    OP_NOT       shift, and go to state 93
-    MK_LPAREN    shift, and go to state 94
+    FALSE        shift, and go to state 30
+    TRUE         shift, and go to state 34
+    ID           shift, and go to state 90
+    OCTAL_CONST  shift, and go to state 35
+    INT_CONST    shift, and go to state 36
+    FLOAT_CONST  shift, and go to state 37
+    SCIENTIFIC   shift, and go to state 38
+    STR_CONST    shift, and go to state 39
+    OP_SUB       shift, and go to state 91
+    OP_NOT       shift, and go to state 92
+    MK_LPAREN    shift, and go to state 93
 
-    int_const       go to state 42
-    literal_const   go to state 95
+    int_const       go to state 41
+    literal_const   go to state 94
     boolean_expr    go to state 179
-    boolean_term    go to state 97
-    boolean_factor  go to state 98
-    relop_expr      go to state 99
-    expr            go to state 100
-    term            go to state 101
-    factor          go to state 102
-    var_ref         go to state 103
+    boolean_term    go to state 96
+    boolean_factor  go to state 97
+    relop_expr      go to state 98
+    expr            go to state 99
+    term            go to state 100
+    factor          go to state 101
+    var_ref         go to state 102
 
 
 State 167
@@ -2246,14 +2247,14 @@ State 168
 
 State 169
 
-   51 array_type: ARRAY $@10 int_const TO int_const OF type .
+   50 array_type: ARRAY $@9 int_const TO int_const OF type .
 
-    $default  reduce using rule 51 (array_type)
+    $default  reduce using rule 50 (array_type)
 
 
 State 170
 
-   34 func_decl: ID $@6 MK_LPAREN opt_param_list MK_RPAREN $@7 opt_type MK_SEMICOLON $@8 . compound_stmt END $@9 ID
+   33 func_decl: ID $@5 MK_LPAREN opt_param_list MK_RPAREN $@6 opt_type MK_SEMICOLON $@7 . compound_stmt END $@8 ID
 
     BEG  shift, and go to state 24
 
@@ -2293,27 +2294,27 @@ State 175
    69 cond_stmt: IF boolean_expr THEN opt_stmt_list ELSE . opt_stmt_list END IF
 
     BEG     shift, and go to state 24
-    FOR     shift, and go to state 66
-    IF      shift, and go to state 67
-    PRINT   shift, and go to state 68
-    READ    shift, and go to state 69
-    RETURN  shift, and go to state 70
-    WHILE   shift, and go to state 71
-    ID      shift, and go to state 72
+    FOR     shift, and go to state 65
+    IF      shift, and go to state 66
+    PRINT   shift, and go to state 67
+    READ    shift, and go to state 68
+    RETURN  shift, and go to state 69
+    WHILE   shift, and go to state 70
+    ID      shift, and go to state 71
 
     $default  reduce using rule 62 (opt_stmt_list)
 
-    stmt            go to state 73
-    compound_stmt   go to state 74
+    stmt            go to state 72
+    compound_stmt   go to state 73
     opt_stmt_list   go to state 183
-    stmt_list       go to state 76
-    simple_stmt     go to state 77
-    proc_call_stmt  go to state 78
-    cond_stmt       go to state 79
-    while_stmt      go to state 80
-    for_stmt        go to state 81
-    return_stmt     go to state 82
-    var_ref         go to state 83
+    stmt_list       go to state 75
+    simple_stmt     go to state 76
+    proc_call_stmt  go to state 77
+    cond_stmt       go to state 78
+    while_stmt      go to state 79
+    for_stmt        go to state 80
+    return_stmt     go to state 81
+    var_ref         go to state 82
 
 
 State 176
@@ -2342,14 +2343,14 @@ State 179
    77 boolean_expr_list: boolean_expr_list MK_COMMA boolean_expr .
    79 boolean_expr: boolean_expr . OP_OR boolean_term
 
-    OP_OR  shift, and go to state 125
+    OP_OR  shift, and go to state 124
 
     $default  reduce using rule 77 (boolean_expr_list)
 
 
 State 180
 
-   34 func_decl: ID $@6 MK_LPAREN opt_param_list MK_RPAREN $@7 opt_type MK_SEMICOLON $@8 compound_stmt . END $@9 ID
+   33 func_decl: ID $@5 MK_LPAREN opt_param_list MK_RPAREN $@6 opt_type MK_SEMICOLON $@7 compound_stmt . END $@8 ID
 
     END  shift, and go to state 186
 
@@ -2358,8 +2359,8 @@ State 181
 
    73 for_stmt: FOR ID $@12 OP_ASSIGN int_const TO . int_const DO opt_stmt_list END DO
 
-    OCTAL_CONST  shift, and go to state 36
-    INT_CONST    shift, and go to state 37
+    OCTAL_CONST  shift, and go to state 35
+    INT_CONST    shift, and go to state 36
 
     int_const  go to state 187
 
@@ -2394,11 +2395,11 @@ State 185
 
 State 186
 
-   34 func_decl: ID $@6 MK_LPAREN opt_param_list MK_RPAREN $@7 opt_type MK_SEMICOLON $@8 compound_stmt END . $@9 ID
+   33 func_decl: ID $@5 MK_LPAREN opt_param_list MK_RPAREN $@6 opt_type MK_SEMICOLON $@7 compound_stmt END . $@8 ID
 
-    $default  reduce using rule 33 ($@9)
+    $default  reduce using rule 32 ($@8)
 
-    $@9  go to state 189
+    $@8  go to state 189
 
 
 State 187
@@ -2417,7 +2418,7 @@ State 188
 
 State 189
 
-   34 func_decl: ID $@6 MK_LPAREN opt_param_list MK_RPAREN $@7 opt_type MK_SEMICOLON $@8 compound_stmt END $@9 . ID
+   33 func_decl: ID $@5 MK_LPAREN opt_param_list MK_RPAREN $@6 opt_type MK_SEMICOLON $@7 compound_stmt END $@8 . ID
 
     ID  shift, and go to state 192
 
@@ -2427,27 +2428,27 @@ State 190
    73 for_stmt: FOR ID $@12 OP_ASSIGN int_const TO int_const DO . opt_stmt_list END DO
 
     BEG     shift, and go to state 24
-    FOR     shift, and go to state 66
-    IF      shift, and go to state 67
-    PRINT   shift, and go to state 68
-    READ    shift, and go to state 69
-    RETURN  shift, and go to state 70
-    WHILE   shift, and go to state 71
-    ID      shift, and go to state 72
+    FOR     shift, and go to state 65
+    IF      shift, and go to state 66
+    PRINT   shift, and go to state 67
+    READ    shift, and go to state 68
+    RETURN  shift, and go to state 69
+    WHILE   shift, and go to state 70
+    ID      shift, and go to state 71
 
     $default  reduce using rule 62 (opt_stmt_list)
 
-    stmt            go to state 73
-    compound_stmt   go to state 74
+    stmt            go to state 72
+    compound_stmt   go to state 73
     opt_stmt_list   go to state 193
-    stmt_list       go to state 76
-    simple_stmt     go to state 77
-    proc_call_stmt  go to state 78
-    cond_stmt       go to state 79
-    while_stmt      go to state 80
-    for_stmt        go to state 81
-    return_stmt     go to state 82
-    var_ref         go to state 83
+    stmt_list       go to state 75
+    simple_stmt     go to state 76
+    proc_call_stmt  go to state 77
+    cond_stmt       go to state 78
+    while_stmt      go to state 79
+    for_stmt        go to state 80
+    return_stmt     go to state 81
+    var_ref         go to state 82
 
 
 State 191
@@ -2459,9 +2460,9 @@ State 191
 
 State 192
 
-   34 func_decl: ID $@6 MK_LPAREN opt_param_list MK_RPAREN $@7 opt_type MK_SEMICOLON $@8 compound_stmt END $@9 ID .
+   33 func_decl: ID $@5 MK_LPAREN opt_param_list MK_RPAREN $@6 opt_type MK_SEMICOLON $@7 compound_stmt END $@8 ID .
 
-    $default  reduce using rule 34 (func_decl)
+    $default  reduce using rule 33 (func_decl)
 
 
 State 193

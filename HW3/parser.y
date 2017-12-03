@@ -89,10 +89,10 @@ int yyerror(char* );
 program		:	ID
 				{
 					//
-					printf("1->");
+					//printf("1->");
 					puts(yytext);
 					strcpy(mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name,yytext);
-					printf("program name %s",mysymbol_table[0].mysub_entry[0].name);
+					//printf("program name %s",mysymbol_table[0].mysub_entry[0].name);
 					global_sub_entry_cnt=1;
 					global_pre_sub_entry_cnt=global_sub_entry_cnt;
 					is_array = 0;
@@ -113,22 +113,22 @@ program		:	ID
 			  	}
 			;
 
-program_body	: opt_decl_list opt_func_decl_list compound_stmt {printf("1->");}
+program_body	: opt_decl_list opt_func_decl_list compound_stmt /*//printf("1->");}*/
 			;
 
-opt_decl_list	: decl_list {printf("2->");}
+opt_decl_list	: decl_list /*{//printf("2->");}*/
 				| /* epsilon */
 			;
 
-decl_list	: 	decl_list {printf("3->");}
- 				decl {printf("4->");}
-			| 	decl {printf("5->");}
+decl_list	: 	decl_list /*//printf("3->");}*/
+ 				decl /*//printf("4->");}*/
+			| 	decl /*//printf("5->");}*/
 			;
 
 decl		: VAR	/* scalar type declaration */
  			id_list MK_COLON scalar_type
 			{
-				{printf("7->");}
+				//printf("7->");}
 				if(scope_depth==0) //global declaration
 				{
 					for(int i=global_pre_sub_entry_cnt;i<global_sub_entry_cnt;i++)
@@ -147,7 +147,7 @@ decl		: VAR	/* scalar type declaration */
 					}
 					global_pre_sub_entry_cnt=global_sub_entry_cnt; //update it for next segment
 					error_detection();
-					dumpsymbol();
+					//dumpsymbol();
 				}
 				else //non global declaration
 				{
@@ -167,7 +167,7 @@ decl		: VAR	/* scalar type declaration */
 					}
 					pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
 					error_detection();
-					dumpsymbol();
+					//dumpsymbol();
 				}
 
 			}
@@ -175,7 +175,7 @@ decl		: VAR	/* scalar type declaration */
 			| VAR    /* array type declaration */
 			id_list MK_COLON array_type MK_SEMICOLON
 			{
-				{printf("9->");}
+				//printf("9->");}
 				if(scope_depth==0) //global declaration
 				{
 					for(int i=global_pre_sub_entry_cnt;i<global_sub_entry_cnt;i++)
@@ -189,13 +189,13 @@ decl		: VAR	/* scalar type declaration */
 						ps_level="(global)";
 						strcat(depth_n,ps_level);
 						strcpy(mysymbol_table[scope_depth].mysub_entry[i].level_str,depth_n);
-						printf("arr buf %s and table arr type buf %s\n",arr_buf,mysymbol_table[scope_depth].mysub_entry[i].array_type_buf);
+						//printf("arr buf %s and table arr type buf %s\n",arr_buf,mysymbol_table[scope_depth].mysub_entry[i].array_type_buf);
 						array_dimension_parser();
-						strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,reverse_arr_buf); //altogether using the sprintf to concatenate multiple strings
+						strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,reverse_arr_buf); //altogether using the s//printf to concatenate multiple strings
 						mysymbol_table[scope_depth].mysub_entry[i].is_array_decl=true;
 					}
 					global_pre_sub_entry_cnt=global_sub_entry_cnt;
-					//error_detection();
+					error_detection();
 				}
 				else //non global declaration
 				{
@@ -210,9 +210,9 @@ decl		: VAR	/* scalar type declaration */
 						ps_level="(local)";
 						strcat(depth_n,ps_level);
 						strcpy(mysymbol_table[scope_depth].mysub_entry[i].level_str,depth_n);
-						printf("arr buf %s and table arr type buf %s\n",arr_buf,mysymbol_table[scope_depth].mysub_entry[i].array_type_buf);
+						//printf("arr buf %s and table arr type buf %s\n",arr_buf,mysymbol_table[scope_depth].mysub_entry[i].array_type_buf);
 						array_dimension_parser();
-						strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,reverse_arr_buf); //altogether using the sprintf to concatenate multiple strings
+						strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,reverse_arr_buf); //altogether using the s//printf to concatenate multiple strings
 						mysymbol_table[scope_depth].mysub_entry[i].is_array_decl=true;
 					}
 					pre_sub_entry_cnt=sub_entry_cnt;
@@ -223,9 +223,9 @@ decl		: VAR	/* scalar type declaration */
 				is_array=0;//end matching an array, turn off the flag
 
 			}
-			| VAR id_list MK_COLON literal_const
+			| VAR id_list MK_COLON literal_const /* const declaration */
 			{
-				{printf("10->");}
+				//printf("10->");}
 				if(scope_depth==0) //global declaration
 				{
 					for(int i=global_pre_sub_entry_cnt;i<global_sub_entry_cnt;i++)
@@ -244,7 +244,7 @@ decl		: VAR	/* scalar type declaration */
 					}
 					global_pre_sub_entry_cnt=global_sub_entry_cnt; //update it for next segment
 					error_detection();
-					dumpsymbol();
+					//dumpsymbol();
 				}
 				else //non-global declaration
 				{
@@ -264,9 +264,9 @@ decl		: VAR	/* scalar type declaration */
 					}
 					pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
 					error_detection();
-					dumpsymbol();
+					//dumpsymbol();
 				}
-			} /* const declaration */
+			}
 			MK_SEMICOLON
 			;
 
@@ -295,7 +295,7 @@ func_decl_list		: func_decl_list func_decl
 
 func_decl	: 	ID
 				{
-					{printf("11->");}
+					//printf("11->");}
 					sub_entry_cnt=0;
 					pre_sub_entry_cnt=0;
 					scope_depth+=1;
@@ -303,7 +303,7 @@ func_decl	: 	ID
 					strcat(mysymbol_table[0].mysub_entry[global_sub_entry_cnt].name,yytext);
 					strcpy(mysymbol_table[0].mysub_entry[global_sub_entry_cnt].kind,"function");
 					strcpy(mysymbol_table[0].mysub_entry[global_sub_entry_cnt].level_str,"0(global)");
-					printf("Global entry count %d \n",global_sub_entry_cnt);
+					//printf("Global entry count %d \n",global_sub_entry_cnt);
 					mysymbol_table[0].mysub_entry[global_sub_entry_cnt].is_funct_decl=1;
 					//memset(funct_type_buf_parser,0,sizeof(funct_type_buf_parser));
 					memset(funct_attri_buf,0,sizeof(funct_attri_buf));
@@ -327,9 +327,9 @@ func_decl	: 	ID
 					}
 					//setting the function attribute(parameter which passed in)
 					strcat(mysymbol_table[0].mysub_entry[global_sub_entry_cnt-1].attri_type_buf,funct_attri_buf);
-					printf("Function attribute %s after parsing and function type %s \n",mysymbol_table[0].mysub_entry[global_sub_entry_cnt-1].attri_type_buf,mysymbol_table[0].mysub_entry[global_sub_entry_cnt-1].funct_type_buf);
-					printf("dump function symbol test \n");
-					dumpsymbol();
+					//printf("Function attribute %s after parsing and function type %s \n",mysymbol_table[0].mysub_entry[global_sub_entry_cnt-1].attri_type_buf,mysymbol_table[0].mysub_entry[global_sub_entry_cnt-1].funct_type_buf);
+					//printf("dump function symbol test \n");
+					//dumpsymbol();
 					global_pre_sub_entry_cnt=global_sub_entry_cnt;
 					is_array=0;
 					 //global function end by 1
@@ -337,10 +337,10 @@ func_decl	: 	ID
 			  	compound_stmt
 			  	END
 				{
-					{printf("12->");}
+					//printf("12->");}
 					//set the function attribute and type after all declared
-					dumpsymbol();
-					pop_symbol_table(); //function pop itself
+					/*dumpsymbol();
+					pop_symbol_table(); //function pop itself*/
 					is_function=0;
 				}
 				ID
@@ -356,12 +356,12 @@ param_list	: param_list MK_SEMICOLON param
 
 param		: id_list MK_COLON type
 			{
-				{printf("13->");}
+				//printf("13->");}
 
 				for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
 				{
 					strcpy(mysymbol_table[scope_depth].mysub_entry[i].kind,"parameter");
-					printf("i is now %d and name %s\n",i,mysymbol_table[scope_depth].mysub_entry[i].name);
+					//printf("i is now %d and name %s\n",i,mysymbol_table[scope_depth].mysub_entry[i].name);
 					char* ps_level;
 					char depth_n[100];
 					memset(depth_n,0,sizeof(depth_n));
@@ -370,13 +370,13 @@ param		: id_list MK_COLON type
 						depth_n[0]=scope_depth+'0';
 						ps_level="(local)";
 						strcat(depth_n,ps_level);
-						printf("Depth n %s \n",depth_n);
+						//printf("Depth n %s \n",depth_n);
 					}
 					strcpy(mysymbol_table[scope_depth].mysub_entry[i].level_str,depth_n);
 					if(is_array)
 					{
-						printf("Found an array parameter passed in \n");
-						printf("arr buf %s \n",arr_buf);
+						//printf("Found an array parameter passed in \n");
+						//printf("arr buf %s \n",arr_buf);
 						array_dimension_parser();
 						strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,reverse_arr_buf);
 						strcat(funct_attri_buf,mysymbol_table[scope_depth].mysub_entry[i].array_type_buf);
@@ -391,7 +391,7 @@ param		: id_list MK_COLON type
 					}
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
-				printf("parsing parameter done dump symbol table\n");
+				//printf("parsing parameter done dump symbol table\n");
 				memset(arr_buf,0,sizeof(arr_buf));
 				is_array=0;
 			}
@@ -399,8 +399,8 @@ param		: id_list MK_COLON type
 
 id_list		: id_list MK_COMMA ID /*one ID for one sub_entry*/
 			{
-				{printf("14->");}
-				printf("ID is %s",yytext);
+				//printf("14->");}
+				//printf("ID is %s",yytext);
 				if(scope_depth==0) //global declaration
 				{
 					strcpy(mysymbol_table[0].mysub_entry[global_sub_entry_cnt].name,yytext);
@@ -412,14 +412,14 @@ id_list		: id_list MK_COMMA ID /*one ID for one sub_entry*/
 					sub_entry_cnt++;
 				}
 				$$=yytext;
-				printf(" AND PASSED IN ID NAME %s \n",mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name);
-				dumpsymbol();
+				//printf(" AND PASSED IN ID NAME %s \n",mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name);
+				//dumpsymbol();
 			}
 			| ID
 			{
 
-				{printf("15->");}
-				printf("ID is %s",yytext);
+				//printf("15->");}
+				//printf("ID is %s",yytext);
 				if(scope_depth==0) //global declaration
 				{
 					strcpy(mysymbol_table[0].mysub_entry[global_sub_entry_cnt].name,yytext);
@@ -431,8 +431,8 @@ id_list		: id_list MK_COMMA ID /*one ID for one sub_entry*/
 					sub_entry_cnt++;
 				}
 				$$=yytext;
-				printf(" AND PASSED IN ID NAME %s \n",mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name);
-				dumpsymbol();
+				//printf(" AND PASSED IN ID NAME %s \n",mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name);
+				//dumpsymbol();
 			}
 			;
 
@@ -446,49 +446,49 @@ type		: scalar_type {$$=$1;} /*type transmittion*/
 
 scalar_type	: INTEGER
 			{
-				{printf("16->");}
-				$$="integer";
+				//printf("16->");}
+				$$="integer ";
 				assign_scalar_type($$);
 			}
 			| REAL
 			{
-				{printf("17->");}
-				printf("TYPE is %s",yytext);
-				$$="real";
+				//printf("17->");}
+				//printf("TYPE is %s",yytext);
+				$$="real ";
 				assign_scalar_type($$);
 			}
 			| BOOLEAN
 			{
-				{printf("18->");}
-				printf("TYPE is %s",yytext);
-				$$="boolean";
+				//printf("18->");}
+				//printf("TYPE is %s",yytext);
+				$$="boolean ";
 				assign_scalar_type($$);
 			}
 			| STRING
 			{
-				{printf("19->");}
-				printf("TYPE is %s",yytext);
-				$$="string";
+				//printf("19->");}
+				//printf("TYPE is %s",yytext);
+				$$="string ";
 				assign_scalar_type($$);
 			}
 			;
 
 array_type	: ARRAY
 			{
-				{printf("20->");}
+				//printf("20->");}
 				is_array=1;
 			}
  			int_const TO int_const OF type
 			{
-				{printf("21->");}
+				//printf("21->");}
 
 				int delta=atol($5)-atol($3)+1;
 				char tmp[10];
-				printf("\narray dim FROM %s to %s delta is %d\n",$3,$5,delta);
+				//printf("\narray dim FROM %s to %s delta is %d\n",$3,$5,delta);
 				sprintf(tmp,"%d",delta);
 				strcat(arr_buf,tmp);
 				strcat(arr_buf,",");
-				printf("Array buf %s \n",arr_buf);
+				//printf("Array buf %s \n",arr_buf);
 			}
 			;
 
@@ -503,7 +503,7 @@ stmt		: compound_stmt
 
 compound_stmt	: BEG
 				{
-					{printf("22->");}
+					//printf("22->");}
 					if(scope_depth==0&&is_function)
 					{
 						scope_depth++;
@@ -514,26 +514,25 @@ compound_stmt	: BEG
 						sub_entry_cnt=0;
 						pre_sub_entry_cnt=0;
 					}
-					printf("compound_stmt begin\n");
-					printf("Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d \n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt);
+					//printf("compound_stmt begin\n");
+					//printf("Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d \n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt);
 
 				}
 			  	opt_decl_list
 			  	opt_stmt_list
-			  	END
 				{
-					{printf("23->");}
-					printf("compound_stmt end\n");
-					printf("Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d \n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt);
+					//printf("23->");}
+					//printf("compound_stmt end\n");
+					//printf("Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d \n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt);
 					if(is_function&&scope_depth>1) //prevernt double popping
 					{
-						printf("pop type 1 function controller is '%d' \n",is_function);
+						//printf("pop type 1 function controller is '%d' \n",is_function);
 						dumpsymbol();
 						pop_symbol_table();
 					}
-					else if(!is_function) //normal like
+					else /*if(!is_function) *///normal like
 					{
-						printf("pop type 1 function controller is '%d' \n",is_function);
+						//printf("pop type 1 function controller is '%d' \n",is_function);
 						dumpsymbol();
 						pop_symbol_table();
 					}
@@ -547,6 +546,8 @@ compound_stmt	: BEG
 					end just directly popping, rather than waiting till the end test!
 					*/
 				}
+			  	END
+
 			;
 
 opt_stmt_list		: stmt_list
@@ -582,17 +583,14 @@ for_stmt	: 	FOR ID
 				{
 					strcpy(myiter_table[iterator_cnt].iterator_name,yytext);
 					myiter_table[iterator_cnt].iterator_level=scope_depth+1;
-					printf("Loop scope depth %d and name %s\n",scope_depth,yytext);
+					//printf("Loop scope depth %d and name %s\n",scope_depth,yytext);
 					error_detection();
-					dumpiterator();
+					//dumpiterator();
 					iterator_cnt++;
 				}
  			  	OP_ASSIGN int_const TO int_const DO
 			  	opt_stmt_list
 			  	END DO
-				{
-					dumpiterator();
-				}
 			;
 
 return_stmt	: RETURN boolean_expr MK_SEMICOLON
