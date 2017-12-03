@@ -121,8 +121,7 @@ void error_detection() //no hashing, just naive solution
             break;
         for(int j=i+1;j<SUB_ENTRY_SIZE;j++)
         {
-            if(!strcmp(mysymbol_table[scope_depth].mysub_entry[i].name,mysymbol_table[scope_depth].mysub_entry[j].name)&&
-            !strcmp(mysymbol_table[scope_depth].mysub_entry[i].type,mysymbol_table[scope_depth].mysub_entry[j].type))
+            if(!strcmp(mysymbol_table[scope_depth].mysub_entry[i].name,mysymbol_table[scope_depth].mysub_entry[j].name))
             {
                 mysymbol_table[scope_depth].mysub_entry[j].name[0]=0;//mark the error table as not print
                 for(;mysymbol_table[scope_depth].mysub_entry[i].name[pre_redeclared_index]!=0;)
