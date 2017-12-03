@@ -22,7 +22,16 @@ void symbol_table_init()
 }
 void pop_symbol_table()
 {
-    scope_depth=(scope_depth==0)?0:scope_depth-1;
+    //pop the table at that table
+    for(int i=0;i<SUB_ENTRY_SIZE;i++)
+    {
+        memset(mysymbol_table[scope_depth].mysub_entry[i].name,0,sizeof(mysymbol_table[scope_depth].mysub_entry[i].name));
+        memset(mysymbol_table[scope_depth].mysub_entry[i].attri_type_buf,0,sizeof(mysymbol_table[scope_depth].mysub_entry[i].attri_type_buf));
+        memset(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,0,sizeof(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf));
+        memset(mysymbol_table[scope_depth].mysub_entry[i].param_type_buf,0,sizeof(mysymbol_table[scope_depth].mysub_entry[i].param_type_buf));
+        mysymbol_table[scope_depth].mysub_entry[i].is_array_decl=false;
+    }
+    scope_depth=(scope_depth==0)?0:scope_depth-1; //shirnk the level
 }
 void dumpsymbol()
 {
