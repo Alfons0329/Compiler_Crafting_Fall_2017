@@ -269,7 +269,7 @@ func_decl	: 	ID
 					sub_entry_cnt=0;
 					pre_sub_entry_cnt=0;
 					scope_depth+=1;
-					is_function=1;
+
 					strcat(mysymbol_table[0].mysub_entry[global_sub_entry_cnt].name,yytext);
 					mysymbol_table[0].mysub_entry[global_sub_entry_cnt].kind="function";
 					strcpy(mysymbol_table[0].mysub_entry[global_sub_entry_cnt].level_str,"0(global)");
@@ -279,8 +279,13 @@ func_decl	: 	ID
 					memset(funct_attri_buf,0,sizeof(funct_attri_buf));
 					global_sub_entry_cnt++;
 				}
- 				MK_LPAREN opt_param_list MK_RPAREN opt_type MK_SEMICOLON
+ 				MK_LPAREN opt_param_list MK_RPAREN
 				{
+					is_function=1;
+				}
+				opt_type MK_SEMICOLON
+				{
+					 //is_function=1 here will be better
 					scope_depth-=1;
 					//setting the function type
 					if(is_array)
@@ -356,12 +361,14 @@ param		: id_list MK_COLON type
 						}
 						strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,reverse_arr_buf);
 						strcat(funct_attri_buf,mysymbol_table[scope_depth].mysub_entry[i].array_type_buf);
+						strcat(funct_attri_buf," "); //for indentation
 						mysymbol_table[scope_depth].mysub_entry[i].is_array_decl=true;
 					}
 					else
 					{
 						mysymbol_table[scope_depth].mysub_entry[i].type=$3;
 						strcat(funct_attri_buf,mysymbol_table[scope_depth].mysub_entry[i].type);
+						strcat(funct_attri_buf," "); //for indentation
 					}
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
