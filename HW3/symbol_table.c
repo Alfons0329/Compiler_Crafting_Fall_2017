@@ -203,12 +203,6 @@ void error_detection() //no hashing, just naive solution
             }
         }
     }
-    printf("Redeclaration string :");
-    for(int i=0;i<100;i++)
-    {
-        printf("%c",redeclared_var[i]);
-    }
-    printf("\n");
     if(is_error)
     {
         for(int i=0;redeclared_var[i]!=0;)
@@ -245,7 +239,7 @@ void error_detection() //no hashing, just naive solution
         for(int j=i+1;j<SUB_ENTRY_SIZE;j++)
         {
             printf("j now %dand %s \n",j,mysymbol_table[scope_depth].mysub_entry[j].name);
-            if(!strncmp(mysymbol_table[scope_depth].mysub_entry[i].name,myiter_table[j].iterator_name,32))
+            if(!strncmp(mysymbol_table[scope_depth].mysub_entry[i].name,mysymbol_table[scope_depth].mysub_entry[j].name,32))
             {
                 printf("Found same variable and variable \n");
                 mysymbol_table[scope_depth].mysub_entry[j].name[0]=0;//mark the error table as not print
