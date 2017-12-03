@@ -180,7 +180,6 @@ void parse_constant()
     memset(const_buf,0,sizeof(const_buf));
     switch(const_type)
     {
-
         case 1:
         {
             strcpy(const_buf,yytext);
@@ -226,13 +225,13 @@ void parse_constant()
         }
         case 9:
         {
-            strcat(const_buf,yytext);
+            radix_converter(yytext);
             break;
         }
         case 10:
         {
             strcat(const_buf,"-");
-            strcat(const_buf,yytext);
+            radix_converter(yytext);
             break;
         }
     }
@@ -270,7 +269,7 @@ void assign_constant_type(int scope_depth,int index)
         }
         case 9 ... 10:
         {
-            mysymbol_table[scope_depth].mysub_entry[index].type="octal";
+            mysymbol_table[scope_depth].mysub_entry[index].type="integer";
             break;
         }
     }
@@ -349,4 +348,24 @@ void array_dimension_parser()
         else
             i--;
     }
+}
+void radix_converter(char* octal_in)
+{
+    int decimal_number = 0, remainder;
+
+    int count = 0;
+    int octal_number=atoi(octal_in);
+    char tmp[20];
+    printf("OCTAL IN is %sand octal number is %d\n",octal_in,octal_number);
+    while(octal_number > 0)
+    {
+        remainder = octal_number % 10;
+        decimal_number = decimal_number + remainder * pow(8, count);
+        octal_number = octal_number / 10;
+        count++;
+    }
+    memset(tmp,0,sizeof(tmp));
+    sprintf(tmp,"%d",decimal_number);
+    strcat(const_buf,tmp);
+    printf("COnstbuf become %s \n",const_buf);
 }

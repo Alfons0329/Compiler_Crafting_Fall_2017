@@ -5,7 +5,7 @@ CCFLAGS   = -Wall -Wextra -pedantic -g3
 LEX      = flex
 YACC     = yacc -v -t
 YACCFLAG = -d
-LIBS     = -lfl
+LIBS     = -lfl -lm
 
 all: $(TARGET)
 
