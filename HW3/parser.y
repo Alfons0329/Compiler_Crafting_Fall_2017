@@ -108,6 +108,7 @@ program		:	ID
 			  	program_body
 			  	END ID
 			  	{
+					error_detection();
 					dumpsymbol();
 					pop_symbol_table();
 			  	}
@@ -527,12 +528,14 @@ compound_stmt	: BEG
 					if(is_function&&scope_depth>1) //prevernt double popping
 					{
 						//printf("pop type 1 function controller is '%d' \n",is_function);
+						error_detection();
 						dumpsymbol();
 						pop_symbol_table();
 					}
 					else /*if(!is_function) *///normal like
 					{
 						//printf("pop type 1 function controller is '%d' \n",is_function);
+						error_detection();
 						dumpsymbol();
 						pop_symbol_table();
 					}
