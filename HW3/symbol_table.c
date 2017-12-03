@@ -249,12 +249,12 @@ void assign_constant_type(int scope_depth,int index)
         }
         case 3 ... 4:
         {
-            mysymbol_table[scope_depth].mysub_entry[index].type="float";
+            mysymbol_table[scope_depth].mysub_entry[index].type="real";
             break;
         }
         case 5 ... 6:
         {
-            mysymbol_table[scope_depth].mysub_entry[index].type="scientific";
+            mysymbol_table[scope_depth].mysub_entry[index].type="real";
             break;
         }
         case 7:
