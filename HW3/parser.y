@@ -17,8 +17,8 @@ char* array_scalar_type;
 char arr_buf[BUF_SIZE];
 char reverse_arr_buf[BUF_SIZE];
 char const_buf[BUF_SIZE];
-char func_attri_buf[BUF_SIZE];
-
+char funct_type_buf_parser[BUF_SIZE];
+char funct_attri_buf[BUF_SIZE];
 extern int yylex(void);
 extern int Opt_D; /* declared in lex.l */
 extern int linenum;		/* declared in lex.l */
@@ -98,6 +98,7 @@ program		:	ID
 					puts(yytext);
 					strcpy(mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name,yytext);
 					printf("program name %s",mysymbol_table[0].mysub_entry[0].name);
+					global_sub_entry_cnt=1;
 					is_array = 0;
 					is_function=0;
 					const_type=0;
@@ -107,8 +108,7 @@ program		:	ID
 					mysymbol_table[0].mysub_entry[0].kind="program";
 					strcpy(mysymbol_table[0].mysub_entry[0].level_str,"0(global)");
 					mysymbol_table[0].mysub_entry[0].type="void";
-
-					//dumpsymbol();
+					dumpsymbol();
 				}
 			  	program_body
 			  	END ID
@@ -160,7 +160,7 @@ decl		: VAR	/* scalar type declaration */
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
 				error_detection();
-				//dumpsymbol();
+				dumpsymbol();
 			}
 			MK_SEMICOLON
 			| VAR    /* array type declaration */
@@ -235,7 +235,7 @@ decl		: VAR	/* scalar type declaration */
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
 				error_detection();
-				//dumpsymbol();
+				dumpsymbol();
 			} /* const declaration */
 			MK_SEMICOLON
 			;
@@ -268,35 +268,45 @@ func_decl	: 	ID
 					{printf("11->");}
 					sub_entry_cnt=0;
 					pre_sub_entry_cnt=0;
-					printf("compound_stmt begin\n");
 					scope_depth+=1;
 					is_function=1;
+					strcat(mysymbol_table[0].mysub_entry[global_sub_entry_cnt].name,yytext);
+					mysymbol_table[0].mysub_entry[global_sub_entry_cnt].kind="function";
+					strcpy(mysymbol_table[0].mysub_entry[global_sub_entry_cnt].level_str,"0(global)");
+					printf("Global entry count %d \n",global_sub_entry_cnt);
+					mysymbol_table[0].mysub_entry[global_sub_entry_cnt].is_funct_decl=1;
+					memset(funct_type_buf_parser,0,sizeof(funct_type_buf_parser));
+					memset(funct_attri_buf,0,sizeof(funct_attri_buf));
+					global_sub_entry_cnt++;
 				}
  				MK_LPAREN opt_param_list MK_RPAREN opt_type MK_SEMICOLON
 				{
 					scope_depth-=1;
+					//setting the function type
+					if(is_array)
+					{
+						strcat(mysymbol_table[0].mysub_entry[global_sub_entry_cnt].funct_type_buf,funct_type_buf_parser);
+						strcat(mysymbol_table[0].mysub_entry[global_sub_entry_cnt].funct_type_buf,arr_buf);
+					}
+					else
+					{
+						strcat(mysymbol_table[0].mysub_entry[global_sub_entry_cnt].funct_type_buf,funct_type_buf_parser);
+					}
+					//setting the function attribute(parameter which passed in)
+					strcat(mysymbol_table[0].mysub_entry[global_sub_entry_cnt].attri_type_buf,funct_attri_buf);
+					printf("Function attribute %s after parsing and function type %s \n",mysymbol_table[0].mysub_entry[global_sub_entry_cnt].attri_type_buf,mysymbol_table[0].mysub_entry[global_sub_entry_cnt].funct_type_buf);
+					printf("dump function symbol test \n");
+					dumpsymbol();
+					is_array=0;
 				}
 			  	compound_stmt
 			  	END
 				{
 					{printf("12->");}
-					/*for(int i=0;i<SUB_ENTRY_SIZE;i++)
-					{
-						//find the fucking parameter
-						if(mysymbol_table[1].mysub_entry[i].kind=="parameter")
-						{
-							if(mysymbol_table[1].mysub_entry[i].is_array_decl)
-							{
-								strcat(mysymbol_table[1].mysub_entry[sub_entry_cnt].attri_type_buf,arr_buf);
-							}
-							else
-							{
-								strcat(mysymbol_table[1].mysub_entry[sub_entry_cnt].attri_type_buf,$5);
-							}
-						}
-					}*/
+					//set the function attribute and type after all declared
 					dumpsymbol();
 					pop_symbol_table(); //function pop itself
+
 					is_function=0;
 				}
 				ID
@@ -345,17 +355,19 @@ param		: id_list MK_COLON type
 							}
 						}
 						strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,reverse_arr_buf);
+						strcat(funct_attri_buf,mysymbol_table[scope_depth].mysub_entry[i].array_type_buf);
 						mysymbol_table[scope_depth].mysub_entry[i].is_array_decl=true;
 					}
 					else
 					{
 						mysymbol_table[scope_depth].mysub_entry[i].type=$3;
+						strcat(funct_attri_buf,mysymbol_table[scope_depth].mysub_entry[i].type);
 					}
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
 				printf("parsing parameter done dump symbol table\n");
 				memset(arr_buf,0,sizeof(arr_buf));
-				//dumpsymbol();
+				is_array=0;
 			}
 			;
 
@@ -367,8 +379,7 @@ id_list		: id_list MK_COMMA ID /*one ID for one sub_entry*/
 				$$=yytext;
 				printf(" AND PASSED IN ID NAME %s \n",mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name);
 				sub_entry_cnt++;
-
-				//dumpsymbol();
+				dumpsymbol();
 			}
 			| ID
 			{
@@ -379,8 +390,7 @@ id_list		: id_list MK_COMMA ID /*one ID for one sub_entry*/
 				$$=yytext;
 				printf(" AND PASSED IN ID NAME %s \n",mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name);
 				sub_entry_cnt++;
-
-				//dumpsymbol();
+				dumpsymbol();
 			}
 			;
 
@@ -404,6 +414,10 @@ scalar_type	: INTEGER
 						strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,"integer ");
 					}
 				}
+				else if(is_function)
+				{
+					strcat(funct_type_buf_parser,"integer ");
+				}
 				printf("match $$:%s \n",$$);
 			}
 			| REAL
@@ -418,6 +432,10 @@ scalar_type	: INTEGER
 						strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,"real ");
 					}
 				}
+				else if(is_function)
+				{
+					strcat(funct_type_buf_parser,"real ");
+				}
 			}
 			| BOOLEAN
 			{
@@ -431,6 +449,10 @@ scalar_type	: INTEGER
 						strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,"boolean ");
 					}
 				}
+				else if(is_function)
+				{
+					strcat(funct_type_buf_parser,"boolean ");
+				}
 			}
 			| STRING
 			{
@@ -443,6 +465,10 @@ scalar_type	: INTEGER
 					{
 						strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,"string ");
 					}
+				}
+				else if(is_function)
+				{
+					strcat(funct_type_buf_parser,"string ");
 				}
 			}
 			;

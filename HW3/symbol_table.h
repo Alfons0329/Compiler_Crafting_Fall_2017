@@ -8,6 +8,7 @@
 #define NAME_SIZE 32
 #define TYPE_SIZE 40
 #define LEVEL_STR_SIZE 20
+#define FUNCT_BUF_SIZE 100
 #define ATTRI_BUF_SIZE 100
 #define ARRAY_BUF_SIZE 100
 #define PARAM_BUF_SIZE 100
@@ -17,6 +18,7 @@ extern char const_buf[50];
 extern int linenum;		/* declared in lex.l */
 extern int Opt_D;
 int scope_depth;
+int global_sub_entry_cnt;
 int sub_entry_cnt;
 int pre_sub_entry_cnt;
 int is_function;
@@ -51,11 +53,12 @@ struct sub_entry //the real entry for inserting the value
     char* kind;
     char level_str[LEVEL_STR_SIZE];
     char* type;
+    char funct_type_buf[FUNCT_BUF_SIZE];
     char attri_type_buf[ATTRI_BUF_SIZE];
     char array_type_buf[ARRAY_BUF_SIZE];
     char param_type_buf[PARAM_BUF_SIZE];
     int level;
-    bool is_array_decl;
+    bool is_array_decl,is_funct_decl;
 };
 struct symbol_table_entry
 {

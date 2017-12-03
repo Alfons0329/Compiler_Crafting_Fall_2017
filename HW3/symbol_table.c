@@ -10,6 +10,7 @@ void symbol_table_init()
         for(int j=0;j<SUB_ENTRY_SIZE;j++)
         {
             memset(mysymbol_table[i].mysub_entry[j].name,0,sizeof(mysymbol_table[i].mysub_entry[j].name));
+            memset(mysymbol_table[i].mysub_entry[j].funct_type_buf,0,sizeof(mysymbol_table[i].mysub_entry[j].funct_type_buf));
             memset(mysymbol_table[i].mysub_entry[j].attri_type_buf,0,sizeof(mysymbol_table[i].mysub_entry[j].attri_type_buf));
             memset(mysymbol_table[i].mysub_entry[j].array_type_buf,0,sizeof(mysymbol_table[i].mysub_entry[j].array_type_buf));
             memset(mysymbol_table[i].mysub_entry[j].param_type_buf,0,sizeof(mysymbol_table[i].mysub_entry[j].param_type_buf));
@@ -26,10 +27,12 @@ void pop_symbol_table()
     for(int i=0;i<SUB_ENTRY_SIZE;i++)
     {
         memset(mysymbol_table[scope_depth].mysub_entry[i].name,0,sizeof(mysymbol_table[scope_depth].mysub_entry[i].name));
+        memset(mysymbol_table[scope_depth].mysub_entry[i].funct_type_buf,0,sizeof(mysymbol_table[scope_depth].mysub_entry[i].funct_type_buf));
         memset(mysymbol_table[scope_depth].mysub_entry[i].attri_type_buf,0,sizeof(mysymbol_table[scope_depth].mysub_entry[i].attri_type_buf));
         memset(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,0,sizeof(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf));
         memset(mysymbol_table[scope_depth].mysub_entry[i].param_type_buf,0,sizeof(mysymbol_table[scope_depth].mysub_entry[i].param_type_buf));
         mysymbol_table[scope_depth].mysub_entry[i].is_array_decl=false;
+        mysymbol_table[scope_depth].mysub_entry[i].is_funct_decl=false;
     }
     scope_depth=(scope_depth==0)?0:scope_depth-1; //shirnk the level
 }
@@ -54,7 +57,18 @@ void dumpsymbol()
         printf("%-33s",mysymbol_table[scope_depth].mysub_entry[i].name);
         printf("%-11s",mysymbol_table[scope_depth].mysub_entry[i].kind);
         printf("%-11s",mysymbol_table[scope_depth].mysub_entry[i].level_str);
-        printf("%-17s",(mysymbol_table[scope_depth].mysub_entry[i].is_array_decl)?mysymbol_table[scope_depth].mysub_entry[i].array_type_buf:mysymbol_table[scope_depth].mysub_entry[i].type);
+        if(mysymbol_table[scope_depth].mysub_entry[i].is_array_decl)
+        {
+            printf("%-17s",mysymbol_table[scope_depth].mysub_entry[i].array_type_buf);
+        }
+        else if(mysymbol_table[scope_depth].mysub_entry[i].is_funct_decl)
+        {
+            printf("%-17s",mysymbol_table[scope_depth].mysub_entry[i].funct_type_buf);
+        }
+        else
+        {
+            printf("%-17s",mysymbol_table[scope_depth].mysub_entry[i].type);
+        }
         printf("%-11s",mysymbol_table[scope_depth].mysub_entry[i].attri_type_buf);
         printf("\n");
     }

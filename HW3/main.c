@@ -29,7 +29,7 @@ int  main( int argc, char **argv )
 	}
 
 	yyin = fp;
-	is_array = 0; //0 no 1 yes
+	//0 no 1 yes
 	symbol_table_init();
 	yyparse();
 	exit(0);
