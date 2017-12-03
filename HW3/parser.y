@@ -322,7 +322,8 @@ func_decl	: 	ID
 					//setting the function type
 					if(is_array)
 					{
-						strcat(mysymbol_table[0].mysub_entry[global_sub_entry_cnt-1].funct_type_buf,arr_buf);
+						array_dimension_parser();
+						strcat(mysymbol_table[0].mysub_entry[global_sub_entry_cnt-1].funct_type_buf,reverse_arr_buf);
 					}
 					//setting the function attribute(parameter which passed in)
 					strcat(mysymbol_table[0].mysub_entry[global_sub_entry_cnt-1].attri_type_buf,funct_attri_buf);
