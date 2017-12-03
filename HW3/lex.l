@@ -167,7 +167,7 @@ identifier ({letter})({letter}|{digit})*
 \n 				{
 				  LIST;
 				  if  (Opt_S)
-				  	printf("%d: %s",  linenum,  buf);
+				  	printf("LINENUM: %d: %s||",  linenum,  buf);
 				  linenum++;
 				  buf[0] = '\0';
 		   		}

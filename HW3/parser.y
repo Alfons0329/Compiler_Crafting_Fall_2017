@@ -160,7 +160,7 @@ decl		: VAR	/* scalar type declaration */
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
 				error_detection();
-				dumpsymbol();
+				//dumpsymbol();
 			}
 			MK_SEMICOLON
 			| VAR    /* array type declaration */
@@ -235,7 +235,7 @@ decl		: VAR	/* scalar type declaration */
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
 				error_detection();
-				dumpsymbol();
+				//dumpsymbol();
 			} /* const declaration */
 			MK_SEMICOLON
 			;
@@ -357,7 +357,7 @@ param		: id_list MK_COLON type
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
 				printf("parsing parameter done dump symbol table\n");
 				memset(arr_buf,0,sizeof(arr_buf));
-				dumpsymbol();
+				//dumpsymbol();
 			}
 			;
 
@@ -370,7 +370,7 @@ id_list		: id_list MK_COMMA ID /*one ID for one sub_entry*/
 				printf(" AND PASSED IN ID NAME %s \n",mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name);
 				sub_entry_cnt++;
 
-				dumpsymbol();
+				//dumpsymbol();
 			}
 			| ID
 			{
@@ -382,7 +382,7 @@ id_list		: id_list MK_COMMA ID /*one ID for one sub_entry*/
 				printf(" AND PASSED IN ID NAME %s \n",mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name);
 				sub_entry_cnt++;
 
-				dumpsymbol();
+				//dumpsymbol();
 			}
 			;
 

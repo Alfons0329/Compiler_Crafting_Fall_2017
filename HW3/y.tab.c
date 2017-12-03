@@ -1573,7 +1573,7 @@ yyreduce:
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
 				error_detection();
-				dumpsymbol();
+				//dumpsymbol();
 			}
 #line 1579 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1654,7 +1654,7 @@ yyreduce:
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
 				error_detection();
-				dumpsymbol();
+				//dumpsymbol();
 			}
 #line 1660 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1820,7 +1820,7 @@ yyreduce:
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
 				printf("parsing parameter done dump symbol table\n");
 				memset(arr_buf,0,sizeof(arr_buf));
-				dumpsymbol();
+				//dumpsymbol();
 			}
 #line 1826 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1835,7 +1835,7 @@ yyreduce:
 				printf(" AND PASSED IN ID NAME %s \n",mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name);
 				sub_entry_cnt++;
 
-				dumpsymbol();
+				//dumpsymbol();
 			}
 #line 1841 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1851,7 +1851,7 @@ yyreduce:
 				printf(" AND PASSED IN ID NAME %s \n",mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name);
 				sub_entry_cnt++;
 
-				dumpsymbol();
+				//dumpsymbol();
 			}
 #line 1857 "y.tab.c" /* yacc.c:1646  */
     break;
