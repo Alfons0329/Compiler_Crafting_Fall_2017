@@ -556,11 +556,11 @@ static const yytype_uint16 yyrline[] =
      357,   400,   418,   439,   440,   443,   444,   447,   453,   460,
      467,   477,   476,   495,   496,   497,   498,   499,   500,   501,
      505,   504,   552,   553,   556,   557,   560,   561,   562,   565,
-     568,   573,   576,   582,   581,   592,   595,   596,   599,   600,
-     603,   604,   607,   608,   611,   612,   615,   616,   619,   620,
-     621,   622,   623,   624,   627,   628,   631,   632,   635,   636,
-     639,   640,   641,   644,   645,   646,   647,   648,   649,   650,
-     653,   654,   657
+     568,   573,   576,   582,   581,   596,   599,   600,   603,   604,
+     607,   608,   611,   612,   615,   616,   619,   620,   623,   624,
+     625,   626,   627,   628,   631,   632,   635,   636,   639,   640,
+     643,   644,   645,   648,   649,   650,   651,   652,   653,   654,
+     657,   658,   661
 };
 #endif
 
@@ -2046,14 +2046,23 @@ yyreduce:
 #line 582 "parser.y" /* yacc.c:1646  */
     {
 					strcpy(myiter_table[iterator_cnt].iterator_name,yytext);
-					myiter_table[iterator_cnt].iterator_level=scope_depth;
+					myiter_table[iterator_cnt].iterator_level=scope_depth+1;
 					printf("Loop scope depth %d and name %s\n",scope_depth,yytext);
+					error_detection();
 				}
-#line 2053 "y.tab.c" /* yacc.c:1646  */
+#line 2054 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 74:
+#line 591 "parser.y" /* yacc.c:1646  */
+    {
+					error_detection();
+				}
+#line 2062 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 2057 "y.tab.c" /* yacc.c:1646  */
+#line 2066 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2281,7 +2290,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 660 "parser.y" /* yacc.c:1906  */
+#line 664 "parser.y" /* yacc.c:1906  */
 
 
 int yyerror( char *msg )

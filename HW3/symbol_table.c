@@ -120,6 +120,123 @@ void error_detection() //no hashing, just naive solution
     memset(error_msg,0,sizeof(error_msg));
     memset(redeclared_var,0,sizeof(redeclared_var));
     int redeclared_index=0,is_error=0,is_parsed=0,pre_redeclared_index=0;
+    //loop iterator-loop iterator detection
+    for(int i=0;i<ITERATOR_TABLE_SIZE;i++)
+    {
+        for(int j=i+1;j<ITERATOR_TABLE_SIZE;j++)
+        {
+            if(!strncmp(myiter_table[i].iterator_name,myiter_table[j].iterator_name,32)&&
+            (myiter_table[j].iterator_level>myiter_table[i].iterator_level))
+            {
+                printf("Found iter same with iter!!\n");
+                for(;myiter_table[i].iterator_name[pre_redeclared_index]!=0&&pre_redeclared_index<33;)
+                {
+
+                    printf("push name %c\n",myiter_table[i].iterator_name[pre_redeclared_index]);
+                    redeclared_var[redeclared_index]=myiter_table[i].iterator_name[pre_redeclared_index];
+                    pre_redeclared_index+=1;
+                    redeclared_index+=1;
+                    printf("same at i %d redeclared_index %d\n",i,redeclared_index);
+                }
+                redeclared_var[redeclared_index]=',';
+                redeclared_index+=1;
+                pre_redeclared_index=0;
+                is_error=1;
+                break;
+            }
+
+        }
+    }
+    if(is_error)
+    {
+        for(int i=0;redeclared_var[i]!=0;)
+        {
+            memset(error_msg,0,sizeof(error_msg));
+            strcat(error_msg,"symbol '");
+
+            for(int j=i,cnt=0;redeclared_var[j]!=',';j++,cnt++) //cnt for substring parsing index
+            {
+                error_msg[cnt+8]=redeclared_var[j];  //parse the redeclaration ID string
+                i=j;
+                is_parsed=1; //error messgae parsed successfully
+            }
+            i+=1;
+            if(redeclared_var[i]==0)
+                break;
+            strcat(error_msg,"' is redeclared");
+            if(is_parsed)
+                printf("<Error> found in Line %d: %s\n", linenum, error_msg);
+
+            is_parsed=0;
+        }
+        is_error=0;
+    }
+    redeclared_index=0,is_error=0,is_parsed=0,pre_redeclared_index=0;
+    memset(error_msg,0,sizeof(error_msg));
+    memset(redeclared_var,0,sizeof(redeclared_var));
+    //variable-iterator detection
+    for(int i=0;i<SUB_ENTRY_SIZE;i++)
+    {
+        if(mysymbol_table[scope_depth].mysub_entry[i].name[0]==0)
+            continue;
+        for(int j=0;j<ITERATOR_TABLE_SIZE;j++)
+        {
+            if(!strncmp(mysymbol_table[scope_depth].mysub_entry[i].name,myiter_table[j].iterator_name,32)&&
+            scope_depth==myiter_table[j].iterator_level)
+            {
+                printf("Found iter same with variable!!\n");
+                mysymbol_table[scope_depth].mysub_entry[i].name[0]=0;//mark the error table as not print
+                for(;mysymbol_table[scope_depth].mysub_entry[i].name[pre_redeclared_index]!=0&&pre_redeclared_index<33;)
+                {
+
+                    printf("push name %c\n",mysymbol_table[scope_depth].mysub_entry[i].name[pre_redeclared_index]);
+                    redeclared_var[redeclared_index]=mysymbol_table[scope_depth].mysub_entry[i].name[pre_redeclared_index];
+                    pre_redeclared_index+=1;
+                    redeclared_index+=1;
+                    printf("same at i %d redeclared_index %d\n",i,redeclared_index);
+                }
+                redeclared_var[redeclared_index]=',';
+                redeclared_index+=1;
+                pre_redeclared_index=0;
+                is_error=1;
+                break;
+            }
+        }
+    }
+    printf("Redeclaration string :");
+    for(int i=0;i<100;i++)
+    {
+        printf("%c",redeclared_var[i]);
+    }
+    printf("\n");
+    if(is_error)
+    {
+        for(int i=0;redeclared_var[i]!=0;)
+        {
+            memset(error_msg,0,sizeof(error_msg));
+            strcat(error_msg,"symbol '");
+
+            for(int j=i,cnt=0;redeclared_var[j]!=',';j++,cnt++) //cnt for substring parsing index
+            {
+                error_msg[cnt+8]=redeclared_var[j];  //parse the redeclaration ID string
+                i=j;
+                is_parsed=1; //error messgae parsed successfully
+            }
+            i+=1;
+            if(redeclared_var[i]==0)
+                break;
+            strcat(error_msg,"' is redeclared");
+            if(is_parsed)
+                printf("<Error> found in Line %d: %s\n", linenum, error_msg);
+
+            is_parsed=0;
+        }
+        is_error=0;
+    }
+    //variable-variable detection
+    redeclared_index=0,is_error=0,is_parsed=0,pre_redeclared_index=0;
+    memset(error_msg,0,sizeof(error_msg));
+    memset(redeclared_var,0,sizeof(redeclared_var));
     for(int i=0;i<SUB_ENTRY_SIZE;i++)
     {
         printf("\ni now %dname first %s ",i,mysymbol_table[scope_depth].mysub_entry[i].name);
@@ -128,8 +245,9 @@ void error_detection() //no hashing, just naive solution
         for(int j=i+1;j<SUB_ENTRY_SIZE;j++)
         {
             printf("j now %dand %s \n",j,mysymbol_table[scope_depth].mysub_entry[j].name);
-            if(!strncmp(mysymbol_table[scope_depth].mysub_entry[i].name,mysymbol_table[scope_depth].mysub_entry[j].name,32))
+            if(!strncmp(mysymbol_table[scope_depth].mysub_entry[i].name,myiter_table[j].iterator_name,32))
             {
+                printf("Found same variable and variable \n");
                 mysymbol_table[scope_depth].mysub_entry[j].name[0]=0;//mark the error table as not print
                 for(;mysymbol_table[scope_depth].mysub_entry[i].name[pre_redeclared_index]!=0&&pre_redeclared_index<33;)
                 {

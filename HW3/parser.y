@@ -581,12 +581,16 @@ while_stmt	: WHILE boolean_expr DO
 for_stmt	: 	FOR ID
 				{
 					strcpy(myiter_table[iterator_cnt].iterator_name,yytext);
-					myiter_table[iterator_cnt].iterator_level=scope_depth;
+					myiter_table[iterator_cnt].iterator_level=scope_depth+1;
 					printf("Loop scope depth %d and name %s\n",scope_depth,yytext);
+					error_detection();
 				}
  			  	OP_ASSIGN int_const TO int_const DO
 			  	opt_stmt_list
 			  	END DO
+				{
+					error_detection();
+				}
 			;
 
 return_stmt	: RETURN boolean_expr MK_SEMICOLON
