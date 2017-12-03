@@ -113,8 +113,8 @@ program		:	ID
 			  	program_body
 			  	END ID
 			  	{
-					pop_symbol_table();
 					dumpsymbol();
+					pop_symbol_table();
 			  	}
 			;
 
@@ -160,7 +160,7 @@ decl		: VAR	/* scalar type declaration */
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
 				error_detection();
-				//dumpsymbol();
+				dumpsymbol();
 			}
 			MK_SEMICOLON
 			| VAR    /* array type declaration */
@@ -499,10 +499,25 @@ compound_stmt	: BEG
 				{
 					{printf("23->");}
 					printf("compound_stmt end\n");
-					if(scope_depth>1) //prevernt double popping
+					printf("Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d \n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt);
+					if(is_function&&scope_depth>1) //prevernt double popping
 					{
-						pop_symbol_table();
 						dumpsymbol();
+						pop_symbol_table();
+					}
+					else if(!is_function) //normal like
+					/*
+					begin
+					    var a: integer;
+					    begin
+					        var a: boolean;
+					    end
+					// outer ’a’ has been hidden in this scope
+					end just directly popping, rather than waiting till the end test!
+					*/
+					{
+						dumpsymbol();
+						pop_symbol_table();
 					}
 				}
 			;

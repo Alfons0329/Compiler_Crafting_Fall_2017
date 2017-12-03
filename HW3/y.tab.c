@@ -561,12 +561,12 @@ static const yytype_uint16 yyrline[] =
      263,   267,   276,   281,   266,   305,   306,   309,   310,   313,
      364,   375,   389,   390,   393,   394,   397,   411,   424,   437,
      453,   452,   470,   471,   472,   473,   474,   475,   476,   480,
-     479,   510,   511,   514,   515,   518,   519,   520,   523,   526,
-     531,   534,   539,   544,   547,   548,   551,   552,   555,   556,
-     559,   560,   563,   564,   567,   568,   571,   572,   573,   574,
-     575,   576,   579,   580,   583,   584,   587,   588,   591,   592,
-     593,   596,   597,   598,   599,   600,   601,   602,   605,   606,
-     609
+     479,   525,   526,   529,   530,   533,   534,   535,   538,   541,
+     546,   549,   554,   559,   562,   563,   566,   567,   570,   571,
+     574,   575,   578,   579,   582,   583,   586,   587,   588,   589,
+     590,   591,   594,   595,   598,   599,   602,   603,   606,   607,
+     608,   611,   612,   613,   614,   615,   616,   617,   620,   621,
+     624
 };
 #endif
 
@@ -1507,8 +1507,8 @@ yyreduce:
   case 4:
 #line 115 "parser.y" /* yacc.c:1646  */
     {
-					pop_symbol_table();
 					dumpsymbol();
+					pop_symbol_table();
 			  	}
 #line 1514 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1573,7 +1573,7 @@ yyreduce:
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
 				error_detection();
-				//dumpsymbol();
+				dumpsymbol();
 			}
 #line 1579 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1987,17 +1987,32 @@ yyreduce:
     {
 					{printf("23->");}
 					printf("compound_stmt end\n");
-					if(scope_depth>1) //prevernt double popping
+					printf("Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d \n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt);
+					if(is_function&&scope_depth>1) //prevernt double popping
 					{
-						pop_symbol_table();
 						dumpsymbol();
+						pop_symbol_table();
+					}
+					else if(!is_function) //normal like
+					/*
+					begin
+					    var a: integer;
+					    begin
+					        var a: boolean;
+					    end
+					// outer ’a’ has been hidden in this scope
+					end just directly popping, rather than waiting till the end test!
+					*/
+					{
+						dumpsymbol();
+						pop_symbol_table();
 					}
 				}
-#line 1997 "y.tab.c" /* yacc.c:1646  */
+#line 2012 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 2001 "y.tab.c" /* yacc.c:1646  */
+#line 2016 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2225,7 +2240,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 612 "parser.y" /* yacc.c:1906  */
+#line 627 "parser.y" /* yacc.c:1906  */
 
 
 int yyerror( char *msg )

@@ -26,7 +26,7 @@ void pop_symbol_table()
 }
 void dumpsymbol()
 {
-    printf("Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d \n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt);
+    printf("(In dump function)Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d \n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt);
     if(!Opt_D)
         return;
 
