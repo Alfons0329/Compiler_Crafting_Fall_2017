@@ -17,22 +17,27 @@ var h : "Gimme Gimme Gimme!!";
 var i : true;
 var j : 2.56;
 var k : 111.111E-3;
-var l : 0777;    // note octal
+
 
 fun();
 begin
 end
 end fun
 
-fun2( a,b:integer; c:string ): integer;
+fun( a,b:integer; c:string ): integer;
 begin
 end
-end fun2
+end fun
 
 fun3( a:array 1 to 10 of boolean ) : array 11 to 20 of real;
 begin
 end
 end fun3
+
+fun3( a,b:integer; c:string ): integer;
+begin
+end
+end fun
 
 //&D-
 begin
