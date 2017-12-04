@@ -97,9 +97,6 @@ int yyerror(char* );
 
 program		:	ID
 				{
-					//
-					//printf("1->");
-					puts(yytext);
 					strcpy(mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name,yytext);
 					//printf("program name %s",mysymbol_table[0].mysub_entry[0].name);
 					global_sub_entry_cnt=1;

@@ -134,7 +134,7 @@ void dumpsymbol()
 }
 void error_detection() //no hashing, just naive solution
 {
-    char error_msg[100];
+    char error_msg[200];
     char redeclared_var[100];
     memset(error_msg,0,sizeof(error_msg));
     memset(redeclared_var,0,sizeof(redeclared_var));
@@ -171,18 +171,18 @@ void error_detection() //no hashing, just naive solution
         for(int i=0;redeclared_var[i]!=0;)
         {
             memset(error_msg,0,sizeof(error_msg));
-            strcat(error_msg,"symbol '");
+            strcat(error_msg,"symbol ");
 
             for(int j=i,cnt=0;redeclared_var[j]!=',';j++,cnt++) //cnt for substring parsing index
             {
-                error_msg[cnt+8]=redeclared_var[j];  //parse the redeclaration ID string
+                error_msg[cnt+7]=redeclared_var[j];  //parse the redeclaration ID string
                 i=j;
                 is_parsed=1; //error messgae parsed successfully
             }
             i+=1;
             if(redeclared_var[i]==0)
                 break;
-            strcat(error_msg,"' is redeclared");
+            strcat(error_msg," is redeclared");
             if(is_parsed)
                 printf("<Error> found in Line %d: %s\n", linenum, error_msg);
 
@@ -228,17 +228,17 @@ void error_detection() //no hashing, just naive solution
         for(int i=0;redeclared_var[i]!=0;)
         {
             memset(error_msg,0,sizeof(error_msg));
-            strcat(error_msg,"symbol '");
+            strcat(error_msg,"symbol ");
             for(int j=i,cnt=0;redeclared_var[j]!=',';j++,cnt++) //cnt for substring parsing index
             {
-                error_msg[cnt+8]=redeclared_var[j];  //parse the redeclaration ID string
+                error_msg[cnt+7]=redeclared_var[j];  //parse the redeclaration ID string
                 i=j;
                 is_parsed=1; //error messgae parsed successfully
             }
             i+=1;
             if(redeclared_var[i]==0)
                 break;
-            strcat(error_msg,"' is redeclared");
+            strcat(error_msg," is redeclared");
             if(is_parsed)
                 printf("<Error> found in Line %d: %s\n", linenum, error_msg);
 
@@ -284,18 +284,18 @@ void error_detection() //no hashing, just naive solution
         for(int i=0;redeclared_var[i]!=0;)
         {
             memset(error_msg,0,sizeof(error_msg));
-            strcat(error_msg,"symbol '");
+            strcat(error_msg,"symbol ");
 
             for(int j=i,cnt=0;redeclared_var[j]!=',';j++,cnt++) //cnt for substring parsing index
             {
-                error_msg[cnt+8]=redeclared_var[j];  //parse the redeclaration ID string
+                error_msg[cnt+7]=redeclared_var[j];  //parse the redeclaration ID string
                 i=j;
                 is_parsed=1; //error messgae parsed successfully
             }
             i+=1;
             if(redeclared_var[i]==0)
                 break;
-            strcat(error_msg,"' is redeclared");
+            strcat(error_msg," is redeclared");
             if(is_parsed)
                 printf("<Error> found in Line %d: %s\n", linenum, error_msg);
 
