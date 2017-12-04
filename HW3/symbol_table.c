@@ -105,14 +105,26 @@ void dumpsymbol()
         {
             printf("%-17s",mysymbol_table[scope_depth].mysub_entry[i].type);
         }
-        for(int j=0;j<ATTRI_BUF_SIZE;j++)
+        for(int j=0;j<ATTRI_BUF_SIZE;)
         {
             if(mysymbol_table[scope_depth].mysub_entry[i].attri_type_buf[j]==0)
                 break;
             else if(mysymbol_table[scope_depth].mysub_entry[i].attri_type_buf[j]==','&&mysymbol_table[scope_depth].mysub_entry[i].attri_type_buf[j+1]==0)
                 break;
-
-            printf("%c",mysymbol_table[scope_depth].mysub_entry[i].attri_type_buf[j]);
+            else if(mysymbol_table[scope_depth].mysub_entry[i].attri_type_buf[j]==' '&&mysymbol_table[scope_depth].mysub_entry[i].attri_type_buf[j+1]==',')
+            {
+                j+=2;
+                if(mysymbol_table[scope_depth].mysub_entry[i].attri_type_buf[j]==0)
+                    break;
+                else
+                    printf(", ");
+                //printf("This is type2 printf ");
+            }
+            else
+            {
+                printf("%c",mysymbol_table[scope_depth].mysub_entry[i].attri_type_buf[j]);
+                j++;
+            }
         }
         printf("\n");
     }
