@@ -2,6 +2,7 @@
 /**
  * Introduction to Compiler Design by Prof. Yi Ping You
  * Project 2 YACC sample
+ $$ yylaval
  */
 #include <string.h>
 #include <stdio.h>
@@ -28,61 +29,69 @@ int yyerror(char* );
 
 %}
 /* tokens */
-%token ARRAY
-%token BEG
-%token BOOLEAN
-%token DEF
-%token DO
-%token ELSE
-%token END
-%token FALSE
-%token FOR
-%token INTEGER
-%token IF
-%token OF
-%token PRINT
-%token READ
-%token REAL
-%token RETURN
-%token STRING
-%token THEN
-%token TO
-%token TRUE
-%token VAR
-%token WHILE
 
-%token ID
-%token OCTAL_CONST
-%token INT_CONST
-%token FLOAT_CONST
-%token SCIENTIFIC
-%token STR_CONST
+%union
+{
+    char* parsed_string;
+}
 
-%token OP_ADD
-%token OP_SUB
-%token OP_MUL
-%token OP_DIV
-%token OP_MOD
-%token OP_ASSIGN
-%token OP_EQ
-%token OP_NE
-%token OP_GT
-%token OP_LT
-%token OP_GE
-%token OP_LE
-%token OP_AND
-%token OP_OR
-%token OP_NOT
+%token <parsed_string>ARRAY
+%token <parsed_string>BEG
+%token <parsed_string>BOOLEAN
+%token <parsed_string>DEF
+%token <parsed_string>DO
+%token <parsed_string>ELSE
+%token <parsed_string>END
+%token <parsed_string>FALSE
+%token <parsed_string>FOR
+%token <parsed_string>INTEGER
+%token <parsed_string>IF
+%token <parsed_string>OF
+%token <parsed_string>PRINT
+%token <parsed_string>READ
+%token <parsed_string>REAL
+%token <parsed_string>RETURN
+%token <parsed_string>STRING
+%token <parsed_string>THEN
+%token <parsed_string>TO
+%token <parsed_string>TRUE
+%token <parsed_string>VAR
+%token <parsed_string>WHILE
 
-%token MK_COMMA
-%token MK_COLON
-%token MK_SEMICOLON
-%token MK_LPAREN
-%token MK_RPAREN
-%token MK_LB
-%token MK_RB
+%token <parsed_string>ID
+%token <parsed_string>OCTAL_CONST
+%token <parsed_string>INT_CONST
+%token <parsed_string>FLOAT_CONST
+%token <parsed_string>SCIENTIFIC
+%token <parsed_string>STR_CONST
+
+%token <parsed_string>OP_ADD
+%token <parsed_string>OP_SUB
+%token <parsed_string>OP_MUL
+%token <parsed_string>OP_DIV
+%token <parsed_string>OP_MOD
+%token <parsed_string>OP_ASSIGN
+%token <parsed_string>OP_EQ
+%token <parsed_string>OP_NE
+%token <parsed_string>OP_GT
+%token <parsed_string>OP_LT
+%token <parsed_string>OP_GE
+%token <parsed_string>OP_LE
+%token <parsed_string>OP_AND
+%token <parsed_string>OP_OR
+%token <parsed_string>OP_NOT
+
+%token <parsed_string>MK_COMMA
+%token <parsed_string>MK_COLON
+%token <parsed_string>MK_SEMICOLON
+%token <parsed_string>MK_LPAREN
+%token <parsed_string>MK_RPAREN
+%token <parsed_string>MK_LB
+%token <parsed_string>MK_RB
 
 /* start symbol */
+%type <parsed_string> decl int_const literal_const param id_list type scalar_type array_type
+
 %start program
 %%
 
@@ -450,28 +459,28 @@ scalar_type	: INTEGER
 			{
 				//printf("16->");}
 				$$="integer ";
-				assign_scalar_type($$);
+				assign_scalar_type("integer ");
 			}
 			| REAL
 			{
 				//printf("17->");}
 				//printf("TYPE is %s",yytext);
 				$$="real ";
-				assign_scalar_type($$);
+				assign_scalar_type("real ");
 			}
 			| BOOLEAN
 			{
 				//printf("18->");}
 				//printf("TYPE is %s",yytext);
 				$$="boolean ";
-				assign_scalar_type($$);
+				assign_scalar_type("boolean ");
 			}
 			| STRING
 			{
 				//printf("19->");}
 				//printf("TYPE is %s",yytext);
 				$$="string ";
-				assign_scalar_type($$);
+				assign_scalar_type("string ");
 			}
 			;
 

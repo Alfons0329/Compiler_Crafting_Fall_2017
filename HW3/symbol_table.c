@@ -61,14 +61,13 @@ void dumpsymbol()
     if(!Opt_D)
         return;
 
-    int i,j;
-    for(i=0;i<110;i++)
+    for(int i=0;i<110;i++)
     {
         printf("=");
     }
     printf("\n");
     printf("%-33s%-11s%-11s%-17s%-11s\n","Name","Kind","Level","Type","Attribute");
-    for(i=0;i<110;i++)
+    for(int i=0;i<110;i++)
     {
         printf("-");
     }
@@ -117,7 +116,7 @@ void dumpsymbol()
         }
         printf("\n");
     }
-    for(i=0;i< 110;i++)
+    for(int i=0;i< 110;i++)
         printf("-");
     printf("\n");
 }
@@ -438,7 +437,7 @@ void array_dimension_parser()
 {
     memset(reverse_arr_buf,0,sizeof(reverse_arr_buf));
     int comma_pos=0,reverse_pos=0,quit_parsing_arr_size=0;
-    for(int i=49,rev_index=0;i>=0;)
+    for(int i=49;i>=0;)
     {
 
         if(arr_buf[i]==',')

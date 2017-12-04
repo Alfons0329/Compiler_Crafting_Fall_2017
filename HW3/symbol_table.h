@@ -85,6 +85,7 @@ void dumpsymbol();
 void error_detection(); //no hashing, just naive solution
 void parse_constant();
 void assign_scalar_type(char* );
+void assign_constant_type(int, int);
 void array_dimension_parser();
 void radix_converter();
 void scientific_converter();
