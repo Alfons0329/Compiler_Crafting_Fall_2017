@@ -360,7 +360,7 @@ func_decl	: 	ID
 				{
 					//printf("12->");}
 					//set the function attribute and type after all declared
-
+					error_detection();
 					/*pop_symbol_table(); //function pop itself*/
 					is_function=0;
 				}
@@ -696,7 +696,7 @@ int yyerror( char *msg )
 	fprintf( stderr, "\n|--------------------------------------------------------------------------\n" );
 	fprintf( stderr, "| Error found in Line #%d: %s\n", linenum, buf );
 	fprintf( stderr, "|\n" );
-	fprintf( stderr, "| Unmatched token: %s\n", yytext );z
+	fprintf( stderr, "| Unmatched token: %s\n", yytext );
 	fprintf( stderr, "|--------------------------------------------------------------------------\n" );
 	exit(-1);
 }
