@@ -132,13 +132,13 @@ void dumpsymbol()
         printf("-");
     printf("\n");
 }
-void error_detection() //no hashing, just naive solution
+int  error_detection() //no hashing, just naive solution
 {
     char error_msg[200];
     char redeclared_var[100];
     memset(error_msg,0,sizeof(error_msg));
     memset(redeclared_var,0,sizeof(redeclared_var));
-    int redeclared_index=0,is_error=0,is_parsed=0,pre_redeclared_index=0;
+    int redeclared_index=0,is_error=0,is_parsed=0,pre_redeclared_index=0,is_final_error=0;
     //loop iterator-loop iterator detection
     for(int i=0;i<ITERATOR_TABLE_SIZE;i++)
     {
@@ -189,6 +189,7 @@ void error_detection() //no hashing, just naive solution
             is_parsed=0;
         }
         is_error=0;
+	is_final_error=1;
     }
     //variable-iterator detection
     redeclared_index=0,is_error=0,is_parsed=0,pre_redeclared_index=0;
@@ -245,6 +246,7 @@ void error_detection() //no hashing, just naive solution
             is_parsed=0;
         }
         is_error=0;
+	is_final_error=1;
     }
     //variable-variable detection
     redeclared_index=0,is_error=0,is_parsed=0,pre_redeclared_index=0;
@@ -302,8 +304,9 @@ void error_detection() //no hashing, just naive solution
             is_parsed=0;
         }
         is_error=0;
+	is_final_error=1;
     }
-
+    return is_final_error;
 }
 
 void parse_constant()

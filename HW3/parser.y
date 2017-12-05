@@ -386,16 +386,24 @@ param		: id_list MK_COLON type
 						//printf("Found an array parameter passed in \n");
 						//printf("arr buf %s \n",arr_buf);
 						array_dimension_parser();
-						strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,reverse_arr_buf);
-						strcat(funct_attri_buf,mysymbol_table[scope_depth].mysub_entry[i].array_type_buf);
-						strcat(funct_attri_buf,","); //for indentation
-						mysymbol_table[scope_depth].mysub_entry[i].is_array_decl=true;
+						if(error_detection()==0)
+						{
+							
+							strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,reverse_arr_buf);
+							strcat(funct_attri_buf,mysymbol_table[scope_depth].mysub_entry[i].array_type_buf);
+							strcat(funct_attri_buf,","); //for indentation			
+							mysymbol_table[scope_depth].mysub_entry[i].is_array_decl=true;
+						}
 					}
 					else
 					{
-						strcpy(mysymbol_table[scope_depth].mysub_entry[i].type,$3);
-						strcat(funct_attri_buf,mysymbol_table[scope_depth].mysub_entry[i].type);
-						strcat(funct_attri_buf,","); //for indentation
+						if(error_detection()==0)
+						{
+						
+							strcpy(mysymbol_table[scope_depth].mysub_entry[i].type,$3);
+							strcat(funct_attri_buf,mysymbol_table[scope_depth].mysub_entry[i].type);
+						        strcat(funct_attri_buf,","); //for indentation
+						}
 					}
 				}
 				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment

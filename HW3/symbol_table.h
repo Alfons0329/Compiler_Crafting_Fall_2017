@@ -82,7 +82,7 @@ struct loop_iterator myiter_table[ITERATOR_TABLE_SIZE];
 void symbol_table_init();
 void pop_symbol_table();
 void dumpsymbol();
-void error_detection(); //no hashing, just naive solution
+int  error_detection(); //no hashing, just naive solution
 void parse_constant();
 void assign_scalar_type(char* );
 void assign_constant_type(int, int);
