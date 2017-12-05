@@ -24,7 +24,7 @@ begin
 end
 end fun
 
-fun2( a,b:integer; c:string ): integer;
+fun2( a,b:integer; a,b,a,b,a,b:string ): integer;
 begin
 end
 end fun2
