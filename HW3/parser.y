@@ -325,19 +325,32 @@ func_decl	: 	ID
 				}
 				opt_type MK_SEMICOLON
 				{
-					 //is_function=1 here will be better
-
+					//is_function=1 here will be better
 					//setting the function type
 					if(is_array)
 					{
 						array_dimension_parser();
 						strcat(mysymbol_table[0].mysub_entry[global_sub_entry_cnt-1].funct_type_buf,reverse_arr_buf);
 					}
+					memset(funct_attri_buf,0,sizeof(funct_attri_buf));
+					for(int i=0;i<SUB_ENTRY_SIZE;i++)
+					{
+						if(strcmp(mysymbol_table[1].mysub_entry[i].kind,"parameter")==0&&(mysymbol_table[1].mysub_entry[i].name[0]!=0))
+						{
+							if(mysymbol_table[1].mysub_entry[i].is_array_decl)
+							{
+								strcat(funct_attri_buf,mysymbol_table[1].mysub_entry[i].array_type_buf);
+								strcat(funct_attri_buf,","); //for indentation
+							}
+							else
+							{
+								strcat(funct_attri_buf,mysymbol_table[1].mysub_entry[i].type);
+							    strcat(funct_attri_buf,","); //for indentation
+							}
+						}
+					}
 					//setting the function attribute(parameter which passed in)
 					strcat(mysymbol_table[0].mysub_entry[global_sub_entry_cnt-1].attri_type_buf,funct_attri_buf);
-					//printf("Function attribute %s after parsing and function type %s \n",mysymbol_table[0].mysub_entry[global_sub_entry_cnt-1].attri_type_buf,mysymbol_table[0].mysub_entry[global_sub_entry_cnt-1].funct_type_buf);
-					//printf("dump function symbol test \n");
-					//dumpsymbol();
 					global_pre_sub_entry_cnt=global_sub_entry_cnt;
 					is_array=0;
 					 //global function end by 1
@@ -347,8 +360,8 @@ func_decl	: 	ID
 				{
 					//printf("12->");}
 					//set the function attribute and type after all declared
-					/*dumpsymbol();
-					pop_symbol_table(); //function pop itself*/
+
+					/*pop_symbol_table(); //function pop itself*/
 					is_function=0;
 				}
 				ID
@@ -383,15 +396,10 @@ param		: id_list MK_COLON type
 					strcpy(mysymbol_table[scope_depth].mysub_entry[i].level_str,depth_n);
 					if(is_array)
 					{
-						//printf("Found an array parameter passed in \n");
-						//printf("arr buf %s \n",arr_buf);
 						array_dimension_parser();
 						if(error_detection()==0)
 						{
-							
 							strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,reverse_arr_buf);
-							strcat(funct_attri_buf,mysymbol_table[scope_depth].mysub_entry[i].array_type_buf);
-							strcat(funct_attri_buf,","); //for indentation			
 							mysymbol_table[scope_depth].mysub_entry[i].is_array_decl=true;
 						}
 					}
@@ -399,10 +407,7 @@ param		: id_list MK_COLON type
 					{
 						if(error_detection()==0)
 						{
-						
 							strcpy(mysymbol_table[scope_depth].mysub_entry[i].type,$3);
-							strcat(funct_attri_buf,mysymbol_table[scope_depth].mysub_entry[i].type);
-						        strcat(funct_attri_buf,","); //for indentation
 						}
 					}
 				}
