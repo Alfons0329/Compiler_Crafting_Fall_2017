@@ -563,7 +563,7 @@ static const yytype_uint16 yyrline[] =
        0,    99,    99,   110,    98,   124,   127,   128,   131,   133,
      138,   136,   183,   235,   234,   281,   282,   285,   286,   287,
      288,   289,   290,   291,   292,   293,   296,   297,   300,   301,
-     305,   321,   327,   360,   304,   370,   371,   374,   375,   378,
+     305,   322,   328,   361,   304,   370,   371,   374,   375,   378,
      421,   439,   460,   461,   464,   465,   468,   474,   481,   488,
      498,   497,   516,   517,   518,   519,   520,   521,   522,   526,
      544,   525,   576,   577,   580,   581,   584,   585,   586,   589,
@@ -1741,7 +1741,7 @@ yyreduce:
 					//printf("11->");}
 					sub_entry_cnt=0;
 					pre_sub_entry_cnt=0;
-					scope_depth+=1;
+
 
 					strcat(mysymbol_table[0].mysub_entry[global_sub_entry_cnt].name,yytext);
 					strcpy(mysymbol_table[0].mysub_entry[global_sub_entry_cnt].kind,"function");
@@ -1750,23 +1750,24 @@ yyreduce:
 					mysymbol_table[0].mysub_entry[global_sub_entry_cnt].is_funct_decl=1;
 					//memset(funct_type_buf_parser,0,sizeof(funct_type_buf_parser));
 					memset(funct_attri_buf,0,sizeof(funct_attri_buf));
-
+                    error_detection();
+					scope_depth+=1;
 				}
-#line 1756 "y.tab.c" /* yacc.c:1646  */
+#line 1757 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 321 "parser.y" /* yacc.c:1646  */
+#line 322 "parser.y" /* yacc.c:1646  */
     {
 					is_function=1;
 					scope_depth-=1;
 					global_sub_entry_cnt++;
 				}
-#line 1766 "y.tab.c" /* yacc.c:1646  */
+#line 1767 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 327 "parser.y" /* yacc.c:1646  */
+#line 328 "parser.y" /* yacc.c:1646  */
     {
 					//is_function=1 here will be better
 					//setting the function type
@@ -1798,15 +1799,14 @@ yyreduce:
 					is_array=0;
 					 //global function end by 1
 				}
-#line 1802 "y.tab.c" /* yacc.c:1646  */
+#line 1803 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 33:
-#line 360 "parser.y" /* yacc.c:1646  */
+#line 361 "parser.y" /* yacc.c:1646  */
     {
 					//printf("12->");}
 					//set the function attribute and type after all declared
-					error_detection();
 					/*pop_symbol_table(); //function pop itself*/
 					is_function=0;
 				}

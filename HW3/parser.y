@@ -306,7 +306,7 @@ func_decl	: 	ID
 					//printf("11->");}
 					sub_entry_cnt=0;
 					pre_sub_entry_cnt=0;
-					scope_depth+=1;
+
 
 					strcat(mysymbol_table[0].mysub_entry[global_sub_entry_cnt].name,yytext);
 					strcpy(mysymbol_table[0].mysub_entry[global_sub_entry_cnt].kind,"function");
@@ -315,7 +315,8 @@ func_decl	: 	ID
 					mysymbol_table[0].mysub_entry[global_sub_entry_cnt].is_funct_decl=1;
 					//memset(funct_type_buf_parser,0,sizeof(funct_type_buf_parser));
 					memset(funct_attri_buf,0,sizeof(funct_attri_buf));
-
+                    error_detection();
+					scope_depth+=1;
 				}
  				MK_LPAREN opt_param_list MK_RPAREN
 				{
@@ -360,7 +361,6 @@ func_decl	: 	ID
 				{
 					//printf("12->");}
 					//set the function attribute and type after all declared
-					error_detection();
 					/*pop_symbol_table(); //function pop itself*/
 					is_function=0;
 				}

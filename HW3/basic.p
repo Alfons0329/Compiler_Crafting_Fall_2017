@@ -24,15 +24,16 @@ begin
 end
 end fun
 
-fun2( a,b:integer; c:string ): integer;
+fun( a,b:integer; c:string ): integer;
 begin
+end
+end fun
+
+fun2( a:array 1 to 10 of boolean; b:real ; c:string ) : array 11 to 20 of real;
+begin
+    var g : boolean;
 end
 end fun2
-
-fun3( a:array 1 to 10 of boolean ) : array 11 to 20 of real;
-begin
-end
-end fun3
 
 //&D-
 begin
