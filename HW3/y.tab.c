@@ -1806,7 +1806,7 @@ yyreduce:
     {
 					//printf("12->");}
 					//set the function attribute and type after all declared
-
+					error_detection();
 					/*pop_symbol_table(); //function pop itself*/
 					is_function=0;
 				}

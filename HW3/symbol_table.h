@@ -4,8 +4,8 @@
 #include <string.h>
 #include <stdbool.h>
 #include <math.h>
-#define SYMBOL_TABLE_MAX_SIZE 10000
-#define SUB_ENTRY_SIZE 50
+#define SYMBOL_TABLE_MAX_SIZE 1000
+#define SUB_ENTRY_SIZE 100
 #define ITERATOR_TABLE_SIZE 50
 #define ITER_NAME_SIZE 32
 #define NAME_SIZE 40
