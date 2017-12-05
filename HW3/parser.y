@@ -696,7 +696,7 @@ int yyerror( char *msg )
 	fprintf( stderr, "\n|--------------------------------------------------------------------------\n" );
 	fprintf( stderr, "| Error found in Line #%d: %s\n", linenum, buf );
 	fprintf( stderr, "|\n" );
-	fprintf( stderr, "| Unmatched token: %s\n", yytext );
+	fprintf( stderr, "| Unmatched token: %s\n", yytext );z
 	fprintf( stderr, "|--------------------------------------------------------------------------\n" );
 	exit(-1);
 }
