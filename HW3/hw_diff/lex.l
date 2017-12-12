@@ -6,6 +6,7 @@
 %{
 
 #include <string.h>
+#include <math.h>
 #include "y.tab.h"
 
 #define LIST strcat( buf, yytext )
@@ -13,7 +14,7 @@
 #define tokenChar(t) { LIST; if (Opt_T) printf("<%c>\n", t );}
 #define tokenInteger(t, i) { LIST; if (Opt_T) printf("<%s: %d>\n", t, i); }
 #define tokenOctInteger(t, i) { LIST; if (Opt_T) printf("<%s: %s>\n", t, i); }
-#define tokenFloat(t, i) { LIST; if (Opt_T) printf("<%s: %s>\n", t, i ); }
+#define tokenFloat(t, i) { LIST; if (Opt_T) printf("<%s: %f>\n", t, i ); }
 #define tokenScientific(t, s) { LIST; if ( Opt_T ) printf("<%s: %s>\n", t, s); }
 #define tokenString(t, s) { LIST; if (Opt_T) printf("<%s: %s>\n", t, s); }
 
@@ -26,6 +27,9 @@ char buf[MAX_LINE_LENG];		/* source code line buffer */
 char strContent[MAX_LINE_LENG];		/* string buffer */
 
 void setPseudoComment( const char * );	/* pseudo comment option switch */
+float scientificToFloat( const char *str );
+
+extern int Opt_D;
 %}
 
 whitespace [ \t]+
@@ -58,12 +62,12 @@ identifier ({letter})({letter}|{digit})*
 "/"				{ tokenChar('/'); return OP_DIV; }
 "mod"				{ token(mod); return OP_MOD; }
 ":="				{ token(:=); return OP_ASSIGN; }
-"<"				{ token(<); return OP_LT; }
+"<"				{ tokenChar('<'); return OP_LT; }
 "<="				{ token(<=); return OP_LE; }
 "<>"				{ token(<>); return OP_NE; }
 ">="				{ token(>=); return OP_GE; }
-">"				{ token(>); return OP_GT; }
-"="				{ token(=); return OP_EQ; }
+">"				{ tokenChar('>'); return OP_GT; }
+"="				{ tokenChar('='); return OP_EQ; }
 "and"				{ token(and); return OP_AND; }
 "or"				{ token(or); return OP_OR; }
 "not"				{ token(not); return OP_NOT; }
@@ -91,31 +95,60 @@ identifier ({letter})({letter}|{digit})*
 "var"				{ token(KWvar); return VAR; }
 "while"				{ token(KWwhile); return WHILE; }
 
-{octal}				{ tokenOctInteger("oct_integer",yytext);return OCTAL_CONST;}
-{identifier}			{ tokenString("id",yytext); return ID; }
-{integer}			{ tokenInteger("integer",atoi(yytext)); return INT_CONST; }
-{float}				{ tokenFloat("float",yytext); return FLOAT_CONST; }
-{scientific}			{ tokenScientific("scientific", yytext); return SCIENTIFIC; }
+{identifier}			{ 
+				  char actualID[33];
+				  memset( actualID, 0, sizeof(actualID) );
+				  strncpy( actualID, yytext, 32 );
+
+				  tokenString("id",actualID);
+				  yylval.lexeme = strdup( actualID );
+				//  tokenString("id",yytext); 
+				//  yylval.lexeme = strdup(yytext); /* pass ID to parser */
+				  return ID; 
+				}
+{integer}			{ 
+				  tokenInteger("integer",atoi(yytext)); 
+				  yylval.intVal = atoi(yytext);
+				  return INT_CONST; 
+				}
+{octal}         {
+				  tokenOctInteger("oct_integer",yytext);
+				  yylval.intVal = (int)strtol(yytext, NULL, 8);
+				  return INT_CONST;  // FIXME maybe use another token
+				}
+{float}				{ 
+				  tokenFloat("float",atof(yytext)); 
+				  yylval.realVal = atof(yytext);
+				  return FLOAT_CONST; 
+				}
+{scientific}			{ 
+				  tokenScientific("scientific", yytext); 
+				  yylval.realVal = scientificToFloat(yytext); 
+				  return SCIENTIFIC; 
+				}
 
 \"((\"\")|[^\"\n])*\"	{
 				LIST;
-				if (Opt_T){
-					size_t wrt_idx = 0;
-					size_t rd_idx = 1;
-					int quote = 0;
-					while( yytext[rd_idx] ){
-						if( yytext[rd_idx] == '\"' ){
-							if( quote )
-								strContent[wrt_idx++] = '\"';
-							quote = 1 - quote;
-						}
-						else
-							strContent[wrt_idx++] = yytext[rd_idx];
-						rd_idx++;
+
+				size_t wrt_idx = 0;
+				size_t rd_idx = 1;
+				int quote = 0;
+				while( yytext[rd_idx] ){
+					if( yytext[rd_idx] == '\"' ){
+						if( quote )
+							strContent[wrt_idx++] = '\"';
+						quote = 1 - quote;
 					}
-					strContent[wrt_idx] = '\0';
-					printf("<%s: %s>\n", "string", strContent);
+					else
+						strContent[wrt_idx++] = yytext[rd_idx];
+					rd_idx++;
 				}
+				strContent[wrt_idx] = '\0';
+				yylval.lexeme = strdup(strContent);
+
+				if(Opt_T)
+					printf("<%s: %s>\n", "string", strContent);
+
 				return STR_CONST;
 			}
 
@@ -137,7 +170,7 @@ identifier ({letter})({letter}|{digit})*
 				  if( Opt_S )
 				  	printf("%d: %s",  linenum,  buf);
 				  linenum++;
-				  buf[0] = '\0';
+				  memset( buf, 0, MAX_LINE_LENG );
 				  BEGIN INITIAL;
 				}
 
@@ -154,7 +187,7 @@ identifier ({letter})({letter}|{digit})*
 				  if  (Opt_S)
 				  	printf("%d: %s",  linenum,  buf);
 				  linenum++;
-				  buf[0] = '\0';
+				  memset( buf, 0, MAX_LINE_LENG );
 				}
 <COMMENT>.			{
 				  LIST;
@@ -169,7 +202,7 @@ identifier ({letter})({letter}|{digit})*
 				  if  (Opt_S)
 				  	printf("%d: %s",  linenum,  buf);
 				  linenum++;
-				  buf[0] = '\0';
+				  memset( buf, 0, MAX_LINE_LENG );
 		   		}
 
 .				{
@@ -182,23 +215,47 @@ identifier ({letter})({letter}|{digit})*
 
 void setPseudoComment( const char *text )
 {
+	int Opt;
+
+	if( text[4] == '+')
+		Opt = 1;
+	else if( text[4] == '-' )
+		Opt = 0;
+	/* This case should not happen. */
+	else
+		return;
+
 	/* format : //&[A-Z][+-] */
 	switch( text[3] ) {
 	 case 'S':			/* Source code */
-		if( text[4] == '+' )
-			Opt_S = 1;
-		else if( text[4] == '-' )
-			Opt_S = 0;
+		Opt_S = Opt;
 		break;
 	 case 'T':			/* Tokens */
-		if( text[4] == '+' )
-			Opt_T = 1;
-		else if( text[4] == '-' )
-			Opt_T = 0;
+		Opt_T = Opt;
 	 	break;
+	 case 'D':
+		Opt_D = Opt;
+	 	break;	
 	 default:
 	 	break;
 	}
 
+}
+
+float scientificToFloat( const char *str )
+{
+	float fraction;
+	int exponent;
+	char buf[256];
+	strcpy( buf, str );
+	char *token = strtok( buf,"Ee \t\n");
+	fraction = atof(token);
+	token = strtok( NULL, "Ee \t\n" );
+	exponent = atoi( token );
+
+	if( exponent != 0 )
+		fraction *= pow(10, exponent);
+
+	return fraction;
 }
 

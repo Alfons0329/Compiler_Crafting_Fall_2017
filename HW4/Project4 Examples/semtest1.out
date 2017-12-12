@@ -1,0 +1,15 @@
+38:     //&S+
+<Error> found in Line 39: constant 'a' cannot be assigned
+39:     a := 5;            // error, constant cannot be assigned
+40:     aa := fun(1,2);    // ok
+41:     fun(1,2);          // ok
+42:     aa := fun(a,a);    // ok
+<Error> found in Line 43: too few arguments to function 'fun'
+43:     aa := fun(a);      // error, parameter number inconsistent
+<Error> found in Line 44: parameter type mismatch
+44:     aa := fun(bb,cc);  // error, parameter type inconsistent 
+<Error> found in Line 45: type mismatch, LHS= boolean, RHS= void
+45:     bb := fun2();      // error, fun2() has no return type
+<Error> found in Line 46: type mismatch, LHS= boolean, RHS= integer
+46:     bb := fun(5,6);    // error, return type inconsistent
+47:     fun2();            // ok

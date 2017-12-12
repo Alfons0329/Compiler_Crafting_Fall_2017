@@ -1,0 +1,6 @@
+<Error> found in Line 30: return dimension number mismatch
+<Error> found in Line 42: parameter type mismatch
+<Error> found in Line 42: type mismatch, LHS= integer [5], RHS= 
+<Error> found in Line 43: parameter type mismatch
+<Error> found in Line 43: type mismatch, LHS= integer [5], RHS= 
+<Error> found in Line 46: type mismatch, LHS= integer [5][5], RHS= integer [5]

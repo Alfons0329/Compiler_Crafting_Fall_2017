@@ -387,21 +387,21 @@ struct yy_trans_info
 static yyconst flex_int16_t yy_accept[150] =
     {   0,
         0,    0,    0,    0,    0,    0,   63,   61,   59,   60,
-       61,    5,    4,   10,    8,    1,    9,   11,   47,   47,
-        3,    2,   14,   19,   18,   46,    6,    7,   46,   46,
-       46,   46,   46,   46,   46,   46,   46,   46,   46,   46,
-       46,   46,   46,   58,   57,   58,   53,   54,   59,    0,
-       50,   55,   52,    0,   45,    0,   47,   13,   15,   16,
-       17,   46,   46,   46,   46,   46,   46,   27,   46,   46,
-       46,   46,   33,   46,   46,   46,   34,   21,   46,   46,
-       46,   46,   41,   46,   46,   46,   56,   53,    0,   48,
-        0,   49,   49,   20,   46,   46,   46,   26,   46,   29,
+       61,    5,    4,   10,    8,    1,    9,   11,   46,   46,
+        3,    2,   14,   19,   18,   45,    6,    7,   45,   45,
+       45,   45,   45,   45,   45,   45,   45,   45,   45,   45,
+       45,   45,   45,   58,   57,   58,   53,   54,   59,    0,
+       50,   55,   52,    0,   47,    0,   46,   13,   15,   16,
+       17,   45,   45,   45,   45,   45,   45,   27,   45,   45,
+       45,   45,   33,   45,   45,   45,   34,   21,   45,   45,
+       45,   45,   41,   45,   45,   45,   56,   53,    0,   48,
+        0,   49,   49,   20,   45,   45,   45,   26,   45,   29,
 
-       46,   31,   46,   12,   22,   46,   46,   46,   46,   46,
-       46,   43,   46,    0,    0,   49,   49,   46,   46,   46,
-       28,   46,   46,   46,   36,   37,   46,   46,   40,   42,
-       46,   51,   23,   24,   46,   30,   46,   35,   46,   46,
-       44,   51,   46,   46,   38,   39,   25,   32,    0
+       45,   31,   45,   12,   22,   45,   45,   45,   45,   45,
+       45,   43,   45,    0,    0,   49,   49,   45,   45,   45,
+       28,   45,   45,   45,   36,   37,   45,   45,   40,   42,
+       45,   51,   23,   24,   45,   30,   45,   35,   45,   45,
+       44,   51,   45,   45,   38,   39,   25,   32,    0
     } ;
 
 static yyconst YY_CHAR yy_ec[256] =
@@ -573,6 +573,7 @@ char *yytext;
 #line 7 "lex.l"
 
 #include <string.h>
+#include <math.h>
 #include "y.tab.h"
 
 #define LIST strcat( buf, yytext )
@@ -580,7 +581,7 @@ char *yytext;
 #define tokenChar(t) { LIST; if (Opt_T) printf("<%c>\n", t );}
 #define tokenInteger(t, i) { LIST; if (Opt_T) printf("<%s: %d>\n", t, i); }
 #define tokenOctInteger(t, i) { LIST; if (Opt_T) printf("<%s: %s>\n", t, i); }
-#define tokenFloat(t, i) { LIST; if (Opt_T) printf("<%s: %s>\n", t, i ); }
+#define tokenFloat(t, i) { LIST; if (Opt_T) printf("<%s: %f>\n", t, i ); }
 #define tokenScientific(t, s) { LIST; if ( Opt_T ) printf("<%s: %s>\n", t, s); }
 #define tokenString(t, s) { LIST; if (Opt_T) printf("<%s: %s>\n", t, s); }
 
@@ -593,10 +594,13 @@ char buf[MAX_LINE_LENG];		/* source code line buffer */
 char strContent[MAX_LINE_LENG];		/* string buffer */
 
 void setPseudoComment( const char * );	/* pseudo comment option switch */
+float scientificToFloat( const char *str );
+
+extern int Opt_D;
 /* exclusive start conditions */
 
 
-#line 600 "lex.yy.c"
+#line 604 "lex.yy.c"
 
 #define INITIAL 0
 #define COMMENT 1
@@ -816,10 +820,10 @@ YY_DECL
 		}
 
 	{
-#line 45 "lex.l"
+#line 49 "lex.l"
 
 
-#line 823 "lex.yy.c"
+#line 827 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -878,277 +882,306 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 47 "lex.l"
+#line 51 "lex.l"
 { tokenChar(','); return MK_COMMA; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 48 "lex.l"
+#line 52 "lex.l"
 { tokenChar(';'); return MK_SEMICOLON; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 49 "lex.l"
+#line 53 "lex.l"
 { tokenChar(':'); return MK_COLON; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 50 "lex.l"
+#line 54 "lex.l"
 { tokenChar(')'); return MK_RPAREN; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 51 "lex.l"
+#line 55 "lex.l"
 { tokenChar('('); return MK_LPAREN; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 52 "lex.l"
+#line 56 "lex.l"
 { tokenChar('['); return MK_LB;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 53 "lex.l"
+#line 57 "lex.l"
 { tokenChar(']'); return MK_RB; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 55 "lex.l"
+#line 59 "lex.l"
 { tokenChar('+'); return OP_ADD; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 56 "lex.l"
+#line 60 "lex.l"
 { tokenChar('-'); return OP_SUB; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 57 "lex.l"
+#line 61 "lex.l"
 { tokenChar('*'); return OP_MUL; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 58 "lex.l"
+#line 62 "lex.l"
 { tokenChar('/'); return OP_DIV; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 59 "lex.l"
+#line 63 "lex.l"
 { token(mod); return OP_MOD; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 60 "lex.l"
+#line 64 "lex.l"
 { token(:=); return OP_ASSIGN; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 61 "lex.l"
-{ token(<); return OP_LT; }
+#line 65 "lex.l"
+{ tokenChar('<'); return OP_LT; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 62 "lex.l"
+#line 66 "lex.l"
 { token(<=); return OP_LE; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 63 "lex.l"
+#line 67 "lex.l"
 { token(<>); return OP_NE; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 64 "lex.l"
+#line 68 "lex.l"
 { token(>=); return OP_GE; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 65 "lex.l"
-{ token(>); return OP_GT; }
+#line 69 "lex.l"
+{ tokenChar('>'); return OP_GT; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 66 "lex.l"
-{ token(=); return OP_EQ; }
+#line 70 "lex.l"
+{ tokenChar('='); return OP_EQ; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 67 "lex.l"
+#line 71 "lex.l"
 { token(and); return OP_AND; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 68 "lex.l"
+#line 72 "lex.l"
 { token(or); return OP_OR; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 69 "lex.l"
+#line 73 "lex.l"
 { token(not); return OP_NOT; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 71 "lex.l"
+#line 75 "lex.l"
 { token(KWarray); return ARRAY; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 72 "lex.l"
+#line 76 "lex.l"
 { token(KWbegin); return BEG; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 73 "lex.l"
+#line 77 "lex.l"
 { token(KWboolean); return BOOLEAN; }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 74 "lex.l"
+#line 78 "lex.l"
 { token(KWdef); return DEF; }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 75 "lex.l"
+#line 79 "lex.l"
 { token(KWdo); return DO; }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 76 "lex.l"
+#line 80 "lex.l"
 { token(KWelse); return ELSE; }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 77 "lex.l"
+#line 81 "lex.l"
 { token(KWend); return END; }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 78 "lex.l"
+#line 82 "lex.l"
 { token(KWfalse); return FALSE; }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 79 "lex.l"
+#line 83 "lex.l"
 { token(KWfor); return FOR; }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 80 "lex.l"
+#line 84 "lex.l"
 { token(KWinteger); return INTEGER; }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 81 "lex.l"
+#line 85 "lex.l"
 { token(KWif); return IF; }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 82 "lex.l"
+#line 86 "lex.l"
 { token(KWof); return OF; }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 83 "lex.l"
+#line 87 "lex.l"
 { token(KWprint); return PRINT; }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 84 "lex.l"
+#line 88 "lex.l"
 { token(KWread); return READ; }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 85 "lex.l"
+#line 89 "lex.l"
 { token(KWreal); return REAL; }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 86 "lex.l"
+#line 90 "lex.l"
 { token(KWreturn); return RETURN; }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 87 "lex.l"
+#line 91 "lex.l"
 { token(KWstring); return STRING; }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 88 "lex.l"
+#line 92 "lex.l"
 { token(KWthen); return THEN; }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 89 "lex.l"
+#line 93 "lex.l"
 { token(KWto); return TO; }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 90 "lex.l"
+#line 94 "lex.l"
 { token(KWtrue); return TRUE; }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 91 "lex.l"
+#line 95 "lex.l"
 { token(KWvar); return VAR; }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 92 "lex.l"
+#line 96 "lex.l"
 { token(KWwhile); return WHILE; }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 94 "lex.l"
-{ tokenOctInteger("oct_integer",yytext);return OCTAL_CONST;}
+#line 98 "lex.l"
+{ 
+				  char actualID[33];
+				  memset( actualID, 0, sizeof(actualID) );
+				  strncpy( actualID, yytext, 32 );
+
+				  tokenString("id",actualID);
+				  yylval.lexeme = strdup( actualID );
+				//  tokenString("id",yytext); 
+				//  yylval.lexeme = strdup(yytext); /* pass ID to parser */
+				  return ID; 
+				}
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 95 "lex.l"
-{ tokenString("id",yytext); return ID; }
+#line 109 "lex.l"
+{ 
+				  tokenInteger("integer",atoi(yytext)); 
+				  yylval.intVal = atoi(yytext);
+				  return INT_CONST; 
+				}
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 96 "lex.l"
-{ tokenInteger("integer",atoi(yytext)); return INT_CONST; }
+#line 114 "lex.l"
+{
+				  tokenOctInteger("oct_integer",yytext);
+				  yylval.intVal = (int)strtol(yytext, NULL, 8);
+				  return INT_CONST;  // FIXME maybe use another token
+				}
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 97 "lex.l"
-{ tokenFloat("float",yytext); return FLOAT_CONST; }
+#line 119 "lex.l"
+{ 
+				  tokenFloat("float",atof(yytext)); 
+				  yylval.realVal = atof(yytext);
+				  return FLOAT_CONST; 
+				}
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 98 "lex.l"
-{ tokenScientific("scientific", yytext); return SCIENTIFIC; }
+#line 124 "lex.l"
+{ 
+				  tokenScientific("scientific", yytext); 
+				  yylval.realVal = scientificToFloat(yytext); 
+				  return SCIENTIFIC; 
+				}
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 100 "lex.l"
+#line 130 "lex.l"
 {
 				LIST;
-				if (Opt_T){
-					size_t wrt_idx = 0;
-					size_t rd_idx = 1;
-					int quote = 0;
-					while( yytext[rd_idx] ){
-						if( yytext[rd_idx] == '\"' ){
-							if( quote )
-								strContent[wrt_idx++] = '\"';
-							quote = 1 - quote;
-						}
-						else
-							strContent[wrt_idx++] = yytext[rd_idx];
-						rd_idx++;
+
+				size_t wrt_idx = 0;
+				size_t rd_idx = 1;
+				int quote = 0;
+				while( yytext[rd_idx] ){
+					if( yytext[rd_idx] == '\"' ){
+						if( quote )
+							strContent[wrt_idx++] = '\"';
+						quote = 1 - quote;
 					}
-					strContent[wrt_idx] = '\0';
-					printf("<%s: %s>\n", "string", strContent);
+					else
+						strContent[wrt_idx++] = yytext[rd_idx];
+					rd_idx++;
 				}
+				strContent[wrt_idx] = '\0';
+				yylval.lexeme = strdup(strContent);
+
+				if(Opt_T)
+					printf("<%s: %s>\n", "string", strContent);
+
 				return STR_CONST;
 			}
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 122 "lex.l"
+#line 155 "lex.l"
 { /* pseudo comment */
 				  LIST;
 				  setPseudoComment( yytext );
@@ -1156,7 +1189,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 126 "lex.l"
+#line 159 "lex.l"
 { /* C++ stype comment */
 				  LIST;
 				  BEGIN COMMENT_CPP;
@@ -1164,7 +1197,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 131 "lex.l"
+#line 164 "lex.l"
 {
 				  LIST;
 				}
@@ -1172,19 +1205,19 @@ YY_RULE_SETUP
 case 54:
 /* rule 54 can match eol */
 YY_RULE_SETUP
-#line 135 "lex.l"
+#line 168 "lex.l"
 {
 				  LIST;
 				  if( Opt_S )
 				  	printf("%d: %s",  linenum,  buf);
 				  linenum++;
-				  buf[0] = '\0';
+				  memset( buf, 0, MAX_LINE_LENG );
 				  BEGIN INITIAL;
 				}
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 144 "lex.l"
+#line 177 "lex.l"
 { /* C-style comment */
 				  LIST;
 				  BEGIN COMMENT;
@@ -1192,7 +1225,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 148 "lex.l"
+#line 181 "lex.l"
 {
 				  LIST;
 				  BEGIN INITIAL;
@@ -1201,25 +1234,25 @@ YY_RULE_SETUP
 case 57:
 /* rule 57 can match eol */
 YY_RULE_SETUP
-#line 152 "lex.l"
+#line 185 "lex.l"
 {
 				  LIST;
 				  if  (Opt_S)
 				  	printf("%d: %s",  linenum,  buf);
 				  linenum++;
-				  buf[0] = '\0';
+				  memset( buf, 0, MAX_LINE_LENG );
 				}
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 159 "lex.l"
+#line 192 "lex.l"
 {
 				  LIST;
 				}
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 163 "lex.l"
+#line 196 "lex.l"
 { 
 				  LIST; 
 				}
@@ -1227,18 +1260,18 @@ YY_RULE_SETUP
 case 60:
 /* rule 60 can match eol */
 YY_RULE_SETUP
-#line 167 "lex.l"
+#line 200 "lex.l"
 {
 				  LIST;
 				  if  (Opt_S)
 				  	printf("%d: %s",  linenum,  buf);
 				  linenum++;
-				  buf[0] = '\0';
+				  memset( buf, 0, MAX_LINE_LENG );
 		   		}
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 175 "lex.l"
+#line 208 "lex.l"
 {
 				  /* error */
 				  printf("error at line %d: bad character \"%s\"\n", linenum, yytext );
@@ -1247,10 +1280,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 181 "lex.l"
+#line 214 "lex.l"
 ECHO;
 	YY_BREAK
-#line 1254 "lex.yy.c"
+#line 1287 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(COMMENT):
 case YY_STATE_EOF(COMMENT_CPP):
@@ -2253,30 +2286,54 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 181 "lex.l"
+#line 214 "lex.l"
 
 
 
 void setPseudoComment( const char *text )
 {
+	int Opt;
+
+	if( text[4] == '+')
+		Opt = 1;
+	else if( text[4] == '-' )
+		Opt = 0;
+	/* This case should not happen. */
+	else
+		return;
+
 	/* format : //&[A-Z][+-] */
 	switch( text[3] ) {
 	 case 'S':			/* Source code */
-		if( text[4] == '+' )
-			Opt_S = 1;
-		else if( text[4] == '-' )
-			Opt_S = 0;
+		Opt_S = Opt;
 		break;
 	 case 'T':			/* Tokens */
-		if( text[4] == '+' )
-			Opt_T = 1;
-		else if( text[4] == '-' )
-			Opt_T = 0;
+		Opt_T = Opt;
 	 	break;
+	 case 'D':
+		Opt_D = Opt;
+	 	break;	
 	 default:
 	 	break;
 	}
 
+}
+
+float scientificToFloat( const char *str )
+{
+	float fraction;
+	int exponent;
+	char buf[256];
+	strcpy( buf, str );
+	char *token = strtok( buf,"Ee \t\n");
+	fraction = atof(token);
+	token = strtok( NULL, "Ee \t\n" );
+	exponent = atoi( token );
+
+	if( exponent != 0 )
+		fraction *= pow(10, exponent);
+
+	return fraction;
 }
 
 

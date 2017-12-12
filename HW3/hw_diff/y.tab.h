@@ -67,34 +67,33 @@ extern int yydebug;
     TRUE = 277,
     VAR = 278,
     WHILE = 279,
-    ID = 280,
-    OCTAL_CONST = 281,
-    INT_CONST = 282,
-    FLOAT_CONST = 283,
-    SCIENTIFIC = 284,
-    STR_CONST = 285,
-    OP_ADD = 286,
-    OP_SUB = 287,
-    OP_MUL = 288,
-    OP_DIV = 289,
-    OP_MOD = 290,
-    OP_ASSIGN = 291,
-    OP_EQ = 292,
-    OP_NE = 293,
-    OP_GT = 294,
-    OP_LT = 295,
-    OP_GE = 296,
-    OP_LE = 297,
-    OP_AND = 298,
-    OP_OR = 299,
-    OP_NOT = 300,
-    MK_COMMA = 301,
-    MK_COLON = 302,
-    MK_SEMICOLON = 303,
-    MK_LPAREN = 304,
-    MK_RPAREN = 305,
-    MK_LB = 306,
-    MK_RB = 307
+    OP_ADD = 280,
+    OP_SUB = 281,
+    OP_MUL = 282,
+    OP_DIV = 283,
+    OP_MOD = 284,
+    OP_ASSIGN = 285,
+    OP_EQ = 286,
+    OP_NE = 287,
+    OP_GT = 288,
+    OP_LT = 289,
+    OP_GE = 290,
+    OP_LE = 291,
+    OP_AND = 292,
+    OP_OR = 293,
+    OP_NOT = 294,
+    MK_COMMA = 295,
+    MK_COLON = 296,
+    MK_SEMICOLON = 297,
+    MK_LPAREN = 298,
+    MK_RPAREN = 299,
+    MK_LB = 300,
+    MK_RB = 301,
+    ID = 302,
+    INT_CONST = 303,
+    FLOAT_CONST = 304,
+    SCIENTIFIC = 305,
+    STR_CONST = 306
   };
 #endif
 /* Tokens.  */
@@ -120,38 +119,58 @@ extern int yydebug;
 #define TRUE 277
 #define VAR 278
 #define WHILE 279
-#define ID 280
-#define OCTAL_CONST 281
-#define INT_CONST 282
-#define FLOAT_CONST 283
-#define SCIENTIFIC 284
-#define STR_CONST 285
-#define OP_ADD 286
-#define OP_SUB 287
-#define OP_MUL 288
-#define OP_DIV 289
-#define OP_MOD 290
-#define OP_ASSIGN 291
-#define OP_EQ 292
-#define OP_NE 293
-#define OP_GT 294
-#define OP_LT 295
-#define OP_GE 296
-#define OP_LE 297
-#define OP_AND 298
-#define OP_OR 299
-#define OP_NOT 300
-#define MK_COMMA 301
-#define MK_COLON 302
-#define MK_SEMICOLON 303
-#define MK_LPAREN 304
-#define MK_RPAREN 305
-#define MK_LB 306
-#define MK_RB 307
+#define OP_ADD 280
+#define OP_SUB 281
+#define OP_MUL 282
+#define OP_DIV 283
+#define OP_MOD 284
+#define OP_ASSIGN 285
+#define OP_EQ 286
+#define OP_NE 287
+#define OP_GT 288
+#define OP_LT 289
+#define OP_GE 290
+#define OP_LE 291
+#define OP_AND 292
+#define OP_OR 293
+#define OP_NOT 294
+#define MK_COMMA 295
+#define MK_COLON 296
+#define MK_SEMICOLON 297
+#define MK_LPAREN 298
+#define MK_RPAREN 299
+#define MK_LB 300
+#define MK_RB 301
+#define ID 302
+#define INT_CONST 303
+#define FLOAT_CONST 304
+#define SCIENTIFIC 305
+#define STR_CONST 306
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+
+union YYSTYPE
+{
+
+
+	int intVal;
+	float realVal;
+	//__BOOLEAN booleanVal;
+	char *lexeme;
+	struct idNode_sem *id;
+	//SEMTYPE type;
+	struct ConstAttr *constVal;
+	struct PType *ptype;
+	struct param_sem *par;
+	struct expr_sem *exprs;
+	/*struct var_ref_sem *varRef; */
+	struct expr_sem_node *exprNode;
+
+
+};
+
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif
