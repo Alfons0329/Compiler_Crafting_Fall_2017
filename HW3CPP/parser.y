@@ -104,6 +104,7 @@ int yyerror(char* );
 program		:	ID
 				{
 					symbol_table_init();
+					tmpstr.clear();
 					strcpy(tmpstr,yytext);
 					id_list_buf.pb(tmpstr);
 					function_attribute_buf.resize(0);
@@ -136,48 +137,7 @@ decl_list	: 	decl_list /*//printf("3->");}*/
 decl		: VAR	/* scalar type declaration */
  			id_list MK_COLON scalar_type
 			{
-				//printf("7->");}
-				if(scope_depth==0) //global declaration
-				{
-					for(int i=global_pre_sub_entry_cnt;i<global_sub_entry_cnt;i++)
-					{
-						strcpy(mysymbol_table[scope_depth].mysub_entry[i].kind,"variable");
-						char* ps_level;
-						char depth_n[100];
-						memset(depth_n,0,sizeof(depth_n));
-
-						depth_n[0]='0';
-						ps_level="(global)";
-						strcat(depth_n,ps_level);
-
-						strcpy(mysymbol_table[scope_depth].mysub_entry[i].level_str,depth_n);
-						strcpy(mysymbol_table[scope_depth].mysub_entry[i].type,$4);
-					}
-					global_pre_sub_entry_cnt=global_sub_entry_cnt; //update it for next segment
-					error_detection();
-					//dumpsymbol();
-				}
-				else //non global declaration
-				{
-					for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
-					{
-						strcpy(mysymbol_table[scope_depth].mysub_entry[i].kind,"variable");
-						char* ps_level;
-						char depth_n[100];
-						memset(depth_n,0,sizeof(depth_n));
-
-						depth_n[0]=scope_depth+'0';
-						ps_level="(local)";
-						strcat(depth_n,ps_level);
-
-						strcpy(mysymbol_table[scope_depth].mysub_entry[i].level_str,depth_n);
-						strcpy(mysymbol_table[scope_depth].mysub_entry[i].type,$4);
-					}
-					pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
-					error_detection();
-					//dumpsymbol();
-				}
-
+				inserting_symbol_table();
 			}
 			MK_SEMICOLON
 			| VAR    /* array type declaration */
@@ -420,41 +380,17 @@ param		: id_list MK_COLON type
 
 id_list		: id_list MK_COMMA ID /*one ID for one sub_entry*/
 			{
-				//printf("14->");}
-				//printf("ID is %s",yytext);
-				if(scope_depth==0) //global declaration
-				{
-					strcpy(mysymbol_table[0].mysub_entry[global_sub_entry_cnt].name,yytext);
-					global_sub_entry_cnt++;
-				}
-				else //non global declaration
-				{
-					strcpy(mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name,yytext);
-					sub_entry_cnt++;
-				}
+				tmpstr.clear();
+				strcpy(tmpstr,yytext);
+				id_list_buf.pb(tmpstr);
 				$$=yytext;
-				//printf(" AND PASSED IN ID NAME %s \n",mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name);
-				//dumpsymbol();
 			}
 			| ID
 			{
-
-				//printf("15->");}
-				//printf("ID is %s",yytext);
-				if(scope_depth==0) //global declaration
-				{
-					strcpy(mysymbol_table[0].mysub_entry[global_sub_entry_cnt].name,yytext);
-					global_sub_entry_cnt++;
-				}
-				else //non global declaration
-				{
-					strcpy(mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name,yytext);
-					sub_entry_cnt++;
-				}
+				tmpstr.clear();
 				strcpy(tmpstr,yytext);
+				id_list_buf.pb(tmpstr);
 				$$=yytext;
-				//printf(" AND PASSED IN ID NAME %s \n",mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name);
-				//dumpsymbol();
 			}
 			;
 
