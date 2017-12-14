@@ -26,8 +26,10 @@ extern int yylex(void);
 extern int Opt_D; /* declared in lex.l */
 extern int linenum;		/* declared in lex.l */
 
-sub_entry one_subentry;
+
 string tmpstr;
+vector<string> id_list_buf;//for multiple ID
+vector<string> function_attribute_buf;
 int yyerror(char* );
 //0 not constant, 1 int 2 -int  3 float 4 -float 5 scientific 6 -scientific 7 string 8 bool 9 OCTAL 10 -OCTAL
 
@@ -101,17 +103,14 @@ int yyerror(char* );
 
 program		:	ID
 				{
-					strcat(tmpstr,yytext);
 					symbol_table_init();
-					one_subentry.name=tmpstr;
-					global_sub_entry_cnt=1;
-					global_pre_sub_entry_cnt=global_sub_entry_cnt;
+					strcpy(tmpstr,yytext);
+					id_list_buf.pb(tmpstr);
+					function_attribute_buf.resize(0);
 				}
 				MK_SEMICOLON
 				{
-					one_subentry.kind="program"
-					one_subentry.level_str="0(global)"
-					one_subentry.type="void"
+					inserting_symbol_table(id_list_buf,"program","void",function_attribute_buf);
 				}
 			  	program_body
 			  	END ID
@@ -452,6 +451,7 @@ id_list		: id_list MK_COMMA ID /*one ID for one sub_entry*/
 					strcpy(mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name,yytext);
 					sub_entry_cnt++;
 				}
+				strcpy(tmpstr,yytext);
 				$$=yytext;
 				//printf(" AND PASSED IN ID NAME %s \n",mysymbol_table[scope_depth].mysub_entry[sub_entry_cnt].name);
 				//dumpsymbol();

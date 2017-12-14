@@ -3,10 +3,6 @@ using namespace std;
 void symbol_table_init()
 {
     mysymbol_table.resize(SYMBOL_TABLE_MAX_SIZE);
-    for(int i=0;i<SYMBOL_TABLE_MAX_SIZE;i++)
-    {
-        mysymbol_table[i].resize(SUB_ENTRY_SIZE);
-    }
     scope_depth=0;
     global_sub_entry_cnt=0;
     global_pre_sub_entry_cnt=0;
@@ -17,6 +13,10 @@ void symbol_table_init()
     is_function=0;
     is_loop=0;
     const_type=0;
+}
+void inserting_symbol_table(vector<string> id_list_buf, string kind_in,,string type_in, string attribute_in)
+{
+
 }
 void pop_symbol_table()
 {
