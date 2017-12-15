@@ -12,28 +12,21 @@ extern "C"
     int yyerror(const char *msg);
     extern int yylex(void);
 }
-//some global variables that needed in the parsing procedure
-string tmpstr;
-string const_buf;
-string const_type_str;
-vector<string> id_list_buf; //for multiple ID
-vector<string> funct_attri_buf; //for concatenating the function attribute
-//0 not constant, 1 int 2 -int  3 float 4 -float 5 scientific 6 -scientific 7 string 8 bool 9 OCTAL 10 -OCTAL
+//global varaible declaration
 extern char *yytext;
-char arr_buf[BUF_SIZE];
-char reverse_arr_buf[BUF_SIZE];
+extern char arr_buf[BUF_SIZE];
+extern char reverse_arr_buf[BUF_SIZE];
 extern int linenum;		/* declared in lex.l */
 extern int Opt_D;
-int scope_depth;
-int global_pre_sub_entry_cnt;
-int global_sub_entry_cnt;
-int sub_entry_cnt;
-int pre_sub_entry_cnt;
-int iterator_cnt;
-int is_funct;
-int is_arr;
-int is_loop;
-int const_type;
+extern int scope_depth;
+extern int is_arr;
+extern int is_funct;
+extern int is_loop;
+extern int const_type;
+extern string const_buf;
+extern string const_type_str;
+extern vector<string> id_list_buf; //for multiple ID
+extern vector<string> funct_attri_buf; //for concatenating the function attribute
 /*###############################################################################################################
 Implementation abstract;
 Use symbol table entry for each symebol table main try and the sub entry
@@ -57,7 +50,7 @@ If it is an array type, say b:array 1 to 2 of array 2 to 4 of real
 than after parsing the array token. mark the array boolean to be true and after reach the end of scalar type
 strcat all the type in same buf
 ###############################################################################################################*/
-//symbol table data structure declarations
+//symbol table data structure declaration
 struct sub_entry //the real entry for inserting the value
 {
     string name;
@@ -67,15 +60,15 @@ struct sub_entry //the real entry for inserting the value
     vector<string> funct_attri;
     bool is_arr_decl,is_funct_decl;
 };
-vector<vector <sub_entry> > mysymbol_table;
+extern vector<vector <sub_entry> > mysymbol_table;
 struct loop_iterator
 {
     string iter_name;
     int iter_level;
 };
-vector <loop_iterator> myiter_table;
-//function prototype definition
-/*void symbol_table_init();
+extern vector <loop_iterator> myiter_table;
+//function prototype declaration
+void symbol_table_init();
 void inserting_symbol_table(vector<string> , string , string , vector<string> );
 void inserting_iter_table(string ,int );
 void pop_symbol_table();
@@ -85,6 +78,5 @@ void parse_constant();
 void array_dimension_parser();
 void radix_converter(char* );
 void scientific_converter(char* );
-void dumpiterator();*/
-
+void dumpiterator();
 #endif

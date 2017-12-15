@@ -25,6 +25,7 @@
 #include <bits/stdc++.h>
 #include "symboltable.h"
 #define pb push_back
+#define BUF_SIZE 50
 extern FILE *yyin;		/* declared by lex */
 extern char *yytext;	/* declared by lex */
 extern char *buf;	/* declared in lex.l */
@@ -32,322 +33,14 @@ extern int yylex(void);
 extern int Opt_D; /* declared in lex.l */
 extern int linenum;	/* declared in lex.l */
 int yyerror(char* );
-/*function mplementation*/
-void symbol_table_init()
-{
-    mysymbol_table.resize(SYMBOL_TABLE_MAX_SIZE);
-    scope_depth = 0;
-    is_arr = 0;
-    is_funct = 0;
-    is_loop = 0;
-    const_type = 0;
-}
-void inserting_symbol_table(vector<string> id_list_buf, string kind_in, string type_in, vector<string> funct_attri_buf)
-{
-    for(unsigned int i=0;i<id_list_buf.size();i++)
-    {
-        sub_entry one_subentry;
-        if(id_list_buf[i].length()>32)
-        {
-            one_subentry.name = id_list_buf[i].substr(0,32);
-        }
-        else
-        {
-            one_subentry.name = id_list_buf[i];
-        }
-        one_subentry.kind = kind_in;
-        one_subentry.type = type_in;
-        string scope_depth_str = to_string(scope_depth);
-        if(scope_depth)
-        {
-            scope_depth_str+="(local)";
-        }
-        else
-        {
-            scope_depth_str+="(global)";
-        }
-        if(funct_attri_buf.size())
-        {
-            one_subentry.funct_attri = funct_attri_buf;
-        }
-        mysymbol_table[scope_depth].pb(one_subentry);
-    }
-}
-void inserting_iter_table(string iter_name_in,int iter_level_in)
-{
-    loop_iterator one_iter_table;
-    one_iter_table.iter_name = iter_name_in;
-    one_iter_table.iter_level = iter_level_in;
-    myiter_table.pb(one_iter_table);
-}
-void pop_symbol_table()
-{
-    mysymbol_table[scope_depth].clear();/*pop the table at that table, easliy pop*/
-    scope_depth=(scope_depth==0)?0:scope_depth-1; /*shirnk the level*/
-    myiter_table.clear(); /*clean the iterator table*/
-}
-void dumpsymbol()
-{
-    /*printf("(In dump function)Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d global_pre_sub_entry_cnt %d global_sub_entry_cnt %d\n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt,global_pre_sub_entry_cnt,global_sub_entry_cnt);*/
-    if(!Opt_D)
-        return;
-
-    for(unsigned int i=0;i<110;i++)
-    {
-        printf("=");
-    }
-    printf("\n");
-    printf("%-33s%-11s%-11s%-17s%-11s\n","Name","Kind","Level","Type","Attribute");
-    for(unsigned int i=0;i<110;i++)
-    {
-        printf("-");
-    }
-    for(unsigned int i=0;i<mysymbol_table[scope_depth].size();i++)
-    {
-        if(mysymbol_table[scope_depth][i].name[0]==0)
-            continue;
-
-        printf("%-33s",mysymbol_table[scope_depth][i].name.c_str()); /*safety first*/
-        printf("%-11s",mysymbol_table[scope_depth][i].kind.c_str());
-        printf("%-11s",mysymbol_table[scope_depth][i].level_str.c_str());
-        printf("%-11s",mysymbol_table[scope_depth][i].type.c_str());
-        for(unsigned int j=0;j<mysymbol_table[scope_depth][i].funct_attri.size();j++)
-        {
-            cout<<mysymbol_table[scope_depth][i].funct_attri[j];
-        }
-        printf("\n");
-
-    }
-    for(unsigned int i=0;i< 110;i++)
-        printf("-");
-    printf("\n");
-}
-int error_detection() /*no hashing, just naive solution*/
-{
-    /*iterator-iterator checking------------------------------------------------------------------------------------//*/
-    vector<string> redeclared_var;
-    string error_msg;
-    bool is_error=0, is_final_error=0;
-    for(unsigned int i=0;i<myiter_table.size();i++)
-    {
-        for(unsigned int j=0;j<myiter_table.size();j++)
-        {
-            if((myiter_table[i].iter_name==myiter_table[j].iter_name)&&(myiter_table[j].iter_level>myiter_table[i].iter_level))
-            {
-                redeclared_var.pb(myiter_table[i].iter_name);
-                is_error=1;
-                is_final_error=1;
-            }
-        }
-    }
-    if(is_error)
-    {
-        for(unsigned int i=0;i<redeclared_var.size();i++)
-        {
-            error_msg=" symbol ";
-            error_msg+=redeclared_var[i];
-            error_msg+=" is redeclared";
-            cout<<"<Error> found in Line "<<linenum<<error_msg<<endl;
-            error_msg.clear();
-        }
-    }
-    /*iterator-variable checking------------------------------------------------------------------------------------//*/
-    redeclared_var.clear();
-    is_error=0;
-    for(unsigned int i=0;i<mysymbol_table[scope_depth].size();i++)
-    {
-        if(mysymbol_table[scope_depth][i].name[0]==0)
-            continue;
-        for(unsigned int j=0;j<myiter_table.size();j++)
-        {
-            if((myiter_table[i].iter_name==myiter_table[j].iter_name)&&(myiter_table[j].iter_level>myiter_table[i].iter_level))
-            {
-                redeclared_var.pb(myiter_table[i].iter_name);
-                is_error=1;
-                is_final_error=1;
-                mysymbol_table[scope_depth][i].name[0]=0; /*turn off the variable which confilicts with the iterator*/
-            }
-        }
-    }
-    if(is_error)
-    {
-        for(unsigned int i=0;i<redeclared_var.size();i++)
-        {
-            error_msg=" symbol ";
-            error_msg+=redeclared_var[i];
-            error_msg+=" is redeclared";
-            cout<<"<Error> found in Line "<<linenum<<error_msg<<endl;
-            error_msg.clear();
-        }
-    }
-    /*variable-variable checking------------------------------------------------------------------------------------//*/
-    redeclared_var.clear();
-    is_error=0;
-    for(unsigned int i=0;i<mysymbol_table[scope_depth].size();i++)
-    {
-        for(unsigned int j=0;j<mysymbol_table[scope_depth].size();j++)
-        {
-            if(mysymbol_table[scope_depth][i].name==mysymbol_table[scope_depth][j].name)
-            {
-                redeclared_var.pb(mysymbol_table[scope_depth][i].name);
-                is_error=1;
-                is_final_error=1;
-                mysymbol_table[scope_depth][i].name[0]=0; /*turn off the variable which confilicts with the iterator*/
-            }
-        }
-    }
-    if(is_error)
-    {
-        for(unsigned int i=0;i<redeclared_var.size();i++)
-        {
-            error_msg=" symbol ";
-            error_msg+=redeclared_var[i];
-            error_msg+=" is redeclared";
-            cout<<"<Error> found in Line "<<linenum<<error_msg<<endl;
-            error_msg.clear();
-        }
-    }
-    return is_final_error;
-}
-void radix_converter(char* octal_in)
-{
-    int decimal_number = 0, remainder;
-    int count = 0;
-    int octal_number=atoi(octal_in);
-    while(octal_number > 0)
-    {
-        remainder = octal_number % 10;
-        decimal_number = decimal_number + remainder * pow(8, count);
-        octal_number = octal_number / 10;
-        count++;
-    }
-    const_buf+=to_string(decimal_number);
-}
-void scientific_converter(char* scientific_in)
-{
-    float float_converted=atof(scientific_in);
-    char tmp[20];
-    memset(tmp,0,sizeof(tmp));
-    sprintf(tmp,"%f",float_converted);
-    const_buf+=tmp;
-}
-void parse_constant()
-{
-    const_buf.clear();
-    const_buf="";
-    float float_tmp=0.0f;
-    switch(const_type)
-    {
-        case 1:
-        {
-            const_buf+=yytext;
-            break;
-        }
-        case 2:
-        {
-            const_buf+="-";
-            const_buf+=yytext;
-            break;
-        }
-        case 3:
-        {
-            const_buf+=yytext;
-            break;
-        }
-        case 4:
-        {
-            const_buf+="-";
-            const_buf+=yytext;
-            break;
-        }
-        case 5:
-        {
-            scientific_converter(yytext);
-            break;
-        }
-        case 6:
-        {
-            const_buf+="-";
-            scientific_converter(yytext);
-            break;
-        }
-        case 7:
-        {
-            const_buf+=yytext;
-            break;
-        }
-        case 8:
-        {
-            const_buf+=yytext;
-            break;
-        }
-        case 9:
-        {
-            radix_converter(yytext);
-            break;
-        }
-        case 10:
-        {
-            const_buf+="-";
-            radix_converter(yytext);
-            break;
-        }
-    }
-
-}
-void array_dimension_parser()
-{
-    memset(reverse_arr_buf,0,sizeof(reverse_arr_buf));
-    int comma_pos=0,reverse_pos=0,quit_parsing_arr_size=0;
-    for(int i=49;i>=0;)
-    {
-        if(arr_buf[i]==',')
-        {
-            for(int k=i-1;;k--)
-            {
-
-                if(arr_buf[k]==',')
-                {
-                    comma_pos=k;
-                    break;
-                }
-                else if(k==0)
-                {
-                    comma_pos=-1; /*headtype*/
-                    quit_parsing_arr_size=1;
-                    break;
-                }
-            }
-            reverse_arr_buf[reverse_pos]='[';
-            reverse_pos++;
-            for(int j=comma_pos+1;arr_buf[j]!=',';)
-            {
-                reverse_arr_buf[reverse_pos]=arr_buf[j];
-                reverse_pos++;
-                j++;
-            }
-            reverse_arr_buf[reverse_pos]=']';
-            reverse_pos++;
-            i=comma_pos+1;
-        }
-        if(quit_parsing_arr_size)
-            break;
-        else
-            i--;
-    }
-}
-void dumpiterator()
-{
-    /*printf("---------ITERATOR TABLE --------\n");
-    for(unsigned int i=0;i<ITERATOR_TABLE_SIZE;i++)
-    {
-            if(myiter_table[i].iter_name[0]==0)
-            break;
-        printf("%s and depth %d\n",myiter_table[i].iter_name,myiter_table[i].iter_level);
-    }
-    printf("---------ITERATOR TABLE --------\n");*/
-}
-#line 333 "parser.y"
+/*some global variables that needed in the parsing procedure*/
+char arr_buf[BUF_SIZE];
+char reverse_arr_buf[BUF_SIZE];
+string const_buf;
+string const_type_str;
+vector<string> id_list_buf; /**/
+vector<string> funct_attri_buf;
+#line 26 "parser.y"
 #ifdef YYSTYPE
 #undef  YYSTYPE_IS_DECLARED
 #define YYSTYPE_IS_DECLARED 1
@@ -359,7 +52,7 @@ typedef union
     char* parsed_string;
 } YYSTYPE;
 #endif /* !YYSTYPE_IS_DECLARED */
-#line 363 "y.tab.c"
+#line 56 "y.tab.c"
 
 /* compatibility with bison */
 #ifdef YYPARSE_PARAM
@@ -637,7 +330,7 @@ static const YYINT yycheck[] = {                         16,
 };
 #define YYFINAL 2
 #ifndef YYDEBUG
-#define YYDEBUG 0
+#define YYDEBUG 1
 #endif
 #define YYMAXTOKEN 306
 #define YYUNDFTOKEN 362
@@ -810,7 +503,7 @@ typedef struct {
 } YYSTACKDATA;
 /* variables for the parser stack */
 static YYSTACKDATA yystack;
-#line 724 "parser.y"
+#line 417 "parser.y"
 
 int yyerror( char *msg )
 {
@@ -822,7 +515,7 @@ int yyerror( char *msg )
 	fprintf( stderr, "|--------------------------------------------------------------------------\n" );
 	exit(-1);
 }
-#line 826 "y.tab.c"
+#line 519 "y.tab.c"
 
 #if YYDEBUG
 #include <stdio.h>		/* needed for printf */
@@ -1025,7 +718,7 @@ yyreduce:
     switch (yyn)
     {
 case 1:
-#line 348 "parser.y"
+#line 41 "parser.y"
 	{
 					symbol_table_init();
 					id_list_buf.pb(yytext);
@@ -1033,14 +726,14 @@ case 1:
 				}
 break;
 case 2:
-#line 354 "parser.y"
+#line 47 "parser.y"
 	{
 					inserting_symbol_table(id_list_buf,"program","void",funct_attri_buf);
 					id_list_buf.clear();
 				}
 break;
 case 3:
-#line 360 "parser.y"
+#line 53 "parser.y"
 	{
 					error_detection();
 					dumpsymbol();
@@ -1048,7 +741,7 @@ case 3:
 			  	}
 break;
 case 9:
-#line 380 "parser.y"
+#line 73 "parser.y"
 	{
 				funct_attri_buf.resize(0); /*normal variable does not have attribute, so just let the size be zero*/
 				inserting_symbol_table(id_list_buf,"variable",yystack.l_mark[0].parsed_string,funct_attri_buf);
@@ -1057,7 +750,7 @@ case 9:
 			}
 break;
 case 11:
-#line 388 "parser.y"
+#line 81 "parser.y"
 	{
 				funct_attri_buf.resize(0); /*normal variable does not have attribute, so just let the size be zero*/
 				array_dimension_parser();
@@ -1069,7 +762,7 @@ case 11:
 			}
 break;
 case 12:
-#line 398 "parser.y"
+#line 91 "parser.y"
 	{
 				funct_attri_buf.pb(const_buf); /*normal variable does not have attribute, so just let the size be zero*/
 				inserting_symbol_table(id_list_buf,"constant",const_type_str,funct_attri_buf);
@@ -1078,51 +771,51 @@ case 12:
 			}
 break;
 case 14:
-#line 407 "parser.y"
+#line 100 "parser.y"
 	{yyval.parsed_string=yytext; const_type=1;}
 break;
 case 15:
-#line 408 "parser.y"
+#line 101 "parser.y"
 	{yyval.parsed_string=yytext; const_type=9;}
 break;
 case 16:
-#line 411 "parser.y"
+#line 104 "parser.y"
 	{yyval.parsed_string=yytext; const_type=(const_type==1)?1:9; const_type_str="integer ";parse_constant();}
 break;
 case 17:
-#line 412 "parser.y"
+#line 105 "parser.y"
 	{yyval.parsed_string=yytext; const_type=(const_type==1)?2:10; const_type_str="integer ";parse_constant();}
 break;
 case 18:
-#line 413 "parser.y"
+#line 106 "parser.y"
 	{yyval.parsed_string=yytext; const_type=3; const_type_str="real ";parse_constant();}
 break;
 case 19:
-#line 414 "parser.y"
+#line 107 "parser.y"
 	{yyval.parsed_string=yytext; const_type=4; const_type_str="real ";parse_constant();}
 break;
 case 20:
-#line 415 "parser.y"
+#line 108 "parser.y"
 	{yyval.parsed_string=yytext; const_type=5; const_type_str="real ";parse_constant();}
 break;
 case 21:
-#line 416 "parser.y"
+#line 109 "parser.y"
 	{yyval.parsed_string=yytext; const_type=6; const_type_str="real ";parse_constant();}
 break;
 case 22:
-#line 417 "parser.y"
+#line 110 "parser.y"
 	{yyval.parsed_string=yytext; const_type=7; const_type_str="string ";parse_constant();}
 break;
 case 23:
-#line 418 "parser.y"
+#line 111 "parser.y"
 	{yyval.parsed_string=yytext; const_type=8; const_type_str="boolean ";parse_constant();}
 break;
 case 24:
-#line 419 "parser.y"
+#line 112 "parser.y"
 	{yyval.parsed_string=yytext; const_type=8; const_type_str="boolean ";parse_constant();}
 break;
 case 29:
-#line 431 "parser.y"
+#line 124 "parser.y"
 	{
 					id_list_buf.pb(yytext);
                     error_detection();
@@ -1130,14 +823,14 @@ case 29:
 				}
 break;
 case 30:
-#line 437 "parser.y"
+#line 130 "parser.y"
 	{
 					is_funct=1;
 					scope_depth--;
 				}
 break;
 case 31:
-#line 442 "parser.y"
+#line 135 "parser.y"
 	{
 					if(is_arr)
 					{
@@ -1170,13 +863,13 @@ case 31:
 				}
 break;
 case 32:
-#line 474 "parser.y"
+#line 167 "parser.y"
 	{
 					is_funct=0;
 				}
 break;
 case 38:
-#line 489 "parser.y"
+#line 182 "parser.y"
 	{
 				funct_attri_buf.resize(0);
 				if(is_arr)
@@ -1202,7 +895,7 @@ case 38:
 			}
 break;
 case 39:
-#line 515 "parser.y"
+#line 208 "parser.y"
 	{
 				/* tmpstr.clear(); */
 				/* strcpy(tmpstr,yytext); */
@@ -1211,7 +904,7 @@ case 39:
 			}
 break;
 case 40:
-#line 522 "parser.y"
+#line 215 "parser.y"
 	{
 				/* tmpstr.clear(); */
 				/* strcpy(tmpstr,yytext); */
@@ -1220,49 +913,49 @@ case 40:
 			}
 break;
 case 41:
-#line 530 "parser.y"
+#line 223 "parser.y"
 	{yyval.parsed_string=yystack.l_mark[0].parsed_string;}
 break;
 case 43:
-#line 534 "parser.y"
+#line 227 "parser.y"
 	{yyval.parsed_string=yystack.l_mark[0].parsed_string;}
 break;
 case 44:
-#line 535 "parser.y"
+#line 228 "parser.y"
 	{yyval.parsed_string=yystack.l_mark[0].parsed_string;}
 break;
 case 45:
-#line 539 "parser.y"
+#line 232 "parser.y"
 	{
 				yyval.parsed_string="integer ";
 			}
 break;
 case 46:
-#line 543 "parser.y"
+#line 236 "parser.y"
 	{
 				yyval.parsed_string="real ";
 			}
 break;
 case 47:
-#line 547 "parser.y"
+#line 240 "parser.y"
 	{
 				yyval.parsed_string="boolean ";
 			}
 break;
 case 48:
-#line 551 "parser.y"
+#line 244 "parser.y"
 	{
 				yyval.parsed_string="string ";
 			}
 break;
 case 49:
-#line 557 "parser.y"
+#line 250 "parser.y"
 	{
 				is_arr=1;
 			}
 break;
 case 50:
-#line 561 "parser.y"
+#line 254 "parser.y"
 	{
 				int delta=atol(yystack.l_mark[-2].parsed_string)-atol(yystack.l_mark[-4].parsed_string)+1;
 				char tmp[10];
@@ -1272,7 +965,7 @@ case 50:
 			}
 break;
 case 58:
-#line 580 "parser.y"
+#line 273 "parser.y"
 	{
 					if(scope_depth==0&&is_funct)
 					{
@@ -1285,7 +978,7 @@ case 58:
 				}
 break;
 case 59:
-#line 592 "parser.y"
+#line 285 "parser.y"
 	{
 					/*printf("23->");}*/
 					/*printf("compound_stmt end\n");*/
@@ -1303,7 +996,7 @@ case 59:
 				}
 break;
 case 72:
-#line 641 "parser.y"
+#line 334 "parser.y"
 	{
 					inserting_iter_table(yytext,scope_depth+1);
 					error_detection();
@@ -1312,12 +1005,12 @@ case 72:
 				}
 break;
 case 73:
-#line 650 "parser.y"
+#line 343 "parser.y"
 	{
 					is_loop=0;
 				}
 break;
-#line 1321 "y.tab.c"
+#line 1014 "y.tab.c"
     }
     yystack.s_mark -= yym;
     yystate = *yystack.s_mark;
