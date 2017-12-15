@@ -2,11 +2,10 @@
 /**
  * Introduction to Compiler Design by Prof. Yi Ping You
  * Project 2 YACC sample
- $$ yylaval
  */
 #include <bits/stdc++.h>
 #include "symbol_table.h"
-#define BUF_SIZE 50
+
 #define push_back pb
 extern FILE *yyin;		/* declared by lex */
 extern "C"{
@@ -15,24 +14,19 @@ extern "C"{
 }
 extern char *yytext;		/* declared by lex */
 extern char *buf;		/* declared in lex.l */
-
-char* array_scalar_type;
 char arr_buf[BUF_SIZE];
 char reverse_arr_buf[BUF_SIZE];
-char const_buf[BUF_SIZE];
-char funct_type_buf_parser[BUF_SIZE];
-char funct_attri_buf[BUF_SIZE];
 extern int yylex(void);
 extern int Opt_D; /* declared in lex.l */
 extern int linenum;		/* declared in lex.l */
-
-
-string tmpstr;
-vector<string> id_list_buf;//for multiple ID
-vector<string> function_attribute_buf;
 int yyerror(char* );
-//0 not constant, 1 int 2 -int  3 float 4 -float 5 scientific 6 -scientific 7 string 8 bool 9 OCTAL 10 -OCTAL
 
+//some global variables that needed in the parsing procedure
+string tmpstr;
+string const_buf;
+vector<string> id_list_buf; //for multiple ID
+vector<string> funct_attri_buf; //for concatenating the function attribute
+//0 not constant, 1 int 2 -int  3 float 4 -float 5 scientific 6 -scientific 7 string 8 bool 9 OCTAL 10 -OCTAL
 %}
 /* tokens */
 
@@ -107,11 +101,12 @@ program		:	ID
 					tmpstr.clear();
 					strcpy(tmpstr,yytext);
 					id_list_buf.pb(tmpstr);
-					function_attribute_buf.resize(0);
+					funct_attri_buf.resize(0);
 				}
 				MK_SEMICOLON
 				{
-					inserting_symbol_table(id_list_buf,"program","void",function_attribute_buf);
+					inserting_symbol_table(id_list_buf,"program","void",funct_attri_buf);
+					id_list_buf.clear();
 				}
 			  	program_body
 			  	END ID
@@ -137,103 +132,29 @@ decl_list	: 	decl_list /*//printf("3->");}*/
 decl		: VAR	/* scalar type declaration */
  			id_list MK_COLON scalar_type
 			{
-				inserting_symbol_table();
+				funct_attri_buf.resize(0); //normal variable does not have attribute, so
+				inserting_symbol_table(id_list_buf,"variable",$4,funct_attri_buf);
+				id_list_buf.clear();
+				error_detection();
 			}
 			MK_SEMICOLON
 			| VAR    /* array type declaration */
 			id_list MK_COLON array_type MK_SEMICOLON
 			{
-				//printf("9->");}
-				if(scope_depth==0) //global declaration
-				{
-					for(int i=global_pre_sub_entry_cnt;i<global_sub_entry_cnt;i++)
-					{
-						strcpy(mysymbol_table[scope_depth].mysub_entry[i].kind,"variable");
-						char* ps_level;
-						char depth_n[100];
-						memset(depth_n,0,sizeof(depth_n));
-
-						depth_n[0]='0';
-						ps_level="(global)";
-						strcat(depth_n,ps_level);
-						strcpy(mysymbol_table[scope_depth].mysub_entry[i].level_str,depth_n);
-						//printf("arr buf %s and table arr type buf %s\n",arr_buf,mysymbol_table[scope_depth].mysub_entry[i].array_type_buf);
-						array_dimension_parser();
-						strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,reverse_arr_buf); //altogether using the s//printf to concatenate multiple strings
-						mysymbol_table[scope_depth].mysub_entry[i].is_array_decl=true;
-					}
-					global_pre_sub_entry_cnt=global_sub_entry_cnt;
-					error_detection();
-				}
-				else //non global declaration
-				{
-					for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
-					{
-						strcpy(mysymbol_table[scope_depth].mysub_entry[i].kind,"variable");
-						char* ps_level;
-						char depth_n[100];
-						memset(depth_n,0,sizeof(depth_n));
-
-						depth_n[0]=scope_depth+'0';
-						ps_level="(local)";
-						strcat(depth_n,ps_level);
-						strcpy(mysymbol_table[scope_depth].mysub_entry[i].level_str,depth_n);
-						//printf("arr buf %s and table arr type buf %s\n",arr_buf,mysymbol_table[scope_depth].mysub_entry[i].array_type_buf);
-						array_dimension_parser();
-						strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,reverse_arr_buf); //altogether using the s//printf to concatenate multiple strings
-						mysymbol_table[scope_depth].mysub_entry[i].is_array_decl=true;
-					}
-					pre_sub_entry_cnt=sub_entry_cnt;
-					error_detection();
-				}
-				 //update it for next segment
-				memset(arr_buf,0,sizeof(arr_buf));
-				is_array=0;//end matching an array, turn off the flag
-
+				funct_attri_buf.resize(0); //normal variable does not have attribute, so
+				array_dimension_parser();
+				inserting_symbol_table(id_list_buf,"variable",reverse_arr_buf,funct_attri_buf);
+				id_list_buf.clear();
+				error_detection();
+				memset(arr_buf,0,sizeof(arr_buf));//update it for next segment
 			}
 			| VAR id_list MK_COLON literal_const /* const declaration */
 			{
-				//printf("10->");}
-				if(scope_depth==0) //global declaration
-				{
-					for(int i=global_pre_sub_entry_cnt;i<global_sub_entry_cnt;i++)
-					{
-						strcpy(mysymbol_table[scope_depth].mysub_entry[i].kind,"constant");
-						char* ps_level;
-						char depth_n[100];
-						memset(depth_n,0,sizeof(depth_n));
-
-						depth_n[0]='0';
-						ps_level="(global)";
-						strcat(depth_n,ps_level);
-
-						strcpy(mysymbol_table[scope_depth].mysub_entry[i].level_str,depth_n);
-						assign_constant_type(scope_depth,i);
-					}
-					global_pre_sub_entry_cnt=global_sub_entry_cnt; //update it for next segment
-					error_detection();
-					//dumpsymbol();
-				}
-				else //non-global declaration
-				{
-					for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
-					{
-						strcpy(mysymbol_table[scope_depth].mysub_entry[i].kind,"constant");
-						char* ps_level;
-						char depth_n[100];
-						memset(depth_n,0,sizeof(depth_n));
-
-						depth_n[0]=scope_depth+'0';
-						ps_level="(local)";
-						strcat(depth_n,ps_level);
-
-						strcpy(mysymbol_table[scope_depth].mysub_entry[i].level_str,depth_n);
-						assign_constant_type(scope_depth,i);
-					}
-					pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
-					error_detection();
-					//dumpsymbol();
-				}
+				funct_attri_buf.pb(const_buf); //normal variable does not have attribute, so
+				array_dimension_parser();
+				inserting_symbol_table(id_list_buf,"constant",,funct_attri_buf);
+				id_list_buf.clear();
+				error_detection();
 			}
 			MK_SEMICOLON
 			;
@@ -337,8 +258,6 @@ param_list	: param_list MK_SEMICOLON param
 
 param		: id_list MK_COLON type
 			{
-				//printf("13->");}
-
 				for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
 				{
 					strcpy(mysymbol_table[scope_depth].mysub_entry[i].kind,"parameter");
@@ -404,30 +323,19 @@ type		: scalar_type {$$=$1;} /*type transmittion*/
 
 scalar_type	: INTEGER
 			{
-				//printf("16->");}
 				$$="integer ";
-				assign_scalar_type("integer ");
 			}
 			| REAL
 			{
-				//printf("17->");}
-				//printf("TYPE is %s",yytext);
 				$$="real ";
-				assign_scalar_type("real ");
 			}
 			| BOOLEAN
 			{
-				//printf("18->");}
-				//printf("TYPE is %s",yytext);
 				$$="boolean ";
-				assign_scalar_type("boolean ");
 			}
 			| STRING
 			{
-				//printf("19->");}
-				//printf("TYPE is %s",yytext);
 				$$="string ";
-				assign_scalar_type("string ");
 			}
 			;
 
@@ -438,15 +346,11 @@ array_type	: ARRAY
 			}
  			int_const TO int_const OF type
 			{
-				//printf("21->");}
-
 				int delta=atol($5)-atol($3)+1;
 				char tmp[10];
-				//printf("\narray dim FROM %s to %s delta is %d\n",$3,$5,delta);
 				sprintf(tmp,"%d",delta);
 				strcat(arr_buf,tmp);
 				strcat(arr_buf,",");
-				//printf("Array buf %s \n",arr_buf);
 			}
 			;
 

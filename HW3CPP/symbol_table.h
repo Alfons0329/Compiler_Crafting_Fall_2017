@@ -3,11 +3,17 @@
 #define pb push_back
 #define SYMBOL_TABLE_MAX_SIZE 1000
 #define SUB_ENTRY_SIZE 100
+#define BUF_SIZE 50
+//some global variables that needed in the parsing procedure
+string tmpstr;
+string const_buf;
+vector<string> id_list_buf; //for multiple ID
+vector<string> funct_attri_buf; //for concatenating the function attribute
+//0 not constant, 1 int 2 -int  3 float 4 -float 5 scientific 6 -scientific 7 string 8 bool 9 OCTAL 10 -OCTAL
 extern char *yytext;
-extern char arr_buf[50];
-extern char reverse_arr_buf[50];
-extern char const_buf[50];
-extern char funct_type_buf_parser[50];
+extern char arr_buf[BUF_SIZE];
+char funct_type_buf_parser[BUF_SIZE];
+char funct_attri_buf[BUF_SIZE];
 extern int linenum;		/* declared in lex.l */
 extern int Opt_D;
 int scope_depth;
@@ -49,7 +55,7 @@ struct sub_entry //the real entry for inserting the value
     string kind;
     string level_str;
     string type_buf;
-    vector<string> function_attribute;
+    vector<string> funct_attri;
     bool is_array_decl,is_funct_decl;
 };
 vector<vector <sub_entry> > mysymbol_table;
@@ -87,7 +93,7 @@ void symbol_table_init()
     is_loop=0;
     const_type=0;
 }
-void inserting_symbol_table(vector<string> id_list_buf, string kind_in, string type_in, vector<string> function_attribute_buf)
+void inserting_symbol_table(vector<string> id_list_buf, string kind_in, string type_in, vector<string> funct_attri_buf)
 {
     for(int i=0;i<id_list_buf.size();i++)
     {
@@ -106,7 +112,7 @@ void inserting_symbol_table(vector<string> id_list_buf, string kind_in, string t
         }
         if(funct_attri_buf.size())
         {
-            one_subentry.function_attribute = function_attribute_buf;
+            one_subentry.funct_attri = funct_attri_buf;
         }
         mysymbol_table[scope_depth].pb(one_subentry);
     }
