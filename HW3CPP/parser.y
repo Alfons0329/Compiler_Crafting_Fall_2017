@@ -10,7 +10,7 @@ extern FILE *yyin;		/* declared by lex */
 extern "C"{
 	extern int yylex(void);
 	int yyerror(const char* );
-}
+} //this can be used for CPP file
 extern char *yytext;	/* declared by lex */
 extern char *buf;	/* declared in lex.l */
 extern int yylex(void);
@@ -81,7 +81,7 @@ decl		: VAR id_list MK_COLON scalar_type/* scalar type declaration */
 				id_list_buf.clear();
 				error_detection();
 				memset(arr_buf,0,sizeof(arr_buf));//update it for next segment
-				is_array=0;
+				is_arr=0;
 			}
 			| VAR id_list MK_COLON literal_const /* const declaration */
 			{
@@ -124,12 +124,12 @@ func_decl	: 	ID
 				}
  				MK_LPAREN opt_param_list MK_RPAREN
 				{
-					is_function=1;
+					is_funct=1;
 					scope_depth--;
 				}
 				opt_type MK_SEMICOLON
 				{
-					if(is_array)
+					if(is_arr)
 					{
 						array_dimension_parser();
 						//here we push_back the funct_attri_buf inorder to match the attributes of function
@@ -156,12 +156,12 @@ func_decl	: 	ID
 						}
 						inserting_symbol_table(id_list_buf,"function",$7,funct_attri_buf);
 					}
-					is_array=0;
+					is_arr=0;
 				}
 			  	compound_stmt
 			  	END
 				{
-					is_function=0;
+					is_funct=0;
 				}
 				ID
 			;
@@ -177,7 +177,7 @@ param_list	: param_list MK_SEMICOLON param
 param		: id_list MK_COLON type
 			{
 				funct_attri_buf.resize(0);
-				if(is_array)
+				if(is_arr)
 				{
 					array_dimension_parser();
 					if(error_detection()==0)
@@ -196,7 +196,7 @@ param		: id_list MK_COLON type
 						id_list_buf.clear();
 					}
 				}
-				is_array=0;
+				is_arr=0;
 			}
 			;
 
@@ -244,7 +244,7 @@ scalar_type	: INTEGER
 
 array_type	: ARRAY
 			{
-				is_array=1;
+				is_arr=1;
 			}
  			int_const TO int_const OF type
 			{
@@ -267,7 +267,7 @@ stmt		: compound_stmt
 
 compound_stmt	: BEG
 				{
-					if(scope_depth==0&&is_function)
+					if(scope_depth==0&&is_funct)
 					{
 						scope_depth++;
 					}
@@ -282,12 +282,12 @@ compound_stmt	: BEG
 					//printf("23->");}
 					//printf("compound_stmt end\n");
 					//printf("Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d \n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt);
-					if(is_function&&scope_depth>1) //prevernt double popping
+					if(is_funct&&scope_depth>1) //prevernt double popping
 					{
 						dumpsymbol();
 						pop_symbol_table();
 					}
-					else if(!is_loop)/*if(!is_function) *///normal like
+					else if(!is_loop)/*if(!is_funct) *///normal like
 					{
 						dumpsymbol();
 						pop_symbol_table();
