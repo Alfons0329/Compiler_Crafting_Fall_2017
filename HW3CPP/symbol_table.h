@@ -13,6 +13,8 @@ vector<string> funct_attri_buf; //for concatenating the function attribute
 //0 not constant, 1 int 2 -int  3 float 4 -float 5 scientific 6 -scientific 7 string 8 bool 9 OCTAL 10 -OCTAL
 extern char *yytext;
 extern char arr_buf[BUF_SIZE];
+char arr_buf[BUF_SIZE];
+char reverse_arr_buf[BUF_SIZE];
 char funct_type_buf_parser[BUF_SIZE];
 char funct_attri_buf[BUF_SIZE];
 extern int linenum;		/* declared in lex.l */
@@ -62,7 +64,7 @@ struct sub_entry //the real entry for inserting the value
 vector<vector <sub_entry> > mysymbol_table;
 struct loop_iterator
 {
-    char iterator_name[ITER_NAME_SIZE];
+    string iterator_name;
     int iterator_level;
 };
 vector <loop_iterator> myiter_table;
@@ -117,6 +119,13 @@ void inserting_symbol_table(vector<string> id_list_buf, string kind_in, string t
         }
         mysymbol_table[scope_depth].pb(one_subentry);
     }
+}
+void inserting_iter_table(string iter_name_in,int iterator_level_in)
+{
+    myiter_table one_iter_table;
+    one_iter_table.iter_name = iter_name_in;
+    one_iter_table.iterator_level = iterator_level_in;
+    myiter_table.pb(one_iter_table);
 }
 void pop_symbol_table()
 {

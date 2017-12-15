@@ -14,8 +14,6 @@ extern "C"{
 }
 extern char *yytext;	/* declared by lex */
 extern char *buf;	/* declared in lex.l */
-char arr_buf[BUF_SIZE];
-char reverse_arr_buf[BUF_SIZE];
 extern int yylex(void);
 extern int Opt_D; /* declared in lex.l */
 extern int linenum;	/* declared in lex.l */
@@ -27,61 +25,10 @@ int yyerror(char* );
 {
     char* parsed_string;
 }
-
-%token <parsed_string>ARRAY
-%token <parsed_string>BEG
-%token <parsed_string>BOOLEAN
-%token <parsed_string>DEF
-%token <parsed_string>DO
-%token <parsed_string>ELSE
-%token <parsed_string>END
-%token <parsed_string>FALSE
-%token <parsed_string>FOR
-%token <parsed_string>INTEGER
-%token <parsed_string>IF
-%token <parsed_string>OF
-%token <parsed_string>PRINT
-%token <parsed_string>READ
-%token <parsed_string>REAL
-%token <parsed_string>RETURN
-%token <parsed_string>STRING
-%token <parsed_string>THEN
-%token <parsed_string>TO
-%token <parsed_string>TRUE
-%token <parsed_string>VAR
-%token <parsed_string>WHILE
-
-%token <parsed_string>ID
-%token <parsed_string>OCTAL_CONST
-%token <parsed_string>INT_CONST
-%token <parsed_string>FLOAT_CONST
-%token <parsed_string>SCIENTIFIC
-%token <parsed_string>STR_CONST
-
-%token <parsed_string>OP_ADD
-%token <parsed_string>OP_SUB
-%token <parsed_string>OP_MUL
-%token <parsed_string>OP_DIV
-%token <parsed_string>OP_MOD
-%token <parsed_string>OP_ASSIGN
-%token <parsed_string>OP_EQ
-%token <parsed_string>OP_NE
-%token <parsed_string>OP_GT
-%token <parsed_string>OP_LT
-%token <parsed_string>OP_GE
-%token <parsed_string>OP_LE
-%token <parsed_string>OP_AND
-%token <parsed_string>OP_OR
-%token <parsed_string>OP_NOT
-
-%token <parsed_string>MK_COMMA
-%token <parsed_string>MK_COLON
-%token <parsed_string>MK_SEMICOLON
-%token <parsed_string>MK_LPAREN
-%token <parsed_string>MK_RPAREN
-%token <parsed_string>MK_LB
-%token <parsed_string>MK_RB
-
+%token <parsed_string>ARRAY BEG BOOLEAN DEF DO ELSE END FALSE FOR INTEGER IF OF PRINT READ REAL RETURN STRING THEN TO TRUE VAR WHILE
+%token <parsed_string>ID OCTAL_CONST INT_CONST FLOAT_CONST SCIENTIFIC STR_CONST
+%token <parsed_string>OP_ADD OP_SUB OP_MUL OP_DIV OP_MOD OP_ASSIGN OP_EQ OP_NE OP_GT OP_LT OP_GE OP_LE OP_AND OP_OR OP_NOT
+%token <parsed_string>MK_COMMA MK_COLON MK_SEMICOLON MK_LPAREN MK_RPAREN MK_LB MK_RB
 /* start symbol */
 %type <parsed_string> decl int_const literal_const param id_list type scalar_type array_type
 
@@ -184,51 +131,41 @@ func_decl	: 	ID
 				{
 					is_function=1;
 					scope_depth-=1;
-					global_sub_entry_cnt++;
 				}
 				opt_type MK_SEMICOLON
 				{
-					//setting the function type
-					funct_attri_buf.resize(0); //normal variable does not have attribute, so just let the size be zero
-
 					if(is_array)
 					{
 						array_dimension_parser();
-						strcat(mysymbol_table[0].mysub_entry[global_sub_entry_cnt-1].funct_type_buf,reverse_arr_buf);
-					}
-					//here we push_back the funct_attri_buf inorder to match the attributes of function
-					memset(funct_attri_buf,0,sizeof(funct_attri_buf));
-					for(int i=0;i<SUB_ENTRY_SIZE;i++)
-					{
-						if(strcmp(mysymbol_table[1].mysub_entry[i].kind,"parameter")==0&&(mysymbol_table[1].mysub_entry[i].name[0]!=0))
+						//here we push_back the funct_attri_buf inorder to match the attributes of function
+						funct_attri_buf.resize(0); //primitive initialization
+						for(int i=0;i<mysymbol_table[1].size();i++)
 						{
-							if(mysymbol_table[1].mysub_entry[i].is_array_decl)
+							if((mysymbol_table[1][i].kind=="parameter")&&(mysymbol_table[1][i].name[0]!=0))
 							{
-								strcat(funct_attri_buf,mysymbol_table[1].mysub_entry[i].array_type_buf);
-								strcat(funct_attri_buf,","); //for indentation
-							}
-							else
-							{
-								strcat(funct_attri_buf,mysymbol_table[1].mysub_entry[i].type);
-							    strcat(funct_attri_buf,","); //for indentation
+								funct_attri_buf.pb(mysymbol_table[1][i].type+",");
 							}
 						}
+						inserting_symbol_table(id_list_buf,"function",reverse_arr_buf,funct_attri_buf);
 					}
-					//setting the function attribute(parameter which passed in)
-					strcat(mysymbol_table[0].mysub_entry[global_sub_entry_cnt-1].attri_type_buf,funct_attri_buf);
-					global_pre_sub_entry_cnt=global_sub_entry_cnt;
+					else
+					{
+						//here we push_back the funct_attri_buf inorder to match the attributes of function
+						funct_attri_buf.resize(0); //primitive initialization
+						for(int i=0;i<mysymbol_table[1].size();i++)
+						{
+							if((mysymbol_table[1][i].kind=="parameter")&&(mysymbol_table[1][i].name[0]!=0))
+							{
+								funct_attri_buf.pb(mysymbol_table[1][i].type+",");
+							}
+						}
+						inserting_symbol_table(id_list_buf,"function",$6,funct_attri_buf);
+					}
 					is_array=0;
-					 //global function end by 1
-					inserting_symbol_table(id_list_buf,"function",$4,funct_attri_buf);
- 					id_list_buf.clear();
- 					error_detection();
 				}
 			  	compound_stmt
 			  	END
 				{
-					//printf("12->");}
-					//set the function attribute and type after all declared
-					/*pop_symbol_table(); //function pop itself*/
 					is_function=0;
 				}
 				ID
@@ -335,7 +272,6 @@ stmt		: compound_stmt
 
 compound_stmt	: BEG
 				{
-					//printf("22->");}
 					if(scope_depth==0&&is_function)
 					{
 						scope_depth++;
@@ -343,12 +279,7 @@ compound_stmt	: BEG
 					else
 					{
 						scope_depth++;
-						sub_entry_cnt=0;
-						pre_sub_entry_cnt=0;
 					}
-					//printf("compound_stmt begin\n");
-					//printf("Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d \n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt);
-
 				}
 			  	opt_decl_list
 			  	opt_stmt_list
@@ -358,27 +289,14 @@ compound_stmt	: BEG
 					//printf("Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d \n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt);
 					if(is_function&&scope_depth>1) //prevernt double popping
 					{
-						//printf("pop type 1 function controller is '%d' \n",is_function);
-						//error_detection();
 						dumpsymbol();
 						pop_symbol_table();
 					}
 					else if(!is_loop)/*if(!is_function) *///normal like
 					{
-						//printf("pop type 1 function controller is '%d' \n",is_function);
-						//error_detection();
 						dumpsymbol();
 						pop_symbol_table();
 					}
-					/*
-					begin
-					    var a: integer;
-					    begin
-					        var a: boolean;
-					    end
-					// outer ’a’ has been hidden in this scope
-					end just directly popping, rather than waiting till the end test!
-					*/
 				}
 			  	END
 
@@ -415,12 +333,9 @@ while_stmt	: WHILE boolean_expr DO
 
 for_stmt	: 	FOR ID
 				{
-					strcpy(myiter_table[iterator_cnt].iterator_name,yytext);
-					myiter_table[iterator_cnt].iterator_level=scope_depth+1;
-					//printf("Loop scope depth %d and name %s\n",scope_depth,yytext);
+					inserting_iter_table(yytext,scope_depth+1);
 					error_detection();
 					//dumpiterator();
-					iterator_cnt++;
 					is_loop=1;
 				}
  			  	OP_ASSIGN int_const TO int_const DO
