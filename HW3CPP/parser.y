@@ -7,13 +7,15 @@
 #include "symboltable.h"
 #define pb push_back
 #define BUF_SIZE 50
+//C++ working
+extern "C" int yylex(void);
 extern FILE *yyin;		/* declared by lex */
 extern char *yytext;	/* declared by lex */
 extern char *buf;	/* declared in lex.l */
 extern int yylex(void);
 extern int Opt_D; /* declared in lex.l */
 extern int linenum;	/* declared in lex.l */
-int yyerror(char* );
+int yyerror(const char*);
 //some global variables that needed in the parsing procedure
 char arr_buf[BUF_SIZE];
 char reverse_arr_buf[BUF_SIZE];
@@ -22,7 +24,7 @@ string const_type_str;
 vector<string> id_list_buf; //
 vector<string> funct_attri_buf;
 %}
-/* tokens */
+/* tokens 
 %union
 {
     char* parsed_string;

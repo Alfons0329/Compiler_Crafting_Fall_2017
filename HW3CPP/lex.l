@@ -6,7 +6,8 @@
 %{
 #include <string.h>
 #include "y.tab.h"
-#include "symboltable.h"
+//C++ working
+extern "C" int yylex();
 #define LIST strcat( buf, yytext )
 #define token(t) { LIST; if (Opt_T)printf("<%s>\n", #t );}
 #define tokenChar(t) { LIST; if (Opt_T)printf("<%c>\n", t );}

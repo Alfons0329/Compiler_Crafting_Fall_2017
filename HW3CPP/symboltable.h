@@ -7,11 +7,6 @@
 #define SUB_ENTRY_SIZE 100
 #define BUF_SIZE 50
 using namespace std;
-extern "C"
-{
-    int yyerror(const char *msg);
-    extern int yylex(void);
-}
 //global varaible declaration
 extern char *yytext;
 extern char arr_buf[BUF_SIZE];
