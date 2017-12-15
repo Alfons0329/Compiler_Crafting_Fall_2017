@@ -7,6 +7,7 @@
 //some global variables that needed in the parsing procedure
 string tmpstr;
 string const_buf;
+string const_type_str;
 vector<string> id_list_buf; //for multiple ID
 vector<string> funct_attri_buf; //for concatenating the function attribute
 //0 not constant, 1 int 2 -int  3 float 4 -float 5 scientific 6 -scientific 7 string 8 bool 9 OCTAL 10 -OCTAL

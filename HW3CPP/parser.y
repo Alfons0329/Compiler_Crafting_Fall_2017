@@ -12,24 +12,17 @@ extern "C"{
 	extern int yylex(void);
 	int yyerror(const char* );
 }
-extern char *yytext;		/* declared by lex */
-extern char *buf;		/* declared in lex.l */
+extern char *yytext;	/* declared by lex */
+extern char *buf;	/* declared in lex.l */
 char arr_buf[BUF_SIZE];
 char reverse_arr_buf[BUF_SIZE];
 extern int yylex(void);
 extern int Opt_D; /* declared in lex.l */
-extern int linenum;		/* declared in lex.l */
+extern int linenum;	/* declared in lex.l */
 int yyerror(char* );
 
-//some global variables that needed in the parsing procedure
-string tmpstr;
-string const_buf;
-vector<string> id_list_buf; //for multiple ID
-vector<string> funct_attri_buf; //for concatenating the function attribute
-//0 not constant, 1 int 2 -int  3 float 4 -float 5 scientific 6 -scientific 7 string 8 bool 9 OCTAL 10 -OCTAL
 %}
 /* tokens */
-
 %union
 {
     char* parsed_string;
@@ -129,28 +122,27 @@ decl_list	: 	decl_list /*//printf("3->");}*/
 			| 	decl /*//printf("5->");}*/
 			;
 
-decl		: VAR	/* scalar type declaration */
- 			id_list MK_COLON scalar_type
+decl		: VAR id_list MK_COLON scalar_type/* scalar type declaration */
 			{
-				funct_attri_buf.resize(0); //normal variable does not have attribute, so
+				funct_attri_buf.resize(0); //normal variable does not have attribute, so just let the size be zero
 				inserting_symbol_table(id_list_buf,"variable",$4,funct_attri_buf);
 				id_list_buf.clear();
 				error_detection();
 			}
 			MK_SEMICOLON
-			| VAR    /* array type declaration */
-			id_list MK_COLON array_type MK_SEMICOLON
+			| VAR id_list MK_COLON array_type MK_SEMICOLON   /* array type declaration */
 			{
-				funct_attri_buf.resize(0); //normal variable does not have attribute, so
+				funct_attri_buf.resize(0); //normal variable does not have attribute, so just let the size be zero
 				array_dimension_parser();
 				inserting_symbol_table(id_list_buf,"variable",reverse_arr_buf,funct_attri_buf);
 				id_list_buf.clear();
 				error_detection();
 				memset(arr_buf,0,sizeof(arr_buf));//update it for next segment
+				is_array=0;
 			}
 			| VAR id_list MK_COLON literal_const /* const declaration */
 			{
-				funct_attri_buf.pb(const_buf); //normal variable does not have attribute, so
+				funct_attri_buf.pb(const_buf); //normal variable does not have attribute, so just let the size be zero
 				array_dimension_parser();
 				inserting_symbol_table(id_list_buf,"constant",,funct_attri_buf);
 				id_list_buf.clear();
@@ -163,15 +155,15 @@ int_const	:	INT_CONST {$$=yytext; const_type=1;}
 			|	OCTAL_CONST {$$=yytext; const_type=9;}
 			;
 
-literal_const	: int_const {$$=yytext; const_type=(const_type==1)?1:9; parse_constant();}
-				| OP_SUB int_const {$$=yytext; const_type=(const_type==1)?2:10; parse_constant();}
-				| FLOAT_CONST {$$=yytext; const_type=3; parse_constant();}
-				| OP_SUB FLOAT_CONST {$$=yytext; const_type=4; parse_constant();}
-				| SCIENTIFIC {$$=yytext; const_type=5; parse_constant();}
-				| OP_SUB SCIENTIFIC {$$=yytext; const_type=6; parse_constant();}
-				| STR_CONST {$$=yytext; const_type=7; parse_constant();}
-				| TRUE {$$=yytext; const_type=8; parse_constant();}
-				| FALSE {$$=yytext; const_type=8; parse_constant();}
+literal_const	: int_const {$$=yytext; const_type=(const_type==1)?1:9; const_type_str="integer ";}
+				| OP_SUB int_const {$$=yytext; const_type=(const_type==1)?2:10; const_type_str="integer ";}
+				| FLOAT_CONST {$$=yytext; const_type=3; const_type_str="real ";}
+				| OP_SUB FLOAT_CONST {$$=yytext; const_type=4; const_type_str="real ";}
+				| SCIENTIFIC {$$=yytext; const_type=5; const_type_str="real ";}
+				| OP_SUB SCIENTIFIC {$$=yytext; const_type=6; const_type_str="real ";}
+				| STR_CONST {$$=yytext; const_type=7; const_type_str="string ";}
+				| TRUE {$$=yytext; const_type=8; const_type_str="boolean ";}
+				| FALSE {$$=yytext; const_type=8; const_type_str="boolean ";}
 			;
 
 opt_func_decl_list	: func_decl_list
@@ -184,18 +176,7 @@ func_decl_list		: func_decl_list func_decl
 
 func_decl	: 	ID
 				{
-					//printf("11->");}
-					sub_entry_cnt=0;
-					pre_sub_entry_cnt=0;
-
-
-					strcat(mysymbol_table[0].mysub_entry[global_sub_entry_cnt].name,yytext);
-					strcpy(mysymbol_table[0].mysub_entry[global_sub_entry_cnt].kind,"function");
-					strcpy(mysymbol_table[0].mysub_entry[global_sub_entry_cnt].level_str,"0(global)");
-					//printf("Global entry count %d \n",global_sub_entry_cnt);
-					mysymbol_table[0].mysub_entry[global_sub_entry_cnt].is_funct_decl=1;
-					//memset(funct_type_buf_parser,0,sizeof(funct_type_buf_parser));
-					memset(funct_attri_buf,0,sizeof(funct_attri_buf));
+					id_list_buf.pb(yytext);
                     error_detection();
 					scope_depth+=1;
 				}
@@ -207,13 +188,15 @@ func_decl	: 	ID
 				}
 				opt_type MK_SEMICOLON
 				{
-					//is_function=1 here will be better
 					//setting the function type
+					funct_attri_buf.resize(0); //normal variable does not have attribute, so just let the size be zero
+
 					if(is_array)
 					{
 						array_dimension_parser();
 						strcat(mysymbol_table[0].mysub_entry[global_sub_entry_cnt-1].funct_type_buf,reverse_arr_buf);
 					}
+					//here we push_back the funct_attri_buf inorder to match the attributes of function
 					memset(funct_attri_buf,0,sizeof(funct_attri_buf));
 					for(int i=0;i<SUB_ENTRY_SIZE;i++)
 					{
@@ -236,6 +219,9 @@ func_decl	: 	ID
 					global_pre_sub_entry_cnt=global_sub_entry_cnt;
 					is_array=0;
 					 //global function end by 1
+					inserting_symbol_table(id_list_buf,"function",$4,funct_attri_buf);
+ 					id_list_buf.clear();
+ 					error_detection();
 				}
 			  	compound_stmt
 			  	END
@@ -258,41 +244,26 @@ param_list	: param_list MK_SEMICOLON param
 
 param		: id_list MK_COLON type
 			{
-				for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
+				funct_attri_buf.resize(0);
+				if(is_array)
 				{
-					strcpy(mysymbol_table[scope_depth].mysub_entry[i].kind,"parameter");
-					//printf("i is now %d and name %s\n",i,mysymbol_table[scope_depth].mysub_entry[i].name);
-					char* ps_level;
-					char depth_n[100];
-					memset(depth_n,0,sizeof(depth_n));
-					if(scope_depth)
+					array_dimension_parser();
+					if(error_detection()==0)
 					{
-						depth_n[0]=scope_depth+'0';
-						ps_level="(local)";
-						strcat(depth_n,ps_level);
-						//printf("Depth n %s \n",depth_n);
-					}
-					strcpy(mysymbol_table[scope_depth].mysub_entry[i].level_str,depth_n);
-					if(is_array)
-					{
+						funct_attri_buf.resize(0);
 						array_dimension_parser();
-						if(error_detection()==0)
-						{
-							strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,reverse_arr_buf);
-							mysymbol_table[scope_depth].mysub_entry[i].is_array_decl=true;
-						}
-					}
-					else
-					{
-						if(error_detection()==0)
-						{
-							strcpy(mysymbol_table[scope_depth].mysub_entry[i].type,$3);
-						}
+						inserting_symbol_table(id_list_buf,"parameter",reverse_arr_buf,funct_attri_buf);
+						id_list_buf.clear();
 					}
 				}
-				pre_sub_entry_cnt=sub_entry_cnt; //update it for next segment
-				//printf("parsing parameter done dump symbol table\n");
-				memset(arr_buf,0,sizeof(arr_buf));
+				else
+				{
+					if(error_detection()==0)
+					{
+						inserting_symbol_table(id_list_buf,"parameter",$3,funct_attri_buf);
+						id_list_buf.clear();
+					}
+				}
 				is_array=0;
 			}
 			;
@@ -302,18 +273,18 @@ id_list		: id_list MK_COMMA ID /*one ID for one sub_entry*/
 				tmpstr.clear();
 				strcpy(tmpstr,yytext);
 				id_list_buf.pb(tmpstr);
-				$$=yytext;
+				/* $$=yytext; */
 			}
 			| ID
 			{
 				tmpstr.clear();
 				strcpy(tmpstr,yytext);
 				id_list_buf.pb(tmpstr);
-				$$=yytext;
+				/* $$=yytext; */
 			}
 			;
 
-opt_type	: MK_COLON type
+opt_type	: MK_COLON type {$$=$2;}
 			| /* epsilon */
 			;
 
@@ -341,7 +312,6 @@ scalar_type	: INTEGER
 
 array_type	: ARRAY
 			{
-				//printf("20->");}
 				is_array=1;
 			}
  			int_const TO int_const OF type
