@@ -5,8 +5,7 @@
  */
 #include <bits/stdc++.h>
 #include "symbol_table.h"
-
-#define push_back pb
+#define pb push_back
 extern FILE *yyin;		/* declared by lex */
 extern "C"{
 	extern int yylex(void);
@@ -18,7 +17,6 @@ extern int yylex(void);
 extern int Opt_D; /* declared in lex.l */
 extern int linenum;	/* declared in lex.l */
 int yyerror(char* );
-
 %}
 /* tokens */
 %union
@@ -30,7 +28,7 @@ int yyerror(char* );
 %token <parsed_string>OP_ADD OP_SUB OP_MUL OP_DIV OP_MOD OP_ASSIGN OP_EQ OP_NE OP_GT OP_LT OP_GE OP_LE OP_AND OP_OR OP_NOT
 %token <parsed_string>MK_COMMA MK_COLON MK_SEMICOLON MK_LPAREN MK_RPAREN MK_LB MK_RB
 /* start symbol */
-%type <parsed_string> decl int_const literal_const param id_list type scalar_type array_type
+%type <parsed_string> decl func_decl opt_type int_const literal_const param id_list type scalar_type array_type
 
 %start program
 %%
@@ -38,9 +36,7 @@ int yyerror(char* );
 program		:	ID
 				{
 					symbol_table_init();
-					tmpstr.clear();
-					strcpy(tmpstr,yytext);
-					id_list_buf.pb(tmpstr);
+					id_list_buf.pb(yytext);
 					funct_attri_buf.resize(0);
 				}
 				MK_SEMICOLON
@@ -101,15 +97,15 @@ int_const	:	INT_CONST {$$=yytext; const_type=1;}
 			|	OCTAL_CONST {$$=yytext; const_type=9;}
 			;
 
-literal_const	: int_const {$$=yytext; const_type=(const_type==1)?1:9; const_type_str="integer ";}
-				| OP_SUB int_const {$$=yytext; const_type=(const_type==1)?2:10; const_type_str="integer ";}
-				| FLOAT_CONST {$$=yytext; const_type=3; const_type_str="real ";}
-				| OP_SUB FLOAT_CONST {$$=yytext; const_type=4; const_type_str="real ";}
-				| SCIENTIFIC {$$=yytext; const_type=5; const_type_str="real ";}
-				| OP_SUB SCIENTIFIC {$$=yytext; const_type=6; const_type_str="real ";}
-				| STR_CONST {$$=yytext; const_type=7; const_type_str="string ";}
-				| TRUE {$$=yytext; const_type=8; const_type_str="boolean ";}
-				| FALSE {$$=yytext; const_type=8; const_type_str="boolean ";}
+literal_const	: int_const {$$=yytext; const_type=(const_type==1)?1:9; const_type_str="integer ";parse_constant();}
+				| OP_SUB int_const {$$=yytext; const_type=(const_type==1)?2:10; const_type_str="integer ";parse_constant();}
+				| FLOAT_CONST {$$=yytext; const_type=3; const_type_str="real ";parse_constant();}
+				| OP_SUB FLOAT_CONST {$$=yytext; const_type=4; const_type_str="real ";parse_constant();}
+				| SCIENTIFIC {$$=yytext; const_type=5; const_type_str="real ";parse_constant();}
+				| OP_SUB SCIENTIFIC {$$=yytext; const_type=6; const_type_str="real ";parse_constant();}
+				| STR_CONST {$$=yytext; const_type=7; const_type_str="string ";parse_constant();}
+				| TRUE {$$=yytext; const_type=8; const_type_str="boolean ";parse_constant();}
+				| FALSE {$$=yytext; const_type=8; const_type_str="boolean ";parse_constant();}
 			;
 
 opt_func_decl_list	: func_decl_list
@@ -158,7 +154,7 @@ func_decl	: 	ID
 								funct_attri_buf.pb(mysymbol_table[1][i].type+",");
 							}
 						}
-						inserting_symbol_table(id_list_buf,"function",$6,funct_attri_buf);
+						inserting_symbol_table(id_list_buf,"function",$7,funct_attri_buf);
 					}
 					is_array=0;
 				}
@@ -206,16 +202,16 @@ param		: id_list MK_COLON type
 
 id_list		: id_list MK_COMMA ID /*one ID for one sub_entry*/
 			{
-				tmpstr.clear();
-				strcpy(tmpstr,yytext);
-				id_list_buf.pb(tmpstr);
+				/* tmpstr.clear(); */
+				/* strcpy(tmpstr,yytext); */
+				id_list_buf.pb(yytext);
 				/* $$=yytext; */
 			}
 			| ID
 			{
-				tmpstr.clear();
-				strcpy(tmpstr,yytext);
-				id_list_buf.pb(tmpstr);
+				/* tmpstr.clear(); */
+				/* strcpy(tmpstr,yytext); */
+				id_list_buf.pb(yytext);
 				/* $$=yytext; */
 			}
 			;

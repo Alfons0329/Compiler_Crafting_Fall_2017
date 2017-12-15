@@ -5,14 +5,11 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "symbol_table.h"
 using namespace std;
-extern void symbol_table_init();
 extern int yyparse();	/* declared by yacc */
 extern int param_or_decl;
 extern int is_array;
 extern FILE* yyin;	/* declared by lex */
-
 
 int  main( int argc, char **argv )
 {
@@ -29,8 +26,6 @@ int  main( int argc, char **argv )
 	}
 
 	yyin = fp;
-	//0 no 1 yes
-	symbol_table_init();
 	yyparse();
 	exit(0);
 }

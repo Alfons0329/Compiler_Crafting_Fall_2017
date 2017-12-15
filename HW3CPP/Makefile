@@ -9,7 +9,7 @@ LIBS     = -lfl -lm
 
 all: $(TARGET)
 
-$(TARGET): y.tab.c lex.yy.c main.cpp symbol_table.cpp
+$(TARGET): y.tab.c lex.yy.c main.cpp symbol_table.h
 	$(CC) $^ -o $(TARGET) $(CCFLAGS) $(LIBS)
 
 y.tab.c: parser.y
