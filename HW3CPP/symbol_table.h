@@ -59,7 +59,7 @@ struct sub_entry //the real entry for inserting the value
     string name;
     string kind;
     string level_str;
-    string type_buf;
+    string type;
     vector<string> funct_attri;
     bool is_array_decl,is_funct_decl;
 };
@@ -153,7 +153,22 @@ void dumpsymbol()
     {
         printf("-");
     }
+    for(int i=0;i<mysymbol_table[scope_depth].size();i++)
+    {
+        if(mysymbol_table[scope_depth][i].name[0]==0)
+            continue;
 
+        printf("%-33s",mysymbol_table[scope_depth][i].name);
+        printf("%-11s",mysymbol_table[scope_depth][i].kind);
+        printf("%-11s",mysymbol_table[scope_depth][i].level_str);
+        printf("%-11s",mysymbol_table[scope_depth][i].type);
+        for(int j=0;j<mysymbol_table[scope_depth][i].funct_attri.size();j++)
+        {
+            mysymbol_table[scope_depth][i].funct_attri[j];
+        }
+        printf("\n",);
+
+    }
     for(int i=0;i< 110;i++)
         printf("-");
     printf("\n");
@@ -322,10 +337,8 @@ void array_dimension_parser()
     int comma_pos=0,reverse_pos=0,quit_parsing_arr_size=0;
     for(int i=49;i>=0;)
     {
-
         if(arr_buf[i]==',')
         {
-
             for(int k=i-1;;k--)
             {
 

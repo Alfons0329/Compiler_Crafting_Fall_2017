@@ -138,7 +138,7 @@ func_decl	: 	ID
 						array_dimension_parser();
 						//here we push_back the funct_attri_buf inorder to match the attributes of function
 						funct_attri_buf.resize(0); //primitive initialization
-						for(int i=0;i<mysymbol_table[1].size();i++)
+						for(int i=0;i<mysymbol_table[1].size();i++) //search the parameter for function attribute
 						{
 							if((mysymbol_table[1][i].kind=="parameter")&&(mysymbol_table[1][i].name[0]!=0))
 							{
@@ -151,7 +151,7 @@ func_decl	: 	ID
 					{
 						//here we push_back the funct_attri_buf inorder to match the attributes of function
 						funct_attri_buf.resize(0); //primitive initialization
-						for(int i=0;i<mysymbol_table[1].size();i++)
+						for(int i=0;i<mysymbol_table[1].size();i++) //search the parameter for function attribute
 						{
 							if((mysymbol_table[1][i].kind=="parameter")&&(mysymbol_table[1][i].name[0]!=0))
 							{
