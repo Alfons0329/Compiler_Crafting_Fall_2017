@@ -9,10 +9,9 @@
 #define BUF_SIZE 50
 //C++ working
 extern "C" int yylex(void);
-extern FILE *yyin;		/* declared by lex */
+extern "C" FILE *yyin;		/* declared by lex */
 extern char *yytext;	/* declared by lex */
 extern char *buf;	/* declared in lex.l */
-extern int yylex(void);
 extern int Opt_D; /* declared in lex.l */
 extern int linenum;	/* declared in lex.l */
 int yyerror(const char*);
@@ -24,7 +23,7 @@ string const_type_str;
 vector<string> id_list_buf; //
 vector<string> funct_attri_buf;
 %}
-/* tokens 
+/*tokens*/
 %union
 {
     char* parsed_string;

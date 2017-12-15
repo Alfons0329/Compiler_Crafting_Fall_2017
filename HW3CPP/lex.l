@@ -6,6 +6,7 @@
 %{
 #include <string.h>
 #include "y.tab.h"
+#include "symboltable.h"
 //C++ working
 extern "C" int yylex();
 #define LIST strcat( buf, yytext )
