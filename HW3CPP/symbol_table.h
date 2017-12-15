@@ -1,9 +1,11 @@
 /*Data structure without the memory adjusment lololol*/
 #include <bits/stdc++.h>
+using namespace std;
 #define pb push_back
 #define SYMBOL_TABLE_MAX_SIZE 1000
 #define SUB_ENTRY_SIZE 100
 #define BUF_SIZE 50
+std::ios_base::sync_with_stdio
 //some global variables that needed in the parsing procedure
 string tmpstr;
 string const_buf;
@@ -64,8 +66,8 @@ struct sub_entry //the real entry for inserting the value
 vector<vector <sub_entry> > mysymbol_table;
 struct loop_iterator
 {
-    string iterator_name;
-    int iterator_level;
+    string iter_name;
+    int iter_level;
 };
 vector <loop_iterator> myiter_table;
 void symbol_table_init();
@@ -86,11 +88,6 @@ void symbol_table_init()
 {
     mysymbol_table.resize(SYMBOL_TABLE_MAX_SIZE);
     scope_depth=0;
-    global_sub_entry_cnt=0;
-    global_pre_sub_entry_cnt=0;
-    sub_entry_cnt=0;
-    pre_sub_entry_cnt=0;
-    iterator_cnt=0;
     is_array = 0;
     is_function=0;
     is_loop=0;
@@ -101,7 +98,14 @@ void inserting_symbol_table(vector<string> id_list_buf, string kind_in, string t
     for(int i=0;i<id_list_buf.size();i++)
     {
         mysub_entry one_subentry;
-        one_subentry.name = id_list_buf[i];
+        if(id_list_buf[i].length()>32)
+        {
+            one_subentry.name = id_list_buf[i].substr(0,32);
+        }
+        else
+        {
+            one_subentry.name = id_list_buf[i];
+        }
         one_subentry.kind = kind_in;
         one_subentry.type = type_in;
         string scope_depth_str = to_string(scope_depth);
@@ -120,11 +124,11 @@ void inserting_symbol_table(vector<string> id_list_buf, string kind_in, string t
         mysymbol_table[scope_depth].pb(one_subentry);
     }
 }
-void inserting_iter_table(string iter_name_in,int iterator_level_in)
+void inserting_iter_table(string iter_name_in,int iter_level_in)
 {
     myiter_table one_iter_table;
     one_iter_table.iter_name = iter_name_in;
-    one_iter_table.iterator_level = iterator_level_in;
+    one_iter_table.iter_level = iter_level_in;
     myiter_table.pb(one_iter_table);
 }
 void pop_symbol_table()
@@ -149,240 +153,95 @@ void dumpsymbol()
     {
         printf("-");
     }
-    printf("\n");
-    for(int i=0;i<SUB_ENTRY_SIZE;i++)
-    {
-        if(mysymbol_table[scope_depth].mysub_entry[i].name[0]==0)
-            continue;
 
-        if(mysymbol_table[scope_depth].mysub_entry[i].name[33]!=0)
-        {
-            for(int j=0;j<32;j++)
-            {
-                printf("%c",mysymbol_table[scope_depth].mysub_entry[i].name[j]==0?32:mysymbol_table[scope_depth].mysub_entry[i].name[j]); //cool method lolol
-            }
-            printf(" ");
-        }
-        else
-        {
-            printf("%-33s",mysymbol_table[scope_depth].mysub_entry[i].name);
-        }
-        if(mysymbol_table[scope_depth].mysub_entry[i].kind)
-            printf("%-11s",mysymbol_table[scope_depth].mysub_entry[i].kind);
-
-        printf("%-11s",mysymbol_table[scope_depth].mysub_entry[i].level_str);
-        if(mysymbol_table[scope_depth].mysub_entry[i].is_array_decl)
-        {
-            printf("%-17s",mysymbol_table[scope_depth].mysub_entry[i].array_type_buf);
-        }
-        else if(mysymbol_table[scope_depth].mysub_entry[i].is_funct_decl)
-        {
-            printf("%-17s",mysymbol_table[scope_depth].mysub_entry[i].funct_type_buf[0]==0?"void":mysymbol_table[scope_depth].mysub_entry[i].funct_type_buf);
-        }
-        else
-        {
-            printf("%-17s",mysymbol_table[scope_depth].mysub_entry[i].type);
-        }
-        for(int j=0;j<ATTRI_BUF_SIZE;)
-        {
-            if(mysymbol_table[scope_depth].mysub_entry[i].attri_type_buf[j]==0)
-                break;
-            else if(mysymbol_table[scope_depth].mysub_entry[i].attri_type_buf[j]==','&&mysymbol_table[scope_depth].mysub_entry[i].attri_type_buf[j+1]==0)
-                break;
-            else if(mysymbol_table[scope_depth].mysub_entry[i].attri_type_buf[j]==' '&&mysymbol_table[scope_depth].mysub_entry[i].attri_type_buf[j+1]==',')
-            {
-                j+=2;
-                if(mysymbol_table[scope_depth].mysub_entry[i].attri_type_buf[j]==0)
-                    break;
-                else
-                    printf(", ");
-                //printf("This is type2 printf ");
-            }
-            else
-            {
-                printf("%c",mysymbol_table[scope_depth].mysub_entry[i].attri_type_buf[j]);
-                j++;
-            }
-        }
-        printf("\n");
-    }
     for(int i=0;i< 110;i++)
         printf("-");
     printf("\n");
 }
-int  error_detection() //no hashing, just naive solution
+int error_detection() //no hashing, just naive solution
 {
-    char error_msg[200];
-    char redeclared_var[100];
-    memset(error_msg,0,sizeof(error_msg));
-    memset(redeclared_var,0,sizeof(redeclared_var));
-    int redeclared_index=0,is_error=0,is_parsed=0,pre_redeclared_index=0,is_final_error=0;
-    //loop iterator-loop iterator detection
-    for(int i=0;i<ITERATOR_TABLE_SIZE;i++)
+    //iterator-iterator checking------------------------------------------------------------------------------------//
+    vector<string> redeclared_var;
+    string error_msg;
+    bool is_error=0, is_final_error=0;
+    for(int i=0;i<myiter_table.size();i++)
     {
-        for(int j=i+1;j<ITERATOR_TABLE_SIZE;j++)
+        for(int j=0;j<myiter_table.size();j++)
         {
-            if(!strncmp(myiter_table[i].iterator_name,myiter_table[j].iterator_name,32)&&
-            (myiter_table[j].iterator_level>myiter_table[i].iterator_level))
+            if((myiter_table[i].iter_name==myiter_table[j].iter_name)&&(myiter_table[j].iter_level>myiter_table[i].iter_level))
             {
-                //printf("Found iter same with iter!!\n");
-                for(;myiter_table[i].iterator_name[pre_redeclared_index]!=0&&pre_redeclared_index<33;)
-                {
-
-                    //printf("push name %c\n",myiter_table[i].iterator_name[pre_redeclared_index]);
-                    redeclared_var[redeclared_index]=myiter_table[i].iterator_name[pre_redeclared_index];
-                    pre_redeclared_index+=1;
-                    redeclared_index+=1;
-                    //printf("same at i %d redeclared_index %d\n",i,redeclared_index);
-                }
-                redeclared_var[redeclared_index]=',';
-                redeclared_index+=1;
-                pre_redeclared_index=0;
+                redeclared_var.pb(myiter_table[i].iter_name);
                 is_error=1;
-                break;
+                is_final_error=1;
             }
-
         }
     }
     if(is_error)
     {
-        for(int i=0;redeclared_var[i]!=0;)
+        for(int i=0;i<redeclared_var.size();i++)
         {
-            memset(error_msg,0,sizeof(error_msg));
-            strcat(error_msg,"symbol ");
-
-            for(int j=i,cnt=0;redeclared_var[j]!=',';j++,cnt++) //cnt for substring parsing index
-            {
-                error_msg[cnt+7]=redeclared_var[j];  //parse the redeclaration ID string
-                i=j;
-                is_parsed=1; //error messgae parsed successfully
-            }
-            i+=1;
-            if(redeclared_var[i]==0)
-                break;
-            strcat(error_msg," is redeclared");
-            if(is_parsed)
-                printf("<Error> found in Line %d: %s\n", linenum, error_msg);
-
-            is_parsed=0;
+            error_msg=" symbol ";
+            error_msg+=redeclared_var[i];
+            error_msg+=" is redeclared"
+            cout<<"<Error> found in Line "<<linenum<<error_msg<<endl;
+            error_msg.clear();
         }
-        is_error=0;
-	is_final_error=1;
     }
-    //variable-iterator detection
-    redeclared_index=0,is_error=0,is_parsed=0,pre_redeclared_index=0;
-    memset(error_msg,0,sizeof(error_msg));
-    memset(redeclared_var,0,sizeof(redeclared_var));
-    for(int i=0;i<SUB_ENTRY_SIZE;i++)
+    //iterator-variable checking------------------------------------------------------------------------------------//
+    redeclared_var.clear();
+    is_error=0;
+    for(int i=0;i<mysymbol_table[scope_depth].size();i++)
     {
-        if(mysymbol_table[scope_depth].mysub_entry[i].name[0]==0)
+        if(mysymbol_table[scope_depth][i].name[0]==0)
             continue;
-        for(int j=0;j<ITERATOR_TABLE_SIZE;j++)
+        for(int j=0;j<myiter_table.size();j++)
         {
-            if(!strncmp(mysymbol_table[scope_depth].mysub_entry[i].name,myiter_table[j].iterator_name,32)&&
-            scope_depth==myiter_table[j].iterator_level)
+            if((myiter_table[i].iter_name==myiter_table[j].iter_name)&&(myiter_table[j].iter_level>myiter_table[i].iter_level))
             {
-
-                for(;mysymbol_table[scope_depth].mysub_entry[i].name[pre_redeclared_index]!=0&&pre_redeclared_index<33;)
-                {
-                    //printf("Found iter same with variable!! name is %s\n",mysymbol_table[scope_depth].mysub_entry[i].name);
-                    //printf("push name %c\n",mysymbol_table[scope_depth].mysub_entry[i].name[pre_redeclared_index]);
-                    redeclared_var[redeclared_index]=mysymbol_table[scope_depth].mysub_entry[i].name[pre_redeclared_index];
-                    pre_redeclared_index+=1;
-                    redeclared_index+=1;
-                    //printf("same at i %d redeclared_index %d\n",i,redeclared_index);
-                }
-                mysymbol_table[scope_depth].mysub_entry[i].name[0]=0;//mark the error table as not print
-                redeclared_var[redeclared_index]=',';
-                redeclared_index+=1;
-                pre_redeclared_index=0;
+                redeclared_var.pb(myiter_table[i].iter_name);
                 is_error=1;
-                break;
+                is_final_error=1;
+                mysymbol_table[scope_depth][i].name[0]=0; //turn off the variable which confilicts with the iterator
             }
         }
     }
     if(is_error)
     {
-        //printf("Error with iter-variable \n");
-        for(int i=0;redeclared_var[i]!=0;)
+        for(int i=0;i<redeclared_var.size();i++)
         {
-            memset(error_msg,0,sizeof(error_msg));
-            strcat(error_msg,"symbol ");
-            for(int j=i,cnt=0;redeclared_var[j]!=',';j++,cnt++) //cnt for substring parsing index
-            {
-                error_msg[cnt+7]=redeclared_var[j];  //parse the redeclaration ID string
-                i=j;
-                is_parsed=1; //error messgae parsed successfully
-            }
-            i+=1;
-            if(redeclared_var[i]==0)
-                break;
-            strcat(error_msg," is redeclared");
-            if(is_parsed)
-                printf("<Error> found in Line %d: %s\n", linenum, error_msg);
-
-            is_parsed=0;
+            error_msg=" symbol ";
+            error_msg+=redeclared_var[i];
+            error_msg+=" is redeclared"
+            cout<<"<Error> found in Line "<<linenum<<error_msg<<endl;
+            error_msg.clear();
         }
-        is_error=0;
-	is_final_error=1;
     }
-    //variable-variable detection
-    redeclared_index=0,is_error=0,is_parsed=0,pre_redeclared_index=0;
-    memset(error_msg,0,sizeof(error_msg));
-    memset(redeclared_var,0,sizeof(redeclared_var));
-    for(int i=0;i<SUB_ENTRY_SIZE;i++)
+    //variable-variable checking------------------------------------------------------------------------------------//
+    redeclared_var.clear();
+    is_error=0;
+    for(int i=0;i<mysymbol_table[scope_depth].size();i++)
     {
-        //printf("\ni now %dname first %s ",i,mysymbol_table[scope_depth].mysub_entry[i].name);
-        if(mysymbol_table[scope_depth].mysub_entry[i].name[0]==0)
-            continue;
-        for(int j=i+1;j<SUB_ENTRY_SIZE;j++)
+        for(int j=0;j<mysymbol_table[scope_depth].size();j++)
         {
-            //printf("j now %dand %s \n",j,mysymbol_table[scope_depth].mysub_entry[j].name);
-            if(!strncmp(mysymbol_table[scope_depth].mysub_entry[i].name,mysymbol_table[scope_depth].mysub_entry[j].name,32))
+            if(mysymbol_table[scope_depth][i].name==mysymbol_table[scope_depth][j].name)
             {
-                //printf("Found same variable and variable \n");
-                mysymbol_table[scope_depth].mysub_entry[j].name[0]=0;//mark the error table as not print
-                for(;mysymbol_table[scope_depth].mysub_entry[i].name[pre_redeclared_index]!=0&&pre_redeclared_index<33;)
-                {
-
-                    //printf("push name %c\n",mysymbol_table[scope_depth].mysub_entry[i].name[pre_redeclared_index]);
-                    redeclared_var[redeclared_index]=mysymbol_table[scope_depth].mysub_entry[i].name[pre_redeclared_index];
-                    pre_redeclared_index+=1;
-                    redeclared_index+=1;
-                    //printf("same at i %d redeclared_index %d\n",i,redeclared_index);
-                }
-                redeclared_var[redeclared_index]=',';
-                redeclared_index+=1;
-                pre_redeclared_index=0;
+                redeclared_var.pb(mysymbol_table[scope_depth][i].name);
                 is_error=1;
-                break;
+                is_final_error=1;
+                mysymbol_table[scope_depth][i].name[0]=0; //turn off the variable which confilicts with the iterator
             }
         }
     }
     if(is_error)
     {
-        for(int i=0;redeclared_var[i]!=0;)
+        for(int i=0;i<redeclared_var.size();i++)
         {
-            memset(error_msg,0,sizeof(error_msg));
-            strcat(error_msg,"symbol ");
-
-            for(int j=i,cnt=0;redeclared_var[j]!=',';j++,cnt++) //cnt for substring parsing index
-            {
-                error_msg[cnt+7]=redeclared_var[j];  //parse the redeclaration ID string
-                i=j;
-                is_parsed=1; //error messgae parsed successfully
-            }
-            i+=1;
-            if(redeclared_var[i]==0)
-                break;
-            strcat(error_msg," is redeclared");
-            if(is_parsed)
-                printf("<Error> found in Line %d: %s\n", linenum, error_msg);
-
-            is_parsed=0;
+            error_msg=" symbol ";
+            error_msg+=redeclared_var[i];
+            error_msg+=" is redeclared"
+            cout<<"<Error> found in Line "<<linenum<<error_msg<<endl;
+            error_msg.clear();
         }
-        is_error=0;
-	is_final_error=1;
     }
     return is_final_error;
 }
@@ -456,75 +315,6 @@ void parse_constant()
         }
     }
 
-}
-void assign_constant_type(int scope_depth,int index)
-{
-    switch(const_type)
-    {
-
-        case 1 ... 2:
-        {
-            strcpy(mysymbol_table[scope_depth].mysub_entry[index].type,"integer ");
-            break;
-        }
-        case 3 ... 4:
-        {
-            strcpy(mysymbol_table[scope_depth].mysub_entry[index].type,"real ");
-            break;
-        }
-        case 5 ... 6:
-        {
-            strcpy(mysymbol_table[scope_depth].mysub_entry[index].type,"real ");
-            break;
-        }
-        case 7:
-        {
-            strcpy(mysymbol_table[scope_depth].mysub_entry[index].type,"string ");
-            break;
-        }
-        case 8:
-        {
-            strcpy(mysymbol_table[scope_depth].mysub_entry[index].type,"boolean ");
-            break;
-        }
-        case 9 ... 10:
-        {
-            strcpy(mysymbol_table[scope_depth].mysub_entry[index].type,"integer ");
-            break;
-        }
-    }
-    strcpy(mysymbol_table[scope_depth].mysub_entry[index].attri_type_buf,const_buf);
-}
-void assign_scalar_type(char* type_in)
-{
-    //printf("type in %s FUNCTION OR NOTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT %d\n",type_in,is_function);
-    //printf("(In dump function)Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d global_pre_sub_entry_cnt %d global_sub_entry_cnt %d\n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt,global_pre_sub_entry_cnt,global_sub_entry_cnt);
-    if(scope_depth==0)
-    {
-        if(is_function)
-        {
-            //printf("TYPE IN LOOP %s \n\n",type_in);
-            for(int i=global_pre_sub_entry_cnt;i<global_sub_entry_cnt;i++)
-            {
-                strcat(mysymbol_table[scope_depth].mysub_entry[i].funct_type_buf,type_in);
-            }
-        }
-        else
-        {
-            for(int i=global_pre_sub_entry_cnt;i<global_sub_entry_cnt;i++)
-            {
-                strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,type_in);
-            }
-        }
-
-    }
-    else
-    {
-        for(int i=pre_sub_entry_cnt;i<sub_entry_cnt;i++)
-        {
-            strcat(mysymbol_table[scope_depth].mysub_entry[i].array_type_buf,type_in);
-        }
-    }
 }
 void array_dimension_parser()
 {
@@ -600,9 +390,9 @@ void dumpiterator()
     /*printf("---------ITERATOR TABLE --------\n");
     for(int i=0;i<ITERATOR_TABLE_SIZE;i++)
     {
-        if(myiter_table[i].iterator_name[0]==0)
+            if(myiter_table[i].iter_name[0]==0)
             break;
-        printf("%s and depth %d\n",myiter_table[i].iterator_name,myiter_table[i].iterator_level);
+        printf("%s and depth %d\n",myiter_table[i].iter_name,myiter_table[i].iter_level);
     }
     printf("---------ITERATOR TABLE --------\n");*/
 }

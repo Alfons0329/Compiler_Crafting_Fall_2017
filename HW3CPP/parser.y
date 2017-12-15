@@ -90,8 +90,7 @@ decl		: VAR id_list MK_COLON scalar_type/* scalar type declaration */
 			| VAR id_list MK_COLON literal_const /* const declaration */
 			{
 				funct_attri_buf.pb(const_buf); //normal variable does not have attribute, so just let the size be zero
-				array_dimension_parser();
-				inserting_symbol_table(id_list_buf,"constant",,funct_attri_buf);
+				inserting_symbol_table(id_list_buf,"constant",const_type_str,funct_attri_buf);
 				id_list_buf.clear();
 				error_detection();
 			}
@@ -125,12 +124,12 @@ func_decl	: 	ID
 				{
 					id_list_buf.pb(yytext);
                     error_detection();
-					scope_depth+=1;
+					scope_depth++;
 				}
  				MK_LPAREN opt_param_list MK_RPAREN
 				{
 					is_function=1;
-					scope_depth-=1;
+					scope_depth--;
 				}
 				opt_type MK_SEMICOLON
 				{
