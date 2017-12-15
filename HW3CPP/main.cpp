@@ -2,15 +2,10 @@
  * Introduction to Compiler Design by Prof. Yi Ping You
  * Prjoect 2 main function
  */
-
 #include <stdio.h>
 #include <stdlib.h>
-using namespace std;
 extern int yyparse();	/* declared by yacc */
-extern int param_or_decl;
-extern int is_array;
 extern FILE* yyin;	/* declared by lex */
-
 int  main( int argc, char **argv )
 {
 	if( argc != 2 ) {

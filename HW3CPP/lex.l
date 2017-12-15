@@ -4,15 +4,9 @@
  */
 
 %{
-
 #include <string.h>
 #include "y.tab.h"
-#include "symbol_table.h"
-
-extern "C"{
-	extern int yylex(void);
-	int yyerror(char* );
-} //this can be used for CPP file
+#include "symboltable.h"
 #define LIST strcat( buf, yytext )
 #define token(t) { LIST; if (Opt_T)printf("<%s>\n", #t );}
 #define tokenChar(t) { LIST; if (Opt_T)printf("<%c>\n", t );}
