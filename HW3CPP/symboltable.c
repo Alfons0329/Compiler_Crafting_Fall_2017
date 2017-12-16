@@ -61,7 +61,7 @@ void pop_symbol_table()
     mysymbol_table[scope_depth].clear();//pop the table at that table, easliy pop
     scope_depth=(scope_depth==0)?0:scope_depth-1; //shirnk the level
     // myiter_table.clear(); //clean the iterator table NO DONT DO THIS! SHOULD BE CLEAN THE ITERATOR OF CURRENT DEPTH RATHER THAN all
-    cout<<"POP symboltable scope_depth "<<scope_depth<<endl;
+    // cout<<"POP symboltable scope_depth "<<scope_depth<<endl;
     for(unsigned int i=0;i<myiter_table.size();i++)
     {
         if(myiter_table[i].iter_level == scope_depth+1)
@@ -114,8 +114,8 @@ void dumpsymbol()
 int error_detection() //no hashing, just naive solution
 {
     //iterator-iterator checking------------------------------------------------------------------------------------//
-    dumpiterator();
-    dumpsymbol();
+    // dumpiterator();
+    // dumpsymbol();
     vector<string> redeclared_var;
     string error_msg;
     bool is_error=0, is_final_error=0;
