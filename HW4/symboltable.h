@@ -57,5 +57,6 @@ void dumpiterator();
 int program_name_checking(string,string,int);
 int procedure_call_checking();
 int op_assign_checking(string );
+void dumpallsymbol();
 
 #endif

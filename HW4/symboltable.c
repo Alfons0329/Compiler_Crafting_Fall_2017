@@ -7,10 +7,12 @@ int is_funct;
 int is_loop;
 int const_type;
 vector <vector <sub_entry> > mysymbol_table;
+vector <vector <sub_entry> > allsymbol_table;
 vector <loop_iterator> myiter_table;
 void symbol_table_init()
 {
-    mysymbol_table.resize(SYMBOL_TABLE_MAX_SIZE);
+    mysymbol_table.resize(SYMBOL_TABLE_MAX_SIZE);\
+    allsymbol_table.resize(SYMBOL_TABLE_MAX_SIZE);
     scope_depth = 0;
     is_arr = 0;
     is_funct = 0;
@@ -47,6 +49,7 @@ void inserting_symbol_table(vector<string> id_list_buf, string kind_in, string t
             one_subentry.funct_attri = funct_attri_buf;
         }
         mysymbol_table[scope_depth].pb(one_subentry);
+        allsymbol_table[scope_depth].pb(one_subentry);
     }
 }
 void inserting_iter_table(string iter_name_in,int iter_level_in)
@@ -110,6 +113,8 @@ void dumpsymbol()
     for(unsigned int i=0;i< 110;i++)
         printf("-");
     printf("\n");
+
+    dumpallsymbol();
 }
 int error_detection() //no hashing, just naive solution
 {
@@ -361,4 +366,43 @@ int program_name_checking(string program_name_in,string parsed_name,int situatio
         }
     }
     return is_error;
+}
+void dumpallsymbol()
+{
+    printf("\n%-110s\n","-------------------ALL SYMBOL TABLE---------------------------------------------------------------------------");
+    for(unsigned int i=0;i<110;i++)
+    {
+        printf("=");
+    }
+    printf("\n");
+    printf("%-33s%-11s%-11s%-17s%-11s\n","Name","Kind","Level","Type","Attribute");
+    for(unsigned int i=0;i<110;i++)
+    {
+        printf("-");
+    }
+    printf("\n");
+    for(unsigned int all_scope_index=0;allsymbol_table[all_scope_index].size()!=0;all_scope_index++)
+    {
+        for(unsigned int i=0;i<allsymbol_table[all_scope_index].size();i++)
+        {
+            if(allsymbol_table[all_scope_index][i].name[0]==0)
+                continue;
+            printf("%-33s",allsymbol_table[all_scope_index][i].name.c_str()); //safety first
+            printf("%-11s",allsymbol_table[all_scope_index][i].kind.c_str());
+            printf("%-11s",allsymbol_table[all_scope_index][i].level_str.c_str());
+            printf("%-17s",allsymbol_table[all_scope_index][i].type.c_str());
+            for(unsigned int j=0;j<allsymbol_table[all_scope_index][i].funct_attri.size();j++)
+            {
+                cout<<allsymbol_table[all_scope_index][i].funct_attri[j];
+                if(j!=allsymbol_table[all_scope_index][i].funct_attri.size()-1)
+                {
+                    cout<<", ";
+                }
+            }
+            printf("\n");
+        }
+    }
+    for(unsigned int i=0;i< 110;i++)
+        printf("-");
+    printf("\n");
 }
