@@ -1,0 +1,71 @@
+1: // Redefined
+2: //&T-
+3: //&D-
+4: Redefined;
+5: 
+6: 
+7: var a, b: integer;
+8: var i : integer;
+<Error> found in Line 9: symbol 'i' is redeclared
+9: var i : string;		// error, var i redeclared
+10: 
+11: func( aa, bb : integer ) : integer ;
+12: begin
+<Error> found in Line 13: symbol 'aa' is redeclared
+13:     var aa : boolean;       // error, var aa redeclared as parameter
+14:     var b : string;         // ok, in nested scope
+<Error> found in Line 15: symbol 'b' is redeclared
+15:     var b: string;          // error, var b redeclared
+16: end
+17: end func
+18: 
+<Error> found in Line 19: symbol 'func' is redeclared
+19: func();
+20: begin
+21: end
+22: end func
+23: 
+24: // main program
+25: begin
+26: 
+27:     var a, b, c: integer;      // ok, in nested scope
+<Error> found in Line 28: symbol 'a' is redeclared
+28:     var a : integer;          // error
+<Error> found in Line 29: symbol 'c' is redeclared
+29:     var c : integer;          // error
+30:     var ii: integer;
+31:     var aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbb : string;
+<Error> found in Line 32: symbol 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' is redeclared
+32:     var aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaccc : string;  // error, variable redefine
+33:     begin
+34:         var a: 100;
+<Error> found in Line 35: symbol 'a' is redeclared
+35:         var a : "100";    // error
+<Error> found in Line 36: symbol 'a' is redeclared
+36:         var a : true;    // error
+37:         begin
+38:             var xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxoooooo : string;
+<Error> found in Line 39: symbol 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' is redeclared
+39:             var xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxz : string;  // error, variable redefine
+40:         end
+41:     end
+42: 
+43:     while ii < 10 do
+44:         begin    
+45:             var a : boolean;    // ok, in nested scope
+<Error> found in Line 46: symbol 'a' is redeclared
+46:             var a : string;     // error, var a redeclared
+47:             var c : 1.1;   
+<Error> found in Line 48: symbol 'c' is redeclared
+48:             var c: 01010;    // error
+<Error> found in Line 49: symbol 'c' is redeclared
+<Error> found in Line 49: symbol 'c' is redeclared
+49:             var c,c: 7777;    // error
+<Error> found in Line 50: symbol 'c' is redeclared
+50:             var c: false;    // error
+51:         end
+52:     end do
+53:     
+54: end
+55: end Redefined
+56: 

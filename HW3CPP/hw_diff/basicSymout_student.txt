@@ -1,0 +1,115 @@
+1: /**
+2:  * basic_sym.p : basic symbol table info. dump check
+3:  * You should pass this pattern
+4:  */
+5: //&T-
+6: basicSym;
+7: 
+8: 
+9: var aaa : integer;
+10: var bbb : boolean;
+11: var ccc : string;
+12: var rrr : real;
+13: var ddd : array 1 to 10 of integer;
+14: var eee : array 1 to 5 of array 1 to 5 of boolean;
+15: var ttt : array 2 to 3 of array 5 to 10 of array 1 to 5 of real;
+16: var fff : 123;
+17: var ggg : true;
+18: var hhh : "hello\n";
+19: var iii : 2.86;
+20: 
+21: var f : array 1 to 5 of array 1 to 5 of integer;
+22: var ee : array 1 to 10 of boolean;
+23: var ff : array 1 to 5 of array 1 to 5 of boolean;
+24: var rr : array 3 to 5 of array 5 to 7 of real;
+25: var g : 10;
+26: var h : "bye~";
+27: var i : true;
+28: var k : 2.56;
+29: 
+30: // function without param and return type
+31: fun();
+32: begin
+33: 
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
+34: end 
+35: end fun
+36: 
+37: // function with param, no return type
+38: fun2( a,b:integer );
+39: begin
+40: 
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+a                                parameter  1(local)   integer          
+b                                parameter  1(local)   integer          
+--------------------------------------------------------------------------------------------------------------
+41: end
+42: end fun2
+43: 
+44: // function with param and return type
+45: 
+46: fun4( a,b,c:boolean ) : boolean;
+47: begin
+48:     return false;
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+a                                parameter  1(local)   boolean          
+b                                parameter  1(local)   boolean          
+c                                parameter  1(local)   boolean          
+--------------------------------------------------------------------------------------------------------------
+49: end
+50: end fun4
+51: 
+52: // main program
+53: begin
+54: var a,b : integer;
+55: var c : boolean;
+56: var d : string;
+57: var r : real;
+58: var e : array 1 to 10 of integer;
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+a                                variable   1(local)   integer          
+b                                variable   1(local)   integer          
+c                                variable   1(local)   boolean          
+d                                variable   1(local)   string           
+r                                variable   1(local)   real             
+e                                variable   1(local)   integer [10]     
+--------------------------------------------------------------------------------------------------------------
+59: end
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+basicSym                         program    0(global)  void             
+aaa                              variable   0(global)  integer          
+bbb                              variable   0(global)  boolean          
+ccc                              variable   0(global)  string           
+rrr                              variable   0(global)  real             
+ddd                              variable   0(global)  integer [10]     
+eee                              variable   0(global)  boolean [5][5]   
+ttt                              variable   0(global)  real [2][6][5]   
+fff                              constant   0(global)  integer          123
+ggg                              constant   0(global)  boolean          true
+hhh                              constant   0(global)  string           "hello\n"
+iii                              constant   0(global)  real             2.860000
+f                                variable   0(global)  integer [5][5]   
+ee                               variable   0(global)  boolean [10]     
+ff                               variable   0(global)  boolean [5][5]   
+rr                               variable   0(global)  real [3][3]      
+g                                constant   0(global)  integer          10
+h                                constant   0(global)  string           "bye~"
+i                                constant   0(global)  boolean          true
+k                                constant   0(global)  real             2.560000
+fun                              function   0(global)  void             
+fun2                             function   0(global)  void             integer, integer
+fun4                             function   0(global)  boolean          boolean, boolean, boolean
+--------------------------------------------------------------------------------------------------------------
+60: end basicSym
+61: 
