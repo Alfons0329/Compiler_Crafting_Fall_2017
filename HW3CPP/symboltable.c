@@ -91,6 +91,10 @@ void dumpsymbol()
         for(unsigned int j=0;j<mysymbol_table[scope_depth][i].funct_attri.size();j++)
         {
             cout<<mysymbol_table[scope_depth][i].funct_attri[j];
+            if(j!=mysymbol_table[scope_depth][i].funct_attri.size()-1)
+            {
+                cout<<", ";
+            }
         }
         printf("\n");
 
@@ -102,7 +106,7 @@ void dumpsymbol()
 int error_detection() //no hashing, just naive solution
 {
     //iterator-iterator checking------------------------------------------------------------------------------------//
-    dumpiterator();
+    // dumpiterator();
     vector<string> redeclared_var;
     string error_msg;
     bool is_error=0, is_final_error=0;
@@ -136,11 +140,11 @@ int error_detection() //no hashing, just naive solution
     {
         if(mysymbol_table[scope_depth][i].name[0]==0)
             continue;
-        for(unsigned int j=i+1;j<myiter_table.size();j++)
+        for(unsigned int j=0;j<myiter_table.size();j++)
         {
-            if((myiter_table[i].iter_name==myiter_table[j].iter_name)&&(myiter_table[j].iter_level>myiter_table[i].iter_level))
+            if((mysymbol_table[scope_depth][i].name==myiter_table[j].iter_name)&&(scope_depth==myiter_table[j].iter_level))
             {
-                redeclared_var.pb(myiter_table[i].iter_name);
+                redeclared_var.pb(mysymbol_table[scope_depth][i].name);
                 is_error=1;
                 is_final_error=1;
                 mysymbol_table[scope_depth][i].name[0]=0; //turn off the variable which confilicts with the iterator
@@ -213,7 +217,6 @@ void parse_constant()
 {
     const_buf.clear();
     const_buf="";
-    float float_tmp=0.0f;
     switch(const_type)
     {
         case 1:

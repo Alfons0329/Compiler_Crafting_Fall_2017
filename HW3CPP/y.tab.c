@@ -508,18 +508,19 @@ typedef struct {
 } YYSTACKDATA;
 /* variables for the parser stack */
 static YYSTACKDATA yystack;
-#line 433 "parser.y"
+#line 431 "parser.y"
 
 int yyerror(const char *msg )
 {
-	fprintf( stderr, "\n|--------------------------------------------------------------------------\n" );
+    const char* tmp = msg;
+    fprintf( stderr, "\n|--------------------------------------------------------------------------\n" );
 	fprintf( stderr, "| Error found in Line #%d: %s\n", linenum, buf );
 	fprintf( stderr, "|\n" );
 	fprintf( stderr, "| Unmatched token: %s\n", yytext );
 	fprintf( stderr, "|--------------------------------------------------------------------------\n" );
 	exit(-1);
 }
-#line 523 "y.tab.c"
+#line 524 "y.tab.c"
 
 #if YYDEBUG
 #include <stdio.h>		/* needed for printf */
@@ -726,7 +727,7 @@ case 1:
 	{
 					symbol_table_init();
 					id_list_buf.pb(yytext);
-					funct_attri_buf.resize(0);
+					funct_attri_buf.clear();
 				}
 break;
 case 2:
@@ -747,7 +748,7 @@ break;
 case 9:
 #line 78 "parser.y"
 	{
-				funct_attri_buf.resize(0); /*normal variable does not have attribute, so just let the size be zero*/
+				funct_attri_buf.clear(); /*normal variable does not have attribute, so just let the size be zero*/
 				inserting_symbol_table(id_list_buf,"variable",yystack.l_mark[0].parsed_string,funct_attri_buf);
 				id_list_buf.clear();
 				error_detection();
@@ -756,9 +757,10 @@ break;
 case 11:
 #line 86 "parser.y"
 	{
-                funct_attri_buf.resize(0); /*normal variable does not have attribute, so just let the size be zero*/
+                funct_attri_buf.clear(); /*normal variable does not have attribute, so just let the size be zero*/
 				array_dimension_parser();
                 array_type_str=yystack.l_mark[-1].parsed_string;
+                array_type_str+=" ";
                 array_type_str+=reverse_arr_buf;
 				inserting_symbol_table(id_list_buf,"variable",array_type_str,funct_attri_buf);
 				id_list_buf.clear();
@@ -768,75 +770,75 @@ case 11:
 			}
 break;
 case 12:
-#line 98 "parser.y"
+#line 99 "parser.y"
 	{
 				funct_attri_buf.pb(const_buf); /*normal variable does not have attribute, so just let the size be zero*/
 				inserting_symbol_table(id_list_buf,"constant",const_type_str,funct_attri_buf);
 				id_list_buf.clear();
 				error_detection();
-                funct_attri_buf.resize(0);
+                funct_attri_buf.clear();
 			}
 break;
 case 14:
-#line 108 "parser.y"
+#line 109 "parser.y"
 	{yyval.parsed_string=yytext; const_type=1;}
 break;
 case 15:
-#line 109 "parser.y"
+#line 110 "parser.y"
 	{yyval.parsed_string=yytext; const_type=9;}
 break;
 case 16:
-#line 112 "parser.y"
+#line 113 "parser.y"
 	{yyval.parsed_string=yytext; const_type=(const_type==1)?1:9; const_type_str="integer ";parse_constant();}
 break;
 case 17:
-#line 113 "parser.y"
+#line 114 "parser.y"
 	{yyval.parsed_string=yytext; const_type=(const_type==1)?2:10; const_type_str="integer ";parse_constant();}
 break;
 case 18:
-#line 114 "parser.y"
+#line 115 "parser.y"
 	{yyval.parsed_string=yytext; const_type=3; const_type_str="real ";parse_constant();}
 break;
 case 19:
-#line 115 "parser.y"
+#line 116 "parser.y"
 	{yyval.parsed_string=yytext; const_type=4; const_type_str="real ";parse_constant();}
 break;
 case 20:
-#line 116 "parser.y"
+#line 117 "parser.y"
 	{yyval.parsed_string=yytext; const_type=5; const_type_str="real ";parse_constant();}
 break;
 case 21:
-#line 117 "parser.y"
+#line 118 "parser.y"
 	{yyval.parsed_string=yytext; const_type=6; const_type_str="real ";parse_constant();}
 break;
 case 22:
-#line 118 "parser.y"
+#line 119 "parser.y"
 	{yyval.parsed_string=yytext; const_type=7; const_type_str="string ";parse_constant();}
 break;
 case 23:
-#line 119 "parser.y"
-	{yyval.parsed_string=yytext; const_type=8; const_type_str="boolean ";parse_constant();}
-break;
-case 24:
 #line 120 "parser.y"
 	{yyval.parsed_string=yytext; const_type=8; const_type_str="boolean ";parse_constant();}
 break;
+case 24:
+#line 121 "parser.y"
+	{yyval.parsed_string=yytext; const_type=8; const_type_str="boolean ";parse_constant();}
+break;
 case 29:
-#line 132 "parser.y"
+#line 133 "parser.y"
 	{
                     funct_name = yytext;
                     scope_depth++;
 				}
 break;
 case 30:
-#line 137 "parser.y"
+#line 138 "parser.y"
 	{
 					is_funct=1;
 					scope_depth--;
 				}
 break;
 case 31:
-#line 142 "parser.y"
+#line 143 "parser.y"
 	{
                     id_list_buf.pb(funct_name);
                     funct_name.clear();
@@ -844,18 +846,16 @@ case 31:
 					{
 						array_dimension_parser();
 						/*here we push_back the funct_attri_buf inorder to match the attributes of function*/
-						funct_attri_buf.resize(0); /*primitive initialization*/
+						funct_attri_buf.clear(); /*primitive initialization*/
 						for(unsigned int i=0;i<mysymbol_table[1].size();i++) /*search the parameter for function attribute*/
 						{
 							if((mysymbol_table[1][i].kind=="parameter")&&(mysymbol_table[1][i].name[0]!=0))
 							{
-                                if(i!=mysymbol_table[1].size()-1)
-                                    funct_attri_buf.pb(mysymbol_table[1][i].type+", ");
-                                else
-                                    funct_attri_buf.pb(mysymbol_table[1][i].type);
+                                funct_attri_buf.pb(mysymbol_table[1][i].type);
 							}
 						}
                         array_type_str=yystack.l_mark[-1].parsed_string;
+                        array_type_str+=" ";
                         array_type_str+=reverse_arr_buf;
 						inserting_symbol_table(id_list_buf,"function",array_type_str,funct_attri_buf);
                         memset(arr_buf,0,sizeof(arr_buf));/*update it for next segment*/
@@ -863,15 +863,12 @@ case 31:
 					else
 					{
 						/*here we push_back the funct_attri_buf inorder to match the attributes of function*/
-						funct_attri_buf.resize(0); /*primitive initialization*/
+						funct_attri_buf.clear(); /*primitive initialization*/
 						for(unsigned int i=0;i<mysymbol_table[1].size();i++) /*search the parameter for function attribute*/
 						{
 							if((mysymbol_table[1][i].kind=="parameter")&&(mysymbol_table[1][i].name[0]!=0))
 							{
-                                if(i!=mysymbol_table[1].size()-1)
-                                    funct_attri_buf.pb(mysymbol_table[1][i].type+", ");
-                                else
-                                    funct_attri_buf.pb(mysymbol_table[1][i].type);
+                                funct_attri_buf.pb(mysymbol_table[1][i].type);
 							}
 						}
                         if(yystack.l_mark[-1].parsed_string==NULL) /*prevent logic null string error*/
@@ -885,26 +882,28 @@ case 31:
 
 					}
                     id_list_buf.clear();
+                    funct_attri_buf.clear();
                     error_detection();
 					is_arr=0;
 				}
 break;
 case 32:
-#line 195 "parser.y"
+#line 192 "parser.y"
 	{
 					is_funct=0;
 				}
 break;
 case 38:
-#line 210 "parser.y"
+#line 207 "parser.y"
 	{
-				funct_attri_buf.resize(0);
+				funct_attri_buf.clear();
 				if(is_arr)
 				{
                     if(error_detection()==0)
 					{
 						array_dimension_parser();
                         array_type_str=yystack.l_mark[0].parsed_string;
+                        array_type_str+=" ";
                         array_type_str+=reverse_arr_buf;
 						inserting_symbol_table(id_list_buf,"parameter",array_type_str,funct_attri_buf);
                         memset(arr_buf,0,sizeof(arr_buf));/*update it for next segment*/
@@ -922,65 +921,65 @@ case 38:
 			}
 break;
 case 39:
-#line 236 "parser.y"
+#line 234 "parser.y"
 	{
                 id_list_buf.pb(yytext);
 			}
 break;
 case 40:
-#line 240 "parser.y"
+#line 238 "parser.y"
 	{
 				id_list_buf.pb(yytext);
 			}
 break;
 case 41:
-#line 245 "parser.y"
+#line 243 "parser.y"
 	{yyval.parsed_string=yystack.l_mark[0].parsed_string;}
 break;
 case 43:
-#line 249 "parser.y"
+#line 247 "parser.y"
 	{yyval.parsed_string=yystack.l_mark[0].parsed_string;}
 break;
 case 44:
-#line 250 "parser.y"
+#line 248 "parser.y"
 	{yyval.parsed_string=yystack.l_mark[0].parsed_string;}
 break;
 case 45:
-#line 254 "parser.y"
+#line 252 "parser.y"
 	{
                 char* synth = (char* )"integer";/*suppose this is not implemented, IOS CONVERSION ERROR WILL BE THROWN*/
                 yyval.parsed_string=synth;
 			}
 break;
 case 46:
-#line 259 "parser.y"
+#line 257 "parser.y"
 	{
                 char* synth = (char* )"real";/*suppose this is not implemented, IOS CONVERSION ERROR WILL BE THROWN*/
                 yyval.parsed_string=synth;
 			}
 break;
 case 47:
-#line 264 "parser.y"
+#line 262 "parser.y"
 	{
                 char* synth = (char* )"boolean";/*suppose this is not implemented, IOS CONVERSION ERROR WILL BE THROWN*/
                 yyval.parsed_string=synth;
 			}
 break;
 case 48:
-#line 269 "parser.y"
+#line 267 "parser.y"
 	{
                 char* synth = (char* )"string";/*suppose this is not implemented, IOS CONVERSION ERROR WILL BE THROWN*/
                 yyval.parsed_string=synth;
 			}
 break;
 case 49:
-#line 276 "parser.y"
+#line 274 "parser.y"
 	{
 				is_arr=1;
 			}
 break;
 case 50:
-#line 280 "parser.y"
+#line 278 "parser.y"
 	{
                 yyval.parsed_string=yystack.l_mark[0].parsed_string;
                 int delta=atol(yystack.l_mark[-2].parsed_string)-atol(yystack.l_mark[-4].parsed_string)+1;
@@ -991,13 +990,13 @@ case 50:
 			}
 break;
 case 58:
-#line 300 "parser.y"
+#line 298 "parser.y"
 	{
 					scope_depth++;
 				}
 break;
 case 59:
-#line 305 "parser.y"
+#line 303 "parser.y"
 	{
 					if(is_funct&&scope_depth>1) /*prevernt double popping*/
 					{
@@ -1012,7 +1011,7 @@ case 59:
 				}
 break;
 case 72:
-#line 350 "parser.y"
+#line 348 "parser.y"
 	{
 					inserting_iter_table(yytext,scope_depth+1);
 					error_detection();
@@ -1021,12 +1020,12 @@ case 72:
 				}
 break;
 case 73:
-#line 359 "parser.y"
+#line 357 "parser.y"
 	{
 					is_loop=0;
 				}
 break;
-#line 1030 "y.tab.c"
+#line 1029 "y.tab.c"
     }
     yystack.s_mark -= yym;
     yystate = *yystack.s_mark;

@@ -46,7 +46,7 @@ program		:	ID
 				{
 					symbol_table_init();
 					id_list_buf.pb(yytext);
-					funct_attri_buf.resize(0);
+					funct_attri_buf.clear();
 				}
 				MK_SEMICOLON
 				{
@@ -76,7 +76,7 @@ decl_list	: 	decl_list /*//printf("3->");}*/
 
 decl		: VAR id_list MK_COLON scalar_type/* scalar type declaration */
 			{
-				funct_attri_buf.resize(0); //normal variable does not have attribute, so just let the size be zero
+				funct_attri_buf.clear(); //normal variable does not have attribute, so just let the size be zero
 				inserting_symbol_table(id_list_buf,"variable",$4,funct_attri_buf);
 				id_list_buf.clear();
 				error_detection();
@@ -84,9 +84,10 @@ decl		: VAR id_list MK_COLON scalar_type/* scalar type declaration */
 			MK_SEMICOLON
 			| VAR id_list MK_COLON array_type MK_SEMICOLON   /* array type declaration */
 			{
-                funct_attri_buf.resize(0); //normal variable does not have attribute, so just let the size be zero
+                funct_attri_buf.clear(); //normal variable does not have attribute, so just let the size be zero
 				array_dimension_parser();
                 array_type_str=$4;
+                array_type_str+=" ";
                 array_type_str+=reverse_arr_buf;
 				inserting_symbol_table(id_list_buf,"variable",array_type_str,funct_attri_buf);
 				id_list_buf.clear();
@@ -100,7 +101,7 @@ decl		: VAR id_list MK_COLON scalar_type/* scalar type declaration */
 				inserting_symbol_table(id_list_buf,"constant",const_type_str,funct_attri_buf);
 				id_list_buf.clear();
 				error_detection();
-                funct_attri_buf.resize(0);
+                funct_attri_buf.clear();
 			}
 			MK_SEMICOLON
 			;
@@ -146,18 +147,16 @@ func_decl	: 	ID
 					{
 						array_dimension_parser();
 						//here we push_back the funct_attri_buf inorder to match the attributes of function
-						funct_attri_buf.resize(0); //primitive initialization
+						funct_attri_buf.clear(); //primitive initialization
 						for(unsigned int i=0;i<mysymbol_table[1].size();i++) //search the parameter for function attribute
 						{
 							if((mysymbol_table[1][i].kind=="parameter")&&(mysymbol_table[1][i].name[0]!=0))
 							{
-                                if(i!=mysymbol_table[1].size()-1)
-                                    funct_attri_buf.pb(mysymbol_table[1][i].type+", ");
-                                else
-                                    funct_attri_buf.pb(mysymbol_table[1][i].type);
+                                funct_attri_buf.pb(mysymbol_table[1][i].type);
 							}
 						}
                         array_type_str=$7;
+                        array_type_str+=" ";
                         array_type_str+=reverse_arr_buf;
 						inserting_symbol_table(id_list_buf,"function",array_type_str,funct_attri_buf);
                         memset(arr_buf,0,sizeof(arr_buf));//update it for next segment
@@ -165,15 +164,12 @@ func_decl	: 	ID
 					else
 					{
 						//here we push_back the funct_attri_buf inorder to match the attributes of function
-						funct_attri_buf.resize(0); //primitive initialization
+						funct_attri_buf.clear(); //primitive initialization
 						for(unsigned int i=0;i<mysymbol_table[1].size();i++) //search the parameter for function attribute
 						{
 							if((mysymbol_table[1][i].kind=="parameter")&&(mysymbol_table[1][i].name[0]!=0))
 							{
-                                if(i!=mysymbol_table[1].size()-1)
-                                    funct_attri_buf.pb(mysymbol_table[1][i].type+", ");
-                                else
-                                    funct_attri_buf.pb(mysymbol_table[1][i].type);
+                                funct_attri_buf.pb(mysymbol_table[1][i].type);
 							}
 						}
                         if($7==NULL) //prevent logic null string error
@@ -187,6 +183,7 @@ func_decl	: 	ID
 
 					}
                     id_list_buf.clear();
+                    funct_attri_buf.clear();
                     error_detection();
 					is_arr=0;
 				}
@@ -208,13 +205,14 @@ param_list	: param_list MK_SEMICOLON param
 
 param		: id_list MK_COLON type
 			{
-				funct_attri_buf.resize(0);
+				funct_attri_buf.clear();
 				if(is_arr)
 				{
                     if(error_detection()==0)
 					{
 						array_dimension_parser();
                         array_type_str=$3;
+                        array_type_str+=" ";
                         array_type_str+=reverse_arr_buf;
 						inserting_symbol_table(id_list_buf,"parameter",array_type_str,funct_attri_buf);
                         memset(arr_buf,0,sizeof(arr_buf));//update it for next segment
@@ -433,7 +431,8 @@ dim			: MK_LB boolean_expr MK_RB
 
 int yyerror(const char *msg )
 {
-	fprintf( stderr, "\n|--------------------------------------------------------------------------\n" );
+    const char* tmp = msg;
+    fprintf( stderr, "\n|--------------------------------------------------------------------------\n" );
 	fprintf( stderr, "| Error found in Line #%d: %s\n", linenum, buf );
 	fprintf( stderr, "|\n" );
 	fprintf( stderr, "| Unmatched token: %s\n", yytext );
