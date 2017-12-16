@@ -1,6 +1,6 @@
 /*Data structure without the memory adjusment lololol*/
-#ifndef _SYMBOLTABLE_H_
-#define _SYMBOLTABLE_H_
+#ifndef _SYMBOLTABLE_
+#define _SYMBOLTABLE_
 #include <bits/stdc++.h>
 #define pb push_back
 #define SYMBOL_TABLE_MAX_SIZE 1000

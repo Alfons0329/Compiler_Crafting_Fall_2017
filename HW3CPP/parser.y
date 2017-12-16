@@ -9,12 +9,13 @@
 #define BUF_SIZE 50
 //C++ working
 extern "C" int yylex(void);
-extern "C" FILE *yyin;		/* declared by lex */
+extern FILE *yyin;		/* declared by lex */
 extern char *yytext;	/* declared by lex */
 extern char *buf;	/* declared in lex.l */
 extern int Opt_D; /* declared in lex.l */
 extern int linenum;	/* declared in lex.l */
 int yyerror(const char*);
+
 //some global variables that needed in the parsing procedure
 char arr_buf[BUF_SIZE];
 char reverse_arr_buf[BUF_SIZE];
@@ -139,7 +140,7 @@ func_decl	: 	ID
 						array_dimension_parser();
 						//here we push_back the funct_attri_buf inorder to match the attributes of function
 						funct_attri_buf.resize(0); //primitive initialization
-						for(int i=0;i<mysymbol_table[1].size();i++) //search the parameter for function attribute
+						for(unsigned int i=0;i<mysymbol_table[1].size();i++) //search the parameter for function attribute
 						{
 							if((mysymbol_table[1][i].kind=="parameter")&&(mysymbol_table[1][i].name[0]!=0))
 							{
@@ -152,7 +153,7 @@ func_decl	: 	ID
 					{
 						//here we push_back the funct_attri_buf inorder to match the attributes of function
 						funct_attri_buf.resize(0); //primitive initialization
-						for(int i=0;i<mysymbol_table[1].size();i++) //search the parameter for function attribute
+						for(unsigned int i=0;i<mysymbol_table[1].size();i++) //search the parameter for function attribute
 						{
 							if((mysymbol_table[1][i].kind=="parameter")&&(mysymbol_table[1][i].name[0]!=0))
 							{
@@ -416,9 +417,8 @@ dim			: MK_LB boolean_expr MK_RB
 
 %%
 
-int yyerror( char *msg )
+int yyerror(const char *msg )
 {
-	(void) msg;
 	fprintf( stderr, "\n|--------------------------------------------------------------------------\n" );
 	fprintf( stderr, "| Error found in Line #%d: %s\n", linenum, buf );
 	fprintf( stderr, "|\n" );
