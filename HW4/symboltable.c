@@ -11,7 +11,7 @@ vector <vector <sub_entry> > allsymbol_table;
 vector <loop_iterator> myiter_table;
 void symbol_table_init()
 {
-    mysymbol_table.resize(SYMBOL_TABLE_MAX_SIZE);\
+    mysymbol_table.resize(SYMBOL_TABLE_MAX_SIZE);
     allsymbol_table.resize(SYMBOL_TABLE_MAX_SIZE);
     scope_depth = 0;
     is_arr = 0;
@@ -120,6 +120,7 @@ int error_detection() //no hashing, just naive solution
 {
     //iterator-iterator checking------------------------------------------------------------------------------------//
     // dumpiterator();
+    cout<<"Error detection current scope depth "<<scope_depth<<endl;
     vector<string> redeclared_var;
     string error_msg;
     bool is_error=0, is_final_error=0;
@@ -202,6 +203,7 @@ int error_detection() //no hashing, just naive solution
             error_msg.clear();
         }
     }
+
     return is_final_error;
 }
 void radix_converter(char* octal_in)
@@ -405,4 +407,13 @@ void dumpallsymbol()
     for(unsigned int i=0;i< 110;i++)
         printf("-");
     printf("\n");
+}
+void move_allsymbol_table()
+{
+    /*allsymbol_table[scope_depth].clear();
+    cout<<"Current scope depth "<<scope_depth<<endl;
+    for(int i=0;i<mysymbol_table[scope_depth].size();i++)
+    {
+        allsymbol_table[scope_depth].pb(mysymbol_table[scope_depth][i]);
+    }*/
 }
