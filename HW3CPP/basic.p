@@ -24,10 +24,10 @@ begin
 end
 end fun
 
-fun( a,b:integer; c:string ): integer;
+fun2( a,b:integer; c:string ): integer;
 begin
 end
-end fun
+end fun2
 
 fun3( a:array 1 to 10 of boolean ) : array 11 to 20 of real;
 begin

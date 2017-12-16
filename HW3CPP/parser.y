@@ -21,6 +21,7 @@ char arr_buf[BUF_SIZE];
 char reverse_arr_buf[BUF_SIZE];
 string const_buf;
 string const_type_str;
+string funct_name;
 vector<string> id_list_buf; //
 vector<string> funct_attri_buf;
 %}
@@ -125,9 +126,8 @@ func_decl_list		: func_decl_list func_decl
 
 func_decl	: 	ID
 				{
-					id_list_buf.pb(yytext);
-                    error_detection();
-					scope_depth++;
+                    funct_name = yytext;
+                    scope_depth++;
 				}
  				MK_LPAREN opt_param_list MK_RPAREN
 				{
@@ -136,7 +136,9 @@ func_decl	: 	ID
 				}
 				opt_type MK_SEMICOLON
 				{
-					if(is_arr)
+                    id_list_buf.pb(funct_name);
+                    funct_name.clear();
+                    if(is_arr)
 					{
 						array_dimension_parser();
 						//here we push_back the funct_attri_buf inorder to match the attributes of function
@@ -171,6 +173,8 @@ func_decl	: 	ID
                         }
 
 					}
+                    id_list_buf.clear();
+                    error_detection();
 					is_arr=0;
 				}
 			  	compound_stmt
@@ -194,13 +198,10 @@ param		: id_list MK_COLON type
 				funct_attri_buf.resize(0);
 				if(is_arr)
 				{
-					array_dimension_parser();
 					if(error_detection()==0)
 					{
-						funct_attri_buf.resize(0);
 						array_dimension_parser();
 						inserting_symbol_table(id_list_buf,"parameter",reverse_arr_buf,funct_attri_buf);
-						id_list_buf.clear();
 					}
 				}
 				else
@@ -208,20 +209,22 @@ param		: id_list MK_COLON type
 					if(error_detection()==0)
 					{
 						inserting_symbol_table(id_list_buf,"parameter",$3,funct_attri_buf);
-						id_list_buf.clear();
 					}
 				}
+                id_list_buf.clear();
 				is_arr=0;
 			}
 			;
 
 id_list		: id_list MK_COMMA ID /*one ID for one sub_entry*/
 			{
-				id_list_buf.pb(yytext);
+                id_list_buf.pb(yytext);
+                cout<<"Match id "<<yytext<<endl;
 			}
 			| ID
 			{
 				id_list_buf.pb(yytext);
+                cout<<"Match id "<<yytext<<endl;
 			}
 			;
 
@@ -280,21 +283,11 @@ stmt		: compound_stmt
 
 compound_stmt	: BEG
 				{
-					if(scope_depth==0&&is_funct)
-					{
-						scope_depth++;
-					}
-					else
-					{
-						scope_depth++;
-					}
+					scope_depth++;
 				}
 			  	opt_decl_list
 			  	opt_stmt_list
 				{
-					//printf("23->");}
-					//printf("compound_stmt end\n");
-					//printf("Scope depth %d, pre_sub_entry_cnt %d sub_entry_cnt %d \n",scope_depth,pre_sub_entry_cnt,sub_entry_cnt);
 					if(is_funct&&scope_depth>1) //prevernt double popping
 					{
 						dumpsymbol();

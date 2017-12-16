@@ -21,6 +21,7 @@ void inserting_symbol_table(vector<string> id_list_buf, string kind_in, string t
 {
     for(unsigned int i=0;i<id_list_buf.size();i++)
     {
+        cout<<"Inserting "<<id_list_buf[i]<<" SCOPE DEPTH "<<scope_depth<<endl;
         sub_entry one_subentry;
         if(id_list_buf[i].length()>32)
         {
