@@ -1,0 +1,114 @@
+1: // Redefined
+2: //&T-
+3: Redefined;
+4: 
+5: 
+6: var a, b: integer;
+7: var i : integer;
+<Error> found in Line 8: symbol 'i' is redeclared
+8: var i : string;		// error, var i redeclared
+9: 
+10: func( aa, bb : integer ) : integer ;
+11: begin
+<Error> found in Line 12: symbol 'aa' is redeclared
+12:     var aa : boolean;       // error, var aa redeclared as parameter
+13:     var b : string;         // ok, in nested scope
+<Error> found in Line 14: symbol 'b' is redeclared
+14:     var b: string;          // error, var b redeclared
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+aa                               parameter  1(local)   integer          
+bb                               parameter  1(local)   integer          
+b                                variable   1(local)   string           
+--------------------------------------------------------------------------------------------------------------
+15: end
+16: end func
+17: 
+<Error> found in Line 18: symbol 'func' is redeclared
+18: func();
+19: begin
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
+20: end
+21: end func
+22: 
+23: // main program
+24: begin
+25: 
+26:     var a, b, c: integer;      // ok, in nested scope
+<Error> found in Line 27: symbol 'a' is redeclared
+27:     var a : integer;          // error
+<Error> found in Line 28: symbol 'c' is redeclared
+28:     var c : integer;          // error
+29:     var ii: integer;
+30:     var aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbb : string;
+<Error> found in Line 31: symbol 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' is redeclared
+31:     var aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaccc : string;  // error, variable redefine
+32:     begin
+33:         var a: 100;
+<Error> found in Line 34: symbol 'a' is redeclared
+34:         var a : "100";    // error
+<Error> found in Line 35: symbol 'a' is redeclared
+35:         var a : true;    // error
+36:         begin
+37:             var xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxoooooo : string;
+<Error> found in Line 38: symbol 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' is redeclared
+38:             var xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxz : string;  // error, variable redefine
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx variable   3(local)   string           
+--------------------------------------------------------------------------------------------------------------
+39:         end
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+a                                constant   2(local)   integer          100
+--------------------------------------------------------------------------------------------------------------
+40:     end
+41: 
+42:     while ii < 10 do
+43:         begin
+44:             var a : boolean;    // ok, in nested scope
+<Error> found in Line 45: symbol 'a' is redeclared
+45:             var a : string;     // error, var a redeclared
+46:             var c : 1.1;
+<Error> found in Line 47: symbol 'c' is redeclared
+47:             var c: 01010;    // error
+<Error> found in Line 48: symbol 'c' is redeclared
+<Error> found in Line 48: symbol 'c' is redeclared
+48:             var c,c: 7777;    // error
+<Error> found in Line 49: symbol 'c' is redeclared
+49:             var c: false;    // error
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+a                                variable   2(local)   boolean          
+c                                constant   2(local)   real             1.1
+--------------------------------------------------------------------------------------------------------------
+50:         end
+51:     end do
+52: 
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+a                                variable   1(local)   integer          
+b                                variable   1(local)   integer          
+c                                variable   1(local)   integer          
+ii                               variable   1(local)   integer          
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa variable   1(local)   string           
+--------------------------------------------------------------------------------------------------------------
+53: end
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+Redefined                        program    0(global)  void             
+a                                variable   0(global)  integer          
+b                                variable   0(global)  integer          
+i                                variable   0(global)  integer          
+func                             function   0(global)  integer          integer, integer
+--------------------------------------------------------------------------------------------------------------
+54: end Redefined

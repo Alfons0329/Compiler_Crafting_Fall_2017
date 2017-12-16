@@ -1,0 +1,137 @@
+1: /*
+2:  * advance_sym.p : Advanced symbol table info. dump check
+3:  * You should pass this pattern
+4:  */
+5: //&T-
+6: advanceSym;
+7: var a,b : integer;
+8: var c : boolean;
+9: var d : string;
+10: var r : string;
+11: var e : array 1 to 10 of integer;
+12: var f : array 1 to 5 of array 1 to 5 of integer;
+13: var ee : array 1 to 10 of boolean;
+14: var ff : array 1 to 5 of array 1 to 5 of boolean;
+15: var gg : array 100 to 199 of real;
+16: var g : 123;
+17: var h : "bye~";
+18: var i : true;
+19: var k : 678E-2;
+20: 
+21: // function without param and return type
+22: fun();
+23: begin
+24: 
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
+25: end
+26: end fun
+27: 
+28: // function with param, no return type
+29: fun2( a,b: array 1 to 10 of array 1 to 5 of integer ; c:boolean );
+30: begin
+31:     var d : integer;
+32:     var e : boolean;
+33: 
+34:     begin
+35:         var a,b,c : string;
+36:         var d : array 1 to 5 of integer;
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+a                                variable   2(local)   string           
+b                                variable   2(local)   string           
+c                                variable   2(local)   string           
+d                                variable   2(local)   integer [5]      
+--------------------------------------------------------------------------------------------------------------
+37:     end
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+a                                parameter  1(local)   integer [10][5]  
+b                                parameter  1(local)   integer [10][5]  
+c                                parameter  1(local)   boolean          
+d                                variable   1(local)   integer          
+e                                variable   1(local)   boolean          
+--------------------------------------------------------------------------------------------------------------
+38: end
+39: end fun2
+40: 
+41: 
+42: // main program
+43: begin
+44:     var aaa, i : integer;
+45:     var bbb : boolean;
+46: 
+47:     while i < 100 do
+48:     begin
+49:         var sum : integer;
+50:         sum := i*i;
+51:         print sum;
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+sum                              variable   2(local)   integer          
+--------------------------------------------------------------------------------------------------------------
+52:     end
+53:     end do
+54: 
+55:     for it:=10 to 111 do
+56:     begin
+57:         var a : string;
+58:         begin
+59:             var a : integer;
+60:             begin
+61:                 var a : real;
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+a                                variable   4(local)   real             
+--------------------------------------------------------------------------------------------------------------
+62:             end
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+a                                variable   3(local)   integer          
+--------------------------------------------------------------------------------------------------------------
+63:         end
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+a                                variable   2(local)   string           
+--------------------------------------------------------------------------------------------------------------
+64:     end
+65:     end do
+66: 
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+aaa                              variable   1(local)   integer          
+i                                variable   1(local)   integer          
+bbb                              variable   1(local)   boolean          
+--------------------------------------------------------------------------------------------------------------
+67: end
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+advanceSym                       program    0(global)  void             
+a                                variable   0(global)  integer          
+b                                variable   0(global)  integer          
+c                                variable   0(global)  boolean          
+d                                variable   0(global)  string           
+r                                variable   0(global)  string           
+e                                variable   0(global)  integer [10]     
+f                                variable   0(global)  integer [5][5]   
+ee                               variable   0(global)  boolean [10]     
+ff                               variable   0(global)  boolean [5][5]   
+gg                               variable   0(global)  real [100]       
+g                                constant   0(global)  integer          123
+h                                constant   0(global)  string           "bye~"
+i                                constant   0(global)  boolean          true
+k                                constant   0(global)  real             6.780000
+fun                              function   0(global)  void             
+fun2                             function   0(global)  void             integer [10][5], integer [10][5], boolean
+--------------------------------------------------------------------------------------------------------------
+68: end advanceSym
