@@ -169,7 +169,7 @@ int error_detection() //no hashing, just naive solution
                 redeclared_var.pb(mysymbol_table[scope_depth][i].name);
                 is_error=1;
                 is_final_error=1;
-                mysymbol_table[scope_depth][i].name[0]=0; //turn off the variable which confilicts with the iterator
+                mysymbol_table[scope_depth][j].name[0]=0; //turn off the variable which confilicts with the iterator
             }
         }
     }

@@ -508,7 +508,7 @@ typedef struct {
 } YYSTACKDATA;
 /* variables for the parser stack */
 static YYSTACKDATA yystack;
-#line 431 "parser.y"
+#line 433 "parser.y"
 
 int yyerror(const char *msg )
 {
@@ -858,6 +858,7 @@ case 31:
                         array_type_str=yystack.l_mark[-1].parsed_string;
                         array_type_str+=reverse_arr_buf;
 						inserting_symbol_table(id_list_buf,"function",array_type_str,funct_attri_buf);
+                        memset(arr_buf,0,sizeof(arr_buf));/*update it for next segment*/
 					}
 					else
 					{
@@ -889,13 +890,13 @@ case 31:
 				}
 break;
 case 32:
-#line 194 "parser.y"
+#line 195 "parser.y"
 	{
 					is_funct=0;
 				}
 break;
 case 38:
-#line 209 "parser.y"
+#line 210 "parser.y"
 	{
 				funct_attri_buf.resize(0);
 				if(is_arr)
@@ -906,6 +907,7 @@ case 38:
                         array_type_str=yystack.l_mark[0].parsed_string;
                         array_type_str+=reverse_arr_buf;
 						inserting_symbol_table(id_list_buf,"parameter",array_type_str,funct_attri_buf);
+                        memset(arr_buf,0,sizeof(arr_buf));/*update it for next segment*/
 					}
 				}
 				else
@@ -920,65 +922,65 @@ case 38:
 			}
 break;
 case 39:
-#line 234 "parser.y"
+#line 236 "parser.y"
 	{
                 id_list_buf.pb(yytext);
 			}
 break;
 case 40:
-#line 238 "parser.y"
+#line 240 "parser.y"
 	{
 				id_list_buf.pb(yytext);
 			}
 break;
 case 41:
-#line 243 "parser.y"
+#line 245 "parser.y"
 	{yyval.parsed_string=yystack.l_mark[0].parsed_string;}
 break;
 case 43:
-#line 247 "parser.y"
+#line 249 "parser.y"
 	{yyval.parsed_string=yystack.l_mark[0].parsed_string;}
 break;
 case 44:
-#line 248 "parser.y"
+#line 250 "parser.y"
 	{yyval.parsed_string=yystack.l_mark[0].parsed_string;}
 break;
 case 45:
-#line 252 "parser.y"
+#line 254 "parser.y"
 	{
                 char* synth = (char* )"integer";/*suppose this is not implemented, IOS CONVERSION ERROR WILL BE THROWN*/
                 yyval.parsed_string=synth;
 			}
 break;
 case 46:
-#line 257 "parser.y"
+#line 259 "parser.y"
 	{
                 char* synth = (char* )"real";/*suppose this is not implemented, IOS CONVERSION ERROR WILL BE THROWN*/
                 yyval.parsed_string=synth;
 			}
 break;
 case 47:
-#line 262 "parser.y"
+#line 264 "parser.y"
 	{
                 char* synth = (char* )"boolean";/*suppose this is not implemented, IOS CONVERSION ERROR WILL BE THROWN*/
                 yyval.parsed_string=synth;
 			}
 break;
 case 48:
-#line 267 "parser.y"
+#line 269 "parser.y"
 	{
                 char* synth = (char* )"string";/*suppose this is not implemented, IOS CONVERSION ERROR WILL BE THROWN*/
                 yyval.parsed_string=synth;
 			}
 break;
 case 49:
-#line 274 "parser.y"
+#line 276 "parser.y"
 	{
 				is_arr=1;
 			}
 break;
 case 50:
-#line 278 "parser.y"
+#line 280 "parser.y"
 	{
                 yyval.parsed_string=yystack.l_mark[0].parsed_string;
                 int delta=atol(yystack.l_mark[-2].parsed_string)-atol(yystack.l_mark[-4].parsed_string)+1;
@@ -989,13 +991,13 @@ case 50:
 			}
 break;
 case 58:
-#line 298 "parser.y"
+#line 300 "parser.y"
 	{
 					scope_depth++;
 				}
 break;
 case 59:
-#line 303 "parser.y"
+#line 305 "parser.y"
 	{
 					if(is_funct&&scope_depth>1) /*prevernt double popping*/
 					{
@@ -1010,7 +1012,7 @@ case 59:
 				}
 break;
 case 72:
-#line 348 "parser.y"
+#line 350 "parser.y"
 	{
 					inserting_iter_table(yytext,scope_depth+1);
 					error_detection();
@@ -1019,12 +1021,12 @@ case 72:
 				}
 break;
 case 73:
-#line 357 "parser.y"
+#line 359 "parser.y"
 	{
 					is_loop=0;
 				}
 break;
-#line 1028 "y.tab.c"
+#line 1030 "y.tab.c"
     }
     yystack.s_mark -= yym;
     yystate = *yystack.s_mark;
