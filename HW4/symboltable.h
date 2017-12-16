@@ -58,5 +58,5 @@ int program_name_checking(string,string,int);
 int procedure_call_checking();
 int op_assign_checking(string );
 void dumpallsymbol();
-void move_allsymbol_table();
+void allsymbol_table_error_detection();
 #endif

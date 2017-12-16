@@ -203,7 +203,7 @@ int error_detection() //no hashing, just naive solution
             error_msg.clear();
         }
     }
-
+    allsymbol_table_error_detection();
     return is_final_error;
 }
 void radix_converter(char* octal_in)
@@ -408,12 +408,17 @@ void dumpallsymbol()
         printf("-");
     printf("\n");
 }
-void move_allsymbol_table()
+void allsymbol_table_error_detection()
 {
-    /*allsymbol_table[scope_depth].clear();
-    cout<<"Current scope depth "<<scope_depth<<endl;
-    for(int i=0;i<mysymbol_table[scope_depth].size();i++)
+    for(unsigned int i=0;i<allsymbol_table[scope_depth].size();i++)
     {
-        allsymbol_table[scope_depth].pb(mysymbol_table[scope_depth][i]);
-    }*/
+        for(unsigned int j=i+1;j<allsymbol_table[scope_depth].size();j++)
+        {
+            if((allsymbol_table[scope_depth][i].name==allsymbol_table[scope_depth][j].name)
+            &&(allsymbol_table[scope_depth][j].type!="parameter"))
+            {
+                allsymbol_table[scope_depth].erase(allsymbol_table[scope_depth].begin()+j);
+            }
+        }
+    }
 }
