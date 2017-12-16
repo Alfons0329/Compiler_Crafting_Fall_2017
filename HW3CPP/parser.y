@@ -22,6 +22,8 @@ char reverse_arr_buf[BUF_SIZE];
 string const_buf;
 string const_type_str;
 string funct_name;
+string array_type_str;
+string final_array;
 vector<string> id_list_buf; //
 vector<string> funct_attri_buf;
 %}
@@ -83,9 +85,11 @@ decl		: VAR id_list MK_COLON scalar_type/* scalar type declaration */
 			MK_SEMICOLON
 			| VAR id_list MK_COLON array_type MK_SEMICOLON   /* array type declaration */
 			{
-				funct_attri_buf.resize(0); //normal variable does not have attribute, so just let the size be zero
+                funct_attri_buf.resize(0); //normal variable does not have attribute, so just let the size be zero
 				array_dimension_parser();
-				inserting_symbol_table(id_list_buf,"variable",reverse_arr_buf,funct_attri_buf);
+                array_type_str=$4;
+                array_type_str+=reverse_arr_buf;
+				inserting_symbol_table(id_list_buf,"variable",array_type_str,funct_attri_buf);
 				id_list_buf.clear();
 				error_detection();
 				memset(arr_buf,0,sizeof(arr_buf));//update it for next segment
@@ -97,6 +101,7 @@ decl		: VAR id_list MK_COLON scalar_type/* scalar type declaration */
 				inserting_symbol_table(id_list_buf,"constant",const_type_str,funct_attri_buf);
 				id_list_buf.clear();
 				error_detection();
+                funct_attri_buf.resize(0);
 			}
 			MK_SEMICOLON
 			;
@@ -150,7 +155,9 @@ func_decl	: 	ID
 								funct_attri_buf.pb(mysymbol_table[1][i].type+",");
 							}
 						}
-						inserting_symbol_table(id_list_buf,"function",reverse_arr_buf,funct_attri_buf);
+                        array_type_str=$7;
+                        array_type_str+=reverse_arr_buf;
+						inserting_symbol_table(id_list_buf,"function",array_type_str,funct_attri_buf);
 					}
 					else
 					{
@@ -160,7 +167,7 @@ func_decl	: 	ID
 						{
 							if((mysymbol_table[1][i].kind=="parameter")&&(mysymbol_table[1][i].name[0]!=0))
 							{
-								funct_attri_buf.pb(mysymbol_table[1][i].type+",");
+                                funct_attri_buf.pb(mysymbol_table[1][i].type+",");
 							}
 						}
                         if($7==NULL) //prevent logic null string error
@@ -198,9 +205,11 @@ param		: id_list MK_COLON type
 				funct_attri_buf.resize(0);
 				if(is_arr)
 				{
-					if(error_detection()==0)
+                    if(error_detection()==0)
 					{
 						array_dimension_parser();
+                        array_type_str=$3;
+                        array_type_str+=reverse_arr_buf;
 						inserting_symbol_table(id_list_buf,"parameter",reverse_arr_buf,funct_attri_buf);
 					}
 				}
@@ -219,12 +228,10 @@ param		: id_list MK_COLON type
 id_list		: id_list MK_COMMA ID /*one ID for one sub_entry*/
 			{
                 id_list_buf.pb(yytext);
-                cout<<"Match id "<<yytext<<endl;
 			}
 			| ID
 			{
 				id_list_buf.pb(yytext);
-                cout<<"Match id "<<yytext<<endl;
 			}
 			;
 
@@ -243,17 +250,17 @@ scalar_type	: INTEGER
 			}
 			| REAL
 			{
-                char* synth = (char* )"real ";
+                char* synth = (char* )"real";
                 $$=synth;
 			}
 			| BOOLEAN
 			{
-                char* synth = (char* )"boolean ";
+                char* synth = (char* )"boolean";
                 $$=synth;
 			}
 			| STRING
 			{
-                char* synth = (char* )"string ";
+                char* synth = (char* )"string";
                 $$=synth;
 			}
 			;
@@ -264,7 +271,8 @@ array_type	: ARRAY
 			}
  			int_const TO int_const OF type
 			{
-				int delta=atol($5)-atol($3)+1;
+                $$=$7;
+                int delta=atol($5)-atol($3)+1;
 				char tmp[10];
 				sprintf(tmp,"%d",delta);
 				strcat(arr_buf,tmp);
