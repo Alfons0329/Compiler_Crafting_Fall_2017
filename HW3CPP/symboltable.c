@@ -102,6 +102,7 @@ void dumpsymbol()
 int error_detection() //no hashing, just naive solution
 {
     //iterator-iterator checking------------------------------------------------------------------------------------//
+    dumpiterator();
     vector<string> redeclared_var;
     string error_msg;
     bool is_error=0, is_final_error=0;
@@ -315,12 +316,12 @@ void array_dimension_parser()
 }
 void dumpiterator()
 {
-    /*printf("---------ITERATOR TABLE --------\n");
-    for(unsigned int i=0;i<ITERATOR_TABLE_SIZE;i++)
+    printf("---------ITERATOR TABLE --------\n");
+    for(unsigned int i=0;i<myiter_table.size();i++)
     {
-            if(myiter_table[i].iter_name[0]==0)
+        if(myiter_table[i].iter_name[0]==0)
             break;
-        printf("%s and depth %d\n",myiter_table[i].iter_name,myiter_table[i].iter_level);
+        cout<<myiter_table[i].iter_name<<" and level "<<myiter_table[i].iter_level<<endl;
     }
-    printf("---------ITERATOR TABLE --------\n");*/
+    printf("---------ITERATOR TABLE --------\n");
 }
