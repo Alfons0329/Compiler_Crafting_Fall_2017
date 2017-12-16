@@ -6,338 +6,28 @@
 6: basicSym;
 7: 
 8: 
-==============================================================================================================
-Name                             Kind       Level      Type             Attribute  
---------------------------------------------------------------------------------------------------------------
-basicSym                         program    0(global)  void             
-aaa                              variable   0(global)  integer          
---------------------------------------------------------------------------------------------------------------
 9: var aaa : integer;
-==============================================================================================================
-Name                             Kind       Level      Type             Attribute  
---------------------------------------------------------------------------------------------------------------
-basicSym                         program    0(global)  void             
-aaa                              variable   0(global)  integer          
-bbb                              variable   0(global)  boolean          
---------------------------------------------------------------------------------------------------------------
 10: var bbb : boolean;
-==============================================================================================================
-Name                             Kind       Level      Type             Attribute  
---------------------------------------------------------------------------------------------------------------
-basicSym                         program    0(global)  void             
-aaa                              variable   0(global)  integer          
-bbb                              variable   0(global)  boolean          
-ccc                              variable   0(global)  string           
---------------------------------------------------------------------------------------------------------------
 11: var ccc : string;
-==============================================================================================================
-Name                             Kind       Level      Type             Attribute  
---------------------------------------------------------------------------------------------------------------
-basicSym                         program    0(global)  void             
-aaa                              variable   0(global)  integer          
-bbb                              variable   0(global)  boolean          
-ccc                              variable   0(global)  string           
-rrr                              variable   0(global)  real             
---------------------------------------------------------------------------------------------------------------
 12: var rrr : real;
-==============================================================================================================
-Name                             Kind       Level      Type             Attribute  
---------------------------------------------------------------------------------------------------------------
-basicSym                         program    0(global)  void             
-aaa                              variable   0(global)  integer          
-bbb                              variable   0(global)  boolean          
-ccc                              variable   0(global)  string           
-rrr                              variable   0(global)  real             
-ddd                              variable   0(global)  integer [10]     
---------------------------------------------------------------------------------------------------------------
 13: var ddd : array 1 to 10 of integer;
-==============================================================================================================
-Name                             Kind       Level      Type             Attribute  
---------------------------------------------------------------------------------------------------------------
-basicSym                         program    0(global)  void             
-aaa                              variable   0(global)  integer          
-bbb                              variable   0(global)  boolean          
-ccc                              variable   0(global)  string           
-rrr                              variable   0(global)  real             
-ddd                              variable   0(global)  integer [10]     
-eee                              variable   0(global)  boolean [5][5]   
---------------------------------------------------------------------------------------------------------------
 14: var eee : array 1 to 5 of array 1 to 5 of boolean;
-==============================================================================================================
-Name                             Kind       Level      Type             Attribute  
---------------------------------------------------------------------------------------------------------------
-basicSym                         program    0(global)  void             
-aaa                              variable   0(global)  integer          
-bbb                              variable   0(global)  boolean          
-ccc                              variable   0(global)  string           
-rrr                              variable   0(global)  real             
-ddd                              variable   0(global)  integer [10]     
-eee                              variable   0(global)  boolean [5][5]   
-ttt                              variable   0(global)  real [2][6][5]   
---------------------------------------------------------------------------------------------------------------
 15: var ttt : array 2 to 3 of array 5 to 10 of array 1 to 5 of real;
-==============================================================================================================
-Name                             Kind       Level      Type             Attribute  
---------------------------------------------------------------------------------------------------------------
-basicSym                         program    0(global)  void             
-aaa                              variable   0(global)  integer          
-bbb                              variable   0(global)  boolean          
-ccc                              variable   0(global)  string           
-rrr                              variable   0(global)  real             
-ddd                              variable   0(global)  integer [10]     
-eee                              variable   0(global)  boolean [5][5]   
-ttt                              variable   0(global)  real [2][6][5]   
-fff                              constant   0(global)  integer          123
---------------------------------------------------------------------------------------------------------------
 16: var fff : 123;
-==============================================================================================================
-Name                             Kind       Level      Type             Attribute  
---------------------------------------------------------------------------------------------------------------
-basicSym                         program    0(global)  void             
-aaa                              variable   0(global)  integer          
-bbb                              variable   0(global)  boolean          
-ccc                              variable   0(global)  string           
-rrr                              variable   0(global)  real             
-ddd                              variable   0(global)  integer [10]     
-eee                              variable   0(global)  boolean [5][5]   
-ttt                              variable   0(global)  real [2][6][5]   
-fff                              constant   0(global)  integer          123
-ggg                              constant   0(global)  boolean          true
---------------------------------------------------------------------------------------------------------------
 17: var ggg : true;
-==============================================================================================================
-Name                             Kind       Level      Type             Attribute  
---------------------------------------------------------------------------------------------------------------
-basicSym                         program    0(global)  void             
-aaa                              variable   0(global)  integer          
-bbb                              variable   0(global)  boolean          
-ccc                              variable   0(global)  string           
-rrr                              variable   0(global)  real             
-ddd                              variable   0(global)  integer [10]     
-eee                              variable   0(global)  boolean [5][5]   
-ttt                              variable   0(global)  real [2][6][5]   
-fff                              constant   0(global)  integer          123
-ggg                              constant   0(global)  boolean          true
-hhh                              constant   0(global)  string           "hello\n"
---------------------------------------------------------------------------------------------------------------
 18: var hhh : "hello\n";
-==============================================================================================================
-Name                             Kind       Level      Type             Attribute  
---------------------------------------------------------------------------------------------------------------
-basicSym                         program    0(global)  void             
-aaa                              variable   0(global)  integer          
-bbb                              variable   0(global)  boolean          
-ccc                              variable   0(global)  string           
-rrr                              variable   0(global)  real             
-ddd                              variable   0(global)  integer [10]     
-eee                              variable   0(global)  boolean [5][5]   
-ttt                              variable   0(global)  real [2][6][5]   
-fff                              constant   0(global)  integer          123
-ggg                              constant   0(global)  boolean          true
-hhh                              constant   0(global)  string           "hello\n"
-iii                              constant   0(global)  real             2.86
---------------------------------------------------------------------------------------------------------------
 19: var iii : 2.86;
 20: 
-==============================================================================================================
-Name                             Kind       Level      Type             Attribute  
---------------------------------------------------------------------------------------------------------------
-basicSym                         program    0(global)  void             
-aaa                              variable   0(global)  integer          
-bbb                              variable   0(global)  boolean          
-ccc                              variable   0(global)  string           
-rrr                              variable   0(global)  real             
-ddd                              variable   0(global)  integer [10]     
-eee                              variable   0(global)  boolean [5][5]   
-ttt                              variable   0(global)  real [2][6][5]   
-fff                              constant   0(global)  integer          123
-ggg                              constant   0(global)  boolean          true
-hhh                              constant   0(global)  string           "hello\n"
-iii                              constant   0(global)  real             2.86
-f                                variable   0(global)  integer [5][5]   
---------------------------------------------------------------------------------------------------------------
 21: var f : array 1 to 5 of array 1 to 5 of integer;
-==============================================================================================================
-Name                             Kind       Level      Type             Attribute  
---------------------------------------------------------------------------------------------------------------
-basicSym                         program    0(global)  void             
-aaa                              variable   0(global)  integer          
-bbb                              variable   0(global)  boolean          
-ccc                              variable   0(global)  string           
-rrr                              variable   0(global)  real             
-ddd                              variable   0(global)  integer [10]     
-eee                              variable   0(global)  boolean [5][5]   
-ttt                              variable   0(global)  real [2][6][5]   
-fff                              constant   0(global)  integer          123
-ggg                              constant   0(global)  boolean          true
-hhh                              constant   0(global)  string           "hello\n"
-iii                              constant   0(global)  real             2.86
-f                                variable   0(global)  integer [5][5]   
-ee                               variable   0(global)  boolean [10]     
---------------------------------------------------------------------------------------------------------------
 22: var ee : array 1 to 10 of boolean;
-==============================================================================================================
-Name                             Kind       Level      Type             Attribute  
---------------------------------------------------------------------------------------------------------------
-basicSym                         program    0(global)  void             
-aaa                              variable   0(global)  integer          
-bbb                              variable   0(global)  boolean          
-ccc                              variable   0(global)  string           
-rrr                              variable   0(global)  real             
-ddd                              variable   0(global)  integer [10]     
-eee                              variable   0(global)  boolean [5][5]   
-ttt                              variable   0(global)  real [2][6][5]   
-fff                              constant   0(global)  integer          123
-ggg                              constant   0(global)  boolean          true
-hhh                              constant   0(global)  string           "hello\n"
-iii                              constant   0(global)  real             2.86
-f                                variable   0(global)  integer [5][5]   
-ee                               variable   0(global)  boolean [10]     
-ff                               variable   0(global)  boolean [5][5]   
---------------------------------------------------------------------------------------------------------------
 23: var ff : array 1 to 5 of array 1 to 5 of boolean;
-==============================================================================================================
-Name                             Kind       Level      Type             Attribute  
---------------------------------------------------------------------------------------------------------------
-basicSym                         program    0(global)  void             
-aaa                              variable   0(global)  integer          
-bbb                              variable   0(global)  boolean          
-ccc                              variable   0(global)  string           
-rrr                              variable   0(global)  real             
-ddd                              variable   0(global)  integer [10]     
-eee                              variable   0(global)  boolean [5][5]   
-ttt                              variable   0(global)  real [2][6][5]   
-fff                              constant   0(global)  integer          123
-ggg                              constant   0(global)  boolean          true
-hhh                              constant   0(global)  string           "hello\n"
-iii                              constant   0(global)  real             2.86
-f                                variable   0(global)  integer [5][5]   
-ee                               variable   0(global)  boolean [10]     
-ff                               variable   0(global)  boolean [5][5]   
-rr                               variable   0(global)  real [3][3]      
---------------------------------------------------------------------------------------------------------------
 24: var rr : array 3 to 5 of array 5 to 7 of real;
-==============================================================================================================
-Name                             Kind       Level      Type             Attribute  
---------------------------------------------------------------------------------------------------------------
-basicSym                         program    0(global)  void             
-aaa                              variable   0(global)  integer          
-bbb                              variable   0(global)  boolean          
-ccc                              variable   0(global)  string           
-rrr                              variable   0(global)  real             
-ddd                              variable   0(global)  integer [10]     
-eee                              variable   0(global)  boolean [5][5]   
-ttt                              variable   0(global)  real [2][6][5]   
-fff                              constant   0(global)  integer          123
-ggg                              constant   0(global)  boolean          true
-hhh                              constant   0(global)  string           "hello\n"
-iii                              constant   0(global)  real             2.86
-f                                variable   0(global)  integer [5][5]   
-ee                               variable   0(global)  boolean [10]     
-ff                               variable   0(global)  boolean [5][5]   
-rr                               variable   0(global)  real [3][3]      
-g                                constant   0(global)  integer          10
---------------------------------------------------------------------------------------------------------------
 25: var g : 10;
-==============================================================================================================
-Name                             Kind       Level      Type             Attribute  
---------------------------------------------------------------------------------------------------------------
-basicSym                         program    0(global)  void             
-aaa                              variable   0(global)  integer          
-bbb                              variable   0(global)  boolean          
-ccc                              variable   0(global)  string           
-rrr                              variable   0(global)  real             
-ddd                              variable   0(global)  integer [10]     
-eee                              variable   0(global)  boolean [5][5]   
-ttt                              variable   0(global)  real [2][6][5]   
-fff                              constant   0(global)  integer          123
-ggg                              constant   0(global)  boolean          true
-hhh                              constant   0(global)  string           "hello\n"
-iii                              constant   0(global)  real             2.86
-f                                variable   0(global)  integer [5][5]   
-ee                               variable   0(global)  boolean [10]     
-ff                               variable   0(global)  boolean [5][5]   
-rr                               variable   0(global)  real [3][3]      
-g                                constant   0(global)  integer          10
-h                                constant   0(global)  string           "bye~"
---------------------------------------------------------------------------------------------------------------
 26: var h : "bye~";
-==============================================================================================================
-Name                             Kind       Level      Type             Attribute  
---------------------------------------------------------------------------------------------------------------
-basicSym                         program    0(global)  void             
-aaa                              variable   0(global)  integer          
-bbb                              variable   0(global)  boolean          
-ccc                              variable   0(global)  string           
-rrr                              variable   0(global)  real             
-ddd                              variable   0(global)  integer [10]     
-eee                              variable   0(global)  boolean [5][5]   
-ttt                              variable   0(global)  real [2][6][5]   
-fff                              constant   0(global)  integer          123
-ggg                              constant   0(global)  boolean          true
-hhh                              constant   0(global)  string           "hello\n"
-iii                              constant   0(global)  real             2.86
-f                                variable   0(global)  integer [5][5]   
-ee                               variable   0(global)  boolean [10]     
-ff                               variable   0(global)  boolean [5][5]   
-rr                               variable   0(global)  real [3][3]      
-g                                constant   0(global)  integer          10
-h                                constant   0(global)  string           "bye~"
-i                                constant   0(global)  boolean          true
---------------------------------------------------------------------------------------------------------------
 27: var i : true;
-==============================================================================================================
-Name                             Kind       Level      Type             Attribute  
---------------------------------------------------------------------------------------------------------------
-basicSym                         program    0(global)  void             
-aaa                              variable   0(global)  integer          
-bbb                              variable   0(global)  boolean          
-ccc                              variable   0(global)  string           
-rrr                              variable   0(global)  real             
-ddd                              variable   0(global)  integer [10]     
-eee                              variable   0(global)  boolean [5][5]   
-ttt                              variable   0(global)  real [2][6][5]   
-fff                              constant   0(global)  integer          123
-ggg                              constant   0(global)  boolean          true
-hhh                              constant   0(global)  string           "hello\n"
-iii                              constant   0(global)  real             2.86
-f                                variable   0(global)  integer [5][5]   
-ee                               variable   0(global)  boolean [10]     
-ff                               variable   0(global)  boolean [5][5]   
-rr                               variable   0(global)  real [3][3]      
-g                                constant   0(global)  integer          10
-h                                constant   0(global)  string           "bye~"
-i                                constant   0(global)  boolean          true
-k                                constant   0(global)  real             2.56
---------------------------------------------------------------------------------------------------------------
 28: var k : 2.56;
 29: 
 30: // function without param and return type
-==============================================================================================================
-Name                             Kind       Level      Type             Attribute  
---------------------------------------------------------------------------------------------------------------
-basicSym                         program    0(global)  void             
-aaa                              variable   0(global)  integer          
-bbb                              variable   0(global)  boolean          
-ccc                              variable   0(global)  string           
-rrr                              variable   0(global)  real             
-ddd                              variable   0(global)  integer [10]     
-eee                              variable   0(global)  boolean [5][5]   
-ttt                              variable   0(global)  real [2][6][5]   
-fff                              constant   0(global)  integer          123
-ggg                              constant   0(global)  boolean          true
-hhh                              constant   0(global)  string           "hello\n"
-iii                              constant   0(global)  real             2.86
-f                                variable   0(global)  integer [5][5]   
-ee                               variable   0(global)  boolean [10]     
-ff                               variable   0(global)  boolean [5][5]   
-rr                               variable   0(global)  real [3][3]      
-g                                constant   0(global)  integer          10
-h                                constant   0(global)  string           "bye~"
-i                                constant   0(global)  boolean          true
-k                                constant   0(global)  real             2.56
-fun                              function   0(global)  void             
---------------------------------------------------------------------------------------------------------------
 31: fun();
 32: begin
 33: 
@@ -349,36 +39,6 @@ Name                             Kind       Level      Type             Attribut
 35: end fun
 36: 
 37: // function with param, no return type
-==============================================================================================================
-Name                             Kind       Level      Type             Attribute  
---------------------------------------------------------------------------------------------------------------
---------------------------------------------------------------------------------------------------------------
-==============================================================================================================
-Name                             Kind       Level      Type             Attribute  
---------------------------------------------------------------------------------------------------------------
-basicSym                         program    0(global)  void             
-aaa                              variable   0(global)  integer          
-bbb                              variable   0(global)  boolean          
-ccc                              variable   0(global)  string           
-rrr                              variable   0(global)  real             
-ddd                              variable   0(global)  integer [10]     
-eee                              variable   0(global)  boolean [5][5]   
-ttt                              variable   0(global)  real [2][6][5]   
-fff                              constant   0(global)  integer          123
-ggg                              constant   0(global)  boolean          true
-hhh                              constant   0(global)  string           "hello\n"
-iii                              constant   0(global)  real             2.86
-f                                variable   0(global)  integer [5][5]   
-ee                               variable   0(global)  boolean [10]     
-ff                               variable   0(global)  boolean [5][5]   
-rr                               variable   0(global)  real [3][3]      
-g                                constant   0(global)  integer          10
-h                                constant   0(global)  string           "bye~"
-i                                constant   0(global)  boolean          true
-k                                constant   0(global)  real             2.56
-fun                              function   0(global)  void             
-fun2                             function   0(global)  void             integer, integer
---------------------------------------------------------------------------------------------------------------
 38: fun2( a,b:integer );
 39: begin
 40: 
@@ -393,37 +53,6 @@ b                                parameter  1(local)   integer
 43: 
 44: // function with param and return type
 45: 
-==============================================================================================================
-Name                             Kind       Level      Type             Attribute  
---------------------------------------------------------------------------------------------------------------
---------------------------------------------------------------------------------------------------------------
-==============================================================================================================
-Name                             Kind       Level      Type             Attribute  
---------------------------------------------------------------------------------------------------------------
-basicSym                         program    0(global)  void             
-aaa                              variable   0(global)  integer          
-bbb                              variable   0(global)  boolean          
-ccc                              variable   0(global)  string           
-rrr                              variable   0(global)  real             
-ddd                              variable   0(global)  integer [10]     
-eee                              variable   0(global)  boolean [5][5]   
-ttt                              variable   0(global)  real [2][6][5]   
-fff                              constant   0(global)  integer          123
-ggg                              constant   0(global)  boolean          true
-hhh                              constant   0(global)  string           "hello\n"
-iii                              constant   0(global)  real             2.86
-f                                variable   0(global)  integer [5][5]   
-ee                               variable   0(global)  boolean [10]     
-ff                               variable   0(global)  boolean [5][5]   
-rr                               variable   0(global)  real [3][3]      
-g                                constant   0(global)  integer          10
-h                                constant   0(global)  string           "bye~"
-i                                constant   0(global)  boolean          true
-k                                constant   0(global)  real             2.56
-fun                              function   0(global)  void             
-fun2                             function   0(global)  void             integer, integer
-fun4                             function   0(global)  boolean          boolean, boolean, boolean
---------------------------------------------------------------------------------------------------------------
 46: fun4( a,b,c:boolean ) : boolean;
 47: begin
 48:     return false;
@@ -439,50 +68,10 @@ c                                parameter  1(local)   boolean
 51: 
 52: // main program
 53: begin
-==============================================================================================================
-Name                             Kind       Level      Type             Attribute  
---------------------------------------------------------------------------------------------------------------
-a                                variable   1(local)   integer          
-b                                variable   1(local)   integer          
---------------------------------------------------------------------------------------------------------------
 54: var a,b : integer;
-==============================================================================================================
-Name                             Kind       Level      Type             Attribute  
---------------------------------------------------------------------------------------------------------------
-a                                variable   1(local)   integer          
-b                                variable   1(local)   integer          
-c                                variable   1(local)   boolean          
---------------------------------------------------------------------------------------------------------------
 55: var c : boolean;
-==============================================================================================================
-Name                             Kind       Level      Type             Attribute  
---------------------------------------------------------------------------------------------------------------
-a                                variable   1(local)   integer          
-b                                variable   1(local)   integer          
-c                                variable   1(local)   boolean          
-d                                variable   1(local)   string           
---------------------------------------------------------------------------------------------------------------
 56: var d : string;
-==============================================================================================================
-Name                             Kind       Level      Type             Attribute  
---------------------------------------------------------------------------------------------------------------
-a                                variable   1(local)   integer          
-b                                variable   1(local)   integer          
-c                                variable   1(local)   boolean          
-d                                variable   1(local)   string           
-r                                variable   1(local)   real             
---------------------------------------------------------------------------------------------------------------
 57: var r : real;
-==============================================================================================================
-Name                             Kind       Level      Type             Attribute  
---------------------------------------------------------------------------------------------------------------
-a                                variable   1(local)   integer          
-b                                variable   1(local)   integer          
-c                                variable   1(local)   boolean          
-d                                variable   1(local)   string           
-r                                variable   1(local)   real             
-e                                variable   1(local)   integer [10]     
---------------------------------------------------------------------------------------------------------------
 58: var e : array 1 to 10 of integer;
 ==============================================================================================================
 Name                             Kind       Level      Type             Attribute  
@@ -495,33 +84,6 @@ r                                variable   1(local)   real
 e                                variable   1(local)   integer [10]     
 --------------------------------------------------------------------------------------------------------------
 59: end
-==============================================================================================================
-Name                             Kind       Level      Type             Attribute  
---------------------------------------------------------------------------------------------------------------
-basicSym                         program    0(global)  void             
-aaa                              variable   0(global)  integer          
-bbb                              variable   0(global)  boolean          
-ccc                              variable   0(global)  string           
-rrr                              variable   0(global)  real             
-ddd                              variable   0(global)  integer [10]     
-eee                              variable   0(global)  boolean [5][5]   
-ttt                              variable   0(global)  real [2][6][5]   
-fff                              constant   0(global)  integer          123
-ggg                              constant   0(global)  boolean          true
-hhh                              constant   0(global)  string           "hello\n"
-iii                              constant   0(global)  real             2.86
-f                                variable   0(global)  integer [5][5]   
-ee                               variable   0(global)  boolean [10]     
-ff                               variable   0(global)  boolean [5][5]   
-rr                               variable   0(global)  real [3][3]      
-g                                constant   0(global)  integer          10
-h                                constant   0(global)  string           "bye~"
-i                                constant   0(global)  boolean          true
-k                                constant   0(global)  real             2.56
-fun                              function   0(global)  void             
-fun2                             function   0(global)  void             integer, integer
-fun4                             function   0(global)  boolean          boolean, boolean, boolean
---------------------------------------------------------------------------------------------------------------
 ==============================================================================================================
 Name                             Kind       Level      Type             Attribute  
 --------------------------------------------------------------------------------------------------------------

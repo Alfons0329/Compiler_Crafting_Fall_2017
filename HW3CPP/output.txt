@@ -1,79 +1,63 @@
-1: // Loopredefined
-2: 
-3: //&T-
-4: //&D-
-5: 
-6: Loopredefined;
-7: begin
-8:     var i: string;
-9:     var ii: string;
-10: /* local var of for loop redeclaration */
-11:     for i:=1 to 10 do
-12:     begin
-<Error2> found in Line 13: symbol i is redeclared
-13:         var i: string;          // error
-14:         for ii:=1 to 10 do
-15:         begin
-16:             for iii:=1 to 10 do
-17:             begin
-<Error1> found in Line 18: symbol i is redeclared
-18:                 for i:=1 to 10 do   //error
-19:                 begin
-20:                 end
-21:                 end do
-22:             end
-23:             end do
-24:         end
-25:         end do
-26:     end
-27:     end do
-28: 
-29: /* Nested for redeclaration*/
-30:     for i:=1 to 10 do
-31:     begin
-<Error2> found in Line 32: symbol i is redeclared
-32:         var i: 12 ;    // error
-33:         var a : "100";
-<Error1> found in Line 34: symbol i is redeclared
-34:         for i:=1 to 10 do    // error
-35:         begin
-<Error1> found in Line 36: symbol i is redeclared
-36:             for i:=1 to 10 do //error
-37:             end do
-38:         end
-39:         end do
-40:         begin
-<Error1> found in Line 41: symbol i is redeclared
-41:             var i:real;     // error
-42:         end
-43:     end
-44:     end do
-45: 
-46: 
-47:     for ii:=1 to 10 do
-48:     begin
-49:         var i: string;
-<Error2> found in Line 50: symbol ii is redeclared
-50:         var ii : false; // error
-<Error3> found in Line 51: symbol i is redeclared
-51:         var i : false; // error
-52:         for i:=1 to 10 do
-53:         begin
-54:             begin
-<Error1> found in Line 55: symbol i is redeclared
-55:             for i:=1 to 10 do       //error
-56:             begin
-<Error1> found in Line 57: symbol i is redeclared
-57:                 for i:=1 to 10 do   //error
-58:                 begin
-59:                 end
-60:                 end do
-61:             end
-62:             end do
-63:             end
-64:         end
-65:         end do
-66:     end
-67:     end do
-68: end
-69: end Loopredefined
+1: //&T-
+2: error;
+3: 
+4: func1(p1:string;p2:array 99 to 100 of integer):array 1 to 10 of real;
+5: begin
+<Error> found in Line 6: symbol p1 is redeclared
+6:     var p1:boolean;  // error redeclare
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+p1                               parameter  1(local)   string           
+p2                               parameter  1(local)   integer [2]      
+--------------------------------------------------------------------------------------------------------------
+7: end
+8: end func1
+9: 
+10: begin
+11:     var a:integer;
+<Error> found in Line 12: symbol a is redeclared
+12:     var a:boolean;   // error redeclare
+13: 
+14:     var bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb : boolean;
+<Error> found in Line 15: symbol bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb is redeclared
+15:     var bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbExtraCharIsUseless:string;
+16: 
+17:     begin
+18:         var a:string;
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+a                                variable   2(local)   string           
+--------------------------------------------------------------------------------------------------------------
+19:     end
+20: 
+21:     for i:=1 to 10 do
+22:     begin
+<Error> found in Line 23: symbol i is redeclared
+23:         var i : integer;       // error redeclare
+<Error> found in Line 24: symbol i is redeclared
+24:         for i:=2 to 3 do      // error same iterator
+25:             a:=3;
+26:         end do
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
+27:     end
+28:     end do
+29: 
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+a                                variable   1(local)   integer          
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb variable   1(local)   boolean          
+--------------------------------------------------------------------------------------------------------------
+30: end
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+error                            program    0(global)  void             
+func1                            function   0(global)  real [10]        string, integer [2]
+--------------------------------------------------------------------------------------------------------------
+31: end error

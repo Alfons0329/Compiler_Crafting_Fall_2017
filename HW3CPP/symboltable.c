@@ -115,7 +115,6 @@ int error_detection() //no hashing, just naive solution
 {
     //iterator-iterator checking------------------------------------------------------------------------------------//
     // dumpiterator();
-    dumpsymbol();
     vector<string> redeclared_var;
     string error_msg;
     bool is_error=0, is_final_error=0;
