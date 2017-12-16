@@ -115,7 +115,7 @@ int error_detection() //no hashing, just naive solution
 {
     //iterator-iterator checking------------------------------------------------------------------------------------//
     // dumpiterator();
-    // dumpsymbol();
+    dumpsymbol();
     vector<string> redeclared_var;
     string error_msg;
     bool is_error=0, is_final_error=0;
@@ -136,7 +136,7 @@ int error_detection() //no hashing, just naive solution
             error_msg=": symbol ";
             error_msg+=redeclared_var[i];
             error_msg+=" is redeclared";
-            cout<<"<Error1> found in Line "<<linenum<<error_msg<<endl;
+            cout<<"<Error> found in Line "<<linenum<<error_msg<<endl;
             error_msg.clear();
         }
     }
@@ -165,7 +165,7 @@ int error_detection() //no hashing, just naive solution
             error_msg=": symbol ";
             error_msg+=redeclared_var[i];
             error_msg+=" is redeclared";
-            cout<<"<Error2> found in Line "<<linenum<<error_msg<<endl;
+            cout<<"<Error> found in Line "<<linenum<<error_msg<<endl;
             error_msg.clear();
         }
     }
@@ -174,9 +174,11 @@ int error_detection() //no hashing, just naive solution
     is_error=0;
     for(unsigned int i=0;i<mysymbol_table[scope_depth].size();i++)
     {
+        if(mysymbol_table[scope_depth][i].name[0]==0)
+            continue;
         for(unsigned int j=i+1;j<mysymbol_table[scope_depth].size();j++)
         {
-            if(mysymbol_table[scope_depth][i].name==mysymbol_table[scope_depth][j].name)
+            if((mysymbol_table[scope_depth][i].name==mysymbol_table[scope_depth][j].name)&&(mysymbol_table[scope_depth][i].level_str==mysymbol_table[scope_depth][j].level_str))
             {
                 redeclared_var.pb(mysymbol_table[scope_depth][i].name);
                 is_error=1;
@@ -192,7 +194,7 @@ int error_detection() //no hashing, just naive solution
             error_msg=": symbol ";
             error_msg+=redeclared_var[i];
             error_msg+=" is redeclared";
-            cout<<"<Error3> found in Line "<<linenum<<error_msg<<endl;
+            cout<<"<Error> found in Line "<<linenum<<error_msg<<endl;
             error_msg.clear();
         }
     }

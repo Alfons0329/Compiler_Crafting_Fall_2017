@@ -1,6 +1,5 @@
 // Redefined
 //&T-
-//&D-
 Redefined;
 
 
@@ -41,16 +40,15 @@ begin
     end
 
     while ii < 10 do
-        begin    
+        begin
             var a : boolean;    // ok, in nested scope
             var a : string;     // error, var a redeclared
-            var c : 1.1;   
+            var c : 1.1;
             var c: 01010;    // error
             var c,c: 7777;    // error
             var c: false;    // error
         end
     end do
-    
+
 end
 end Redefined
-
