@@ -23,6 +23,5 @@ vim basic_student.txt
 ./parser error.p > error_student.txt
 vim error_student.txt
 
-./parser_teacher test.p > test_teacher.txt
 ./parser test.p > test_student.txt
 vim test_student.txt

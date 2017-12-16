@@ -1,13 +1,18 @@
 1: //&T-
+<Error> found in Line 2: program end ID inconsist with the file name
 2: Array;
 3: 
 4: // integer, real, boolean, string
 5: 
 6: begin
 7: begin
+Error detection current scope depth 2
 8:     var h,i: array 1 to 8 of string;
+Error detection current scope depth 2
 9:     var k,l,m,n: array 101 to 200 of array 301 to 500 of array 10001 to 10300 of real;
+Error detection current scope depth 2
 10:     var b: array 100 to 200 of real;
+Error detection current scope depth 2
 11:     var d: array 99 to 99 of string;
 ==============================================================================================================
 Name                             Kind       Level      Type             Attribute  
@@ -21,15 +26,51 @@ n                                variable   2(local)   real [100][200][300]
 b                                variable   2(local)   real [101]       
 d                                variable   2(local)   string [1]       
 --------------------------------------------------------------------------------------------------------------
+
+-------------------ALL SYMBOL TABLE---------------------------------------------------------------------------
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+Array                            program    0(global)  void             
+h                                variable   2(local)   string [8]       
+i                                variable   2(local)   string [8]       
+k                                variable   2(local)   real [100][200][300]
+l                                variable   2(local)   real [100][200][300]
+m                                variable   2(local)   real [100][200][300]
+n                                variable   2(local)   real [100][200][300]
+b                                variable   2(local)   real [101]       
+d                                variable   2(local)   string [1]       
+--------------------------------------------------------------------------------------------------------------
 12: end
 13: 
 14: begin
+Error detection current scope depth 2
 15:     var e: array 1 to 8 of array 1 to 7 of integer;
+Error detection current scope depth 2
 16:     var f: array 101 to 200 of array 301 to 500 of array 10001 to 10300 of real;
+Error detection current scope depth 2
 17:     var g: array 1000 to 1000 of array 1000 to 1000 of array 1000 to 1000 of array 1000 to 1000 of array 1000 to 1000 of array 1000 to 1000 of array 1000 to 1000 of integer;
 ==============================================================================================================
 Name                             Kind       Level      Type             Attribute  
 --------------------------------------------------------------------------------------------------------------
+e                                variable   2(local)   integer [8][7]   
+f                                variable   2(local)   real [100][200][300]
+g                                variable   2(local)   integer [1][1][1][1][1][1][1]
+--------------------------------------------------------------------------------------------------------------
+
+-------------------ALL SYMBOL TABLE---------------------------------------------------------------------------
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+Array                            program    0(global)  void             
+h                                variable   2(local)   string [8]       
+i                                variable   2(local)   string [8]       
+k                                variable   2(local)   real [100][200][300]
+l                                variable   2(local)   real [100][200][300]
+m                                variable   2(local)   real [100][200][300]
+n                                variable   2(local)   real [100][200][300]
+b                                variable   2(local)   real [101]       
+d                                variable   2(local)   string [1]       
 e                                variable   2(local)   integer [8][7]   
 f                                variable   2(local)   real [100][200][300]
 g                                variable   2(local)   integer [1][1][1][1][1][1][1]
@@ -39,10 +80,48 @@ g                                variable   2(local)   integer [1][1][1][1][1][1
 Name                             Kind       Level      Type             Attribute  
 --------------------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
-19: end
+
+-------------------ALL SYMBOL TABLE---------------------------------------------------------------------------
 ==============================================================================================================
 Name                             Kind       Level      Type             Attribute  
 --------------------------------------------------------------------------------------------------------------
 Array                            program    0(global)  void             
+h                                variable   2(local)   string [8]       
+i                                variable   2(local)   string [8]       
+k                                variable   2(local)   real [100][200][300]
+l                                variable   2(local)   real [100][200][300]
+m                                variable   2(local)   real [100][200][300]
+n                                variable   2(local)   real [100][200][300]
+b                                variable   2(local)   real [101]       
+d                                variable   2(local)   string [1]       
+e                                variable   2(local)   integer [8][7]   
+f                                variable   2(local)   real [100][200][300]
+g                                variable   2(local)   integer [1][1][1][1][1][1][1]
+--------------------------------------------------------------------------------------------------------------
+19: end
+Error detection current scope depth 0
+<Error> found in Line 20: program end ID inconsist with the file name
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+Array                            program    0(global)  void             
+--------------------------------------------------------------------------------------------------------------
+
+-------------------ALL SYMBOL TABLE---------------------------------------------------------------------------
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+Array                            program    0(global)  void             
+h                                variable   2(local)   string [8]       
+i                                variable   2(local)   string [8]       
+k                                variable   2(local)   real [100][200][300]
+l                                variable   2(local)   real [100][200][300]
+m                                variable   2(local)   real [100][200][300]
+n                                variable   2(local)   real [100][200][300]
+b                                variable   2(local)   real [101]       
+d                                variable   2(local)   string [1]       
+e                                variable   2(local)   integer [8][7]   
+f                                variable   2(local)   real [100][200][300]
+g                                variable   2(local)   integer [1][1][1][1][1][1][1]
 --------------------------------------------------------------------------------------------------------------
 20: end Array

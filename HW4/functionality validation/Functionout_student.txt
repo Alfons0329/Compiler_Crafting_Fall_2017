@@ -1,8 +1,11 @@
 1: //&T-
 2: // array, function
+<Error> found in Line 3: program end ID inconsist with the file name
 3: Function;
 4: 
 5: 
+Error detection current scope depth 1
+Error detection current scope depth 0
 6: func2(a: boolean): array 1 to 10 of array 2 to 20 of string;
 7: begin
 ==============================================================================================================
@@ -10,9 +13,21 @@ Name                             Kind       Level      Type             Attribut
 --------------------------------------------------------------------------------------------------------------
 a                                parameter  1(local)   boolean          
 --------------------------------------------------------------------------------------------------------------
+
+-------------------ALL SYMBOL TABLE---------------------------------------------------------------------------
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+Function                         program    0(global)  void             
+func2                            function   0(global)  string [10][19]  boolean
+a                                parameter  1(local)   boolean          
+--------------------------------------------------------------------------------------------------------------
 8: end
 9: end func2
 10: 
+Error detection current scope depth 1
+Error detection current scope depth 1
+Error detection current scope depth 0
 11: funca(x, y: integer; z: string): boolean;
 12: begin
 ==============================================================================================================
@@ -22,24 +37,72 @@ x                                parameter  1(local)   integer
 y                                parameter  1(local)   integer          
 z                                parameter  1(local)   string           
 --------------------------------------------------------------------------------------------------------------
+
+-------------------ALL SYMBOL TABLE---------------------------------------------------------------------------
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+Function                         program    0(global)  void             
+func2                            function   0(global)  string [10][19]  boolean
+funca                            function   0(global)  boolean          integer, integer, string
+a                                parameter  1(local)   boolean          
+x                                parameter  1(local)   integer          
+y                                parameter  1(local)   integer          
+z                                parameter  1(local)   string           
+--------------------------------------------------------------------------------------------------------------
 13: end
 14: end funca
+Error detection current scope depth 0
 15: func3();
 16: begin
 ==============================================================================================================
 Name                             Kind       Level      Type             Attribute  
 --------------------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
+
+-------------------ALL SYMBOL TABLE---------------------------------------------------------------------------
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+Function                         program    0(global)  void             
+func2                            function   0(global)  string [10][19]  boolean
+funca                            function   0(global)  boolean          integer, integer, string
+func3                            function   0(global)  void             
+a                                parameter  1(local)   boolean          
+x                                parameter  1(local)   integer          
+y                                parameter  1(local)   integer          
+z                                parameter  1(local)   string           
+--------------------------------------------------------------------------------------------------------------
 17: end
 18: end func3
+Error detection current scope depth 0
 19: func5(): integer;
 20: begin
 ==============================================================================================================
 Name                             Kind       Level      Type             Attribute  
 --------------------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
+
+-------------------ALL SYMBOL TABLE---------------------------------------------------------------------------
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+Function                         program    0(global)  void             
+func2                            function   0(global)  string [10][19]  boolean
+funca                            function   0(global)  boolean          integer, integer, string
+func3                            function   0(global)  void             
+func5                            function   0(global)  integer          
+a                                parameter  1(local)   boolean          
+x                                parameter  1(local)   integer          
+y                                parameter  1(local)   integer          
+z                                parameter  1(local)   string           
+--------------------------------------------------------------------------------------------------------------
 21: end
 22: end func5
+Error detection current scope depth 1
+Error detection current scope depth 1
+Find same name!! x
+Error detection current scope depth 0
 23: func6(x:array 1 to 1 of array 1 to 1 of real;y:array 999 to 1999 of integer);
 24: begin
 ==============================================================================================================
@@ -48,8 +111,36 @@ Name                             Kind       Level      Type             Attribut
 x                                parameter  1(local)   real [1][1]      
 y                                parameter  1(local)   integer [1001]   
 --------------------------------------------------------------------------------------------------------------
+
+-------------------ALL SYMBOL TABLE---------------------------------------------------------------------------
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+Function                         program    0(global)  void             
+func2                            function   0(global)  string [10][19]  boolean
+funca                            function   0(global)  boolean          integer, integer, string
+func3                            function   0(global)  void             
+func5                            function   0(global)  integer          
+func6                            function   0(global)  void             real [1][1], integer [1001]
+a                                parameter  1(local)   boolean          
+x                                parameter  1(local)   integer          
+y                                parameter  1(local)   integer          
+z                                parameter  1(local)   string           
+y                                parameter  1(local)   integer [1001]   
+--------------------------------------------------------------------------------------------------------------
 25: end
 26: end func6
+Error detection current scope depth 1
+Find same name!! y
+Error detection current scope depth 1
+Find same name!! x
+Error detection current scope depth 1
+Find same name!! y
+Error detection current scope depth 1
+Find same name!! z
+Error detection current scope depth 1
+Find same name!! a
+Error detection current scope depth 0
 27: func8(x:integer;y:boolean;z:string;a:real;b:integer);
 28: begin
 ==============================================================================================================
@@ -61,8 +152,32 @@ z                                parameter  1(local)   string
 a                                parameter  1(local)   real             
 b                                parameter  1(local)   integer          
 --------------------------------------------------------------------------------------------------------------
+
+-------------------ALL SYMBOL TABLE---------------------------------------------------------------------------
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+Function                         program    0(global)  void             
+func2                            function   0(global)  string [10][19]  boolean
+funca                            function   0(global)  boolean          integer, integer, string
+func3                            function   0(global)  void             
+func5                            function   0(global)  integer          
+func6                            function   0(global)  void             real [1][1], integer [1001]
+func8                            function   0(global)  void             integer, boolean, string, real, integer
+a                                parameter  1(local)   boolean          
+x                                parameter  1(local)   integer          
+y                                parameter  1(local)   integer          
+z                                parameter  1(local)   string           
+b                                parameter  1(local)   integer          
+--------------------------------------------------------------------------------------------------------------
 29: end
 30: end func8
+Error detection current scope depth 1
+Error detection current scope depth 1
+Find same name!! x
+Find same name!! y
+Find same name!! z
+Error detection current scope depth 0
 31: func9(x,y,z:string; a,b,c,d:array 999 to 999 of array 1 to 2 of real) : boolean;
 32: begin
 ==============================================================================================================
@@ -76,15 +191,8 @@ b                                parameter  1(local)   real [1][2]
 c                                parameter  1(local)   real [1][2]      
 d                                parameter  1(local)   real [1][2]      
 --------------------------------------------------------------------------------------------------------------
-33: end
-34: end func9
-35: 
-36: begin
-==============================================================================================================
-Name                             Kind       Level      Type             Attribute  
---------------------------------------------------------------------------------------------------------------
---------------------------------------------------------------------------------------------------------------
-37: end
+
+-------------------ALL SYMBOL TABLE---------------------------------------------------------------------------
 ==============================================================================================================
 Name                             Kind       Level      Type             Attribute  
 --------------------------------------------------------------------------------------------------------------
@@ -96,5 +204,83 @@ func5                            function   0(global)  integer
 func6                            function   0(global)  void             real [1][1], integer [1001]
 func8                            function   0(global)  void             integer, boolean, string, real, integer
 func9                            function   0(global)  boolean          string, string, string, real [1][2], real [1][2], real [1][2], real [1][2]
+a                                parameter  1(local)   boolean          
+x                                parameter  1(local)   integer          
+y                                parameter  1(local)   integer          
+z                                parameter  1(local)   string           
+b                                parameter  1(local)   integer          
+a                                parameter  1(local)   real [1][2]      
+b                                parameter  1(local)   real [1][2]      
+c                                parameter  1(local)   real [1][2]      
+d                                parameter  1(local)   real [1][2]      
+--------------------------------------------------------------------------------------------------------------
+33: end
+34: end func9
+35: 
+36: begin
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
+
+-------------------ALL SYMBOL TABLE---------------------------------------------------------------------------
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+Function                         program    0(global)  void             
+func2                            function   0(global)  string [10][19]  boolean
+funca                            function   0(global)  boolean          integer, integer, string
+func3                            function   0(global)  void             
+func5                            function   0(global)  integer          
+func6                            function   0(global)  void             real [1][1], integer [1001]
+func8                            function   0(global)  void             integer, boolean, string, real, integer
+func9                            function   0(global)  boolean          string, string, string, real [1][2], real [1][2], real [1][2], real [1][2]
+a                                parameter  1(local)   boolean          
+x                                parameter  1(local)   integer          
+y                                parameter  1(local)   integer          
+z                                parameter  1(local)   string           
+b                                parameter  1(local)   integer          
+a                                parameter  1(local)   real [1][2]      
+b                                parameter  1(local)   real [1][2]      
+c                                parameter  1(local)   real [1][2]      
+d                                parameter  1(local)   real [1][2]      
+--------------------------------------------------------------------------------------------------------------
+37: end
+Error detection current scope depth 0
+<Error> found in Line 38: program end ID inconsist with the file name
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+Function                         program    0(global)  void             
+func2                            function   0(global)  string [10][19]  boolean
+funca                            function   0(global)  boolean          integer, integer, string
+func3                            function   0(global)  void             
+func5                            function   0(global)  integer          
+func6                            function   0(global)  void             real [1][1], integer [1001]
+func8                            function   0(global)  void             integer, boolean, string, real, integer
+func9                            function   0(global)  boolean          string, string, string, real [1][2], real [1][2], real [1][2], real [1][2]
+--------------------------------------------------------------------------------------------------------------
+
+-------------------ALL SYMBOL TABLE---------------------------------------------------------------------------
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+Function                         program    0(global)  void             
+func2                            function   0(global)  string [10][19]  boolean
+funca                            function   0(global)  boolean          integer, integer, string
+func3                            function   0(global)  void             
+func5                            function   0(global)  integer          
+func6                            function   0(global)  void             real [1][1], integer [1001]
+func8                            function   0(global)  void             integer, boolean, string, real, integer
+func9                            function   0(global)  boolean          string, string, string, real [1][2], real [1][2], real [1][2], real [1][2]
+a                                parameter  1(local)   boolean          
+x                                parameter  1(local)   integer          
+y                                parameter  1(local)   integer          
+z                                parameter  1(local)   string           
+b                                parameter  1(local)   integer          
+a                                parameter  1(local)   real [1][2]      
+b                                parameter  1(local)   real [1][2]      
+c                                parameter  1(local)   real [1][2]      
+d                                parameter  1(local)   real [1][2]      
 --------------------------------------------------------------------------------------------------------------
 38: end Function

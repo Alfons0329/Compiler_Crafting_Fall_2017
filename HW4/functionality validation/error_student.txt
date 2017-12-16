@@ -1,9 +1,15 @@
 1: //&T-
+<Error> found in Line 2: program end ID inconsist with the file name
 2: error;
 3: 
+Error detection current scope depth 1
+Error detection current scope depth 1
+Error detection current scope depth 0
 4: func1(p1:string;p2:array 99 to 100 of integer):array 1 to 10 of real;
 5: begin
+Error detection current scope depth 1
 <Error> found in Line 6: symbol 'p1' is redeclared
+Find same name!! p1
 6:     var p1:boolean;  // error redeclare
 ==============================================================================================================
 Name                             Kind       Level      Type             Attribute  
@@ -11,31 +17,64 @@ Name                             Kind       Level      Type             Attribut
 p1                               parameter  1(local)   string           
 p2                               parameter  1(local)   integer [2]      
 --------------------------------------------------------------------------------------------------------------
+
+-------------------ALL SYMBOL TABLE---------------------------------------------------------------------------
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+error                            program    0(global)  void             
+func1                            function   0(global)  real [10]        string, integer [2]
+p1                               parameter  1(local)   string           
+p2                               parameter  1(local)   integer [2]      
+--------------------------------------------------------------------------------------------------------------
 7: end
 8: end func1
 9: 
 10: begin
+Error detection current scope depth 1
 11:     var a:integer;
+Error detection current scope depth 1
 <Error> found in Line 12: symbol 'a' is redeclared
+Find same name!! a
 12:     var a:boolean;   // error redeclare
 13: 
+Error detection current scope depth 1
 14:     var bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb : boolean;
+Error detection current scope depth 1
 <Error> found in Line 15: symbol 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb' is redeclared
+Find same name!! bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 15:     var bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbExtraCharIsUseless:string;
 16: 
 17:     begin
+Error detection current scope depth 2
 18:         var a:string;
 ==============================================================================================================
 Name                             Kind       Level      Type             Attribute  
 --------------------------------------------------------------------------------------------------------------
 a                                variable   2(local)   string           
 --------------------------------------------------------------------------------------------------------------
+
+-------------------ALL SYMBOL TABLE---------------------------------------------------------------------------
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+error                            program    0(global)  void             
+func1                            function   0(global)  real [10]        string, integer [2]
+p1                               parameter  1(local)   string           
+p2                               parameter  1(local)   integer [2]      
+a                                variable   1(local)   integer          
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb variable   1(local)   boolean          
+a                                variable   2(local)   string           
+--------------------------------------------------------------------------------------------------------------
 19:     end
 20: 
+Error detection current scope depth 1
 21:     for i:=1 to 10 do
 22:     begin
+Error detection current scope depth 2
 <Error> found in Line 23: symbol 'i' is redeclared
 23:         var i : integer;       // error redeclare
+Error detection current scope depth 2
 <Error> found in Line 24: symbol 'i' is redeclared
 24:         for i:=2 to 3 do      // error same iterator
 25:             a:=3;
@@ -43,6 +82,20 @@ a                                variable   2(local)   string
 ==============================================================================================================
 Name                             Kind       Level      Type             Attribute  
 --------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
+
+-------------------ALL SYMBOL TABLE---------------------------------------------------------------------------
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+error                            program    0(global)  void             
+func1                            function   0(global)  real [10]        string, integer [2]
+p1                               parameter  1(local)   string           
+p2                               parameter  1(local)   integer [2]      
+a                                variable   1(local)   integer          
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb variable   1(local)   boolean          
+a                                variable   2(local)   string           
+i                                variable   2(local)   integer          
 --------------------------------------------------------------------------------------------------------------
 27:     end
 28:     end do
@@ -53,11 +106,41 @@ Name                             Kind       Level      Type             Attribut
 a                                variable   1(local)   integer          
 bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb variable   1(local)   boolean          
 --------------------------------------------------------------------------------------------------------------
-30: end
+
+-------------------ALL SYMBOL TABLE---------------------------------------------------------------------------
 ==============================================================================================================
 Name                             Kind       Level      Type             Attribute  
 --------------------------------------------------------------------------------------------------------------
 error                            program    0(global)  void             
 func1                            function   0(global)  real [10]        string, integer [2]
+p1                               parameter  1(local)   string           
+p2                               parameter  1(local)   integer [2]      
+a                                variable   1(local)   integer          
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb variable   1(local)   boolean          
+a                                variable   2(local)   string           
+i                                variable   2(local)   integer          
+--------------------------------------------------------------------------------------------------------------
+30: end
+Error detection current scope depth 0
+<Error> found in Line 31: program end ID inconsist with the file name
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+error                            program    0(global)  void             
+func1                            function   0(global)  real [10]        string, integer [2]
+--------------------------------------------------------------------------------------------------------------
+
+-------------------ALL SYMBOL TABLE---------------------------------------------------------------------------
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+error                            program    0(global)  void             
+func1                            function   0(global)  real [10]        string, integer [2]
+p1                               parameter  1(local)   string           
+p2                               parameter  1(local)   integer [2]      
+a                                variable   1(local)   integer          
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb variable   1(local)   boolean          
+a                                variable   2(local)   string           
+i                                variable   2(local)   integer          
 --------------------------------------------------------------------------------------------------------------
 31: end error

@@ -1,18 +1,36 @@
 <id: test>
+<Error> found in Line 1: program end ID inconsist with the file name
 <;>
 1: test;
 2: //&T-
 3: // no global declaration(s)
 4: 
+Error detection current scope depth 1
+Error detection current scope depth 1
+Error detection current scope depth 0
 5: func( a: integer ; b: array 1 to 2 of array 2 to 4 of real ): boolean;
 6: begin
+Error detection current scope depth 1
 7:         var c: "hello world!";
 8:         begin
+Error detection current scope depth 2
 9:                 var d: real;
 10:                 return (b[1][4] >= 1.0);
 ==============================================================================================================
 Name                             Kind       Level      Type             Attribute  
 --------------------------------------------------------------------------------------------------------------
+d                                variable   2(local)   real             
+--------------------------------------------------------------------------------------------------------------
+
+-------------------ALL SYMBOL TABLE---------------------------------------------------------------------------
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+test                             program    0(global)  void             
+func                             function   0(global)  boolean          integer, real [2][3]
+a                                parameter  1(local)   integer          
+b                                parameter  1(local)   real [2][3]      
+c                                constant   1(local)   string           "hello world!"
 d                                variable   2(local)   real             
 --------------------------------------------------------------------------------------------------------------
 11:         end
@@ -23,16 +41,44 @@ a                                parameter  1(local)   integer
 b                                parameter  1(local)   real [2][3]      
 c                                constant   1(local)   string           "hello world!"
 --------------------------------------------------------------------------------------------------------------
+
+-------------------ALL SYMBOL TABLE---------------------------------------------------------------------------
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+test                             program    0(global)  void             
+func                             function   0(global)  boolean          integer, real [2][3]
+a                                parameter  1(local)   integer          
+b                                parameter  1(local)   real [2][3]      
+c                                constant   1(local)   string           "hello world!"
+d                                variable   2(local)   real             
+--------------------------------------------------------------------------------------------------------------
 12: end
 13: end func
 14: 
 15: begin
+Error detection current scope depth 1
+Find same name!! a
 16:         var a: integer;
 17:         begin
+Error detection current scope depth 2
 18:                 var a: boolean; // outer 'a' has been hidden in this scope
 ==============================================================================================================
 Name                             Kind       Level      Type             Attribute  
 --------------------------------------------------------------------------------------------------------------
+a                                variable   2(local)   boolean          
+--------------------------------------------------------------------------------------------------------------
+
+-------------------ALL SYMBOL TABLE---------------------------------------------------------------------------
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+test                             program    0(global)  void             
+func                             function   0(global)  boolean          integer, real [2][3]
+a                                parameter  1(local)   integer          
+b                                parameter  1(local)   real [2][3]      
+c                                constant   1(local)   string           "hello world!"
+d                                variable   2(local)   real             
 a                                variable   2(local)   boolean          
 --------------------------------------------------------------------------------------------------------------
 19:         end
@@ -41,11 +87,39 @@ Name                             Kind       Level      Type             Attribut
 --------------------------------------------------------------------------------------------------------------
 a                                variable   1(local)   integer          
 --------------------------------------------------------------------------------------------------------------
-20: end
+
+-------------------ALL SYMBOL TABLE---------------------------------------------------------------------------
 ==============================================================================================================
 Name                             Kind       Level      Type             Attribute  
 --------------------------------------------------------------------------------------------------------------
 test                             program    0(global)  void             
 func                             function   0(global)  boolean          integer, real [2][3]
+a                                parameter  1(local)   integer          
+b                                parameter  1(local)   real [2][3]      
+c                                constant   1(local)   string           "hello world!"
+d                                variable   2(local)   real             
+a                                variable   2(local)   boolean          
+--------------------------------------------------------------------------------------------------------------
+20: end
+Error detection current scope depth 0
+<Error> found in Line 21: program end ID inconsist with the file name
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+test                             program    0(global)  void             
+func                             function   0(global)  boolean          integer, real [2][3]
+--------------------------------------------------------------------------------------------------------------
+
+-------------------ALL SYMBOL TABLE---------------------------------------------------------------------------
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+test                             program    0(global)  void             
+func                             function   0(global)  boolean          integer, real [2][3]
+a                                parameter  1(local)   integer          
+b                                parameter  1(local)   real [2][3]      
+c                                constant   1(local)   string           "hello world!"
+d                                variable   2(local)   real             
+a                                variable   2(local)   boolean          
 --------------------------------------------------------------------------------------------------------------
 21: end test

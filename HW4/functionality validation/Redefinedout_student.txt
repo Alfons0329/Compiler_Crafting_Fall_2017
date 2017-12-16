@@ -1,19 +1,31 @@
 1: // Redefined
 2: //&T-
+<Error> found in Line 3: program end ID inconsist with the file name
 3: Redefined;
 4: 
 5: 
+Error detection current scope depth 0
 6: var a, b: integer;
+Error detection current scope depth 0
 7: var i : integer;
+Error detection current scope depth 0
 <Error> found in Line 8: symbol 'i' is redeclared
+Find same name!! i
 8: var i : string;		// error, var i redeclared
 9: 
+Error detection current scope depth 1
+Error detection current scope depth 0
 10: func( aa, bb : integer ) : integer ;
 11: begin
+Error detection current scope depth 1
 <Error> found in Line 12: symbol 'aa' is redeclared
+Find same name!! aa
 12:     var aa : boolean;       // error, var aa redeclared as parameter
+Error detection current scope depth 1
 13:     var b : string;         // ok, in nested scope
+Error detection current scope depth 1
 <Error> found in Line 14: symbol 'b' is redeclared
+Find same name!! b
 14:     var b: string;          // error, var b redeclared
 ==============================================================================================================
 Name                             Kind       Level      Type             Attribute  
@@ -22,15 +34,45 @@ aa                               parameter  1(local)   integer
 bb                               parameter  1(local)   integer          
 b                                variable   1(local)   string           
 --------------------------------------------------------------------------------------------------------------
+
+-------------------ALL SYMBOL TABLE---------------------------------------------------------------------------
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+Redefined                        program    0(global)  void             
+a                                variable   0(global)  integer          
+b                                variable   0(global)  integer          
+i                                variable   0(global)  integer          
+func                             function   0(global)  integer          integer, integer
+aa                               parameter  1(local)   integer          
+bb                               parameter  1(local)   integer          
+b                                variable   1(local)   string           
+--------------------------------------------------------------------------------------------------------------
 15: end
 16: end func
 17: 
+Error detection current scope depth 0
 <Error> found in Line 18: symbol 'func' is redeclared
+Find same name!! func
 18: func();
 19: begin
 ==============================================================================================================
 Name                             Kind       Level      Type             Attribute  
 --------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
+
+-------------------ALL SYMBOL TABLE---------------------------------------------------------------------------
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+Redefined                        program    0(global)  void             
+a                                variable   0(global)  integer          
+b                                variable   0(global)  integer          
+i                                variable   0(global)  integer          
+func                             function   0(global)  integer          integer, integer
+aa                               parameter  1(local)   integer          
+bb                               parameter  1(local)   integer          
+b                                variable   1(local)   string           
 --------------------------------------------------------------------------------------------------------------
 20: end
 21: end func
@@ -38,28 +80,66 @@ Name                             Kind       Level      Type             Attribut
 23: // main program
 24: begin
 25: 
+Error detection current scope depth 1
+Find same name!! b
 26:     var a, b, c: integer;      // ok, in nested scope
+Error detection current scope depth 1
 <Error> found in Line 27: symbol 'a' is redeclared
+Find same name!! a
 27:     var a : integer;          // error
+Error detection current scope depth 1
 <Error> found in Line 28: symbol 'c' is redeclared
+Find same name!! c
 28:     var c : integer;          // error
+Error detection current scope depth 1
 29:     var ii: integer;
+Error detection current scope depth 1
 30:     var aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbb : string;
+Error detection current scope depth 1
 <Error> found in Line 31: symbol 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' is redeclared
+Find same name!! aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 31:     var aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaccc : string;  // error, variable redefine
 32:     begin
+Error detection current scope depth 2
 33:         var a: 100;
+Error detection current scope depth 2
 <Error> found in Line 34: symbol 'a' is redeclared
+Find same name!! a
 34:         var a : "100";    // error
+Error detection current scope depth 2
 <Error> found in Line 35: symbol 'a' is redeclared
+Find same name!! a
 35:         var a : true;    // error
 36:         begin
+Error detection current scope depth 3
 37:             var xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxoooooo : string;
+Error detection current scope depth 3
 <Error> found in Line 38: symbol 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' is redeclared
+Find same name!! xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 38:             var xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxz : string;  // error, variable redefine
 ==============================================================================================================
 Name                             Kind       Level      Type             Attribute  
 --------------------------------------------------------------------------------------------------------------
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx variable   3(local)   string           
+--------------------------------------------------------------------------------------------------------------
+
+-------------------ALL SYMBOL TABLE---------------------------------------------------------------------------
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+Redefined                        program    0(global)  void             
+a                                variable   0(global)  integer          
+b                                variable   0(global)  integer          
+i                                variable   0(global)  integer          
+func                             function   0(global)  integer          integer, integer
+aa                               parameter  1(local)   integer          
+bb                               parameter  1(local)   integer          
+b                                variable   1(local)   string           
+a                                variable   1(local)   integer          
+c                                variable   1(local)   integer          
+ii                               variable   1(local)   integer          
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa variable   1(local)   string           
+a                                constant   2(local)   integer          100
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx variable   3(local)   string           
 --------------------------------------------------------------------------------------------------------------
 39:         end
@@ -68,26 +148,79 @@ Name                             Kind       Level      Type             Attribut
 --------------------------------------------------------------------------------------------------------------
 a                                constant   2(local)   integer          100
 --------------------------------------------------------------------------------------------------------------
+
+-------------------ALL SYMBOL TABLE---------------------------------------------------------------------------
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+Redefined                        program    0(global)  void             
+a                                variable   0(global)  integer          
+b                                variable   0(global)  integer          
+i                                variable   0(global)  integer          
+func                             function   0(global)  integer          integer, integer
+aa                               parameter  1(local)   integer          
+bb                               parameter  1(local)   integer          
+b                                variable   1(local)   string           
+a                                variable   1(local)   integer          
+c                                variable   1(local)   integer          
+ii                               variable   1(local)   integer          
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa variable   1(local)   string           
+a                                constant   2(local)   integer          100
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx variable   3(local)   string           
+--------------------------------------------------------------------------------------------------------------
 40:     end
 41: 
 42:     while ii < 10 do
 43:         begin
+Error detection current scope depth 2
+Find same name!! a
 44:             var a : boolean;    // ok, in nested scope
+Error detection current scope depth 2
 <Error> found in Line 45: symbol 'a' is redeclared
+Find same name!! a
 45:             var a : string;     // error, var a redeclared
+Error detection current scope depth 2
 46:             var c : 1.1;
+Error detection current scope depth 2
 <Error> found in Line 47: symbol 'c' is redeclared
+Find same name!! c
 47:             var c: 01010;    // error
+Error detection current scope depth 2
 <Error> found in Line 48: symbol 'c' is redeclared
 <Error> found in Line 48: symbol 'c' is redeclared
+Find same name!! c
 48:             var c,c: 7777;    // error
+Error detection current scope depth 2
 <Error> found in Line 49: symbol 'c' is redeclared
+Find same name!! c
 49:             var c: false;    // error
 ==============================================================================================================
 Name                             Kind       Level      Type             Attribute  
 --------------------------------------------------------------------------------------------------------------
 a                                variable   2(local)   boolean          
 c                                constant   2(local)   real             1.1
+--------------------------------------------------------------------------------------------------------------
+
+-------------------ALL SYMBOL TABLE---------------------------------------------------------------------------
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+Redefined                        program    0(global)  void             
+a                                variable   0(global)  integer          
+b                                variable   0(global)  integer          
+i                                variable   0(global)  integer          
+func                             function   0(global)  integer          integer, integer
+aa                               parameter  1(local)   integer          
+bb                               parameter  1(local)   integer          
+b                                variable   1(local)   string           
+a                                variable   1(local)   integer          
+c                                variable   1(local)   integer          
+ii                               variable   1(local)   integer          
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa variable   1(local)   string           
+a                                constant   2(local)   integer          100
+c                                constant   2(local)   real             1.1
+c                                constant   2(local)   boolean          false
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx variable   3(local)   string           
 --------------------------------------------------------------------------------------------------------------
 50:         end
 51:     end do
@@ -101,7 +234,8 @@ c                                variable   1(local)   integer
 ii                               variable   1(local)   integer          
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa variable   1(local)   string           
 --------------------------------------------------------------------------------------------------------------
-53: end
+
+-------------------ALL SYMBOL TABLE---------------------------------------------------------------------------
 ==============================================================================================================
 Name                             Kind       Level      Type             Attribute  
 --------------------------------------------------------------------------------------------------------------
@@ -110,5 +244,50 @@ a                                variable   0(global)  integer
 b                                variable   0(global)  integer          
 i                                variable   0(global)  integer          
 func                             function   0(global)  integer          integer, integer
+aa                               parameter  1(local)   integer          
+bb                               parameter  1(local)   integer          
+b                                variable   1(local)   string           
+a                                variable   1(local)   integer          
+c                                variable   1(local)   integer          
+ii                               variable   1(local)   integer          
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa variable   1(local)   string           
+a                                constant   2(local)   integer          100
+c                                constant   2(local)   real             1.1
+c                                constant   2(local)   boolean          false
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx variable   3(local)   string           
+--------------------------------------------------------------------------------------------------------------
+53: end
+Error detection current scope depth 0
+<Error> found in Line 54: program end ID inconsist with the file name
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+Redefined                        program    0(global)  void             
+a                                variable   0(global)  integer          
+b                                variable   0(global)  integer          
+i                                variable   0(global)  integer          
+func                             function   0(global)  integer          integer, integer
+--------------------------------------------------------------------------------------------------------------
+
+-------------------ALL SYMBOL TABLE---------------------------------------------------------------------------
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+Redefined                        program    0(global)  void             
+a                                variable   0(global)  integer          
+b                                variable   0(global)  integer          
+i                                variable   0(global)  integer          
+func                             function   0(global)  integer          integer, integer
+aa                               parameter  1(local)   integer          
+bb                               parameter  1(local)   integer          
+b                                variable   1(local)   string           
+a                                variable   1(local)   integer          
+c                                variable   1(local)   integer          
+ii                               variable   1(local)   integer          
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa variable   1(local)   string           
+a                                constant   2(local)   integer          100
+c                                constant   2(local)   real             1.1
+c                                constant   2(local)   boolean          false
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx variable   3(local)   string           
 --------------------------------------------------------------------------------------------------------------
 54: end Redefined

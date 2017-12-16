@@ -383,12 +383,13 @@ void dumpallsymbol()
         printf("-");
     }
     printf("\n");
-    for(unsigned int all_scope_index=0;allsymbol_table[all_scope_index].size()!=0;all_scope_index++)
+    for(unsigned int all_scope_index=0;all_scope_index<SYMBOL_TABLE_MAX_SIZE;all_scope_index++)
     {
+        if(allsymbol_table[all_scope_index].size()==0)
+            continue;
+
         for(unsigned int i=0;i<allsymbol_table[all_scope_index].size();i++)
         {
-            if(allsymbol_table[all_scope_index][i].name[0]==0)
-                continue;
             printf("%-33s",allsymbol_table[all_scope_index][i].name.c_str()); //safety first
             printf("%-11s",allsymbol_table[all_scope_index][i].kind.c_str());
             printf("%-11s",allsymbol_table[all_scope_index][i].level_str.c_str());
@@ -415,8 +416,9 @@ void allsymbol_table_error_detection()
         for(unsigned int j=i+1;j<allsymbol_table[scope_depth].size();j++)
         {
             if((allsymbol_table[scope_depth][i].name==allsymbol_table[scope_depth][j].name)
-            &&(allsymbol_table[scope_depth][j].type!="parameter"))
+            &&(allsymbol_table[scope_depth][j].kind!="parameter")&&((allsymbol_table[scope_depth][i].kind!="parameter")))
             {
+                cout<<"Find same name!! "<<allsymbol_table[scope_depth][i].name<<endl;
                 allsymbol_table[scope_depth].erase(allsymbol_table[scope_depth].begin()+j);
             }
         }
