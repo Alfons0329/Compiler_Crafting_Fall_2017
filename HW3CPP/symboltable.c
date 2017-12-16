@@ -21,7 +21,6 @@ void inserting_symbol_table(vector<string> id_list_buf, string kind_in, string t
 {
     for(unsigned int i=0;i<id_list_buf.size();i++)
     {
-        // cout<<"Inserting "<<id_list_buf[i]<<" SCOPE DEPTH "<<scope_depth<<endl;
         sub_entry one_subentry;
         if(id_list_buf[i].length()>32)
         {
@@ -102,7 +101,6 @@ void dumpsymbol()
 }
 int error_detection() //no hashing, just naive solution
 {
-    cout<<"Current scope depth "<<scope_depth<<endl;
     //iterator-iterator checking------------------------------------------------------------------------------------//
     vector<string> redeclared_var;
     string error_msg;
@@ -123,10 +121,10 @@ int error_detection() //no hashing, just naive solution
     {
         for(unsigned int i=0;i<redeclared_var.size();i++)
         {
-            error_msg=" symbol ";
+            error_msg=": symbol ";
             error_msg+=redeclared_var[i];
             error_msg+=" is redeclared";
-            cout<<"<Error1> found in Line "<<linenum<<error_msg<<endl;
+            cout<<"<Error> found in Line "<<linenum<<error_msg<<endl;
             error_msg.clear();
         }
     }
@@ -152,10 +150,10 @@ int error_detection() //no hashing, just naive solution
     {
         for(unsigned int i=0;i<redeclared_var.size();i++)
         {
-            error_msg=" symbol ";
+            error_msg=": symbol ";
             error_msg+=redeclared_var[i];
             error_msg+=" is redeclared";
-            cout<<"<Error2> found in Line "<<linenum<<error_msg<<endl;
+            cout<<"<Error> found in Line "<<linenum<<error_msg<<endl;
             error_msg.clear();
         }
     }
@@ -179,10 +177,10 @@ int error_detection() //no hashing, just naive solution
     {
         for(unsigned int i=0;i<redeclared_var.size();i++)
         {
-            error_msg=" symbol ";
+            error_msg=": symbol ";
             error_msg+=redeclared_var[i];
             error_msg+=" is redeclared";
-            cout<<"<Error3> found in Line "<<linenum<<error_msg<<endl;
+            cout<<"<Error> found in Line "<<linenum<<error_msg<<endl;
             error_msg.clear();
         }
     }

@@ -80,7 +80,6 @@ decl		: VAR id_list MK_COLON scalar_type/* scalar type declaration */
 				inserting_symbol_table(id_list_buf,"variable",$4,funct_attri_buf);
 				id_list_buf.clear();
 				error_detection();
-                dumpsymbol();
 			}
 			MK_SEMICOLON
 			| VAR id_list MK_COLON array_type MK_SEMICOLON   /* array type declaration */
@@ -152,7 +151,10 @@ func_decl	: 	ID
 						{
 							if((mysymbol_table[1][i].kind=="parameter")&&(mysymbol_table[1][i].name[0]!=0))
 							{
-								funct_attri_buf.pb(mysymbol_table[1][i].type+",");
+                                if(i!=mysymbol_table[1].size()-1)
+                                    funct_attri_buf.pb(mysymbol_table[1][i].type+", ");
+                                else
+                                    funct_attri_buf.pb(mysymbol_table[1][i].type);
 							}
 						}
                         array_type_str=$7;
@@ -167,7 +169,10 @@ func_decl	: 	ID
 						{
 							if((mysymbol_table[1][i].kind=="parameter")&&(mysymbol_table[1][i].name[0]!=0))
 							{
-                                funct_attri_buf.pb(mysymbol_table[1][i].type+",");
+                                if(i!=mysymbol_table[1].size()-1)
+                                    funct_attri_buf.pb(mysymbol_table[1][i].type+", ");
+                                else
+                                    funct_attri_buf.pb(mysymbol_table[1][i].type);
 							}
 						}
                         if($7==NULL) //prevent logic null string error
@@ -308,7 +313,6 @@ compound_stmt	: BEG
 					}
 				}
 			  	END
-
 			;
 
 opt_stmt_list		: stmt_list
