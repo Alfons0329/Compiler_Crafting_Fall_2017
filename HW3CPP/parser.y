@@ -210,7 +210,7 @@ param		: id_list MK_COLON type
 						array_dimension_parser();
                         array_type_str=$3;
                         array_type_str+=reverse_arr_buf;
-						inserting_symbol_table(id_list_buf,"parameter",reverse_arr_buf,funct_attri_buf);
+						inserting_symbol_table(id_list_buf,"parameter",array_type_str,funct_attri_buf);
 					}
 				}
 				else
@@ -245,22 +245,22 @@ type		: scalar_type {$$=$1;} /*type transmittion*/
 
 scalar_type	: INTEGER
 			{
-                char* synth = (char* )"integer";
+                char* synth = (char* )"integer";//suppose this is not implemented, IOS CONVERSION ERROR WILL BE THROWN
                 $$=synth;
 			}
 			| REAL
 			{
-                char* synth = (char* )"real";
+                char* synth = (char* )"real";//suppose this is not implemented, IOS CONVERSION ERROR WILL BE THROWN
                 $$=synth;
 			}
 			| BOOLEAN
 			{
-                char* synth = (char* )"boolean";
+                char* synth = (char* )"boolean";//suppose this is not implemented, IOS CONVERSION ERROR WILL BE THROWN
                 $$=synth;
 			}
 			| STRING
 			{
-                char* synth = (char* )"string";
+                char* synth = (char* )"string";//suppose this is not implemented, IOS CONVERSION ERROR WILL BE THROWN
                 $$=synth;
 			}
 			;

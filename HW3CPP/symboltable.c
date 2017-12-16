@@ -88,7 +88,7 @@ void dumpsymbol()
         printf("%-33s",mysymbol_table[scope_depth][i].name.c_str()); //safety first
         printf("%-11s",mysymbol_table[scope_depth][i].kind.c_str());
         printf("%-11s",mysymbol_table[scope_depth][i].level_str.c_str());
-        printf("%-11s",mysymbol_table[scope_depth][i].type.c_str());
+        printf("%-17s",mysymbol_table[scope_depth][i].type.c_str());
         for(unsigned int j=0;j<mysymbol_table[scope_depth][i].funct_attri.size();j++)
         {
             cout<<mysymbol_table[scope_depth][i].funct_attri[j];

@@ -900,7 +900,7 @@ case 38:
 						array_dimension_parser();
                         array_type_str=yystack.l_mark[0].parsed_string;
                         array_type_str+=reverse_arr_buf;
-						inserting_symbol_table(id_list_buf,"parameter",reverse_arr_buf,funct_attri_buf);
+						inserting_symbol_table(id_list_buf,"parameter",array_type_str,funct_attri_buf);
 					}
 				}
 				else
@@ -941,28 +941,28 @@ break;
 case 45:
 #line 247 "parser.y"
 	{
-                char* synth = (char* )"integer";
+                char* synth = (char* )"integer";/*suppose this is not implemented, IOS CONVERSION ERROR WILL BE THROWN*/
                 yyval.parsed_string=synth;
 			}
 break;
 case 46:
 #line 252 "parser.y"
 	{
-                char* synth = (char* )"real";
+                char* synth = (char* )"real";/*suppose this is not implemented, IOS CONVERSION ERROR WILL BE THROWN*/
                 yyval.parsed_string=synth;
 			}
 break;
 case 47:
 #line 257 "parser.y"
 	{
-                char* synth = (char* )"boolean";
+                char* synth = (char* )"boolean";/*suppose this is not implemented, IOS CONVERSION ERROR WILL BE THROWN*/
                 yyval.parsed_string=synth;
 			}
 break;
 case 48:
 #line 262 "parser.y"
 	{
-                char* synth = (char* )"string";
+                char* synth = (char* )"string";/*suppose this is not implemented, IOS CONVERSION ERROR WILL BE THROWN*/
                 yyval.parsed_string=synth;
 			}
 break;
