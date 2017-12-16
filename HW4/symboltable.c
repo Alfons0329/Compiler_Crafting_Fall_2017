@@ -418,7 +418,6 @@ void allsymbol_table_error_detection()
             if((allsymbol_table[scope_depth][i].name==allsymbol_table[scope_depth][j].name)
             &&(allsymbol_table[scope_depth][j].kind!="parameter")&&((allsymbol_table[scope_depth][i].kind!="parameter")))
             {
-                cout<<"Find same name!! "<<allsymbol_table[scope_depth][i].name<<endl;
                 allsymbol_table[scope_depth].erase(allsymbol_table[scope_depth].begin()+j);
             }
         }
