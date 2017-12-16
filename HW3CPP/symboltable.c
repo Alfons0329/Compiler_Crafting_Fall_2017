@@ -132,9 +132,9 @@ int error_detection() //no hashing, just naive solution
     {
         for(unsigned int i=0;i<redeclared_var.size();i++)
         {
-            error_msg=": symbol ";
+            error_msg=": symbol '";
             error_msg+=redeclared_var[i];
-            error_msg+=" is redeclared";
+            error_msg+="' is redeclared";
             cout<<"<Error> found in Line "<<linenum<<error_msg<<endl;
             error_msg.clear();
         }
@@ -161,9 +161,9 @@ int error_detection() //no hashing, just naive solution
     {
         for(unsigned int i=0;i<redeclared_var.size();i++)
         {
-            error_msg=": symbol ";
+            error_msg=": symbol '";
             error_msg+=redeclared_var[i];
-            error_msg+=" is redeclared";
+            error_msg+="' is redeclared";
             cout<<"<Error> found in Line "<<linenum<<error_msg<<endl;
             error_msg.clear();
         }
@@ -190,9 +190,9 @@ int error_detection() //no hashing, just naive solution
     {
         for(unsigned int i=0;i<redeclared_var.size();i++)
         {
-            error_msg=": symbol ";
+            error_msg=": symbol '";
             error_msg+=redeclared_var[i];
-            error_msg+=" is redeclared";
+            error_msg+="' is redeclared";
             cout<<"<Error> found in Line "<<linenum<<error_msg<<endl;
             error_msg.clear();
         }
