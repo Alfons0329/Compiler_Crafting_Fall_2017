@@ -41,6 +41,7 @@ void inserting_symbol_table(vector<string> id_list_buf, string kind_in, string t
         {
             scope_depth_str+="(global)";
         }
+        one_subentry.level_str = scope_depth_str;
         if(funct_attri_buf.size())
         {
             one_subentry.funct_attri = funct_attri_buf;
@@ -77,6 +78,7 @@ void dumpsymbol()
     {
         printf("-");
     }
+    printf("\n");
     for(unsigned int i=0;i<mysymbol_table[scope_depth].size();i++)
     {
         if(mysymbol_table[scope_depth][i].name[0]==0)
@@ -99,13 +101,14 @@ void dumpsymbol()
 }
 int error_detection() //no hashing, just naive solution
 {
+    cout<<"Current scope depth "<<scope_depth<<endl;
     //iterator-iterator checking------------------------------------------------------------------------------------//
     vector<string> redeclared_var;
     string error_msg;
     bool is_error=0, is_final_error=0;
     for(unsigned int i=0;i<myiter_table.size();i++)
     {
-        for(unsigned int j=0;j<myiter_table.size();j++)
+        for(unsigned int j=i+1;j<myiter_table.size();j++)
         {
             if((myiter_table[i].iter_name==myiter_table[j].iter_name)&&(myiter_table[j].iter_level>myiter_table[i].iter_level))
             {
@@ -122,7 +125,7 @@ int error_detection() //no hashing, just naive solution
             error_msg=" symbol ";
             error_msg+=redeclared_var[i];
             error_msg+=" is redeclared";
-            cout<<"<Error> found in Line "<<linenum<<error_msg<<endl;
+            cout<<"<Error1> found in Line "<<linenum<<error_msg<<endl;
             error_msg.clear();
         }
     }
@@ -133,7 +136,7 @@ int error_detection() //no hashing, just naive solution
     {
         if(mysymbol_table[scope_depth][i].name[0]==0)
             continue;
-        for(unsigned int j=0;j<myiter_table.size();j++)
+        for(unsigned int j=i+1;j<myiter_table.size();j++)
         {
             if((myiter_table[i].iter_name==myiter_table[j].iter_name)&&(myiter_table[j].iter_level>myiter_table[i].iter_level))
             {
@@ -151,7 +154,7 @@ int error_detection() //no hashing, just naive solution
             error_msg=" symbol ";
             error_msg+=redeclared_var[i];
             error_msg+=" is redeclared";
-            cout<<"<Error> found in Line "<<linenum<<error_msg<<endl;
+            cout<<"<Error2> found in Line "<<linenum<<error_msg<<endl;
             error_msg.clear();
         }
     }
@@ -160,7 +163,7 @@ int error_detection() //no hashing, just naive solution
     is_error=0;
     for(unsigned int i=0;i<mysymbol_table[scope_depth].size();i++)
     {
-        for(unsigned int j=0;j<mysymbol_table[scope_depth].size();j++)
+        for(unsigned int j=i+1;j<mysymbol_table[scope_depth].size();j++)
         {
             if(mysymbol_table[scope_depth][i].name==mysymbol_table[scope_depth][j].name)
             {
@@ -178,7 +181,7 @@ int error_detection() //no hashing, just naive solution
             error_msg=" symbol ";
             error_msg+=redeclared_var[i];
             error_msg+=" is redeclared";
-            cout<<"<Error> found in Line "<<linenum<<error_msg<<endl;
+            cout<<"<Error3> found in Line "<<linenum<<error_msg<<endl;
             error_msg.clear();
         }
     }

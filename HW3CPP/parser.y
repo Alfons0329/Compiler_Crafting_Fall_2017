@@ -77,6 +77,7 @@ decl		: VAR id_list MK_COLON scalar_type/* scalar type declaration */
 				inserting_symbol_table(id_list_buf,"variable",$4,funct_attri_buf);
 				id_list_buf.clear();
 				error_detection();
+                dumpsymbol();
 			}
 			MK_SEMICOLON
 			| VAR id_list MK_COLON array_type MK_SEMICOLON   /* array type declaration */
@@ -160,7 +161,15 @@ func_decl	: 	ID
 								funct_attri_buf.pb(mysymbol_table[1][i].type+",");
 							}
 						}
-						inserting_symbol_table(id_list_buf,"function",$7,funct_attri_buf);
+                        if($7==NULL) //prevent logic null string error
+                        {
+                            inserting_symbol_table(id_list_buf,"function","void",funct_attri_buf);
+                        }
+                        else
+                        {
+                            inserting_symbol_table(id_list_buf,"function",$7,funct_attri_buf);
+                        }
+
 					}
 					is_arr=0;
 				}
@@ -208,17 +217,11 @@ param		: id_list MK_COLON type
 
 id_list		: id_list MK_COMMA ID /*one ID for one sub_entry*/
 			{
-				/* tmpstr.clear(); */
-				/* strcpy(tmpstr,yytext); */
 				id_list_buf.pb(yytext);
-				/* $$=yytext; */
 			}
 			| ID
 			{
-				/* tmpstr.clear(); */
-				/* strcpy(tmpstr,yytext); */
 				id_list_buf.pb(yytext);
-				/* $$=yytext; */
 			}
 			;
 
@@ -232,19 +235,23 @@ type		: scalar_type {$$=$1;} /*type transmittion*/
 
 scalar_type	: INTEGER
 			{
-				$$="integer ";
+                char* synth = (char* )"integer";
+                $$=synth;
 			}
 			| REAL
 			{
-				$$="real ";
+                char* synth = (char* )"real ";
+                $$=synth;
 			}
 			| BOOLEAN
 			{
-				$$="boolean ";
+                char* synth = (char* )"boolean ";
+                $$=synth;
 			}
 			| STRING
 			{
-				$$="string ";
+                char* synth = (char* )"string ";
+                $$=synth;
 			}
 			;
 

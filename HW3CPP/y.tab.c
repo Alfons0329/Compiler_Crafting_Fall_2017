@@ -505,7 +505,7 @@ typedef struct {
 } YYSTACKDATA;
 /* variables for the parser stack */
 static YYSTACKDATA yystack;
-#line 419 "parser.y"
+#line 432 "parser.y"
 
 int yyerror(const char *msg )
 {
@@ -748,10 +748,11 @@ case 9:
 				inserting_symbol_table(id_list_buf,"variable",yystack.l_mark[0].parsed_string,funct_attri_buf);
 				id_list_buf.clear();
 				error_detection();
+                dumpsymbol();
 			}
 break;
 case 11:
-#line 83 "parser.y"
+#line 84 "parser.y"
 	{
 				funct_attri_buf.resize(0); /*normal variable does not have attribute, so just let the size be zero*/
 				array_dimension_parser();
@@ -763,7 +764,7 @@ case 11:
 			}
 break;
 case 12:
-#line 93 "parser.y"
+#line 94 "parser.y"
 	{
 				funct_attri_buf.pb(const_buf); /*normal variable does not have attribute, so just let the size be zero*/
 				inserting_symbol_table(id_list_buf,"constant",const_type_str,funct_attri_buf);
@@ -772,51 +773,51 @@ case 12:
 			}
 break;
 case 14:
-#line 102 "parser.y"
+#line 103 "parser.y"
 	{yyval.parsed_string=yytext; const_type=1;}
 break;
 case 15:
-#line 103 "parser.y"
+#line 104 "parser.y"
 	{yyval.parsed_string=yytext; const_type=9;}
 break;
 case 16:
-#line 106 "parser.y"
+#line 107 "parser.y"
 	{yyval.parsed_string=yytext; const_type=(const_type==1)?1:9; const_type_str="integer ";parse_constant();}
 break;
 case 17:
-#line 107 "parser.y"
+#line 108 "parser.y"
 	{yyval.parsed_string=yytext; const_type=(const_type==1)?2:10; const_type_str="integer ";parse_constant();}
 break;
 case 18:
-#line 108 "parser.y"
+#line 109 "parser.y"
 	{yyval.parsed_string=yytext; const_type=3; const_type_str="real ";parse_constant();}
 break;
 case 19:
-#line 109 "parser.y"
+#line 110 "parser.y"
 	{yyval.parsed_string=yytext; const_type=4; const_type_str="real ";parse_constant();}
 break;
 case 20:
-#line 110 "parser.y"
+#line 111 "parser.y"
 	{yyval.parsed_string=yytext; const_type=5; const_type_str="real ";parse_constant();}
 break;
 case 21:
-#line 111 "parser.y"
+#line 112 "parser.y"
 	{yyval.parsed_string=yytext; const_type=6; const_type_str="real ";parse_constant();}
 break;
 case 22:
-#line 112 "parser.y"
+#line 113 "parser.y"
 	{yyval.parsed_string=yytext; const_type=7; const_type_str="string ";parse_constant();}
 break;
 case 23:
-#line 113 "parser.y"
-	{yyval.parsed_string=yytext; const_type=8; const_type_str="boolean ";parse_constant();}
-break;
-case 24:
 #line 114 "parser.y"
 	{yyval.parsed_string=yytext; const_type=8; const_type_str="boolean ";parse_constant();}
 break;
+case 24:
+#line 115 "parser.y"
+	{yyval.parsed_string=yytext; const_type=8; const_type_str="boolean ";parse_constant();}
+break;
 case 29:
-#line 126 "parser.y"
+#line 127 "parser.y"
 	{
 					id_list_buf.pb(yytext);
                     error_detection();
@@ -824,14 +825,14 @@ case 29:
 				}
 break;
 case 30:
-#line 132 "parser.y"
+#line 133 "parser.y"
 	{
 					is_funct=1;
 					scope_depth--;
 				}
 break;
 case 31:
-#line 137 "parser.y"
+#line 138 "parser.y"
 	{
 					if(is_arr)
 					{
@@ -858,19 +859,27 @@ case 31:
 								funct_attri_buf.pb(mysymbol_table[1][i].type+",");
 							}
 						}
-						inserting_symbol_table(id_list_buf,"function",yystack.l_mark[-1].parsed_string,funct_attri_buf);
+                        if(yystack.l_mark[-1].parsed_string==NULL) /*prevent logic null string error*/
+                        {
+                            inserting_symbol_table(id_list_buf,"function","void",funct_attri_buf);
+                        }
+                        else
+                        {
+                            inserting_symbol_table(id_list_buf,"function",yystack.l_mark[-1].parsed_string,funct_attri_buf);
+                        }
+
 					}
 					is_arr=0;
 				}
 break;
 case 32:
-#line 169 "parser.y"
+#line 178 "parser.y"
 	{
 					is_funct=0;
 				}
 break;
 case 38:
-#line 184 "parser.y"
+#line 193 "parser.y"
 	{
 				funct_attri_buf.resize(0);
 				if(is_arr)
@@ -896,7 +905,7 @@ case 38:
 			}
 break;
 case 39:
-#line 210 "parser.y"
+#line 219 "parser.y"
 	{
 				/* tmpstr.clear(); */
 				/* strcpy(tmpstr,yytext); */
@@ -905,7 +914,7 @@ case 39:
 			}
 break;
 case 40:
-#line 217 "parser.y"
+#line 226 "parser.y"
 	{
 				/* tmpstr.clear(); */
 				/* strcpy(tmpstr,yytext); */
@@ -914,49 +923,53 @@ case 40:
 			}
 break;
 case 41:
-#line 225 "parser.y"
+#line 234 "parser.y"
 	{yyval.parsed_string=yystack.l_mark[0].parsed_string;}
 break;
 case 43:
-#line 229 "parser.y"
+#line 238 "parser.y"
 	{yyval.parsed_string=yystack.l_mark[0].parsed_string;}
 break;
 case 44:
-#line 230 "parser.y"
+#line 239 "parser.y"
 	{yyval.parsed_string=yystack.l_mark[0].parsed_string;}
 break;
 case 45:
-#line 234 "parser.y"
+#line 243 "parser.y"
 	{
-				yyval.parsed_string="integer ";
+                char* synth = (char* )"integer";
+                yyval.parsed_string=synth;
 			}
 break;
 case 46:
-#line 238 "parser.y"
+#line 248 "parser.y"
 	{
-				yyval.parsed_string="real ";
+                char* synth = (char* )"real ";
+                yyval.parsed_string=synth;
 			}
 break;
 case 47:
-#line 242 "parser.y"
+#line 253 "parser.y"
 	{
-				yyval.parsed_string="boolean ";
+                char* synth = (char* )"boolean ";
+                yyval.parsed_string=synth;
 			}
 break;
 case 48:
-#line 246 "parser.y"
+#line 258 "parser.y"
 	{
-				yyval.parsed_string="string ";
+                char* synth = (char* )"string ";
+                yyval.parsed_string=synth;
 			}
 break;
 case 49:
-#line 252 "parser.y"
+#line 265 "parser.y"
 	{
 				is_arr=1;
 			}
 break;
 case 50:
-#line 256 "parser.y"
+#line 269 "parser.y"
 	{
 				int delta=atol(yystack.l_mark[-2].parsed_string)-atol(yystack.l_mark[-4].parsed_string)+1;
 				char tmp[10];
@@ -966,7 +979,7 @@ case 50:
 			}
 break;
 case 58:
-#line 275 "parser.y"
+#line 288 "parser.y"
 	{
 					if(scope_depth==0&&is_funct)
 					{
@@ -979,7 +992,7 @@ case 58:
 				}
 break;
 case 59:
-#line 287 "parser.y"
+#line 300 "parser.y"
 	{
 					/*printf("23->");}*/
 					/*printf("compound_stmt end\n");*/
@@ -997,7 +1010,7 @@ case 59:
 				}
 break;
 case 72:
-#line 336 "parser.y"
+#line 349 "parser.y"
 	{
 					inserting_iter_table(yytext,scope_depth+1);
 					error_detection();
@@ -1006,12 +1019,12 @@ case 72:
 				}
 break;
 case 73:
-#line 345 "parser.y"
+#line 358 "parser.y"
 	{
 					is_loop=0;
 				}
 break;
-#line 1015 "y.tab.c"
+#line 1028 "y.tab.c"
     }
     yystack.s_mark -= yym;
     yystate = *yystack.s_mark;
