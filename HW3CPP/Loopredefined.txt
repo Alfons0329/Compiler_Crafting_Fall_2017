@@ -10,13 +10,13 @@
 10: /* local var of for loop redeclaration */
 11:     for i:=1 to 10 do
 12:     begin
-<Error2> found in Line 13: symbol i is redeclared
+<Error> found in Line 13: symbol 'i' is redeclared
 13:         var i: string;          // error
 14:         for ii:=1 to 10 do
 15:         begin
 16:             for iii:=1 to 10 do
 17:             begin
-<Error1> found in Line 18: symbol i is redeclared
+<Error> found in Line 18: symbol 'i' is redeclared
 18:                 for i:=1 to 10 do   //error
 19:                 begin
 20:                 end
@@ -31,20 +31,19 @@
 29: /* Nested for redeclaration*/
 30:     for i:=1 to 10 do
 31:     begin
-<Error2> found in Line 32: symbol i is redeclared
+<Error> found in Line 32: symbol 'i' is redeclared
 32:         var i: 12 ;    // error
 33:         var a : "100";
-<Error1> found in Line 34: symbol i is redeclared
+<Error> found in Line 34: symbol 'i' is redeclared
 34:         for i:=1 to 10 do    // error
 35:         begin
-<Error1> found in Line 36: symbol i is redeclared
-<Error1> found in Line 36: symbol i is redeclared
-<Error1> found in Line 36: symbol i is redeclared
+<Error> found in Line 36: symbol 'i' is redeclared
 36:             for i:=1 to 10 do //error
 37:             end do
 38:         end
 39:         end do
 40:         begin
+<Error> found in Line 41: symbol 'i' is redeclared
 41:             var i:real;     // error
 42:         end
 43:     end
@@ -54,19 +53,17 @@
 47:     for ii:=1 to 10 do
 48:     begin
 49:         var i: string;
-<Error2> found in Line 50: symbol ii is redeclared
+<Error> found in Line 50: symbol 'ii' is redeclared
 50:         var ii : false; // error
-<Error3> found in Line 51: symbol i is redeclared
+<Error> found in Line 51: symbol 'i' is redeclared
 51:         var i : false; // error
 52:         for i:=1 to 10 do
 53:         begin
 54:             begin
-<Error1> found in Line 55: symbol i is redeclared
+<Error> found in Line 55: symbol 'i' is redeclared
 55:             for i:=1 to 10 do       //error
 56:             begin
-<Error1> found in Line 57: symbol i is redeclared
-<Error1> found in Line 57: symbol i is redeclared
-<Error1> found in Line 57: symbol i is redeclared
+<Error> found in Line 57: symbol 'i' is redeclared
 57:                 for i:=1 to 10 do   //error
 58:                 begin
 59:                 end

@@ -23,7 +23,6 @@ string const_buf;
 string const_type_str;
 string funct_name;
 string array_type_str;
-string final_array;
 vector<string> id_list_buf; //
 vector<string> funct_attri_buf;
 %}
@@ -301,16 +300,16 @@ compound_stmt	: BEG
 			  	opt_decl_list
 			  	opt_stmt_list
 				{
-					if(is_funct&&scope_depth>1) //prevernt double popping
+					/*if(is_funct&&scope_depth>1) //prevernt double popping
 					{
 						dumpsymbol();
 						pop_symbol_table();
 					}
-					else if(!is_loop)/*if(!is_funct) *///normal like
+					else if(!is_loop)///normal like
 					{
-						dumpsymbol();
-						pop_symbol_table();
-					}
+					}*/
+                    dumpsymbol();
+                    pop_symbol_table();
 				}
 			  	END
 			;
@@ -348,7 +347,6 @@ for_stmt	: 	FOR ID
 				{
 					inserting_iter_table(yytext,scope_depth+1);
 					error_detection();
-					//dumpiterator();
 					is_loop=1;
 				}
  			  	OP_ASSIGN int_const TO int_const DO

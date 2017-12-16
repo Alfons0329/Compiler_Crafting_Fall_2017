@@ -93,8 +93,8 @@ func2                            function   0(global)  string [10][19]  boolean
 funca                            function   0(global)  boolean          integer, integer, string
 func3                            function   0(global)  void             
 func5                            function   0(global)  integer          
-func6                            function   0(global)  void             real [1][1],integer [1001]
+func6                            function   0(global)  void             real [1][1], integer [1001]
 func8                            function   0(global)  void             integer, boolean, string, real, integer
-func9                            function   0(global)  boolean          string, string, string, real [1][2],real [1][2],real [1][2],real [1][2]
+func9                            function   0(global)  boolean          string, string, string, real [1][2], real [1][2], real [1][2], real [1][2]
 --------------------------------------------------------------------------------------------------------------
 38: end Function

@@ -6,7 +6,7 @@ int is_arr;
 int is_funct;
 int is_loop;
 int const_type;
-vector<vector <sub_entry> > mysymbol_table;
+vector <vector <sub_entry> > mysymbol_table;
 vector <loop_iterator> myiter_table;
 void symbol_table_init()
 {
@@ -60,7 +60,15 @@ void pop_symbol_table()
 {
     mysymbol_table[scope_depth].clear();//pop the table at that table, easliy pop
     scope_depth=(scope_depth==0)?0:scope_depth-1; //shirnk the level
-    myiter_table.clear(); //clean the iterator table
+    // myiter_table.clear(); //clean the iterator table NO DONT DO THIS! SHOULD BE CLEAN THE ITERATOR OF CURRENT DEPTH RATHER THAN all
+    cout<<"POP symboltable scope_depth "<<scope_depth<<endl;
+    for(unsigned int i=0;i<myiter_table.size();i++)
+    {
+        if(myiter_table[i].iter_level == scope_depth+1)
+        {
+            myiter_table.erase(myiter_table.begin()+i);
+        }
+    }
 }
 void dumpsymbol()
 {
@@ -106,20 +114,19 @@ void dumpsymbol()
 int error_detection() //no hashing, just naive solution
 {
     //iterator-iterator checking------------------------------------------------------------------------------------//
-    // dumpiterator();
+    dumpiterator();
+    dumpsymbol();
     vector<string> redeclared_var;
     string error_msg;
     bool is_error=0, is_final_error=0;
     for(unsigned int i=0;i<myiter_table.size();i++)
     {
-        for(unsigned int j=i+1;j<myiter_table.size();j++)
+        if((myiter_table[i].iter_name==myiter_table.back().iter_name)&&(myiter_table.back().iter_level>myiter_table[i].iter_level))
         {
-            if((myiter_table[i].iter_name==myiter_table[j].iter_name)&&(myiter_table[j].iter_level>myiter_table[i].iter_level))
-            {
-                redeclared_var.pb(myiter_table[i].iter_name);
-                is_error=1;
-                is_final_error=1;
-            }
+            redeclared_var.pb(myiter_table[i].iter_name);
+            is_error=1;
+            is_final_error=1;
+            break;
         }
     }
     if(is_error)
@@ -129,7 +136,7 @@ int error_detection() //no hashing, just naive solution
             error_msg=": symbol ";
             error_msg+=redeclared_var[i];
             error_msg+=" is redeclared";
-            cout<<"<Error> found in Line "<<linenum<<error_msg<<endl;
+            cout<<"<Error1> found in Line "<<linenum<<error_msg<<endl;
             error_msg.clear();
         }
     }
@@ -158,7 +165,7 @@ int error_detection() //no hashing, just naive solution
             error_msg=": symbol ";
             error_msg+=redeclared_var[i];
             error_msg+=" is redeclared";
-            cout<<"<Error> found in Line "<<linenum<<error_msg<<endl;
+            cout<<"<Error2> found in Line "<<linenum<<error_msg<<endl;
             error_msg.clear();
         }
     }
@@ -185,7 +192,7 @@ int error_detection() //no hashing, just naive solution
             error_msg=": symbol ";
             error_msg+=redeclared_var[i];
             error_msg+=" is redeclared";
-            cout<<"<Error> found in Line "<<linenum<<error_msg<<endl;
+            cout<<"<Error3> found in Line "<<linenum<<error_msg<<endl;
             error_msg.clear();
         }
     }
@@ -326,5 +333,5 @@ void dumpiterator()
             break;
         cout<<myiter_table[i].iter_name<<" and level "<<myiter_table[i].iter_level<<endl;
     }
-    printf("---------ITERATOR TABLE --------\n");
+    printf("---------ITERATOR ENDDD --------\n");
 }

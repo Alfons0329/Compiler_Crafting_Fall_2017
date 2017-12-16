@@ -98,7 +98,7 @@ ttt                              variable   0(global)  real [2][6][5]
 fff                              constant   0(global)  integer          123
 ggg                              constant   0(global)  boolean          true
 hhh                              constant   0(global)  string           "hello\n"
-iii                              constant   0(global)  real             2.860000
+iii                              constant   0(global)  real             2.86
 f                                variable   0(global)  integer [5][5]   
 ee                               variable   0(global)  boolean [10]     
 ff                               variable   0(global)  boolean [5][5]   
@@ -106,7 +106,7 @@ rr                               variable   0(global)  real [3][3]
 g                                constant   0(global)  integer          10
 h                                constant   0(global)  string           "bye~"
 i                                constant   0(global)  boolean          true
-k                                constant   0(global)  real             2.560000
+k                                constant   0(global)  real             2.56
 fun                              function   0(global)  void             
 fun2                             function   0(global)  void             integer, integer
 fun4                             function   0(global)  boolean          boolean, boolean, boolean
