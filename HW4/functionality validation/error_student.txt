@@ -9,7 +9,6 @@ Error detection current scope depth 0
 5: begin
 Error detection current scope depth 1
 <Error> found in Line 6: symbol 'p1' is redeclared
-Find same name!! p1
 6:     var p1:boolean;  // error redeclare
 ==============================================================================================================
 Name                             Kind       Level      Type             Attribute  
@@ -26,6 +25,7 @@ error                            program    0(global)  void
 func1                            function   0(global)  real [10]        string, integer [2]
 p1                               parameter  1(local)   string           
 p2                               parameter  1(local)   integer [2]      
+p1                               variable   1(local)   boolean          
 --------------------------------------------------------------------------------------------------------------
 7: end
 8: end func1
@@ -35,14 +35,12 @@ Error detection current scope depth 1
 11:     var a:integer;
 Error detection current scope depth 1
 <Error> found in Line 12: symbol 'a' is redeclared
-Find same name!! a
 12:     var a:boolean;   // error redeclare
 13: 
 Error detection current scope depth 1
 14:     var bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb : boolean;
 Error detection current scope depth 1
 <Error> found in Line 15: symbol 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb' is redeclared
-Find same name!! bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 15:     var bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbExtraCharIsUseless:string;
 16: 
 17:     begin
@@ -62,6 +60,7 @@ error                            program    0(global)  void
 func1                            function   0(global)  real [10]        string, integer [2]
 p1                               parameter  1(local)   string           
 p2                               parameter  1(local)   integer [2]      
+p1                               variable   1(local)   boolean          
 a                                variable   1(local)   integer          
 bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb variable   1(local)   boolean          
 a                                variable   2(local)   string           
@@ -92,6 +91,7 @@ error                            program    0(global)  void
 func1                            function   0(global)  real [10]        string, integer [2]
 p1                               parameter  1(local)   string           
 p2                               parameter  1(local)   integer [2]      
+p1                               variable   1(local)   boolean          
 a                                variable   1(local)   integer          
 bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb variable   1(local)   boolean          
 a                                variable   2(local)   string           
@@ -115,6 +115,7 @@ error                            program    0(global)  void
 func1                            function   0(global)  real [10]        string, integer [2]
 p1                               parameter  1(local)   string           
 p2                               parameter  1(local)   integer [2]      
+p1                               variable   1(local)   boolean          
 a                                variable   1(local)   integer          
 bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb variable   1(local)   boolean          
 a                                variable   2(local)   string           
@@ -138,6 +139,7 @@ error                            program    0(global)  void
 func1                            function   0(global)  real [10]        string, integer [2]
 p1                               parameter  1(local)   string           
 p2                               parameter  1(local)   integer [2]      
+p1                               variable   1(local)   boolean          
 a                                variable   1(local)   integer          
 bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb variable   1(local)   boolean          
 a                                variable   2(local)   string           

@@ -7,7 +7,6 @@ Error detection current scope depth 0
 5: var a,b,c : integer;
 Error detection current scope depth 0
 <Error> found in Line 6: symbol 'c' is redeclared
-Find same name!! c
 6: var c : boolean;
 Error detection current scope depth 0
 7: var d : string;
@@ -153,7 +152,6 @@ a                                parameter  1(local)   boolean [10]
 37: //&D-
 38: begin
 Error detection current scope depth 1
-Find same name!! a
 39:     var noDump: string;
 40: end
 41: //&D+
@@ -209,6 +207,7 @@ fun3                             function   0(global)  real [10]        boolean 
 a                                parameter  1(local)   integer          
 b                                parameter  1(local)   integer          
 c                                parameter  1(local)   string           
+a                                parameter  1(local)   boolean [10]     
 noDump                           variable   1(local)   string           
 --------------------------------------------------------------------------------------------------------------
 42: end basic

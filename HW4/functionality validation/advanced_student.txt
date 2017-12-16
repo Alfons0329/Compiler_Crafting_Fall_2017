@@ -229,7 +229,6 @@ Error detection current scope depth 1
 55:     for it:=10 to 111 do
 56:     begin
 Error detection current scope depth 2
-Find same name!! a
 57:         var a : string;
 58:         begin
 Error detection current scope depth 3

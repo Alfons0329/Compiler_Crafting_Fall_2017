@@ -42,7 +42,6 @@ Error detection current scope depth 1
 31:     begin
 Error detection current scope depth 2
 <Error> found in Line 32: symbol 'i' is redeclared
-Find same name!! i
 32:         var i: 12 ;    // error
 Error detection current scope depth 2
 33:         var a : "100";
@@ -69,14 +68,12 @@ Error detection current scope depth 1
 47:     for ii:=1 to 10 do
 48:     begin
 Error detection current scope depth 2
-Find same name!! i
 49:         var i: string;
 Error detection current scope depth 2
 <Error> found in Line 50: symbol 'ii' is redeclared
 50:         var ii : false; // error
 Error detection current scope depth 2
 <Error> found in Line 51: symbol 'i' is redeclared
-Find same name!! i
 51:         var i : false; // error
 Error detection current scope depth 2
 52:         for i:=1 to 10 do

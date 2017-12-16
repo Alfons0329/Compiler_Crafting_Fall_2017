@@ -101,7 +101,6 @@ z                                parameter  1(local)   string
 22: end func5
 Error detection current scope depth 1
 Error detection current scope depth 1
-Find same name!! x
 Error detection current scope depth 0
 23: func6(x:array 1 to 1 of array 1 to 1 of real;y:array 999 to 1999 of integer);
 24: begin
@@ -126,20 +125,16 @@ a                                parameter  1(local)   boolean
 x                                parameter  1(local)   integer          
 y                                parameter  1(local)   integer          
 z                                parameter  1(local)   string           
+x                                parameter  1(local)   real [1][1]      
 y                                parameter  1(local)   integer [1001]   
 --------------------------------------------------------------------------------------------------------------
 25: end
 26: end func6
 Error detection current scope depth 1
-Find same name!! y
 Error detection current scope depth 1
-Find same name!! x
 Error detection current scope depth 1
-Find same name!! y
 Error detection current scope depth 1
-Find same name!! z
 Error detection current scope depth 1
-Find same name!! a
 Error detection current scope depth 0
 27: func8(x:integer;y:boolean;z:string;a:real;b:integer);
 28: begin
@@ -168,15 +163,18 @@ a                                parameter  1(local)   boolean
 x                                parameter  1(local)   integer          
 y                                parameter  1(local)   integer          
 z                                parameter  1(local)   string           
+x                                parameter  1(local)   real [1][1]      
+y                                parameter  1(local)   integer [1001]   
+x                                parameter  1(local)   integer          
+y                                parameter  1(local)   boolean          
+z                                parameter  1(local)   string           
+a                                parameter  1(local)   real             
 b                                parameter  1(local)   integer          
 --------------------------------------------------------------------------------------------------------------
 29: end
 30: end func8
 Error detection current scope depth 1
 Error detection current scope depth 1
-Find same name!! x
-Find same name!! y
-Find same name!! z
 Error detection current scope depth 0
 31: func9(x,y,z:string; a,b,c,d:array 999 to 999 of array 1 to 2 of real) : boolean;
 32: begin
@@ -208,7 +206,16 @@ a                                parameter  1(local)   boolean
 x                                parameter  1(local)   integer          
 y                                parameter  1(local)   integer          
 z                                parameter  1(local)   string           
+x                                parameter  1(local)   real [1][1]      
+y                                parameter  1(local)   integer [1001]   
+x                                parameter  1(local)   integer          
+y                                parameter  1(local)   boolean          
+z                                parameter  1(local)   string           
+a                                parameter  1(local)   real             
 b                                parameter  1(local)   integer          
+x                                parameter  1(local)   string           
+y                                parameter  1(local)   string           
+z                                parameter  1(local)   string           
 a                                parameter  1(local)   real [1][2]      
 b                                parameter  1(local)   real [1][2]      
 c                                parameter  1(local)   real [1][2]      
@@ -239,7 +246,16 @@ a                                parameter  1(local)   boolean
 x                                parameter  1(local)   integer          
 y                                parameter  1(local)   integer          
 z                                parameter  1(local)   string           
+x                                parameter  1(local)   real [1][1]      
+y                                parameter  1(local)   integer [1001]   
+x                                parameter  1(local)   integer          
+y                                parameter  1(local)   boolean          
+z                                parameter  1(local)   string           
+a                                parameter  1(local)   real             
 b                                parameter  1(local)   integer          
+x                                parameter  1(local)   string           
+y                                parameter  1(local)   string           
+z                                parameter  1(local)   string           
 a                                parameter  1(local)   real [1][2]      
 b                                parameter  1(local)   real [1][2]      
 c                                parameter  1(local)   real [1][2]      
@@ -277,7 +293,16 @@ a                                parameter  1(local)   boolean
 x                                parameter  1(local)   integer          
 y                                parameter  1(local)   integer          
 z                                parameter  1(local)   string           
+x                                parameter  1(local)   real [1][1]      
+y                                parameter  1(local)   integer [1001]   
+x                                parameter  1(local)   integer          
+y                                parameter  1(local)   boolean          
+z                                parameter  1(local)   string           
+a                                parameter  1(local)   real             
 b                                parameter  1(local)   integer          
+x                                parameter  1(local)   string           
+y                                parameter  1(local)   string           
+z                                parameter  1(local)   string           
 a                                parameter  1(local)   real [1][2]      
 b                                parameter  1(local)   real [1][2]      
 c                                parameter  1(local)   real [1][2]      

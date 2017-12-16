@@ -185,13 +185,8 @@ c                                parameter  1(local)   boolean
 52: // main program
 53: begin
 Error detection current scope depth 1
-Find same name!! a
-Find same name!! a
-Find same name!! b
-Find same name!! b
 54: var a,b : integer;
 Error detection current scope depth 1
-Find same name!! c
 55: var c : boolean;
 Error detection current scope depth 1
 56: var d : string;
@@ -239,7 +234,12 @@ fun2                             function   0(global)  void             integer,
 fun4                             function   0(global)  boolean          boolean, boolean, boolean
 a                                parameter  1(local)   integer          
 b                                parameter  1(local)   integer          
+a                                parameter  1(local)   boolean          
+b                                parameter  1(local)   boolean          
 c                                parameter  1(local)   boolean          
+a                                variable   1(local)   integer          
+b                                variable   1(local)   integer          
+c                                variable   1(local)   boolean          
 d                                variable   1(local)   string           
 r                                variable   1(local)   real             
 e                                variable   1(local)   integer [10]     
@@ -304,7 +304,12 @@ fun2                             function   0(global)  void             integer,
 fun4                             function   0(global)  boolean          boolean, boolean, boolean
 a                                parameter  1(local)   integer          
 b                                parameter  1(local)   integer          
+a                                parameter  1(local)   boolean          
+b                                parameter  1(local)   boolean          
 c                                parameter  1(local)   boolean          
+a                                variable   1(local)   integer          
+b                                variable   1(local)   integer          
+c                                variable   1(local)   boolean          
 d                                variable   1(local)   string           
 r                                variable   1(local)   real             
 e                                variable   1(local)   integer [10]     

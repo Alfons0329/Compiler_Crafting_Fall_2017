@@ -58,7 +58,6 @@ d                                variable   2(local)   real
 14: 
 15: begin
 Error detection current scope depth 1
-Find same name!! a
 16:         var a: integer;
 17:         begin
 Error detection current scope depth 2
@@ -78,6 +77,7 @@ func                             function   0(global)  boolean          integer,
 a                                parameter  1(local)   integer          
 b                                parameter  1(local)   real [2][3]      
 c                                constant   1(local)   string           "hello world!"
+a                                variable   1(local)   integer          
 d                                variable   2(local)   real             
 a                                variable   2(local)   boolean          
 --------------------------------------------------------------------------------------------------------------
@@ -97,6 +97,7 @@ func                             function   0(global)  boolean          integer,
 a                                parameter  1(local)   integer          
 b                                parameter  1(local)   real [2][3]      
 c                                constant   1(local)   string           "hello world!"
+a                                variable   1(local)   integer          
 d                                variable   2(local)   real             
 a                                variable   2(local)   boolean          
 --------------------------------------------------------------------------------------------------------------
@@ -119,6 +120,7 @@ func                             function   0(global)  boolean          integer,
 a                                parameter  1(local)   integer          
 b                                parameter  1(local)   real [2][3]      
 c                                constant   1(local)   string           "hello world!"
+a                                variable   1(local)   integer          
 d                                variable   2(local)   real             
 a                                variable   2(local)   boolean          
 --------------------------------------------------------------------------------------------------------------
