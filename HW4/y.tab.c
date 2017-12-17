@@ -510,7 +510,7 @@ typedef struct {
 } YYSTACKDATA;
 /* variables for the parser stack */
 static YYSTACKDATA yystack;
-#line 442 "parser.y"
+#line 443 "parser.y"
 
 int yyerror(const char *msg )
 {
@@ -1009,15 +1009,19 @@ break;
 case 65:
 #line 323 "parser.y"
 	{
-                if(yystack.l_mark[0].str==NULL)
-                {
-                    cout<<"Nullptr exception line "<<linenum<<endl;
-                }
+                /*cout<<"VAR REF GET "<<$1<<endl;*/
                 assign_check_buf.pb(yystack.l_mark[0].str);
+                simple_stmt_checking();
+            }
+break;
+case 66:
+#line 329 "parser.y"
+	{
+                assign_check_buf.clear();
             }
 break;
 case 73:
-#line 352 "parser.y"
+#line 353 "parser.y"
 	{
 					inserting_iter_table(yytext,scope_depth+1);
 					error_detection();
@@ -1025,21 +1029,21 @@ case 73:
 				}
 break;
 case 74:
-#line 360 "parser.y"
+#line 361 "parser.y"
 	{
 					is_loop=0;
 				}
 break;
 case 103:
-#line 417 "parser.y"
-	{yyval.str=yystack.l_mark[0].str;}
-break;
-case 104:
 #line 418 "parser.y"
 	{yyval.str=yystack.l_mark[0].str;}
 break;
+case 104:
+#line 419 "parser.y"
+	{yyval.str=yystack.l_mark[0].str;}
+break;
 case 110:
-#line 428 "parser.y"
+#line 429 "parser.y"
 	{
                 if(yystack.l_mark[0].str==NULL)
                 {
@@ -1048,7 +1052,7 @@ case 110:
                 yyval.str=yystack.l_mark[0].str;
             }
 break;
-#line 1052 "y.tab.c"
+#line 1056 "y.tab.c"
     }
     yystack.s_mark -= yym;
     yystate = *yystack.s_mark;

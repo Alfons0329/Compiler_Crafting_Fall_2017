@@ -428,6 +428,7 @@ void simple_stmt_checking()
     int is_error=0;
     if(assign_check_buf.size()==1) //check if LHS is the constant, which cannot be assigned
     {
+        cout<<"Check constant problem"<<endl;
         //search the current symbol table
         for(unsigned int i=0;i<mysymbol_table[scope_depth].size();i++)
         {

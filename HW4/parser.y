@@ -321,13 +321,14 @@ stmt_list		: stmt_list stmt
 
 simple_stmt	: var_ref
             {
-                if($1==NULL)
-                {
-                    cout<<"Nullptr exception line "<<linenum<<endl;
-                }
+                /*cout<<"VAR REF GET "<<$1<<endl;*/
                 assign_check_buf.pb($1);
+                simple_stmt_checking();
             }
             OP_ASSIGN boolean_expr MK_SEMICOLON
+            {
+                assign_check_buf.clear();
+            }
 			| PRINT boolean_expr MK_SEMICOLON
 			| READ boolean_expr MK_SEMICOLON
 			;
