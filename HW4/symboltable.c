@@ -125,7 +125,7 @@ int error_detection() //no hashing, just naive solution
 {
     //iterator-iterator checking------------------------------------------------------------------------------------//
     // dumpiterator();
-    cout<<"Error detection current scope depth "<<scope_depth<<endl;
+    // cout<<"Error detection current scope depth "<<scope_depth<<endl;
     vector<string> redeclared_var;
     string error_msg;
     bool is_error=0, is_final_error=0;
@@ -428,36 +428,6 @@ void allsymbol_table_error_detection()
         }
     }
 }
-void assignop()
-{
-    int is_error=0;
-    if(assign_check_buf.size()==1) //check if LHS is the constant, which cannot be assigned
-    {
-        //search the current symbol table
-        for(unsigned int i=0;i<mysymbol_table[scope_depth].size();i++)
-        {
-            if(assign_check_buf[0]==mysymbol_table[scope_depth][i].name
-            && mysymbol_table[scope_depth][i].kind=="constant")
-            {
-                is_error=1;
-            }
-        }
-        //search the global variables
-        for(unsigned int i=0;i<mysymbol_table[0].size();i++)
-        {
-            if(assign_check_buf[0]==mysymbol_table[0][i].name
-            && mysymbol_table[0][i].kind=="constant")
-            {
-                is_error=1;
-            }
-        }
-        string constant_name=assign_check_buf[0];
-        if(is_error)
-        {
-            cout<<"<Error> found in Line "<<linenum<<": constant '"<<constant_name<<"' cannot be assigned"<<endl;
-        }
-    }
-}
 void procedure_call_checking()
 {
     string funct_name = funct_param_buf[0];
@@ -490,8 +460,8 @@ void procedure_call_checking()
             {
                 if(funct_param_buf[param_idx+1]!=mysymbol_table[0][i].funct_attri[param_idx])
                 {
-                    cout<<"funct attri "<<i<<" and paramidx "<<param_idx<<" "
-                    <<mysymbol_table[0][i].funct_attri[param_idx]<<"r"<<" with "<<funct_param_buf[param_idx+1]<<"s"<<endl;
+                    /*cout<<"funct attri "<<i<<" and paramidx "<<param_idx<<" "
+                    <<mysymbol_table[0][i].funct_attri[param_idx]<<"r"<<" with "<<funct_param_buf[param_idx+1]<<"s"<<endl;*/
                     cout<<"<Error> found in Line: "<<linenum<<" parameter type inconsistent"<<endl;
                     return;
                 }
@@ -514,4 +484,37 @@ string find_type(string name_in)
         }
     }
     return "none";
+}
+string find_kind(string name_in)
+{
+    //dumpsymbol();
+    for(unsigned int i=0;i<=scope_depth;i++)
+    {
+        for(unsigned int j=0;j<mysymbol_table[i].size();j++)
+        {
+            if(mysymbol_table[i][j].name==name_in)
+            {
+                return mysymbol_table[i][j].kind;
+            }
+        }
+    }
+    return "none";
+}
+string assignop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
+{
+    cout<<"LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
+    if(find_kind(LHS_name)=="constant")
+    {
+        cout<<"<Error> found in Line: "<<linenum<<" constant '"<<LHS_name<<"'cannot be assigned"<<endl;
+        return "assign_error";
+    }
+    if(LHS_type!=RHS_type)
+    {
+        if(!(LHS_type=="real"&&RHS_type=="integer")) //only this is allowed
+        {
+            cout<<"<Error> found in Line: "<<linenum<<" Assign operation LHS_type and RHS_type inconsistent "<<endl;
+            return "assign_error";
+        }
+    }
+    return RHS_type;
 }

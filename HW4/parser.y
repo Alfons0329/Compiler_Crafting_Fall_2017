@@ -233,7 +233,6 @@ func_decl	: 	ID
                                 funct_attri_buf.pb(mysymbol_table[1][i].type);
 							}
 						}
-						cout<<"NULL FUNCTION"<<$7<<endl;
                         if($7==";") //prevent logic null string error
                         {
 							inserting_symbol_table(id_list_buf,"function","void",funct_attri_buf);
@@ -384,8 +383,13 @@ simple_stmt	: var_ref
 				if(find_type($3)=="none")
 				{
 					cout<<"const type "<<$3<<endl;
+					assignop(find_type($1),$3,$1,$3);
 				}
-				assignop();
+				else
+				{
+					assignop(find_type($1),find_type($3),$1,$3);
+				}
+
             }
 			| PRINT boolean_expr MK_SEMICOLON
 			| READ boolean_expr MK_SEMICOLON

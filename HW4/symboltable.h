@@ -64,7 +64,8 @@ void dumpallsymbol();
 void allsymbol_table_error_detection();
 void procedure_call_checking();
 //operations
-void addop();
-void assignop();
 string find_type(string);
+string find_kind(string);
+string assignop(string,string,string,string);
+void addop();
 #endif
