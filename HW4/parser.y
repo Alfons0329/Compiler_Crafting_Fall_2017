@@ -336,16 +336,7 @@ simple_stmt	: var_ref
 
 proc_call_stmt	:
             ID
-            {
-                funct_param_buf.pb($1);
-                is_proc_call=1;
-                cout<<"procedure call "<<endl;
-            }
             MK_LPAREN opt_boolean_expr_list MK_RPAREN MK_SEMICOLON
-            {
-                is_proc_call=0;
-                cout<<"procedure call END   "<<endl;
-            }
 			;
 
 cond_stmt	: IF boolean_expr THEN
@@ -434,10 +425,28 @@ factor		: var_ref {$$=$1;}
 			| ID
             {
                 cout<<"NEW PROCEDURE CALL"<<endl;
-            } 
+                funct_param_buf.pb($1);
+                is_proc_call=1;
+            }
             MK_LPAREN opt_boolean_expr_list MK_RPAREN
+            {
+                for(int i=0;i<funct_param_buf.size();i++)
+                {
+                    cout<<"Func param "<<funct_param_buf[i]<<endl;
+                }
+                funct_param_buf.clear();
+                is_proc_call=0;
+            }
 			| OP_SUB ID MK_LPAREN opt_boolean_expr_list MK_RPAREN
 			| literal_const
+            {
+                $$=$1;
+                if(is_proc_call)
+                {
+                    cout<<"parameter "<<const_type_str<<endl;
+                    funct_param_buf.pb($1);
+                }
+            }
 			;
 
 var_ref		:
@@ -446,7 +455,8 @@ var_ref		:
                 $$=$1;
                 if(is_proc_call)
                 {
-                    cout<<"IS PROCEDUIRE CALL PARAM "<<$1<<endl;
+                    cout<<"parameter "<<$1<<endl;
+                    funct_param_buf.pb($1);
                 }
             }
 			| var_ref dim
