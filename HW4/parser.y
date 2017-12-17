@@ -178,9 +178,10 @@ func_decl	: 	ID
                                 funct_attri_buf.pb(mysymbol_table[1][i].type);
 							}
 						}
-                        if($7==NULL) //prevent logic null string error
+						cout<<"NULL FUNCTION"<<$7<<endl;
+                        if($7==";") //prevent logic null string error
                         {
-                            inserting_symbol_table(id_list_buf,"function","void",funct_attri_buf);
+							inserting_symbol_table(id_list_buf,"function","void",funct_attri_buf);
                         }
                         else
                         {
@@ -424,17 +425,11 @@ factor		: var_ref {$$=$1;}
 			| OP_SUB MK_LPAREN boolean_expr MK_RPAREN
 			| ID
             {
-                /* cout<<"NEW PROCEDURE CALL"<<endl; */
-				cout<<"funct name "<<$1<<endl;
                 funct_param_buf.pb($1);
                 is_proc_call=1;
             }
             MK_LPAREN opt_boolean_expr_list MK_RPAREN
             {
-                for(int i=0;i<funct_param_buf.size();i++)
-                {
-                    /* cout<<"Func param "<<funct_param_buf[i]<<endl; */
-                }
 				procedure_call_checking();
                 funct_param_buf.clear();
                 is_proc_call=0;
@@ -445,7 +440,6 @@ factor		: var_ref {$$=$1;}
                 $$=$1;
                 if(is_proc_call)
                 {
-                    /* cout<<"parameter "<<const_type_str<<endl; */
                     funct_param_buf.pb(const_type_str);
                 }
             }

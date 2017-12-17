@@ -34,6 +34,10 @@ void inserting_symbol_table(vector<string> id_list_buf, string kind_in, string t
             one_subentry.name = id_list_buf[i];
         }
         one_subentry.kind = kind_in;
+        
+        if(type_in==";")
+            type_in = "void";
+
         one_subentry.type = type_in;
         string scope_depth_str = to_string(scope_depth);
         if(scope_depth)
