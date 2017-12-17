@@ -518,3 +518,21 @@ string assignop(string LHS_type,string RHS_type,string LHS_name, string RHS_name
     }
     return RHS_type;
 }
+string relop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
+{
+    cout<<"LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
+    /*if(find_kind(LHS_name)=="constant")
+    {
+        cout<<"<Error> found in Line: "<<linenum<<" constant '"<<LHS_name<<"'cannot be assigned"<<endl;
+        return "assign_error";
+    }*/
+    if(LHS_type!=RHS_type)
+    {
+        if(!(LHS_type=="real"&&RHS_type=="integer")) //only this is allowed
+        {
+            cout<<"<Error> found in Line: "<<linenum<<" Assign operation LHS_type and RHS_type inconsistent "<<endl;
+            return "relop_error";
+        }
+    }
+    return RHS_type;
+}

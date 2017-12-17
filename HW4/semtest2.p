@@ -1,4 +1,4 @@
-//&S-
+
 //&T-
 //&D-
 /**
@@ -18,13 +18,13 @@ begin
     a := b >= c*4;                // error, LHS=integer RHS=boolean
     e := b >= c*4;                // ok
     print a <> 11 ;               // ok
-   
+
     e := false;
     f := true;
-    d := e and f;                 // ok 
+    d := e and f;                 // ok
     d := true or false;           // ok
     d := a+b mod c;               // error, LHS=boolean RHS=integer
-   
+
     g := "hello ";
     h := "world\n";
     i := g;                       // ok

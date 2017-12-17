@@ -379,7 +379,7 @@ stmt_list		: stmt_list stmt
 simple_stmt	: var_ref
             OP_ASSIGN boolean_expr MK_SEMICOLON
             {
-				cout<<"we have an assign LHS "<<find_type($1)<<" with RHS "<<find_type($3)<<endl;
+				/* cout<<"we have an assign LHS "<<find_type($1)<<" with RHS "<<find_type($3)<<endl; */
 				if(find_type($3)=="none")
 				{
 					cout<<"const type "<<$3<<endl;
@@ -450,7 +450,26 @@ boolean_factor		: OP_NOT boolean_factor
 			| relop_expr {$$=$1;}
 			;
 
-relop_expr		: expr rel_op expr
+relop_expr	:
+			expr rel_op expr
+			{
+				cout<<"RELOP EXPR HAPPENS HERE "<<endl;
+				if(find_type($3)=="none")
+				{
+					cout<<"const type "<<$3<<endl;
+					if(relop(find_type($1),$3,$1,$3)!="relop_error")
+					{
+						$$=strdup(relop(find_type($1),$3,$1,$3).c_str());
+					}
+				}
+				else
+				{
+					if(relop(find_type($1),$3,$1,$3)!="relop_error")
+					{
+						$$=strdup(relop(find_type($1),$3,$1,$3).c_str());
+					}
+				}
+			}
 			| expr {$$=$1;}
 			;
 

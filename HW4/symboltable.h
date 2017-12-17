@@ -67,5 +67,6 @@ void procedure_call_checking();
 string find_type(string);
 string find_kind(string);
 string assignop(string,string,string,string);
+string relop(string,string,string,string);
 void addop();
 #endif
