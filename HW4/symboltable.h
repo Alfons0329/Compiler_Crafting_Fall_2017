@@ -44,6 +44,7 @@ struct loop_iterator
     int iter_level;
 };
 extern vector <loop_iterator> myiter_table;
+//operation data structures
 //function prototype declaration for HW3 symbol table implementation
 void symbol_table_init();
 void inserting_symbol_table(vector<string> , string , string , vector<string> );
@@ -58,9 +59,12 @@ void scientific_converter(char* );
 void dumpiterator();
 //function prototype declaration for HW4 semantic analysis
 int program_name_checking(string,string,int);
-int procedure_call_checking();
 int op_assign_checking(string );
 void dumpallsymbol();
 void allsymbol_table_error_detection();
 void simple_stmt_checking();
+void procedure_call_checking();
+//operations
+void addop();
+string find_type(string);
 #endif

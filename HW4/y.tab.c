@@ -1076,7 +1076,7 @@ case 110:
                 if(is_proc_call)
                 {
                     cout<<"parameter "<<const_type_str<<endl;
-                    funct_param_buf.pb(yystack.l_mark[0].str);
+                    funct_param_buf.pb(const_type_str);
                 }
             }
 break;
@@ -1087,7 +1087,7 @@ case 111:
                 if(is_proc_call)
                 {
                     cout<<"parameter "<<yystack.l_mark[0].str<<endl;
-                    funct_param_buf.pb(yystack.l_mark[0].str);
+                    funct_param_buf.pb(find_type(yystack.l_mark[0].str));
                 }
             }
 break;

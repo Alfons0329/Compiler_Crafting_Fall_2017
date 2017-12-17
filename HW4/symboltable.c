@@ -454,3 +454,45 @@ void simple_stmt_checking()
         }
     }
 }
+void procedure_call_checking()
+{
+    string funct_name = funct_param_buf[0];
+    //check if parameter count consistent
+    for(unsigned int i=0;i<mysymbol_table[0].size();i++)
+    {
+        if(mysymbol_table[0][i].name == funct_name
+        && mysymbol_table[0][i].kind == "function")
+        {
+            if(funct_param_buf.size()-1!=mysymbol_table[0][i].funct_attri.size())
+            {
+                cout<<"<Error> found in Line: "<<linenum<<" parameter number inconsistent"<<endl;
+                break;
+            }
+        }
+    }
+    //check if parameter type consistent
+    /*for(unsigned int i=0;i<mysymbol_table[0].size();i++)
+    {
+        if(mysymbol_table[0][i].name == funct_name
+        && mysymbol_table[0][i].kind == "function")
+        {
+            for()
+        }
+    }*/
+
+}
+string find_type(string name_in)
+{
+    //dumpsymbol();
+    for(unsigned int i=0;i<=scope_depth;i++)
+    {
+        for(unsigned int j=0;j<mysymbol_table[i].size();j++)
+        {
+            if(mysymbol_table[i][j].name==name_in)
+            {
+                return mysymbol_table[i][j].type;
+            }
+        }
+    }
+    return "none";
+}

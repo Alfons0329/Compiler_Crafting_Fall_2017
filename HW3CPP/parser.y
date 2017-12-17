@@ -21,7 +21,6 @@ char arr_buf[BUF_SIZE];
 char reverse_arr_buf[BUF_SIZE];
 string const_buf;
 string const_type_str;
-string funct_name;
 string array_type_str;
 vector<string> id_list_buf; //
 vector<string> funct_attri_buf;

@@ -444,7 +444,7 @@ factor		: var_ref {$$=$1;}
                 if(is_proc_call)
                 {
                     cout<<"parameter "<<const_type_str<<endl;
-                    funct_param_buf.pb($1);
+                    funct_param_buf.pb(const_type_str);
                 }
             }
 			;
@@ -456,7 +456,7 @@ var_ref		:
                 if(is_proc_call)
                 {
                     cout<<"parameter "<<$1<<endl;
-                    funct_param_buf.pb($1);
+                    funct_param_buf.pb(find_type($1));
                 }
             }
 			| var_ref dim
