@@ -344,7 +344,6 @@ array_type	: ARRAY
                 $$=$7;
                 int delta=atol($5)-atol($3)+1;
 				char tmp[10];
-				cout<<"DELTA "<<delta<<endl;
 				sprintf(tmp,"%d",delta);
 				strcat(arr_buf,tmp);
 				strcat(arr_buf,",");
@@ -458,7 +457,7 @@ boolean_factor		: OP_NOT boolean_factor
 relop_expr	:
 			expr rel_op expr
 			{
-				cout<<"RELOP EXPR HAPPENS HERE "<<endl;
+				cout<<"RELOP EXPR HAPPENS HERE linenum "<<linenum<<endl;
 				if(find_type($3)=="none")
 				{
 					cout<<"const type "<<$3<<endl;
@@ -467,11 +466,19 @@ relop_expr	:
 						$$=strdup(relop(find_type($1),$3,$1,$3).c_str());
 					}
 				}
+				else if(find_type($1)=="none")
+				{
+					cout<<"const type "<<$3<<endl;
+					if(relop($1,find_type($3),$1,$3)!="relop_error")
+					{
+						$$=strdup(relop($1,find_type($3),$1,$3).c_str());
+					}
+				}
 				else
 				{
-					if(relop(find_type($1),$3,$1,$3)!="relop_error")
+					if(relop(find_type($1),find_type($3),$1,$3)!="relop_error")
 					{
-						$$=strdup(relop(find_type($1),$3,$1,$3).c_str());
+						$$=strdup(relop(find_type($1),find_type($3),$1,$3).c_str());
 					}
 				}
 			}

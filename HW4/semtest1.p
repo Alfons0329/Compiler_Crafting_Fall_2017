@@ -11,8 +11,8 @@
 semtest1;
 
 var a : 10;       // a is integer constant
-var b : integer;
-
+var b : 10.635;
+var dr : real;
 fun( a,b : integer ) : integer;
 begin
     if a >= b then
@@ -42,9 +42,13 @@ begin
     fun(1,2);          // ok
     aa := fun(a,a);    // ok
     aa := h[4];        // error string array cannot assign to integer
-    h[4] := aa;        //still an error
-    aa := zr[3];       //correct a LHS RHS same type
-    zr[3] := aa;       //correct a LHS RHS same type 
+    h[4] := aa;        // still an error
+    dr := aa;          // ok assign integer to real , type coercion
+    aa := dr;          // wrong assign real to integer, invalid type coercion
+    dr := zr[7];       // ok assign integer to real , type coercion
+    zr[7] := dr;       // wrong assign real to integer, invalid type coercion
+    aa := zr[3];       // correct a LHS RHS same type
+    zr[3] := aa;       // correct a LHS RHS same type
     aa := fun(a);      // error, parameter number inconsistent
     aa := fun(bb,cc);  // error, parameter type inconsistent
     bb := fun2();      // error, fun2() has no return type

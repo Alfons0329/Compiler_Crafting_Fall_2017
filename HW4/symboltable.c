@@ -510,8 +510,7 @@ string find_kind(string name_in)
 }
 string assignop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
 {
-    cout<<"LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
-    cout<<"this is new version "<<endl;
+    cout<<endl<<"LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
     if(find_kind(LHS_name)=="constant")
     {
         cout<<"<Error> found in Line: "<<linenum<<" constant '"<<LHS_name<<"'cannot be assigned"<<endl;
@@ -530,7 +529,7 @@ string assignop(string LHS_type,string RHS_type,string LHS_name, string RHS_name
             // return "assign_error";
             if(find1==string::npos && find2==string::npos)
             {
-                cout<<"<Error2> found in Line: "<<linenum<<" Assign operation LHS_type and RHS_type inconsistent "<<endl;
+                cout<<"<Error> found in Line: "<<linenum<<" Assign operation LHS_type and RHS_type inconsistent "<<endl;
                 return "assign_error";
             }
         }
@@ -540,19 +539,36 @@ string assignop(string LHS_type,string RHS_type,string LHS_name, string RHS_name
 }
 string relop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
 {
-    cout<<"LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
+    cout<<"Relop LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
     /*if(find_kind(LHS_name)=="constant")
     {
         cout<<"<Error> found in Line: "<<linenum<<" constant '"<<LHS_name<<"'cannot be assigned"<<endl;
         return "assign_error";
     }*/
-    if(LHS_type!=RHS_type)
+    if(LHS_type==RHS_type)
     {
-        if(!(LHS_type=="real"&&RHS_type=="integer")) //only this is allowed
-        {
-            cout<<"<Error> found in Line: "<<linenum<<" Assign operation LHS_type and RHS_type inconsistent "<<endl;
-            return "relop_error";
-        }
+        return "boolean";
     }
-    return RHS_type;
+    else
+    {
+        //if array type since it comes with dimention, so use string find to check if
+        size_t find1=LHS_type.find("integer");
+        size_t find2=RHS_type.find("real");
+        size_t find3=LHS_type.find("real");
+        size_t find4=RHS_type.find("integer");
+         cout<<"FIND 1 "<<find1
+             <<"FIND 2 "<<find2
+            <<"FIND 3 "<<find3
+            <<"FIND 4 "<<find4<<endl;
+        if(!(find1!=string::npos && find2!=string::npos))
+        {
+            if(!(find3!=string::npos && find4!=string::npos))
+            {
+                cout<<"<Error3> found in Line: "<<linenum<<" Relational operation LHS_type and RHS_type inconsistent "<<endl;
+                return "relop_error";
+            }
+        }
+
+    }
+    return "boolean";
 }
