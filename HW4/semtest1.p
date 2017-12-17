@@ -34,12 +34,17 @@ begin
 
     var aa : integer;
     var bb,cc : boolean;
-
+    var h,i: array 1 to 8 of string; //my test
+    var zr: array 1 to 8 of integer;
     //&S+
     a := 5;            // error, constant cannot be assigned
     aa := fun(1,2);    // ok
     fun(1,2);          // ok
     aa := fun(a,a);    // ok
+    aa := h[4];        // error string array cannot assign to integer
+    h[4] := aa;        //still an error
+    aa := zr[3];       //correct a LHS RHS same type
+    zr[3] := aa;       //correct a LHS RHS same type 
     aa := fun(a);      // error, parameter number inconsistent
     aa := fun(bb,cc);  // error, parameter type inconsistent
     bb := fun2();      // error, fun2() has no return type

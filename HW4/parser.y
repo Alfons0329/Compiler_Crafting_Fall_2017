@@ -28,6 +28,8 @@ vector<string> funct_attri_buf;
 //global variables for HW4
 vector<string> assign_check_buf;
 vector<string> funct_param_buf;
+//this one is the new array buffer which is easier to be implemented in C++
+vector<int> arr_dim_buf;
 int is_proc_call;
 %}
 /*tokens*/
@@ -97,6 +99,7 @@ decl		: VAR id_list MK_COLON scalar_type/* scalar type declaration */
                 array_type_str+=" ";
                 array_type_str+=reverse_arr_buf;
 				inserting_symbol_table(id_list_buf,"variable",array_type_str,funct_attri_buf);
+
 				id_list_buf.clear();
 				error_detection();
 				memset(arr_buf,0,sizeof(arr_buf));//update it for next segment
@@ -286,6 +289,7 @@ param		: id_list MK_COLON type
 						inserting_symbol_table(id_list_buf,"parameter",$3,funct_attri_buf);
 					}
 				}
+
                 id_list_buf.clear();
 				is_arr=0;
 			}
@@ -340,6 +344,7 @@ array_type	: ARRAY
                 $$=$7;
                 int delta=atol($5)-atol($3)+1;
 				char tmp[10];
+				cout<<"DELTA "<<delta<<endl;
 				sprintf(tmp,"%d",delta);
 				strcat(arr_buf,tmp);
 				strcat(arr_buf,",");

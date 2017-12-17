@@ -39,6 +39,14 @@ void inserting_symbol_table(vector<string> id_list_buf, string kind_in, string t
 
 
         one_subentry.type = type_in;
+        if(is_arr) //moreover, assign the arr_dim
+        {
+            one_subentry.arr_dim = arr_dim_buf;
+        }
+        else
+        {
+            one_subentry.arr_dim.resize(0);
+        }
         string scope_depth_str = to_string(scope_depth);
         if(scope_depth)
         {
@@ -503,6 +511,7 @@ string find_kind(string name_in)
 string assignop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
 {
     cout<<"LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
+    cout<<"this is new version "<<endl;
     if(find_kind(LHS_name)=="constant")
     {
         cout<<"<Error> found in Line: "<<linenum<<" constant '"<<LHS_name<<"'cannot be assigned"<<endl;
@@ -510,11 +519,22 @@ string assignop(string LHS_type,string RHS_type,string LHS_name, string RHS_name
     }
     if(LHS_type!=RHS_type)
     {
-        if(!(LHS_type=="real"&&RHS_type=="integer")) //only this is allowed
+        //if array type since it comes with dimention, so use string find to check if
+        size_t find1=LHS_type.find(RHS_type); //find right in left ex: left string[10] right string is allowed
+        size_t find2=RHS_type.find(LHS_type); //find left in right ex: left integer right integer [10] is allowed
+        size_t find3=LHS_type.find("real"); //the only allowed conversion is this one
+        size_t find4=RHS_type.find("integer"); //the only allowed conversion is this one
+        if(!(find3!=string::npos && find4!=string::npos))
         {
-            cout<<"<Error> found in Line: "<<linenum<<" Assign operation LHS_type and RHS_type inconsistent "<<endl;
-            return "assign_error";
+            // cout<<"<Error> found in Line: "<<linenum<<" Assign operation LHS_type and RHS_type inconsistent "<<endl;
+            // return "assign_error";
+            if(find1==string::npos && find2==string::npos)
+            {
+                cout<<"<Error2> found in Line: "<<linenum<<" Assign operation LHS_type and RHS_type inconsistent "<<endl;
+                return "assign_error";
+            }
         }
+
     }
     return RHS_type;
 }

@@ -27,6 +27,8 @@ extern int is_proc_call;
 extern string program_name;
 extern vector<string> assign_check_buf;
 extern vector<string> funct_param_buf;
+//this one is the new array buffer which is easier to be implemented in C++
+extern vector<int> arr_dim_buf;
 //symbol table data structure declaration
 struct sub_entry //the real entry for inserting the value
 {
@@ -34,6 +36,7 @@ struct sub_entry //the real entry for inserting the value
     string kind;
     string level_str;
     string type;
+    vector<int> arr_dim;
     vector<string> funct_attri;
     bool is_arr_decl,is_funct_decl;
 };
@@ -68,5 +71,5 @@ string find_type(string);
 string find_kind(string);
 string assignop(string,string,string,string);
 string relop(string,string,string,string);
-void addop();
+string arithop(string,string,string,string);
 #endif
