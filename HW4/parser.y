@@ -116,15 +116,15 @@ int_const	:	INT_CONST {$$=yytext; const_type=1;}
 			|	OCTAL_CONST {$$=yytext; const_type=9;}
 			;
 
-literal_const	: int_const {$$=yytext; const_type=(const_type==1)?1:9; const_type_str="integer ";parse_constant();}
-				| OP_SUB int_const {$$=yytext; const_type=(const_type==1)?2:10; const_type_str="integer ";parse_constant();}
-				| FLOAT_CONST {$$=yytext; const_type=3; const_type_str="real ";parse_constant();}
-				| OP_SUB FLOAT_CONST {$$=yytext; const_type=4; const_type_str="real ";parse_constant();}
-				| SCIENTIFIC {$$=yytext; const_type=5; const_type_str="real ";parse_constant();}
-				| OP_SUB SCIENTIFIC {$$=yytext; const_type=6; const_type_str="real ";parse_constant();}
+literal_const	: int_const {$$=yytext; const_type=(const_type==1)?1:9; const_type_str="integer";parse_constant();}
+				| OP_SUB int_const {$$=yytext; const_type=(const_type==1)?2:10; const_type_str="integer";parse_constant();}
+				| FLOAT_CONST {$$=yytext; const_type=3; const_type_str="real";parse_constant();}
+				| OP_SUB FLOAT_CONST {$$=yytext; const_type=4; const_type_str="real";parse_constant();}
+				| SCIENTIFIC {$$=yytext; const_type=5; const_type_str="real";parse_constant();}
+				| OP_SUB SCIENTIFIC {$$=yytext; const_type=6; const_type_str="real";parse_constant();}
 				| STR_CONST {$$=yytext; const_type=7; const_type_str="string ";parse_constant();}
-				| TRUE {$$=yytext; const_type=8; const_type_str="boolean ";parse_constant();}
-				| FALSE {$$=yytext; const_type=8; const_type_str="boolean ";parse_constant();}
+				| TRUE {$$=yytext; const_type=8; const_type_str="boolean";parse_constant();}
+				| FALSE {$$=yytext; const_type=8; const_type_str="boolean";parse_constant();}
 			;
 
 opt_func_decl_list	: func_decl_list
@@ -424,7 +424,8 @@ factor		: var_ref {$$=$1;}
 			| OP_SUB MK_LPAREN boolean_expr MK_RPAREN
 			| ID
             {
-                cout<<"NEW PROCEDURE CALL"<<endl;
+                /* cout<<"NEW PROCEDURE CALL"<<endl; */
+				cout<<"funct name "<<$1<<endl;
                 funct_param_buf.pb($1);
                 is_proc_call=1;
             }
@@ -432,8 +433,9 @@ factor		: var_ref {$$=$1;}
             {
                 for(int i=0;i<funct_param_buf.size();i++)
                 {
-                    cout<<"Func param "<<funct_param_buf[i]<<endl;
+                    /* cout<<"Func param "<<funct_param_buf[i]<<endl; */
                 }
+				procedure_call_checking();
                 funct_param_buf.clear();
                 is_proc_call=0;
             }
@@ -443,7 +445,7 @@ factor		: var_ref {$$=$1;}
                 $$=$1;
                 if(is_proc_call)
                 {
-                    cout<<"parameter "<<const_type_str<<endl;
+                    /* cout<<"parameter "<<const_type_str<<endl; */
                     funct_param_buf.pb(const_type_str);
                 }
             }
@@ -455,7 +457,7 @@ var_ref		:
                 $$=$1;
                 if(is_proc_call)
                 {
-                    cout<<"parameter "<<$1<<endl;
+                    /* cout<<"parameter "<<$1<<" and its type "<<find_type($1)<<endl; */
                     funct_param_buf.pb(find_type($1));
                 }
             }

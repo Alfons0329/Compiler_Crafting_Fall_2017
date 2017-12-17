@@ -458,6 +458,12 @@ void procedure_call_checking()
 {
     string funct_name = funct_param_buf[0];
     //check if parameter count consistent
+    cout<<"Check function name "<<funct_name<<endl;
+    for(int i=0;i<funct_param_buf.size();i++)
+    {
+        cout<<funct_param_buf[i]<<" ";
+    }
+    cout<<endl;
     for(unsigned int i=0;i<mysymbol_table[0].size();i++)
     {
         if(mysymbol_table[0][i].name == funct_name
@@ -476,10 +482,12 @@ void procedure_call_checking()
         if(mysymbol_table[0][i].name == funct_name
         && mysymbol_table[0][i].kind == "function")
         {
-            for(unsigned param_idx=0;param_idx<mysymbol_table[0][i].funct_attri.size();param_idx++)
+            for(unsigned int param_idx=0;param_idx<mysymbol_table[0][i].funct_attri.size();param_idx++)
             {
                 if(funct_param_buf[param_idx+1]!=mysymbol_table[0][i].funct_attri[param_idx])
                 {
+                    cout<<"funct attri "<<i<<" and paramidx "<<param_idx<<" "
+                    <<mysymbol_table[0][i].funct_attri[param_idx]<<"r"<<" with "<<funct_param_buf[param_idx+1]<<"s"<<endl;
                     cout<<"<Error> found in Line: "<<linenum<<" parameter type inconsistent"<<endl;
                     return;
                 }
