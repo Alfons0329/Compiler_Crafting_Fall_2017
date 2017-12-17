@@ -27,6 +27,8 @@ vector<string> id_list_buf; //
 vector<string> funct_attri_buf;
 //global variables for HW4
 vector<string> assign_check_buf;
+vector<string> funct_param_buf;
+int is_proc_call;
 %}
 /*tokens*/
 %union
@@ -321,7 +323,6 @@ stmt_list		: stmt_list stmt
 
 simple_stmt	: var_ref
             {
-                /*cout<<"VAR REF GET "<<$1<<endl;*/
                 assign_check_buf.pb($1);
                 simple_stmt_checking();
             }
@@ -333,7 +334,18 @@ simple_stmt	: var_ref
 			| READ boolean_expr MK_SEMICOLON
 			;
 
-proc_call_stmt		: ID MK_LPAREN opt_boolean_expr_list MK_RPAREN MK_SEMICOLON
+proc_call_stmt	:
+            ID
+            {
+                funct_param_buf.pb($1);
+                is_proc_call=1;
+                cout<<"procedure call "<<endl;
+            }
+            MK_LPAREN opt_boolean_expr_list MK_RPAREN MK_SEMICOLON
+            {
+                is_proc_call=0;
+                cout<<"procedure call END   "<<endl;
+            }
 			;
 
 cond_stmt	: IF boolean_expr THEN
@@ -398,7 +410,7 @@ rel_op		: OP_LT
 			| OP_NE
 			;
 
-expr			: expr add_op term
+expr		: expr add_op term
 			| term
 			;
 
@@ -410,7 +422,7 @@ term		: term mul_op factor
 			| factor
 			;
 
-mul_op			: OP_MUL
+mul_op		: OP_MUL
 			| OP_DIV
 			| OP_MOD
 			;
@@ -419,7 +431,11 @@ factor		: var_ref {$$=$1;}
 			| OP_SUB var_ref {$$=$2;}
 			| MK_LPAREN boolean_expr MK_RPAREN
 			| OP_SUB MK_LPAREN boolean_expr MK_RPAREN
-			| ID MK_LPAREN opt_boolean_expr_list MK_RPAREN
+			| ID
+            {
+                cout<<"NEW PROCEDURE CALL"<<endl;
+            } 
+            MK_LPAREN opt_boolean_expr_list MK_RPAREN
 			| OP_SUB ID MK_LPAREN opt_boolean_expr_list MK_RPAREN
 			| literal_const
 			;
@@ -427,11 +443,11 @@ factor		: var_ref {$$=$1;}
 var_ref		:
             ID
             {
-                if($1==NULL)
-                {
-                    cout<<"VAR RED Nullptr"<<endl;
-                }
                 $$=$1;
+                if(is_proc_call)
+                {
+                    cout<<"IS PROCEDUIRE CALL PARAM "<<$1<<endl;
+                }
             }
 			| var_ref dim
 			;

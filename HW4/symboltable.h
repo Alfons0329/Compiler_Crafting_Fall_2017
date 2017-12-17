@@ -23,8 +23,10 @@ extern string const_type_str;
 extern vector<string> id_list_buf; //for multiple ID
 extern vector<string> funct_attri_buf; //for concatenating the function attribute
 //global varaible declaration for HW4 semantic analysis
+extern int is_proc_call;
 extern string program_name;
 extern vector<string> assign_check_buf;
+extern vector<string> funct_param_buf;
 //symbol table data structure declaration
 struct sub_entry //the real entry for inserting the value
 {

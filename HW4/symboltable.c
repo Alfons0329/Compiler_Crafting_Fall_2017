@@ -18,6 +18,7 @@ void symbol_table_init()
     is_funct = 0;
     is_loop = 0;
     const_type = 0;
+    is_proc_call = 0;
 }
 void inserting_symbol_table(vector<string> id_list_buf, string kind_in, string type_in, vector<string> funct_attri_buf)
 {
@@ -428,7 +429,6 @@ void simple_stmt_checking()
     int is_error=0;
     if(assign_check_buf.size()==1) //check if LHS is the constant, which cannot be assigned
     {
-        cout<<"Check constant problem"<<endl;
         //search the current symbol table
         for(unsigned int i=0;i<mysymbol_table[scope_depth].size();i++)
         {
