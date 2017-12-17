@@ -56,7 +56,7 @@
 #define YYSTYPE_IS_DECLARED 1
 typedef union
 {
-    char* parsed_string;
+    char* str;
 } YYSTYPE;
 #endif /* !YYSTYPE_IS_DECLARED */
 extern YYSTYPE yylval;

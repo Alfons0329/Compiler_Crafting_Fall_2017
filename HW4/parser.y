@@ -25,19 +25,22 @@ string funct_name;
 string array_type_str;
 vector<string> id_list_buf; //
 vector<string> funct_attri_buf;
+//global variables for HW4
+vector<string> assign_check_buf;
 %}
 /*tokens*/
 %union
 {
-    char* parsed_string;
+    char* str;
 }
-%token <parsed_string>ARRAY BEG BOOLEAN DEF DO ELSE END FALSE FOR INTEGER IF OF PRINT READ REAL RETURN STRING THEN TO TRUE VAR WHILE
-%token <parsed_string>ID OCTAL_CONST INT_CONST FLOAT_CONST SCIENTIFIC STR_CONST
-%token <parsed_string>OP_ADD OP_SUB OP_MUL OP_DIV OP_MOD OP_ASSIGN OP_EQ OP_NE OP_GT OP_LT OP_GE OP_LE OP_AND OP_OR OP_NOT
-%token <parsed_string>MK_COMMA MK_COLON MK_SEMICOLON MK_LPAREN MK_RPAREN MK_LB MK_RB
+%token <str>ARRAY BEG BOOLEAN DEF DO ELSE END FALSE FOR INTEGER IF OF PRINT READ REAL RETURN STRING THEN TO TRUE VAR WHILE
+%token <str>ID OCTAL_CONST INT_CONST FLOAT_CONST SCIENTIFIC STR_CONST
+%token <str>OP_ADD OP_SUB OP_MUL OP_DIV OP_MOD OP_ASSIGN OP_EQ OP_NE OP_GT OP_LT OP_GE OP_LE OP_AND OP_OR OP_NOT
+%token <str>MK_COMMA MK_COLON MK_SEMICOLON MK_LPAREN MK_RPAREN MK_LB MK_RB
 /* start symbol */
-%type <parsed_string> decl func_decl opt_type int_const literal_const param id_list type scalar_type array_type
-
+%type <str> decl func_decl opt_type int_const literal_const param id_list type scalar_type array_type
+/* HW4 more type to be implemented*/
+%type <str> var_ref factor
 %start program
 %%
 
@@ -316,7 +319,15 @@ stmt_list		: stmt_list stmt
 			| stmt
 			;
 
-simple_stmt		: var_ref OP_ASSIGN boolean_expr MK_SEMICOLON
+simple_stmt	: var_ref
+            {
+                if($1==NULL)
+                {
+                    cout<<"Nullptr exception line "<<linenum<<endl;
+                }
+                assign_check_buf.pb($1);
+            }
+            OP_ASSIGN boolean_expr MK_SEMICOLON
 			| PRINT boolean_expr MK_SEMICOLON
 			| READ boolean_expr MK_SEMICOLON
 			;
@@ -403,8 +414,8 @@ mul_op			: OP_MUL
 			| OP_MOD
 			;
 
-factor		: var_ref
-			| OP_SUB var_ref
+factor		: var_ref {$$=$1;}
+			| OP_SUB var_ref {$$=$2;}
 			| MK_LPAREN boolean_expr MK_RPAREN
 			| OP_SUB MK_LPAREN boolean_expr MK_RPAREN
 			| ID MK_LPAREN opt_boolean_expr_list MK_RPAREN
@@ -412,7 +423,15 @@ factor		: var_ref
 			| literal_const
 			;
 
-var_ref		: ID
+var_ref		:
+            ID
+            {
+                if($1==NULL)
+                {
+                    cout<<"VAR RED Nullptr"<<endl;
+                }
+                $$=$1;
+            }
 			| var_ref dim
 			;
 

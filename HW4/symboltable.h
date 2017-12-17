@@ -24,6 +24,7 @@ extern vector<string> id_list_buf; //for multiple ID
 extern vector<string> funct_attri_buf; //for concatenating the function attribute
 //global varaible declaration for HW4 semantic analysis
 extern string program_name;
+extern vector<string> assign_check_buf;
 //symbol table data structure declaration
 struct sub_entry //the real entry for inserting the value
 {
@@ -59,4 +60,5 @@ int procedure_call_checking();
 int op_assign_checking(string );
 void dumpallsymbol();
 void allsymbol_table_error_detection();
+void simple_stmt_checking();
 #endif

@@ -114,7 +114,7 @@ void dumpsymbol()
         printf("-");
     printf("\n");
 
-    dumpallsymbol();
+    // dumpallsymbol();
 }
 int error_detection() //no hashing, just naive solution
 {
@@ -420,6 +420,36 @@ void allsymbol_table_error_detection()
             {
                 allsymbol_table[scope_depth].erase(allsymbol_table[scope_depth].begin()+j);
             }
+        }
+    }
+}
+void simple_stmt_checking()
+{
+    int is_error=0;
+    if(assign_check_buf.size()==1) //check if LHS is the constant, which cannot be assigned
+    {
+        //search the current symbol table
+        for(unsigned int i=0;i<mysymbol_table[scope_depth].size();i++)
+        {
+            if(assign_check_buf[0]==mysymbol_table[scope_depth][i].name
+            && mysymbol_table[scope_depth][i].kind=="constant")
+            {
+                is_error=1;
+            }
+        }
+        //search the global variables
+        for(unsigned int i=0;i<mysymbol_table[0].size();i++)
+        {
+            if(assign_check_buf[0]==mysymbol_table[0][i].name
+            && mysymbol_table[0][i].kind=="constant")
+            {
+                is_error=1;
+            }
+        }
+        string constant_name=assign_check_buf[0];
+        if(is_error)
+        {
+            cout<<"<Error> found in Line "<<linenum<<": constant '"<<constant_name<<"' cannot be assigned"<<endl;
         }
     }
 }
