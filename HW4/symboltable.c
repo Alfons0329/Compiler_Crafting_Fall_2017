@@ -471,14 +471,21 @@ void procedure_call_checking()
         }
     }
     //check if parameter type consistent
-    /*for(unsigned int i=0;i<mysymbol_table[0].size();i++)
+    for(unsigned int i=0;i<mysymbol_table[0].size();i++)
     {
         if(mysymbol_table[0][i].name == funct_name
         && mysymbol_table[0][i].kind == "function")
         {
-            for()
+            for(unsigned param_idx=0;param_idx<mysymbol_table[0][i].funct_attri.size();param_idx++)
+            {
+                if(funct_param_buf[param_idx+1]!=mysymbol_table[0][i].funct_attri[param_idx])
+                {
+                    cout<<"<Error> found in Line: "<<linenum<<" parameter type inconsistent"<<endl;
+                    return;
+                }
+            }
         }
-    }*/
+    }
 
 }
 string find_type(string name_in)

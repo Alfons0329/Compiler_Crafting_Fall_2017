@@ -409,7 +409,7 @@ add_op		: OP_ADD
 			| OP_SUB
 			;
 
-term		: term mul_op factor
+term		: term mul_op factor /*use dollar sign to do things*/
 			| factor
 			;
 
