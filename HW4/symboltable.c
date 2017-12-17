@@ -34,9 +34,9 @@ void inserting_symbol_table(vector<string> id_list_buf, string kind_in, string t
             one_subentry.name = id_list_buf[i];
         }
         one_subentry.kind = kind_in;
-        
         if(type_in==";")
             type_in = "void";
+
 
         one_subentry.type = type_in;
         string scope_depth_str = to_string(scope_depth);
@@ -428,7 +428,7 @@ void allsymbol_table_error_detection()
         }
     }
 }
-void simple_stmt_checking()
+void assignop()
 {
     int is_error=0;
     if(assign_check_buf.size()==1) //check if LHS is the constant, which cannot be assigned
@@ -462,12 +462,12 @@ void procedure_call_checking()
 {
     string funct_name = funct_param_buf[0];
     //check if parameter count consistent
-    cout<<"Check function name "<<funct_name<<endl;
+    /*cout<<"Check function name "<<funct_name<<endl;
     for(int i=0;i<funct_param_buf.size();i++)
     {
         cout<<funct_param_buf[i]<<" ";
     }
-    cout<<endl;
+    cout<<endl;*/
     for(unsigned int i=0;i<mysymbol_table[0].size();i++)
     {
         if(mysymbol_table[0][i].name == funct_name

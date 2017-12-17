@@ -62,9 +62,9 @@ int program_name_checking(string,string,int);
 int op_assign_checking(string );
 void dumpallsymbol();
 void allsymbol_table_error_detection();
-void simple_stmt_checking();
 void procedure_call_checking();
 //operations
 void addop();
+void assignop();
 string find_type(string);
 #endif

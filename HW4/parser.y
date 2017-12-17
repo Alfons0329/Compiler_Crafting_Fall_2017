@@ -43,6 +43,7 @@ int is_proc_call;
 %type <str> decl func_decl opt_type int_const literal_const param id_list type scalar_type array_type
 /* HW4 more type to be implemented*/
 %type <str> var_ref factor
+%type <str> boolean_expr_list boolean_expr boolean_term boolean_factor relop_expr expr term
 %start program
 %%
 
@@ -116,15 +117,69 @@ int_const	:	INT_CONST {$$=yytext; const_type=1;}
 			|	OCTAL_CONST {$$=yytext; const_type=9;}
 			;
 
-literal_const	: int_const {$$=yytext; const_type=(const_type==1)?1:9; const_type_str="integer";parse_constant();}
-				| OP_SUB int_const {$$=yytext; const_type=(const_type==1)?2:10; const_type_str="integer";parse_constant();}
-				| FLOAT_CONST {$$=yytext; const_type=3; const_type_str="real";parse_constant();}
-				| OP_SUB FLOAT_CONST {$$=yytext; const_type=4; const_type_str="real";parse_constant();}
-				| SCIENTIFIC {$$=yytext; const_type=5; const_type_str="real";parse_constant();}
-				| OP_SUB SCIENTIFIC {$$=yytext; const_type=6; const_type_str="real";parse_constant();}
-				| STR_CONST {$$=yytext; const_type=7; const_type_str="string ";parse_constant();}
-				| TRUE {$$=yytext; const_type=8; const_type_str="boolean";parse_constant();}
-				| FALSE {$$=yytext; const_type=8; const_type_str="boolean";parse_constant();}
+literal_const	: int_const
+				{
+					const_type=(const_type==1)?1:9;
+					const_type_str="integer";
+					parse_constant();
+					$$=strdup(const_type_str.c_str());
+				}
+				| OP_SUB int_const
+				{
+					const_type=(const_type==1)?2:10;
+					const_type_str="integer";
+					parse_constant();
+					$$=strdup(const_type_str.c_str());
+				}
+				| FLOAT_CONST
+				{
+					const_type=3;
+					const_type_str="real";
+					parse_constant();
+					$$=strdup(const_type_str.c_str());
+				}
+				| OP_SUB FLOAT_CONST
+				{
+					const_type=4;
+					const_type_str="real";
+					parse_constant();
+					$$=strdup(const_type_str.c_str());
+				}
+				| SCIENTIFIC
+				{
+					const_type=5;
+					const_type_str="real";
+					parse_constant();
+					$$=strdup(const_type_str.c_str());
+				}
+				| OP_SUB SCIENTIFIC
+				{
+					const_type=6;
+					const_type_str="real";
+					parse_constant();
+					$$=strdup(const_type_str.c_str());
+				}
+				| STR_CONST
+				{
+					 const_type=7;
+					 const_type_str="string ";
+					 parse_constant();
+					 $$=strdup(const_type_str.c_str());
+				 }
+				| TRUE
+				{
+					const_type=8;
+					const_type_str="boolean";
+					parse_constant();
+					$$=strdup(const_type_str.c_str());
+				}
+				| FALSE
+				{
+					const_type=8;
+					const_type_str="boolean";
+					parse_constant();
+					$$=strdup(const_type_str.c_str());
+				}
 			;
 
 opt_func_decl_list	: func_decl_list
@@ -323,13 +378,14 @@ stmt_list		: stmt_list stmt
 			;
 
 simple_stmt	: var_ref
-            {
-                assign_check_buf.pb($1);
-                simple_stmt_checking();
-            }
             OP_ASSIGN boolean_expr MK_SEMICOLON
             {
-                assign_check_buf.clear();
+				cout<<"we have an assign LHS "<<find_type($1)<<" with RHS "<<find_type($3)<<endl;
+				if(find_type($3)=="none")
+				{
+					cout<<"const type "<<$3<<endl;
+				}
+				assignop();
             }
 			| PRINT boolean_expr MK_SEMICOLON
 			| READ boolean_expr MK_SEMICOLON
@@ -375,23 +431,23 @@ opt_boolean_expr_list	: boolean_expr_list
 			;
 
 boolean_expr_list	: boolean_expr_list MK_COMMA boolean_expr
-			| boolean_expr
+			| boolean_expr {$$=$1;}
 			;
 
 boolean_expr		: boolean_expr OP_OR boolean_term
-			| boolean_term
+			| boolean_term {$$=$1;}
 			;
 
 boolean_term		: boolean_term OP_AND boolean_factor
-			| boolean_factor
+			| boolean_factor {$$=$1;}
 			;
 
 boolean_factor		: OP_NOT boolean_factor
-			| relop_expr
+			| relop_expr {$$=$1;}
 			;
 
 relop_expr		: expr rel_op expr
-			| expr
+			| expr {$$=$1;}
 			;
 
 rel_op		: OP_LT
@@ -403,7 +459,7 @@ rel_op		: OP_LT
 			;
 
 expr		: expr add_op term
-			| term
+			| term {$$=$1;}
 			;
 
 add_op		: OP_ADD
@@ -411,7 +467,7 @@ add_op		: OP_ADD
 			;
 
 term		: term mul_op factor /*use dollar sign to do things*/
-			| factor
+			| factor {$$=$1;} /*pass the factor up*/
 			;
 
 mul_op		: OP_MUL
