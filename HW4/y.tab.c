@@ -574,9 +574,9 @@ static const yytype_uint16 yyrline[] =
      369,   363,   376,   377,   380,   381,   384,   399,   400,   404,
      408,   413,   416,   422,   421,   435,   438,   439,   442,   443,
      446,   447,   450,   451,   454,   455,   459,   484,   487,   488,
-     489,   490,   491,   492,   495,   520,   523,   524,   527,   528,
-     531,   532,   533,   536,   537,   538,   539,   541,   540,   551,
-     552,   563,   573,   580
+     489,   490,   491,   492,   495,   520,   523,   524,   527,   552,
+     555,   556,   557,   560,   561,   562,   563,   565,   564,   575,
+     576,   587,   597,   604
 };
 #endif
 
@@ -1987,14 +1987,14 @@ yyreduce:
     {
                 if(find_type((yyvsp[0].str))=="none")
 				{
-					cout<<"Right const type "<<(yyvsp[0].str)<<endl;
+					cout<<" Left variable type "<<(yyvsp[-2].str)<<"Right const type "<<(yyvsp[0].str)<<endl;
 					/*if(addop(find_type($1),$3,$1,$3,$2)!="error")
 					{*/
 					(yyval.str)=strdup(addop(find_type((yyvsp[-2].str)),(yyvsp[0].str),(yyvsp[-2].str),(yyvsp[0].str),(yyvsp[-1].str)).c_str());
 				}
 				else if(find_type((yyvsp[-2].str))=="none")
 				{
-					cout<<"Left const type "<<(yyvsp[0].str)<<endl;
+					cout<<" Left const type "<<(yyvsp[-2].str)<<"Right variable type "<<(yyvsp[0].str)<<endl;
 					/*if(addop($1,find_type($3),$1,$3,$2)!="error")
 					{*/
 					(yyval.str)=strdup(addop((yyvsp[-2].str),find_type((yyvsp[0].str)),(yyvsp[-2].str),(yyvsp[0].str),(yyvsp[-1].str)).c_str());
@@ -2017,45 +2017,74 @@ yyreduce:
 #line 2018 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 99:
+  case 98:
 #line 528 "parser.y" /* yacc.c:1646  */
+    {
+				if(find_type((yyvsp[0].str))=="none")
+				{
+					cout<<" Left variable type "<<(yyvsp[-2].str)<<"Right const type "<<(yyvsp[0].str)<<endl;
+					/*if(addop(find_type($1),$3,$1,$3,$2)!="error")
+					{*/
+					(yyval.str)=strdup(mulop(find_type((yyvsp[-2].str)),(yyvsp[0].str),(yyvsp[-2].str),(yyvsp[0].str),(yyvsp[-1].str)).c_str());
+				}
+				else if(find_type((yyvsp[-2].str))=="none")
+				{
+					cout<<" Left const type "<<(yyvsp[-2].str)<<"Right variable type "<<(yyvsp[0].str)<<endl;
+					/*if(addop($1,find_type($3),$1,$3,$2)!="error")
+					{*/
+					(yyval.str)=strdup(mulop((yyvsp[-2].str),find_type((yyvsp[0].str)),(yyvsp[-2].str),(yyvsp[0].str),(yyvsp[-1].str)).c_str());
+				}
+				else
+				{
+					cout<<"Both Non const type "<<(yyvsp[0].str)<<endl;
+					/*if(addop(find_type($1),find_type($3),$1,$3,$2)!="error")
+					{*/
+					(yyval.str)=strdup(mulop(find_type((yyvsp[-2].str)),find_type((yyvsp[0].str)),(yyvsp[-2].str),(yyvsp[0].str),(yyvsp[-1].str)).c_str());
+
+				}
+			}
+#line 2047 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 99:
+#line 552 "parser.y" /* yacc.c:1646  */
     {(yyval.str)=(yyvsp[0].str);}
-#line 2024 "y.tab.c" /* yacc.c:1646  */
+#line 2053 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 103:
-#line 536 "parser.y" /* yacc.c:1646  */
+#line 560 "parser.y" /* yacc.c:1646  */
     {(yyval.str)=(yyvsp[0].str);}
-#line 2030 "y.tab.c" /* yacc.c:1646  */
+#line 2059 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 104:
-#line 537 "parser.y" /* yacc.c:1646  */
+#line 561 "parser.y" /* yacc.c:1646  */
     {(yyval.str)=(yyvsp[0].str);}
-#line 2036 "y.tab.c" /* yacc.c:1646  */
+#line 2065 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 107:
-#line 541 "parser.y" /* yacc.c:1646  */
+#line 565 "parser.y" /* yacc.c:1646  */
     {
                 funct_param_buf.pb((yyvsp[0].str));
                 is_proc_call=1;
             }
-#line 2045 "y.tab.c" /* yacc.c:1646  */
+#line 2074 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 108:
-#line 546 "parser.y" /* yacc.c:1646  */
+#line 570 "parser.y" /* yacc.c:1646  */
     {
 				procedure_call_checking();
                 funct_param_buf.clear();
                 is_proc_call=0;
             }
-#line 2055 "y.tab.c" /* yacc.c:1646  */
+#line 2084 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 110:
-#line 553 "parser.y" /* yacc.c:1646  */
+#line 577 "parser.y" /* yacc.c:1646  */
     {
                 (yyval.str)=(yyvsp[0].str);
                 if(is_proc_call)
@@ -2063,11 +2092,11 @@ yyreduce:
                     funct_param_buf.pb(const_type_str);
                 }
             }
-#line 2067 "y.tab.c" /* yacc.c:1646  */
+#line 2096 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 111:
-#line 564 "parser.y" /* yacc.c:1646  */
+#line 588 "parser.y" /* yacc.c:1646  */
     {
                 (yyval.str)=(yyvsp[0].str);
                 if(is_proc_call)
@@ -2077,20 +2106,20 @@ yyreduce:
 				/* cout<<"Array First time reference! "<<endl; */
 
             }
-#line 2081 "y.tab.c" /* yacc.c:1646  */
+#line 2110 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 112:
-#line 574 "parser.y" /* yacc.c:1646  */
+#line 598 "parser.y" /* yacc.c:1646  */
     {
 				/* cout<<"Array dimension reference! "<<endl; */
 				arr_dim_cnt++;
 			}
-#line 2090 "y.tab.c" /* yacc.c:1646  */
+#line 2119 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 2094 "y.tab.c" /* yacc.c:1646  */
+#line 2123 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2318,7 +2347,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 583 "parser.y" /* yacc.c:1906  */
+#line 607 "parser.y" /* yacc.c:1906  */
 
 
 int yyerror(const char *msg )

@@ -559,7 +559,7 @@ string relop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
 string addop(string LHS_type,string RHS_type,string LHS_name, string RHS_name,string oper)
 {
     //still chekc the array type first
-    cout<<"Addop at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
+    cout<<"Operator "<<oper<<" at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
     size_t find1=LHS_type.find("integer");
     size_t find2=RHS_type.find("real");
     size_t find3=LHS_type.find("real");
@@ -596,18 +596,18 @@ string addop(string LHS_type,string RHS_type,string LHS_name, string RHS_name,st
         {
             if(!(find3!=string::npos && find4!=string::npos)) //LHS RHS Is neither real nor integer
             {
-                cout<<"<Error> found in Line: "<<linenum<<" Add operation LHS_type and RHS_type should be either real or integer type"<<endl;
+                cout<<"<Error> found in Line: "<<linenum<<oper<<" operation LHS_type and RHS_type should be either real integer or string type"<<endl;
                 return "error";
             }
         }
     }
     else
     {
-        if(LHS_type.find("integer") && RHS_type.find("integer"))
+        if(LHS_type.find("integer")!=string::npos && RHS_type.find("integer")!=string::npos)
         {
             return "integer";
         }
-        else if(LHS_type.find("real") && RHS_type.find("real")) //LHS is real RHS is integer
+        else if(LHS_type.find("real")!=string::npos && RHS_type.find("real")!=string::npos) //LHS is real RHS is integer
         {
             return "real";
         }
@@ -623,65 +623,61 @@ string addop(string LHS_type,string RHS_type,string LHS_name, string RHS_name,st
         {
             if(!(find3!=string::npos && find4!=string::npos)) //LHS RHS Is neither real nor integer
             {
-                cout<<"<Error> found in Line: "<<linenum<<" Add operation LHS_type and RHS_type should be either real or integer type"<<endl;
+                cout<<"<Error> found in Line: "<<linenum<<oper<<" operation LHS_type and RHS_type should be either real or integer type"<<endl;
                 return "error";
             }
         }
     }
 }
-/*
-void dumpallsymbol()
+string mulop(string LHS_type,string RHS_type,string LHS_name, string RHS_name,string oper)
 {
-    printf("\n%-110s\n","-------------------ALL SYMBOL TABLE---------------------------------------------------------------------------");
-    for(unsigned int i=0;i<110;i++)
+    //still chekc the array type first
+    cout<<"Operator MUL FUNCTION "<<oper<<" at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
+    size_t find1=LHS_type.find("integer");
+    size_t find2=RHS_type.find("real");
+    size_t find3=LHS_type.find("real");
+    size_t find4=RHS_type.find("integer");
+    if(arr_convert_to_scalar_checking(LHS_type,RHS_type)=="error")
     {
-        printf("=");
+        return "error";
     }
-    printf("\n");
-    printf("%-33s%-11s%-11s%-17s%-11s\n","Name","Kind","Level","Type","Attribute");
-    for(unsigned int i=0;i<110;i++)
+    if(oper=="*" || oper=="/")
     {
-        printf("-");
-    }
-    printf("\n");
-    for(unsigned int all_scope_index=0;all_scope_index<SYMBOL_TABLE_MAX_SIZE;all_scope_index++)
-    {
-        if(allsymbol_table[all_scope_index].size()==0)
-            continue;
-
-        for(unsigned int i=0;i<allsymbol_table[all_scope_index].size();i++)
+        if(LHS_type.find("integer")!=string::npos && RHS_type.find("integer")!=string::npos)
         {
-            printf("%-33s",allsymbol_table[all_scope_index][i].name.c_str()); //safety first
-            printf("%-11s",allsymbol_table[all_scope_index][i].kind.c_str());
-            printf("%-11s",allsymbol_table[all_scope_index][i].level_str.c_str());
-            printf("%-17s",allsymbol_table[all_scope_index][i].type.c_str());
-            for(unsigned int j=0;j<allsymbol_table[all_scope_index][i].funct_attri.size();j++)
-            {
-                cout<<allsymbol_table[all_scope_index][i].funct_attri[j];
-                if(j!=allsymbol_table[all_scope_index][i].funct_attri.size()-1)
-                {
-                    cout<<", ";
-                }
-            }
-            printf("\n");
+            return "integer";
         }
-    }
-    for(unsigned int i=0;i< 110;i++)
-        printf("-");
-    printf("\n");
-}
-void allsymbol_table_error_detection()
-{
-    for(unsigned int i=0;i<allsymbol_table[scope_depth].size();i++)
-    {
-        for(unsigned int j=i+1;j<allsymbol_table[scope_depth].size();j++)
+        else if(LHS_type.find("real")!=string::npos && RHS_type.find("real")!=string::npos) //LHS is real RHS is integer
         {
-            if((allsymbol_table[scope_depth][i].name==allsymbol_table[scope_depth][j].name)
-            &&(allsymbol_table[scope_depth][j].kind!="parameter")&&((allsymbol_table[scope_depth][i].kind!="parameter")))
+            return "real";
+        }
+        else if(find1!=string::npos && find2!=string::npos) //LHS is integer RHS is real
+        {
+            return "real";
+        }
+        else if(find3!=string::npos && find4!=string::npos) //LHS is real RHS is integer
+        {
+            return "real";
+        }
+        else if(!(find1!=string::npos && find2!=string::npos)) //LHS RHS diff types expected to be either int real or real int
+        {
+            if(!(find3!=string::npos && find4!=string::npos)) //LHS RHS Is neither real nor integer
             {
-                allsymbol_table[scope_depth].erase(allsymbol_table[scope_depth].begin()+j);
+                cout<<"<Error> found in Line: "<<linenum<<oper<<" operation LHS_type and RHS_type should be either real or integer type"<<endl;
+                return "error";
             }
         }
     }
+    else if(oper=="mod") //mod operator only allow both LHS and RHS to be integer type, will return an integer value back, otherwise, an error occurred
+    {
+        if(LHS_type.find("integer")!=string::npos && RHS_type.find("integer")!=string::npos)
+        {
+            return "integer";
+        }
+        else
+        {
+            cout<<"<Error> found in Line: "<<linenum<<oper<<" operation LHS_type and RHS_type should be either integer type"<<endl;
+            return "error";
+        }
+    }
 }
-*/

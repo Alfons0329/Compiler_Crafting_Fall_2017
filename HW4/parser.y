@@ -496,14 +496,14 @@ expr		: expr add_op term
             {
                 if(find_type($3)=="none")
 				{
-					cout<<"Right const type "<<$3<<endl;
+					cout<<" Left variable type "<<$1<<"Right const type "<<$3<<endl;
 					/*if(addop(find_type($1),$3,$1,$3,$2)!="error")
 					{*/
 					$$=strdup(addop(find_type($1),$3,$1,$3,$2).c_str());
 				}
 				else if(find_type($1)=="none")
 				{
-					cout<<"Left const type "<<$3<<endl;
+					cout<<" Left const type "<<$1<<"Right variable type "<<$3<<endl;
 					/*if(addop($1,find_type($3),$1,$3,$2)!="error")
 					{*/
 					$$=strdup(addop($1,find_type($3),$1,$3,$2).c_str());
@@ -525,6 +525,30 @@ add_op		: OP_ADD
 			;
 
 term		: term mul_op factor /*use dollar sign to do things*/
+			{
+				if(find_type($3)=="none")
+				{
+					cout<<" Left variable type "<<$1<<"Right const type "<<$3<<endl;
+					/*if(addop(find_type($1),$3,$1,$3,$2)!="error")
+					{*/
+					$$=strdup(mulop(find_type($1),$3,$1,$3,$2).c_str());
+				}
+				else if(find_type($1)=="none")
+				{
+					cout<<" Left const type "<<$1<<"Right variable type "<<$3<<endl;
+					/*if(addop($1,find_type($3),$1,$3,$2)!="error")
+					{*/
+					$$=strdup(mulop($1,find_type($3),$1,$3,$2).c_str());
+				}
+				else
+				{
+					cout<<"Both Non const type "<<$3<<endl;
+					/*if(addop(find_type($1),find_type($3),$1,$3,$2)!="error")
+					{*/
+					$$=strdup(mulop(find_type($1),find_type($3),$1,$3,$2).c_str());
+
+				}
+			}
 			| factor {$$=$1;} /*pass the factor up*/
 			;
 

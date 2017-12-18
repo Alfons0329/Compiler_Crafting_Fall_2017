@@ -70,11 +70,9 @@ void procedure_call_checking();
 //operations type ckecking
 string find_type(string);
 string find_kind(string);
+string arr_convert_to_scalar_checking();
 string assignop(string,string,string,string);
 string relop(string,string,string,string);
 string addop(string,string,string,string,string);
-string mulop(string,string,string,string);
-string divop(string,string,string,string);
-string modop(string,string,string,string);
-string arr_convert_to_scalar_checking();
+string mulop(string,string,string,string,string);
 #endif
