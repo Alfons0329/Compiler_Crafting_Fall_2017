@@ -1954,7 +1954,7 @@ yyreduce:
 				if(find_type((yyvsp[0].str))=="none")
 				{
 					cout<<"Right const type "<<(yyvsp[0].str)<<endl;
-					if(relop(find_type((yyvsp[-2].str)),(yyvsp[0].str),(yyvsp[-2].str),(yyvsp[0].str))!="relop_error")
+					if(relop(find_type((yyvsp[-2].str)),(yyvsp[0].str),(yyvsp[-2].str),(yyvsp[0].str))!="error")
 					{
 						(yyval.str)=strdup(relop(find_type((yyvsp[-2].str)),(yyvsp[0].str),(yyvsp[-2].str),(yyvsp[0].str)).c_str());
 					}
@@ -1962,7 +1962,7 @@ yyreduce:
 				else if(find_type((yyvsp[-2].str))=="none")
 				{
 					cout<<"Left const type "<<(yyvsp[0].str)<<endl;
-					if(relop((yyvsp[-2].str),find_type((yyvsp[0].str)),(yyvsp[-2].str),(yyvsp[0].str))!="relop_error")
+					if(relop((yyvsp[-2].str),find_type((yyvsp[0].str)),(yyvsp[-2].str),(yyvsp[0].str))!="error")
 					{
 						(yyval.str)=strdup(relop((yyvsp[-2].str),find_type((yyvsp[0].str)),(yyvsp[-2].str),(yyvsp[0].str)).c_str());
 					}
@@ -1970,7 +1970,7 @@ yyreduce:
 				else
 				{
 					cout<<"Both Non const type "<<(yyvsp[0].str)<<endl;
-					if(relop(find_type((yyvsp[-2].str)),find_type((yyvsp[0].str)),(yyvsp[-2].str),(yyvsp[0].str))!="relop_error")
+					if(relop(find_type((yyvsp[-2].str)),find_type((yyvsp[0].str)),(yyvsp[-2].str),(yyvsp[0].str))!="error")
 					{
 						(yyval.str)=strdup(relop(find_type((yyvsp[-2].str)),find_type((yyvsp[0].str)),(yyvsp[-2].str),(yyvsp[0].str)).c_str());
 					}

@@ -462,7 +462,7 @@ relop_expr	:
 				if(find_type($3)=="none")
 				{
 					cout<<"Right const type "<<$3<<endl;
-					if(relop(find_type($1),$3,$1,$3)!="relop_error")
+					if(relop(find_type($1),$3,$1,$3)!="error")
 					{
 						$$=strdup(relop(find_type($1),$3,$1,$3).c_str());
 					}
@@ -470,7 +470,7 @@ relop_expr	:
 				else if(find_type($1)=="none")
 				{
 					cout<<"Left const type "<<$3<<endl;
-					if(relop($1,find_type($3),$1,$3)!="relop_error")
+					if(relop($1,find_type($3),$1,$3)!="error")
 					{
 						$$=strdup(relop($1,find_type($3),$1,$3).c_str());
 					}
@@ -478,7 +478,7 @@ relop_expr	:
 				else
 				{
 					cout<<"Both Non const type "<<$3<<endl;
-					if(relop(find_type($1),find_type($3),$1,$3)!="relop_error")
+					if(relop(find_type($1),find_type($3),$1,$3)!="error")
 					{
 						$$=strdup(relop(find_type($1),find_type($3),$1,$3).c_str());
 					}

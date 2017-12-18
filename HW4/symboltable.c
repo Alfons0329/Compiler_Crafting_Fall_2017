@@ -453,47 +453,56 @@ string find_kind(string name_in)
     }
     return "none";
 }
+string arr_convert_to_scalar_checking(string LHS_type,string RHS_type)
+{
+    size_t LHS_arr_dim=count(LHS_type.begin(),LHS_type.end(),'[');
+    size_t RHS_arr_dim=count(RHS_type.begin(),RHS_type.end(),'[');
+    // cout<<"Line:"<<linenum<<"LHS Array dimension "<<LHS_arr_dim<<" RHS Array dimension "<<RHS_arr_dim<<" Total dimension "<<arr_dim_cnt<<endl;
+    //ends here
+    string check_LHS_arr;
+    if(arr_dim_cnt!=LHS_arr_dim+RHS_arr_dim)
+    {
+        cout<<"<Error> found in Line: "<<linenum<<" Array reference does not converted to scalar type successfully "<<endl;
+        return "error";
+    }
+    else if(LHS_arr_dim && RHS_arr_dim) //array case by case which has been converted to scalar type successfully, checking whether their type matches
+    {
+        //find the type name before [] characters and take the substr out
+        size_t find5=LHS_type.find("[");
+        check_LHS_arr=LHS_type.substr(0,find5-1);
+        cout<<"Array has been converted to scalar type :"<<check_LHS_arr<<"QQ"<<endl;
+        size_t arr_correct=RHS_type.find(check_LHS_arr);
+        if(arr_correct==string::npos)
+        {
+            cout<<"<Error> found in Line: "<<linenum<<" Assign operation LHS_type and RHS_type inconsistent "<<endl;
+            return "error";
+        }
+        else
+        {
+            return check_LHS_arr;
+        }
+    }
+    return check_LHS_arr;
+}
 string assignop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
 {
-    cout<<"\n\nAssignop at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
+    // cout<<"\n\nAssignop at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
     if(find_kind(LHS_name)=="constant")
     {
         cout<<"<Error> found in Line: "<<linenum<<" constant '"<<LHS_name<<"'cannot be assigned"<<endl;
-        return "assign_error";
+        return "error";
     }
     if(LHS_type!=RHS_type)
     {
         //special judge for judging the array_type checking the consistency of their dimension
-        size_t LHS_arr_dim=count(LHS_type.begin(),LHS_type.end(),'[');
-        size_t RHS_arr_dim=count(RHS_type.begin(),RHS_type.end(),'[');
-        cout<<"Line:"<<linenum<<"LHS Array dimension "<<LHS_arr_dim<<" RHS Array dimension "<<RHS_arr_dim<<" Total dimension "<<arr_dim_cnt<<endl;
-        //ends here
-        if(arr_dim_cnt!=LHS_arr_dim+RHS_arr_dim)
+        if(arr_convert_to_scalar_checking(LHS_type,RHS_type)=="error")
         {
-            cout<<"<Error> found in Line: "<<linenum<<" Array reference does not converted to scalar type successfully "<<endl;
-            return "assign_error";
-        }
-        else if(LHS_arr_dim && RHS_arr_dim) //array case by case which has been converted to scalar type successfully, checking whether their type matches
-        {
-            //find the type name before [] characters and take the substr out
-            size_t find5=LHS_type.find("[");
-            string check_LHS_arr=LHS_type.substr(0,find5-1);
-            cout<<"Array has been converted to scalar type :"<<check_LHS_arr<<"QQ"<<endl;
-            size_t arr_correct=RHS_type.find(check_LHS_arr);
-            if(arr_correct==string::npos)
-            {
-                cout<<"<Error> found in Line: "<<linenum<<" Assign operation LHS_type and RHS_type inconsistent "<<endl;
-                return "assign_error";
-            }
-            else
-            {
-                return check_LHS_arr;
-            }
+            return "error";
         }
         /*if((LHS_arr_dim!=RHS_arr_dim) && LHS_arr_dim && RHS_arr_dim)
         {
             cout<<"<Error> found in Line: "<<linenum<<" Assign operation LHS Array dimension  RHS Array dimension inconsistent "<<endl;
-            return "assign_error";
+            return "error";
         }*/
         size_t find1=LHS_type.find(RHS_type); //find right in left ex: left string[10] right string is allowed
         size_t find2=RHS_type.find(LHS_type); //find left in right ex: left integer right integer [10] is allowed
@@ -504,7 +513,7 @@ string assignop(string LHS_type,string RHS_type,string LHS_name, string RHS_name
             if(find1==string::npos && find2==string::npos) //LHS does not have the same type
             {
                 cout<<"<Error> found in Line: "<<linenum<<" Assign operation LHS_type and RHS_type inconsistent "<<endl;
-                return "assign_error";
+                return "error";
             }
         }
 
@@ -513,7 +522,7 @@ string assignop(string LHS_type,string RHS_type,string LHS_name, string RHS_name
 }
 string relop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
 {
-    cout<<"Relop at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
+    // cout<<"Relop at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
 
     //if array type since it comes with dimention, so use string find to check if
     size_t find1=LHS_type.find("integer");
@@ -524,6 +533,11 @@ string relop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
         <<"FIND 2 "<<find2
         <<"FIND 3 "<<find3
         <<"FIND 4 "<<find4<<endl;*/
+    //check if array has been converted to scalar first and whether their type matches or not
+    if(arr_convert_to_scalar_checking(LHS_type,RHS_type)=="error")
+    {
+        return "error";
+    }
     if(find1!=string::npos && find4!=string::npos)
     {
         return "boolean";
@@ -537,7 +551,7 @@ string relop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
         if(!(find3!=string::npos && find4!=string::npos))
         {
             cout<<"<Error> found in Line: "<<linenum<<" Relational operation LHS_type and RHS_type inconsistent "<<endl;
-            return "relop_error";
+            return "error";
         }
     }
     return "boolean";

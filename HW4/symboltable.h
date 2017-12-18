@@ -77,4 +77,5 @@ string minop(string,string,string,string);
 string mulop(string,string,string,string);
 string divop(string,string,string,string);
 string modop(string,string,string,string);
+string arr_convert_to_scalar_checking();
 #endif

@@ -38,12 +38,65 @@ begin
     var itg : 44;
     var bb,cc : boolean;
     var h,i: array 1 to 8 of string; //my test
-    var zr: array 1 to 8 of integer;
+    var zr, zs: array 1 to 8 of integer;
     var str,sttr : string;
     var twodim: array 1 to 8 of array 1 to 7 of integer; //mytest
     //&S+
 
     //relop start testing here
+
+    if h[3] > zr[5] then //error LHS string RHS integer
+        aa := 7;
+    else
+        aa := 10;
+    end if
+
+    if h > zr[5] then //error LHS has not been converted to scalar type
+        aa := 7;
+    else
+        aa := 10;
+    end if
+
+    if h[3] > sttr then //error relop should be real or integer
+        aa := 7;
+    else
+        aa := 10;
+    end if
+
+
+
+    if zr[3] > aa then //OK LHS integer RHS integer
+        aa := 7;
+    else
+        aa := 10;
+    end if
+
+    if zr > aa then //error LHS has not been converted to scalar type
+        aa := 7;
+    else
+        aa := 10;
+    end if
+
+    if twodim[4] > zr[5] then //error LHS has not been converted to scalar type
+        aa := 7;
+    else
+        aa := 10;
+    end if
+
+    if twodim[3][4] > zr[5] then //correct LHS integer and RHS Integer, all of them has been converted to scalar type
+        aa := 7;
+    else
+        aa := 10;
+    end if
+
+
+
+    if str > sttr then //error relop should be real or integer
+        aa := 7;
+    else
+        aa := 10;
+    end if
+
 
     if str > sttr then //error relop should be real or integer
         aa := 7;
