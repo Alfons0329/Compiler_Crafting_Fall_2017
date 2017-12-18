@@ -210,7 +210,7 @@ func_decl	: 	ID
                     funct_name.clear();
                     if(is_arr)
 					{
-						array_dimension_parser();
+						/*array_dimension_parser();
 						//here we push_back the funct_attri_buf inorder to match the attributes of function
 						funct_attri_buf.clear(); //primitive initialization
 						for(unsigned int i=0;i<mysymbol_table[1].size();i++) //search the parameter for function attribute
@@ -224,7 +224,7 @@ func_decl	: 	ID
                         array_type_str+=" ";
                         array_type_str+=reverse_arr_buf;
 						inserting_symbol_table(id_list_buf,"function",array_type_str,funct_attri_buf);
-                        memset(arr_buf,0,sizeof(arr_buf));//update it for next segment
+                        memset(arr_buf,0,sizeof(arr_buf));//update it for next segment*/
 					}
 					else
 					{
@@ -496,6 +496,32 @@ rel_op		: OP_LT
 			;
 
 expr		: expr add_op term
+            {
+                /*if(find_type($3)=="none")
+				{
+					cout<<"Right const type "<<$3<<endl;
+					if(addop(find_type($1),$3,$1,$3,$2)!="error")
+					{
+						$$=strdup(addop(find_type($1),$3,$1,$3,$2).c_str());
+					}
+				}
+				else if(find_type($1)=="none")
+				{
+					cout<<"Left const type "<<$3<<endl;
+					if(addop($1,find_type($3),$1,$3,$2)!="error")
+					{
+						$$=strdup(addop($1,find_type($3),$1,$3,$2).c_str());
+					}
+				}
+				else
+				{
+					cout<<"Both Non const type "<<$3<<endl;
+					if(addop(find_type($1),find_type($3),$1,$3,$2)!="error")
+					{
+						$$=strdup(addop(find_type($1),find_type($3),$1,$3,$2).c_str());
+					}
+				}*/
+            }
 			| term {$$=$1;}
 			;
 
