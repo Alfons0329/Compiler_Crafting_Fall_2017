@@ -62,11 +62,11 @@ void scientific_converter(char* );
 void dumpiterator();
 //function prototype declaration for HW4 semantic analysis
 int program_name_checking(string,string,int);
-int op_assign_checking(string );
-void dumpallsymbol();
-void allsymbol_table_error_detection();
+// int op_assign_checking(string );
+// void dumpallsymbol();
+// void allsymbol_table_error_detection();
 void procedure_call_checking();
-//operations
+//operations type ckecking
 string find_type(string);
 string find_kind(string);
 string assignop(string,string,string,string);

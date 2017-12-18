@@ -127,8 +127,6 @@ void dumpsymbol()
     for(unsigned int i=0;i< 110;i++)
         printf("-");
     printf("\n");
-
-    // dumpallsymbol();
 }
 int error_detection() //no hashing, just naive solution
 {
@@ -217,7 +215,6 @@ int error_detection() //no hashing, just naive solution
             error_msg.clear();
         }
     }
-    allsymbol_table_error_detection();
     return is_final_error;
 }
 void radix_converter(char* octal_in)
@@ -383,60 +380,6 @@ int program_name_checking(string program_name_in,string parsed_name,int situatio
     }
     return is_error;
 }
-void dumpallsymbol()
-{
-    printf("\n%-110s\n","-------------------ALL SYMBOL TABLE---------------------------------------------------------------------------");
-    for(unsigned int i=0;i<110;i++)
-    {
-        printf("=");
-    }
-    printf("\n");
-    printf("%-33s%-11s%-11s%-17s%-11s\n","Name","Kind","Level","Type","Attribute");
-    for(unsigned int i=0;i<110;i++)
-    {
-        printf("-");
-    }
-    printf("\n");
-    for(unsigned int all_scope_index=0;all_scope_index<SYMBOL_TABLE_MAX_SIZE;all_scope_index++)
-    {
-        if(allsymbol_table[all_scope_index].size()==0)
-            continue;
-
-        for(unsigned int i=0;i<allsymbol_table[all_scope_index].size();i++)
-        {
-            printf("%-33s",allsymbol_table[all_scope_index][i].name.c_str()); //safety first
-            printf("%-11s",allsymbol_table[all_scope_index][i].kind.c_str());
-            printf("%-11s",allsymbol_table[all_scope_index][i].level_str.c_str());
-            printf("%-17s",allsymbol_table[all_scope_index][i].type.c_str());
-            for(unsigned int j=0;j<allsymbol_table[all_scope_index][i].funct_attri.size();j++)
-            {
-                cout<<allsymbol_table[all_scope_index][i].funct_attri[j];
-                if(j!=allsymbol_table[all_scope_index][i].funct_attri.size()-1)
-                {
-                    cout<<", ";
-                }
-            }
-            printf("\n");
-        }
-    }
-    for(unsigned int i=0;i< 110;i++)
-        printf("-");
-    printf("\n");
-}
-void allsymbol_table_error_detection()
-{
-    for(unsigned int i=0;i<allsymbol_table[scope_depth].size();i++)
-    {
-        for(unsigned int j=i+1;j<allsymbol_table[scope_depth].size();j++)
-        {
-            if((allsymbol_table[scope_depth][i].name==allsymbol_table[scope_depth][j].name)
-            &&(allsymbol_table[scope_depth][j].kind!="parameter")&&((allsymbol_table[scope_depth][i].kind!="parameter")))
-            {
-                allsymbol_table[scope_depth].erase(allsymbol_table[scope_depth].begin()+j);
-            }
-        }
-    }
-}
 void procedure_call_checking()
 {
     string funct_name = funct_param_buf[0];
@@ -574,3 +517,59 @@ string relop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
     }
     return "boolean";
 }
+/*
+void dumpallsymbol()
+{
+    printf("\n%-110s\n","-------------------ALL SYMBOL TABLE---------------------------------------------------------------------------");
+    for(unsigned int i=0;i<110;i++)
+    {
+        printf("=");
+    }
+    printf("\n");
+    printf("%-33s%-11s%-11s%-17s%-11s\n","Name","Kind","Level","Type","Attribute");
+    for(unsigned int i=0;i<110;i++)
+    {
+        printf("-");
+    }
+    printf("\n");
+    for(unsigned int all_scope_index=0;all_scope_index<SYMBOL_TABLE_MAX_SIZE;all_scope_index++)
+    {
+        if(allsymbol_table[all_scope_index].size()==0)
+            continue;
+
+        for(unsigned int i=0;i<allsymbol_table[all_scope_index].size();i++)
+        {
+            printf("%-33s",allsymbol_table[all_scope_index][i].name.c_str()); //safety first
+            printf("%-11s",allsymbol_table[all_scope_index][i].kind.c_str());
+            printf("%-11s",allsymbol_table[all_scope_index][i].level_str.c_str());
+            printf("%-17s",allsymbol_table[all_scope_index][i].type.c_str());
+            for(unsigned int j=0;j<allsymbol_table[all_scope_index][i].funct_attri.size();j++)
+            {
+                cout<<allsymbol_table[all_scope_index][i].funct_attri[j];
+                if(j!=allsymbol_table[all_scope_index][i].funct_attri.size()-1)
+                {
+                    cout<<", ";
+                }
+            }
+            printf("\n");
+        }
+    }
+    for(unsigned int i=0;i< 110;i++)
+        printf("-");
+    printf("\n");
+}
+void allsymbol_table_error_detection()
+{
+    for(unsigned int i=0;i<allsymbol_table[scope_depth].size();i++)
+    {
+        for(unsigned int j=i+1;j<allsymbol_table[scope_depth].size();j++)
+        {
+            if((allsymbol_table[scope_depth][i].name==allsymbol_table[scope_depth][j].name)
+            &&(allsymbol_table[scope_depth][j].kind!="parameter")&&((allsymbol_table[scope_depth][i].kind!="parameter")))
+            {
+                allsymbol_table[scope_depth].erase(allsymbol_table[scope_depth].begin()+j);
+            }
+        }
+    }
+}
+*/
