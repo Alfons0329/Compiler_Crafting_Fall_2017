@@ -32,13 +32,91 @@ end fun2
 // main program
 begin
 
-    var aa : integer;
+    var aa,an : integer;
+    var bk : real;
+    var rl : 0.123;
+    var itg : 44;
     var bb,cc : boolean;
     var h,i: array 1 to 8 of string; //my test
     var zr: array 1 to 8 of integer;
+    var str,sttr : string;
     var twodim: array 1 to 8 of array 1 to 7 of integer; //mytest
     //&S+
 
+    //relop start testing here
+
+    if str > sttr then //error relop should be real or integer
+        aa := 7;
+    else
+        aa := 10;
+    end if
+
+    if aa > sttr then //error relop should be real or integer
+        aa := 7;
+    else
+        aa := 10;
+    end if
+
+    if bb > sttr then //error relop should be real or integer
+        aa := 7;
+    else
+        aa := 10;
+    end if
+
+    if rl > sttr then //error relop should be real or integer
+        aa := 7;
+    else
+        aa := 10;
+    end if
+
+    if itg > sttr then //error relop should be real or integer
+        aa := 7;
+    else
+        aa := 10;
+    end if
+
+    if aa > an then    //correct LHS int RHS int
+        aa := 7;
+    else
+        aa := 10;
+    end if
+
+    if aa > 10 then    //correct LHS int RHS int
+        aa := 7;
+    else
+        aa := 10;
+    end if
+
+    if aa > 10.625 then    //correct LHS int RHS real
+        aa := 7;
+    else
+        aa := 10;
+    end if
+
+    if aa > bk then    //correct LHS int RHS int
+        aa := 7;
+    else
+        aa := 10;
+    end if
+
+    if aa > rl then    //correct LHS int RHS real
+        aa := 7;
+    else
+        aa := 10;
+    end if
+
+    if aa > 10 then    //correct LHS int RHS int
+        aa := 7;
+    else
+        aa := 10;
+    end if
+
+    if str > sttr then //error relop should be real or integer
+        aa := 7;
+    else
+        aa := 10;
+    end if
+    //relop end testing here
     zr := twodim;      //error array dimension error, also , whole array cannot be assigned
     twodim := zr;      //error array dimension error, also , whole array cannot be assigned
 

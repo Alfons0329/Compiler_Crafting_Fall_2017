@@ -1950,7 +1950,7 @@ yyreduce:
   case 86:
 #line 460 "parser.y" /* yacc.c:1646  */
     {
-				cout<<"RELOP EXPR HAPPENS HERE linenum "<<linenum<<endl;
+				/* cout<<"RELOP EXPR HAPPENS HERE linenum "<<linenum<<endl; */
 				if(find_type((yyvsp[0].str))=="none")
 				{
 					cout<<"const type "<<(yyvsp[0].str)<<endl;

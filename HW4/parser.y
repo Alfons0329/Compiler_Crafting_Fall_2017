@@ -458,7 +458,7 @@ boolean_factor		: OP_NOT boolean_factor
 relop_expr	:
 			expr rel_op expr
 			{
-				cout<<"RELOP EXPR HAPPENS HERE linenum "<<linenum<<endl;
+				/* cout<<"RELOP EXPR HAPPENS HERE linenum "<<linenum<<endl; */
 				if(find_type($3)=="none")
 				{
 					cout<<"const type "<<$3<<endl;
