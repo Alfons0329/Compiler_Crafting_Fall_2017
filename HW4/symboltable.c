@@ -466,7 +466,7 @@ string assignop(string LHS_type,string RHS_type,string LHS_name, string RHS_name
         //special judge for judging the array_type checking the consistency of their dimension
         size_t LHS_arr_dim=count(LHS_type.begin(),LHS_type.end(),'[');
         size_t RHS_arr_dim=count(RHS_type.begin(),RHS_type.end(),'[');
-        cout<<"LHS Array dimension "<<LHS_arr_dim<<" RHS Array dimension "<<RHS_arr_dim<<" Total dimension "<<arr_dim_cnt<<endl;
+        cout<<"Line:"<<linenum<<"LHS Array dimension "<<LHS_arr_dim<<" RHS Array dimension "<<RHS_arr_dim<<" Total dimension "<<arr_dim_cnt<<endl;
         //ends here
         if(arr_dim_cnt!=LHS_arr_dim+RHS_arr_dim)
         {
