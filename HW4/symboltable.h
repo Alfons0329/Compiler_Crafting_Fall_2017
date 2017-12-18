@@ -75,4 +75,5 @@ string assignop(string,string,string,string);
 string relop(string,string,string,string);
 string addop(string,string,string,string,string);
 string mulop(string,string,string,string,string);
+string simple(string);
 #endif

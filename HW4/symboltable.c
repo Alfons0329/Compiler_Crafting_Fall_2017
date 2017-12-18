@@ -685,3 +685,7 @@ string mulop(string LHS_type,string RHS_type,string LHS_name, string RHS_name,st
         }
     }
 }
+string simple(string SIM_type)
+{
+    
+}
