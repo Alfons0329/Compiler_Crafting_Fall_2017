@@ -46,7 +46,7 @@ int arr_dim_cnt;
 %type <str> decl func_decl opt_type int_const literal_const param id_list type scalar_type array_type
 /* HW4 more type to be implemented*/
 %type <str> var_ref factor
-%type <str> boolean_expr_list boolean_expr boolean_term boolean_factor relop_expr expr term
+%type <str> boolean_expr_list boolean_expr boolean_term boolean_factor relop_expr expr term add_op mul_op
 %start program
 %%
 
@@ -497,7 +497,7 @@ rel_op		: OP_LT
 
 expr		: expr add_op term
             {
-                /*if(find_type($3)=="none")
+                if(find_type($3)=="none")
 				{
 					cout<<"Right const type "<<$3<<endl;
 					if(addop(find_type($1),$3,$1,$3,$2)!="error")
@@ -520,7 +520,7 @@ expr		: expr add_op term
 					{
 						$$=strdup(addop(find_type($1),find_type($3),$1,$3,$2).c_str());
 					}
-				}*/
+				}
             }
 			| term {$$=$1;}
 			;

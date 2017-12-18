@@ -548,13 +548,86 @@ string relop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
     }
     else if(!(find1!=string::npos && find2!=string::npos)) //LHS RHS diff types expected to be either int real or real int
     {
-        if(!(find3!=string::npos && find4!=string::npos))
+        if(!(find3!=string::npos && find4!=string::npos)) //LHS RHS Is neither real nor integer
         {
-            cout<<"<Error> found in Line: "<<linenum<<" Relational operation LHS_type and RHS_type inconsistent "<<endl;
+            cout<<"<Error> found in Line: "<<linenum<<" Relational operation LHS_type and RHS_type should be either real or integer type"<<endl;
             return "error";
         }
     }
     return "boolean";
+}
+string addop(string LHS_type,string RHS_type,string LHS_name, string RHS_name,string oper)
+{
+    //still chekc the array type first
+    cout<<"Addop at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
+    size_t find1=LHS_type.find("integer");
+    size_t find2=RHS_type.find("real");
+    size_t find3=LHS_type.find("real");
+    size_t find4=RHS_type.find("integer");
+    if(arr_convert_to_scalar_checking(LHS_type,RHS_type)=="error")
+    {
+        return "error";
+    }
+    if(oper=="+") //add, operator overloading works for striong type
+    {
+        size_t LHS_str=LHS_type.find("string");
+        size_t RHS_str=LHS_type.find("string");
+        if(LHS_str!=string::npos && RHS_str!=string::npos) //LHS RHS if both be the string, then + operator fits the case
+        {
+            return "string";
+        }
+        else if(LHS_type.find("integer") && RHS_type.find("integer"))
+        {
+            return "integer";
+        }
+        else if(LHS_type.find("real") && RHS_type.find("real")) //LHS is real RHS is integer
+        {
+            return "real";
+        }
+        else if(find1!=string::npos && find2!=string::npos) //LHS is integer RHS is real
+        {
+            return "real";
+        }
+        else if(find3!=string::npos && find4!=string::npos) //LHS is real RHS is integer
+        {
+            return "real";
+        }
+        else if(!(find1!=string::npos && find2!=string::npos)) //LHS RHS diff types expected to be either int real or real int
+        {
+            if(!(find3!=string::npos && find4!=string::npos)) //LHS RHS Is neither real nor integer
+            {
+                cout<<"<Error> found in Line: "<<linenum<<" Add operation LHS_type and RHS_type should be either real or integer type"<<endl;
+                return "error";
+            }
+        }
+    }
+    else
+    {
+        if(LHS_type.find("integer") && RHS_type.find("integer"))
+        {
+            return "integer";
+        }
+        else if(LHS_type.find("real") && RHS_type.find("real")) //LHS is real RHS is integer
+        {
+            return "real";
+        }
+        else if(find1!=string::npos && find2!=string::npos) //LHS is integer RHS is real
+        {
+            return "real";
+        }
+        else if(find3!=string::npos && find4!=string::npos) //LHS is real RHS is integer
+        {
+            return "real";
+        }
+        else if(!(find1!=string::npos && find2!=string::npos)) //LHS RHS diff types expected to be either int real or real int
+        {
+            if(!(find3!=string::npos && find4!=string::npos)) //LHS RHS Is neither real nor integer
+            {
+                cout<<"<Error> found in Line: "<<linenum<<" Add operation LHS_type and RHS_type should be either real or integer type"<<endl;
+                return "error";
+            }
+        }
+    }
 }
 /*
 void dumpallsymbol()

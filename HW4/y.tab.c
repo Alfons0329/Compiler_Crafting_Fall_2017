@@ -1988,30 +1988,30 @@ yyreduce:
   case 94:
 #line 499 "parser.y" /* yacc.c:1646  */
     {
-                /*if(find_type($3)=="none")
+                if(find_type((yyvsp[0].str))=="none")
 				{
-					cout<<"Right const type "<<$3<<endl;
-					if(addop(find_type($1),$3,$1,$3,$2)!="error")
+					cout<<"Right const type "<<(yyvsp[0].str)<<endl;
+					if(addop(find_type((yyvsp[-2].str)),(yyvsp[0].str),(yyvsp[-2].str),(yyvsp[0].str),(yyvsp[-1].str))!="error")
 					{
-						$$=strdup(addop(find_type($1),$3,$1,$3,$2).c_str());
+						(yyval.str)=strdup(addop(find_type((yyvsp[-2].str)),(yyvsp[0].str),(yyvsp[-2].str),(yyvsp[0].str),(yyvsp[-1].str)).c_str());
 					}
 				}
-				else if(find_type($1)=="none")
+				else if(find_type((yyvsp[-2].str))=="none")
 				{
-					cout<<"Left const type "<<$3<<endl;
-					if(addop($1,find_type($3),$1,$3,$2)!="error")
+					cout<<"Left const type "<<(yyvsp[0].str)<<endl;
+					if(addop((yyvsp[-2].str),find_type((yyvsp[0].str)),(yyvsp[-2].str),(yyvsp[0].str),(yyvsp[-1].str))!="error")
 					{
-						$$=strdup(addop($1,find_type($3),$1,$3,$2).c_str());
+						(yyval.str)=strdup(addop((yyvsp[-2].str),find_type((yyvsp[0].str)),(yyvsp[-2].str),(yyvsp[0].str),(yyvsp[-1].str)).c_str());
 					}
 				}
 				else
 				{
-					cout<<"Both Non const type "<<$3<<endl;
-					if(addop(find_type($1),find_type($3),$1,$3,$2)!="error")
+					cout<<"Both Non const type "<<(yyvsp[0].str)<<endl;
+					if(addop(find_type((yyvsp[-2].str)),find_type((yyvsp[0].str)),(yyvsp[-2].str),(yyvsp[0].str),(yyvsp[-1].str))!="error")
 					{
-						$$=strdup(addop(find_type($1),find_type($3),$1,$3,$2).c_str());
+						(yyval.str)=strdup(addop(find_type((yyvsp[-2].str)),find_type((yyvsp[0].str)),(yyvsp[-2].str),(yyvsp[0].str),(yyvsp[-1].str)).c_str());
 					}
-				}*/
+				}
             }
 #line 2017 "y.tab.c" /* yacc.c:1646  */
     break;
