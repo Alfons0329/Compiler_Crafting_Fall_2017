@@ -16,7 +16,8 @@ begin
     c := 25;
     a := b+c;                     // ok
     a := g+i;                     // error, LHS=integer RHS=string
-    g := h+1;                     // ok, LHS=string RHS=string   
+    g := h+1;                     // ok, LHS=string RHS=string
+    g := h+"apple";               // ok, LHS=string RHS=string  
     a := b+c*c mod 17;            // ok
     a := b >= c*4;                // error, LHS=integer RHS=boolean
     e := b >= c*4;                // ok
