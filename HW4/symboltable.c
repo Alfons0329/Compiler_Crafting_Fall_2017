@@ -455,7 +455,7 @@ string find_kind(string name_in)
 }
 string assignop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
 {
-    cout<<"Assignop at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
+    cout<<"\n\nAssignop at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
     if(find_kind(LHS_name)=="constant")
     {
         cout<<"<Error> found in Line: "<<linenum<<" constant '"<<LHS_name<<"'cannot be assigned"<<endl;
@@ -473,6 +473,23 @@ string assignop(string LHS_type,string RHS_type,string LHS_name, string RHS_name
             cout<<"<Error> found in Line: "<<linenum<<" Array reference does not converted to scalar type successfully "<<endl;
             return "assign_error";
         }
+        else if(LHS_arr_dim && RHS_arr_dim) //array case by case which has been converted to scalar type successfully, checking whether their type matches
+        {
+            //find the type name before [] characters and take the substr out
+            size_t find5=LHS_type.find("[");
+            string check_LHS_arr=LHS_type.substr(0,find5-1);
+            cout<<"Array has been converted to scalar type :"<<check_LHS_arr<<"QQ"<<endl;
+            size_t arr_correct=RHS_type.find(check_LHS_arr);
+            if(arr_correct==string::npos)
+            {
+                cout<<"<Error> found in Line: "<<linenum<<" Assign operation LHS_type and RHS_type inconsistent "<<endl;
+                return "assign_error";
+            }
+            else
+            {
+                return check_LHS_arr;
+            }
+        }
         /*if((LHS_arr_dim!=RHS_arr_dim) && LHS_arr_dim && RHS_arr_dim)
         {
             cout<<"<Error> found in Line: "<<linenum<<" Assign operation LHS Array dimension  RHS Array dimension inconsistent "<<endl;
@@ -482,9 +499,9 @@ string assignop(string LHS_type,string RHS_type,string LHS_name, string RHS_name
         size_t find2=RHS_type.find(LHS_type); //find left in right ex: left integer right integer [10] is allowed
         size_t find3=LHS_type.find("real"); //the only allowed conversion is this one
         size_t find4=RHS_type.find("integer"); //the only allowed conversion is this one
-        if(!(find3!=string::npos && find4!=string::npos))
+        if(!(find3!=string::npos && find4!=string::npos)) //LHS is not real and RHS is not integer
         {
-            if(find1==string::npos && find2==string::npos)
+            if(find1==string::npos && find2==string::npos) //LHS does not have the same type
             {
                 cout<<"<Error> found in Line: "<<linenum<<" Assign operation LHS_type and RHS_type inconsistent "<<endl;
                 return "assign_error";
