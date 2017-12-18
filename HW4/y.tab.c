@@ -1987,14 +1987,14 @@ yyreduce:
     {
                 if(find_type((yyvsp[0].str))=="none")
 				{
-					cout<<" Left variable type "<<(yyvsp[-2].str)<<"Right const type "<<(yyvsp[0].str)<<endl;
+					cout<<" Left variable type "<<(yyvsp[-2].str)<<" Right const type "<<(yyvsp[0].str)<<endl;
 					/*if(addop(find_type($1),$3,$1,$3,$2)!="error")
 					{*/
 					(yyval.str)=strdup(addop(find_type((yyvsp[-2].str)),(yyvsp[0].str),(yyvsp[-2].str),(yyvsp[0].str),(yyvsp[-1].str)).c_str());
 				}
 				else if(find_type((yyvsp[-2].str))=="none")
 				{
-					cout<<" Left const type "<<(yyvsp[-2].str)<<"Right variable type "<<(yyvsp[0].str)<<endl;
+					cout<<" Left const type "<<(yyvsp[-2].str)<<" Right variable type "<<(yyvsp[0].str)<<endl;
 					/*if(addop($1,find_type($3),$1,$3,$2)!="error")
 					{*/
 					(yyval.str)=strdup(addop((yyvsp[-2].str),find_type((yyvsp[0].str)),(yyvsp[-2].str),(yyvsp[0].str),(yyvsp[-1].str)).c_str());
@@ -2022,14 +2022,14 @@ yyreduce:
     {
 				if(find_type((yyvsp[0].str))=="none")
 				{
-					cout<<" Left variable type "<<(yyvsp[-2].str)<<"Right const type "<<(yyvsp[0].str)<<endl;
-					/*if(addop(find_type($1),$3,$1,$3,$2)!="error")
-					{*/
+					cout<<" Left variable type xdxdxdxddx "<<(yyvsp[-2].str)<<" Right const type "<<(yyvsp[0].str)<<endl;
+						/*if(addop(find_type($1),$3,$1,$3,$2)!="error")
+						{*/
 					(yyval.str)=strdup(mulop(find_type((yyvsp[-2].str)),(yyvsp[0].str),(yyvsp[-2].str),(yyvsp[0].str),(yyvsp[-1].str)).c_str());
 				}
 				else if(find_type((yyvsp[-2].str))=="none")
 				{
-					cout<<" Left const type "<<(yyvsp[-2].str)<<"Right variable type "<<(yyvsp[0].str)<<endl;
+					cout<<" Left const type "<<(yyvsp[-2].str)<<" Right variable type "<<(yyvsp[0].str)<<endl;
 					/*if(addop($1,find_type($3),$1,$3,$2)!="error")
 					{*/
 					(yyval.str)=strdup(mulop((yyvsp[-2].str),find_type((yyvsp[0].str)),(yyvsp[-2].str),(yyvsp[0].str),(yyvsp[-1].str)).c_str());

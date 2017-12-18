@@ -426,6 +426,10 @@ void procedure_call_checking()
 string find_type(string name_in)
 {
     //dumpsymbol();
+    if(name_in=="integer" || name_in=="real" || name_in=="boolean" || name_in=="string")
+    {
+        return name_in;
+    }
     for(unsigned int i=0;i<=scope_depth;i++)
     {
         for(unsigned int j=0;j<mysymbol_table[i].size();j++)
