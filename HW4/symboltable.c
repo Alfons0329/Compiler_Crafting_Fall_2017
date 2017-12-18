@@ -576,11 +576,11 @@ string addop(string LHS_type,string RHS_type,string LHS_name, string RHS_name,st
         {
             return "string";
         }
-        else if(LHS_type.find("integer") && RHS_type.find("integer"))
+        else if(LHS_type.find("integer")!=string::npos && RHS_type.find("integer")!=string::npos)
         {
             return "integer";
         }
-        else if(LHS_type.find("real") && RHS_type.find("real")) //LHS is real RHS is integer
+        else if(LHS_type.find("real")!=string::npos && RHS_type.find("real")!=string::npos) //LHS is real RHS is integer
         {
             return "real";
         }

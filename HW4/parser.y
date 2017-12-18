@@ -462,26 +462,23 @@ relop_expr	:
 				if(find_type($3)=="none")
 				{
 					cout<<"Right const type "<<$3<<endl;
-					if(relop(find_type($1),$3,$1,$3)!="error")
-					{
-						$$=strdup(relop(find_type($1),$3,$1,$3).c_str());
-					}
+					/*if(relop(find_type($1),$3,$1,$3)!="error")
+					{*/
+					$$=strdup(relop(find_type($1),$3,$1,$3).c_str());
 				}
 				else if(find_type($1)=="none")
 				{
 					cout<<"Left const type "<<$3<<endl;
-					if(relop($1,find_type($3),$1,$3)!="error")
-					{
-						$$=strdup(relop($1,find_type($3),$1,$3).c_str());
-					}
+					/*if(relop($1,find_type($3),$1,$3)!="error")
+					{*/
+					$$=strdup(relop($1,find_type($3),$1,$3).c_str());
 				}
 				else
 				{
 					cout<<"Both Non const type "<<$3<<endl;
-					if(relop(find_type($1),find_type($3),$1,$3)!="error")
-					{
-						$$=strdup(relop(find_type($1),find_type($3),$1,$3).c_str());
-					}
+					/*if(relop(find_type($1),find_type($3),$1,$3)!="error")
+					{*/
+					$$=strdup(relop(find_type($1),find_type($3),$1,$3).c_str());
 				}
 			}
 			| expr {$$=$1;}
@@ -500,26 +497,24 @@ expr		: expr add_op term
                 if(find_type($3)=="none")
 				{
 					cout<<"Right const type "<<$3<<endl;
-					if(addop(find_type($1),$3,$1,$3,$2)!="error")
-					{
-						$$=strdup(addop(find_type($1),$3,$1,$3,$2).c_str());
-					}
+					/*if(addop(find_type($1),$3,$1,$3,$2)!="error")
+					{*/
+					$$=strdup(addop(find_type($1),$3,$1,$3,$2).c_str());
 				}
 				else if(find_type($1)=="none")
 				{
 					cout<<"Left const type "<<$3<<endl;
-					if(addop($1,find_type($3),$1,$3,$2)!="error")
-					{
-						$$=strdup(addop($1,find_type($3),$1,$3,$2).c_str());
-					}
+					/*if(addop($1,find_type($3),$1,$3,$2)!="error")
+					{*/
+					$$=strdup(addop($1,find_type($3),$1,$3,$2).c_str());
 				}
 				else
 				{
 					cout<<"Both Non const type "<<$3<<endl;
-					if(addop(find_type($1),find_type($3),$1,$3,$2)!="error")
-					{
-						$$=strdup(addop(find_type($1),find_type($3),$1,$3,$2).c_str());
-					}
+					/*if(addop(find_type($1),find_type($3),$1,$3,$2)!="error")
+					{*/
+					$$=strdup(addop(find_type($1),find_type($3),$1,$3,$2).c_str());
+
 				}
             }
 			| term {$$=$1;}
