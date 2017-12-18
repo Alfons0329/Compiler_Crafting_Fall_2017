@@ -1,4 +1,5 @@
 #include "symboltable.h"
+#include <algorithm>
 using namespace std;
 //function mplementation
 int scope_depth;
@@ -518,15 +519,21 @@ string assignop(string LHS_type,string RHS_type,string LHS_name, string RHS_name
     }
     if(LHS_type!=RHS_type)
     {
-        //if array type since it comes with dimention, so use string find to check if
+        //special judge for judging the array_type checking the consistency of their dimension
+        size_t LHS_arr_dim=count(LHS_type.begin(),LHS_type.end(),'[');
+        size_t RHS_arr_dim=count(RHS_type.begin(),RHS_type.end(),'[');
+        cout<<"LHS Array dimension "<<LHS_arr_dim<<" RHS Array dimension "<<RHS_arr_dim<<endl;
+        //ends here
+        if((LHS_arr_dim!=RHS_arr_dim) && LHS_arr_dim && RHS_arr_dim)
+        {
+            cout<<"<Error> found in Line: "<<linenum<<" Assign operation LHS Array dimension  RHS Array dimension inconsistent "<<endl;
+        }
         size_t find1=LHS_type.find(RHS_type); //find right in left ex: left string[10] right string is allowed
         size_t find2=RHS_type.find(LHS_type); //find left in right ex: left integer right integer [10] is allowed
         size_t find3=LHS_type.find("real"); //the only allowed conversion is this one
         size_t find4=RHS_type.find("integer"); //the only allowed conversion is this one
         if(!(find3!=string::npos && find4!=string::npos))
         {
-            // cout<<"<Error> found in Line: "<<linenum<<" Assign operation LHS_type and RHS_type inconsistent "<<endl;
-            // return "assign_error";
             if(find1==string::npos && find2==string::npos)
             {
                 cout<<"<Error> found in Line: "<<linenum<<" Assign operation LHS_type and RHS_type inconsistent "<<endl;
@@ -540,11 +547,6 @@ string assignop(string LHS_type,string RHS_type,string LHS_name, string RHS_name
 string relop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
 {
     cout<<"Relop LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
-    /*if(find_kind(LHS_name)=="constant")
-    {
-        cout<<"<Error> found in Line: "<<linenum<<" constant '"<<LHS_name<<"'cannot be assigned"<<endl;
-        return "assign_error";
-    }*/
     if(LHS_type==RHS_type)
     {
         return "boolean";
@@ -556,10 +558,10 @@ string relop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
         size_t find2=RHS_type.find("real");
         size_t find3=LHS_type.find("real");
         size_t find4=RHS_type.find("integer");
-         cout<<"FIND 1 "<<find1
+        /*cout<<"FIND 1 "<<find1
              <<"FIND 2 "<<find2
             <<"FIND 3 "<<find3
-            <<"FIND 4 "<<find4<<endl;
+            <<"FIND 4 "<<find4<<endl;*/
         if(!(find1!=string::npos && find2!=string::npos))
         {
             if(!(find3!=string::npos && find4!=string::npos))
