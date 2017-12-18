@@ -20,6 +20,7 @@ void symbol_table_init()
     is_loop = 0;
     const_type = 0;
     is_proc_call = 0;
+    arr_dim_cnt = 0;
 }
 void inserting_symbol_table(vector<string> id_list_buf, string kind_in, string type_in, vector<string> funct_attri_buf)
 {
@@ -384,12 +385,12 @@ void procedure_call_checking()
 {
     string funct_name = funct_param_buf[0];
     //check if parameter count consistent
-    /*cout<<"Check function name "<<funct_name<<endl;
+    cout<<"Check function name "<<funct_name<<endl;
     for(int i=0;i<funct_param_buf.size();i++)
     {
         cout<<funct_param_buf[i]<<" ";
     }
-    cout<<endl;*/
+    cout<<endl;
     for(unsigned int i=0;i<mysymbol_table[0].size();i++)
     {
         if(mysymbol_table[0][i].name == funct_name
@@ -465,12 +466,18 @@ string assignop(string LHS_type,string RHS_type,string LHS_name, string RHS_name
         //special judge for judging the array_type checking the consistency of their dimension
         size_t LHS_arr_dim=count(LHS_type.begin(),LHS_type.end(),'[');
         size_t RHS_arr_dim=count(RHS_type.begin(),RHS_type.end(),'[');
-        cout<<"LHS Array dimension "<<LHS_arr_dim<<" RHS Array dimension "<<RHS_arr_dim<<endl;
+        cout<<"LHS Array dimension "<<LHS_arr_dim<<" RHS Array dimension "<<RHS_arr_dim<<" Total dimension "<<arr_dim_cnt<<endl;
         //ends here
-        if((LHS_arr_dim!=RHS_arr_dim) && LHS_arr_dim && RHS_arr_dim)
+        if(arr_dim_cnt!=LHS_arr_dim+RHS_arr_dim)
+        {
+            cout<<"<Error> found in Line: "<<linenum<<" Array reference does not converted to scalar type successfully "<<endl;
+            return "assign_error";
+        }
+        /*if((LHS_arr_dim!=RHS_arr_dim) && LHS_arr_dim && RHS_arr_dim)
         {
             cout<<"<Error> found in Line: "<<linenum<<" Assign operation LHS Array dimension  RHS Array dimension inconsistent "<<endl;
-        }
+            return "assign_error";
+        }*/
         size_t find1=LHS_type.find(RHS_type); //find right in left ex: left string[10] right string is allowed
         size_t find2=RHS_type.find(LHS_type); //find left in right ex: left integer right integer [10] is allowed
         size_t find3=LHS_type.find("real"); //the only allowed conversion is this one

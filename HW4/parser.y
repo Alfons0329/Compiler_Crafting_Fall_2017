@@ -31,6 +31,7 @@ vector<string> funct_param_buf;
 //this one is the new array buffer which is easier to be implemented in C++
 vector<int> arr_dim_buf;
 int is_proc_call;
+int arr_dim_cnt;
 %}
 /*tokens*/
 %union
@@ -393,7 +394,7 @@ simple_stmt	: var_ref
 				{
 					assignop(find_type($1),find_type($3),$1,$3);
 				}
-
+				arr_dim_cnt=0; //finish counting the dimension
             }
 			| PRINT boolean_expr MK_SEMICOLON
 			| READ boolean_expr MK_SEMICOLON
@@ -514,7 +515,7 @@ factor		: var_ref {$$=$1;}
 			| OP_SUB var_ref {$$=$2;}
 			| MK_LPAREN boolean_expr MK_RPAREN
 			| OP_SUB MK_LPAREN boolean_expr MK_RPAREN
-			| ID
+			| ID /*function param here*/
             {
                 funct_param_buf.pb($1);
                 is_proc_call=1;
@@ -542,11 +543,16 @@ var_ref		:
                 $$=$1;
                 if(is_proc_call)
                 {
-                    /* cout<<"parameter "<<$1<<" and its type "<<find_type($1)<<endl; */
                     funct_param_buf.pb(find_type($1));
                 }
+				/* cout<<"Array First time reference! "<<endl; */
+
             }
 			| var_ref dim
+			{
+				/* cout<<"Array dimension reference! "<<endl; */
+				arr_dim_cnt++;
+			}
 			;
 
 dim			: MK_LB boolean_expr MK_RB

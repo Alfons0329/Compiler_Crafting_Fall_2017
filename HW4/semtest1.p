@@ -44,7 +44,11 @@ begin
 
     aa := twodim[2][4]; //correct
     twodim[7][3] := aa; //correct
-
+    twodim[7] := aa;    //incorrect not a scalar type
+    twodim := zr;       //incorrect not a scalar type
+    zr[8] := twodim[4][7]; //correct
+    zr[8] := twodim[4];  //incorrect not a scalar type
+    zr[8] := twodim;    //incorrect not a scalar type
     h[4] := zr[5];      //array in same dimension but different type error
 
     a := 5;            // error, constant cannot be assigned
