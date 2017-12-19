@@ -26,6 +26,7 @@ extern vector<string> funct_attri_buf; //for concatenating the function attribut
 extern int is_proc_call;
 extern int LHS_dim,RHS_dim,switch_side;//for checking the array dimesion
 extern string program_name;
+extern string tmp_inheritance; //for assignop case by case
 extern vector<string> assign_check_buf;
 extern vector<string> funct_param_buf;
 //this one is the new array buffer which is easier to be implemented in C++
@@ -75,7 +76,7 @@ string mulop(string,string,string,string,string);
 string boolop(string,string,string,string);
 string simple(string); //for checking the simple statement
 string condition(string); //for checking the conditional statement
-string has_scalar(string,int);
+string has_scalar(string,int,string);
 
 
 

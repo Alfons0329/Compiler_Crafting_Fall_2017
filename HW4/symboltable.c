@@ -23,6 +23,7 @@ void symbol_table_init()
     LHS_dim = 0;
     RHS_dim = 0;
     switch_side = 0;
+    tmp_inheritance = "";
 }
 void inserting_symbol_table(vector<string> id_list_buf, string kind_in, string type_in, vector<string> funct_attri_buf)
 {
@@ -507,11 +508,10 @@ string assignop(string LHS_type,string RHS_type,string LHS_name, string RHS_name
     if(LHS_type!=RHS_type)
     {
         //special judge for judging the array_type checking the consistency of their dimension
-        if(has_scalar(LHS_type,LHS_dim)!="error" && has_scalar(RHS_type,RHS_dim)!="error" )
+        if(tmp_inheritance!="error" && has_scalar(RHS_type,RHS_dim,"assign")!="error" )
         {
-            LHS_type=has_scalar(LHS_type,LHS_dim);
-            RHS_type=has_scalar(RHS_type,RHS_dim);
-            cout<<"Assignop at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl<<endl;
+            RHS_type=has_scalar(RHS_type,RHS_dim,"assign");
+            cout<<"Assignop at Line:"<<linenum<<" LHS_type "<<tmp_inheritance<<" RHS_type "<<RHS_type<<endl<<endl;
         }
         else
         {
@@ -542,10 +542,10 @@ string relop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
 {
 
     //if array type since it comes with dimention, so use string find to check if
-    if(has_scalar(LHS_type,LHS_dim)!="error" && has_scalar(RHS_type,RHS_dim)!="error" )
+    if(has_scalar(LHS_type,LHS_dim,"relop")!="error" && has_scalar(RHS_type,RHS_dim,"relop")!="error" )
     {
-        LHS_type=has_scalar(LHS_type,LHS_dim);
-        RHS_type=has_scalar(RHS_type,RHS_dim);
+        LHS_type=has_scalar(LHS_type,LHS_dim,"relop");
+        RHS_type=has_scalar(RHS_type,RHS_dim,"relop");
         cout<<"Relop at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
     }
     else
@@ -582,10 +582,10 @@ string relop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
 string addop(string LHS_type,string RHS_type,string LHS_name, string RHS_name,string oper)
 {
     //still chekc the array type first
-    if(has_scalar(LHS_type,LHS_dim)!="error" && has_scalar(RHS_type,RHS_dim)!="error" )
+    if(has_scalar(LHS_type,LHS_dim,"addop")!="error" && has_scalar(RHS_type,RHS_dim,"addop")!="error" )
     {
-        LHS_type=has_scalar(LHS_type,LHS_dim);
-        RHS_type=has_scalar(RHS_type,RHS_dim);
+        LHS_type=has_scalar(LHS_type,LHS_dim,"addop");
+        RHS_type=has_scalar(RHS_type,RHS_dim,"addop");
         cout<<"Operator "<<oper<<" at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
     }
     else
@@ -660,10 +660,10 @@ string addop(string LHS_type,string RHS_type,string LHS_name, string RHS_name,st
 string mulop(string LHS_type,string RHS_type,string LHS_name, string RHS_name,string oper)
 {
     //still chekc the array type first
-    if(has_scalar(LHS_type,LHS_dim)!="error" && has_scalar(RHS_type,RHS_dim)!="error" )
+    if(has_scalar(LHS_type,LHS_dim,"mulop")!="error" && has_scalar(RHS_type,RHS_dim,"mulop")!="error" )
     {
-        LHS_type=has_scalar(LHS_type,LHS_dim);
-        RHS_type=has_scalar(RHS_type,RHS_dim);
+        LHS_type=has_scalar(LHS_type,LHS_dim,"mulop");
+        RHS_type=has_scalar(RHS_type,RHS_dim,"mulop");
         cout<<"Operator MUL FUNCTION "<<oper<<" at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
     }
     else
@@ -720,19 +720,21 @@ string boolop(string,string,string,string)
 }
 string simple(string SIM_type)
 {
-    return (has_scalar(SIM_type,LHS_dim)=="error") ? "error" : has_scalar(SIM_type,LHS_dim);
+    return (has_scalar(SIM_type,LHS_dim,"simpleop ")=="error") ? "error" : has_scalar(SIM_type,LHS_dim,"simpleop ");
 }
 string condition(string COND_type)
 {
     return (COND_type == "boolean" ) ? "boolean" : "error";
 }
-string has_scalar(string LHS_type,int reference_dim)
+string has_scalar(string LHS_type,int reference_dim,string oper)
 {
     size_t LHS_arr_dim=count(LHS_type.begin(),LHS_type.end(),'[');
     //total array dimension reference should be equal to their sum of dimension
     //e.g. arr1[6][7] and arr2[4] then total array dimension reference should be 3, so given arr1[6] = arr2[4] is an illegal condition
     //same idea as arr_convert_to_scalar_checking but without the type coercion checking
-    cout<<"check scalar FUNCTION  at Line:"<<linenum<<" LHS_type "<<LHS_type<<" actual total dim "<<LHS_arr_dim<<" however, reference_dim "<<reference_dim<<endl;
+    cout<<"Operation is "<<oper
+    <<"Check scalar FUNCTION  at Line:"<<linenum<<" LHS_type "
+    <<LHS_type<<" actual total dim "<<LHS_arr_dim<<" however, reference_dim "<<reference_dim<<endl;
     if(LHS_type=="integer" || LHS_type=="real" || LHS_type=="boolean" || LHS_type=="string") //is already an scalar_type
     {
         return LHS_type;

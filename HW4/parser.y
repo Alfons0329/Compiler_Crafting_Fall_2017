@@ -33,6 +33,7 @@ vector<int> arr_dim_buf;
 int is_proc_call;
 //use for array scalar type checking
 int LHS_dim,RHS_dim,switch_side;
+string tmp_inheritance;
 %}
 /*tokens*/
 %union
@@ -249,6 +250,7 @@ func_decl	: 	ID
                         }
 
 					}
+					dumpsymbol();
                     id_list_buf.clear();
                     funct_attri_buf.clear();
                     error_detection();
@@ -388,6 +390,8 @@ simple_stmt	:
 			{
 				switch_side=1;
 				RHS_dim=0;
+				cout<<666666<<endl;
+				tmp_inheritance=has_scalar(find_type($1),LHS_dim,"assign LHS");
 			}
             OP_ASSIGN boolean_expr MK_SEMICOLON
             {
@@ -401,6 +405,7 @@ simple_stmt	:
 				{
 					assignop(find_type($1),find_type($4),$1,$4);
 				}
+				tmp_inheritance.clear();
 				switch_side=0;
 				LHS_dim=0;
 				RHS_dim=0;
@@ -557,6 +562,7 @@ term		:
 			}
 			factor /*use dollar sign to do things*/
 			{
+				cout<<"555555  "<<endl;
 				if(find_type($4)=="none")
 				{
 					cout<<" Left variable type xdxdxdxddx "<<$1<<" Right const type "<<$4<<endl;
