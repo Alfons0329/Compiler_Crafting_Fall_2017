@@ -542,6 +542,10 @@ boolean_factor		: OP_NOT boolean_factor /*do self relation*/
 			;
 
 relop_expr	: 	expr
+				{
+					cout<<"relop most left part "<<endl;
+					switch_side=0;
+				}
 				rel_op
 				{
 					cout<<"Switch side relop !! \n\n";
@@ -551,20 +555,20 @@ relop_expr	: 	expr
 				expr
 				{
 				/* cout<<"RELOP EXPR HAPPENS HERE linenum "<<linenum<<endl; */
-					if(find_type($4)=="none")
+					if(find_type($5)=="none")
 					{
-						/* cout<<"Right const type "<<$4<<endl; */
-						$$=strdup(relop(find_type($1),$4,$1,$4).c_str());
+						/* cout<<"Right const type "<<$5<<endl; */
+						$$=strdup(relop(find_type($1),$5,$1,$5).c_str());
 					}
 					else if(find_type($1)=="none")
 					{
-						/* cout<<"Left const type "<<$4<<endl; */
-						$$=strdup(relop($1,find_type($4),$1,$4).c_str());
+						/* cout<<"Left const type "<<$5<<endl; */
+						$$=strdup(relop($1,find_type($5),$1,$5).c_str());
 					}
 					else
 					{
-						/* cout<<"Both Non const type "<<$4<<endl; */
-						$$=strdup(relop(find_type($1),find_type($4),$1,$4).c_str());
+						/* cout<<"Both Non const type "<<$5<<endl; */
+						$$=strdup(relop(find_type($1),find_type($5),$1,$5).c_str());
 					}
 					switch_side=0;
 					LHS_dim=0;
@@ -582,6 +586,10 @@ rel_op		: OP_LT
 			;
 
 expr		: 	expr
+				{
+					cout<<"addop most left part "<<endl;
+					switch_side=0;
+				}
  				add_op
 				{
 					switch_side=1;
@@ -589,20 +597,20 @@ expr		: 	expr
 				}
 				term
             	{
-                	if(find_type($4)=="none")
+                	if(find_type($5)=="none")
 					{
-						/* cout<<" Left variable type "<<$1<<" Right const type "<<$4<<endl; */
-						$$=strdup(addop(find_type($1),$4,$1,$4,$2).c_str());
+						/* cout<<" Left variable type "<<$1<<" Right const type "<<$5<<endl; */
+						$$=strdup(addop(find_type($1),$5,$1,$5,$3).c_str());
 					}
 					else if(find_type($1)=="none")
 					{
-						/* cout<<" Left const type "<<$1<<" Right variable type "<<$4<<endl; */
-						$$=strdup(addop($1,find_type($4),$1,$4,$2).c_str());
+						/* cout<<" Left const type "<<$1<<" Right variable type "<<$5<<endl; */
+						$$=strdup(addop($1,find_type($5),$1,$5,$3).c_str());
 					}
 					else
 					{
-						/* cout<<"Both Non const type "<<$4<<endl; */
-						$$=strdup(addop(find_type($1),find_type($4),$1,$4,$2).c_str());
+						/* cout<<"Both Non const type "<<$5<<endl; */
+						$$=strdup(addop(find_type($1),find_type($5),$1,$5,$3).c_str());
 					}
 					switch_side=0;
 					LHS_dim=0;
@@ -617,6 +625,10 @@ add_op		: OP_ADD
 
 term		:
 			term
+			{
+				cout<<"mulop most left part "<<endl;
+				switch_side=0;
+			}
 			mul_op
 			{
 				cout<<"Switch side mul !! \n\n";
@@ -626,20 +638,20 @@ term		:
 			factor /*use dollar sign to do things*/
 			{
 				/* cout<<"555555  "<<endl; */
-				if(find_type($4)=="none")
+				if(find_type($5)=="none")
 				{
 					/* cout<<" Left variable type xdxdxdxddx "<<$1<<" Right const type "<<$4<<endl; */
-					$$=strdup(mulop(find_type($1),$4,$1,$4,$2).c_str());
+					$$=strdup(mulop(find_type($1),$5,$1,$5,$3).c_str());
 				}
 				else if(find_type($1)=="none")
 				{
 					/* cout<<" Left const type "<<$1<<" Right variable type "<<$4<<endl; */
-					$$=strdup(mulop($1,find_type($4),$1,$4,$2).c_str());
+					$$=strdup(mulop($1,find_type($5),$1,$5,$3).c_str());
 				}
 				else
 				{
 					/* cout<<"Both Non const type "<<$4<<endl; */
-					$$=strdup(mulop(find_type($1),find_type($4),$1,$4,$2).c_str());
+					$$=strdup(mulop(find_type($1),find_type($5),$1,$5,$3).c_str());
 				}
 				switch_side=0;
 				LHS_dim=0;
