@@ -20,9 +20,9 @@ void symbol_table_init()
     is_loop = 0;
     const_type = 0;
     is_proc_call = 0;
-    arr_dim_cnt = 0;
-    LHS_is_scalar = 0;
-    RHS_is_scalar = 0;
+    LHS_dim = 0;
+    RHS_dim = 0;
+    switch_side = 0;
 }
 void inserting_symbol_table(vector<string> id_list_buf, string kind_in, string type_in, vector<string> funct_attri_buf)
 {
@@ -465,7 +465,7 @@ string find_kind(string name_in)
     }
     return "none";
 }
-string arr_convert_to_scalar_checking(string LHS_type,string RHS_type)
+/*string arr_convert_to_scalar_checking(string LHS_type,string RHS_type)
 {
     size_t LHS_arr_dim=count(LHS_type.begin(),LHS_type.end(),'[');
     size_t RHS_arr_dim=count(RHS_type.begin(),RHS_type.end(),'[');
@@ -496,7 +496,7 @@ string arr_convert_to_scalar_checking(string LHS_type,string RHS_type)
         }
     }
     return check_LHS_arr;
-}
+}*/
 string assignop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
 {
     // cout<<"Assignop at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl<<endl;
@@ -508,19 +508,20 @@ string assignop(string LHS_type,string RHS_type,string LHS_name, string RHS_name
     if(LHS_type!=RHS_type)
     {
         //special judge for judging the array_type checking the consistency of their dimension
-        if(arr_convert_to_scalar_checking(LHS_type,RHS_type)=="error")
+        if(has_scalar(LHS_type,LHS_dim)!="error" && has_scalar(RHS_type,RHS_dim)!="error" )
         {
-            return "error";
+            LHS_type=has_scalar(LHS_type,LHS_dim);
+            RHS_type=has_scalar(RHS_type,RHS_dim);
         }
+        size_t find1=LHS_type.find(RHS_type); //find right in left ex: left string[10] right string is allowed
+        size_t find2=RHS_type.find(LHS_type); //find left in right ex: left integer right integer [10] is allowed
+        size_t find3=LHS_type.find("real"); //the only allowed conversion is this one
+        size_t find4=RHS_type.find("integer"); //the only allowed conversion is this one
         /*if((LHS_arr_dim!=RHS_arr_dim) && LHS_arr_dim && RHS_arr_dim)
         {
             cout<<"<Error> found in Line: "<<linenum<<" Assign operation LHS Array dimension  RHS Array dimension inconsistent "<<endl;
             return "error";
         }*/
-        size_t find1=LHS_type.find(RHS_type); //find right in left ex: left string[10] right string is allowed
-        size_t find2=RHS_type.find(LHS_type); //find left in right ex: left integer right integer [10] is allowed
-        size_t find3=LHS_type.find("real"); //the only allowed conversion is this one
-        size_t find4=RHS_type.find("integer"); //the only allowed conversion is this one
         if(!(find3!=string::npos && find4!=string::npos)) //LHS is not real and RHS is not integer
         {
             if(find1==string::npos && find2==string::npos) //LHS does not have the same type
@@ -538,6 +539,11 @@ string relop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
     // cout<<"Relop at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
 
     //if array type since it comes with dimention, so use string find to check if
+    if(has_scalar(LHS_type,LHS_dim)!="error" && has_scalar(RHS_type,RHS_dim)!="error" )
+    {
+        LHS_type=has_scalar(LHS_type,LHS_dim);
+        RHS_type=has_scalar(RHS_type,RHS_dim);
+    }
     size_t find1=LHS_type.find("integer");
     size_t find2=RHS_type.find("real");
     size_t find3=LHS_type.find("real");
@@ -547,10 +553,6 @@ string relop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
         <<"FIND 3 "<<find3
         <<"FIND 4 "<<find4<<endl;*/
     //check if array has been converted to scalar first and whether their type matches or not
-    if(arr_convert_to_scalar_checking(LHS_type,RHS_type)=="error")
-    {
-        return "error";
-    }
     if(find1!=string::npos && find4!=string::npos)
     {
         return "boolean";
@@ -573,14 +575,15 @@ string addop(string LHS_type,string RHS_type,string LHS_name, string RHS_name,st
 {
     //still chekc the array type first
     cout<<"Operator "<<oper<<" at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
+    if(has_scalar(LHS_type,LHS_dim)!="error" && has_scalar(RHS_type,RHS_dim)!="error" )
+    {
+        LHS_type=has_scalar(LHS_type,LHS_dim);
+        RHS_type=has_scalar(RHS_type,RHS_dim);
+    }
     size_t find1=LHS_type.find("integer");
     size_t find2=RHS_type.find("real");
     size_t find3=LHS_type.find("real");
     size_t find4=RHS_type.find("integer");
-    if(arr_convert_to_scalar_checking(LHS_type,RHS_type)=="error")
-    {
-        return "error";
-    }
     if(oper=="+") //add, operator overloading works for striong type
     {
         size_t LHS_str=LHS_type.find("string");
@@ -646,14 +649,15 @@ string mulop(string LHS_type,string RHS_type,string LHS_name, string RHS_name,st
 {
     //still chekc the array type first
     cout<<"Operator MUL FUNCTION "<<oper<<" at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
+    if(has_scalar(LHS_type,LHS_dim)!="error" && has_scalar(RHS_type,RHS_dim)!="error" )
+    {
+        LHS_type=has_scalar(LHS_type,LHS_dim);
+        RHS_type=has_scalar(RHS_type,RHS_dim);
+    }
     size_t find1=LHS_type.find("integer");
     size_t find2=RHS_type.find("real");
     size_t find3=LHS_type.find("real");
     size_t find4=RHS_type.find("integer");
-    if(arr_convert_to_scalar_checking(LHS_type,RHS_type)=="error")
-    {
-        return "error";
-    }
     if(oper=="*" || oper=="/")
     {
         if(LHS_type.find("integer")!=string::npos && RHS_type.find("integer")!=string::npos)
@@ -700,24 +704,30 @@ string boolop(string,string,string,string)
 }
 string simple(string SIM_type)
 {
-    return (has_scalar(SIM_type)=="error") ? "error" : has_scalar(SIM_type);
+    return (has_scalar(SIM_type,LHS_dim)=="error") ? "error" : has_scalar(SIM_type,LHS_dim);
 }
 string condition(string COND_type)
 {
     return (COND_type == "boolean" ) ? "boolean" : "error";
 }
-string has_scalar(string LHS_type)
+string has_scalar(string LHS_type,int reference_dim)
 {
     size_t LHS_arr_dim=count(LHS_type.begin(),LHS_type.end(),'[');
     //total array dimension reference should be equal to their sum of dimension
     //e.g. arr1[6][7] and arr2[4] then total array dimension reference should be 3, so given arr1[6] = arr2[4] is an illegal condition
     //same idea as arr_convert_to_scalar_checking but without the type coercion checking
-    if(LHS_arr_dim!=arr_dim_cnt)
+    cout<<"check scalar FUNCTION  at Line:"<<linenum<<" LHS_type "<<LHS_type<<" reference_dim "<<reference_dim<<endl;
+    if(LHS_type=="integer" || LHS_type=="real" || LHS_type=="boolean" || LHS_type=="string") //is already an scalar_type
+    {
+        return LHS_type;
+    }
+
+    if(LHS_arr_dim!=reference_dim && LHS_arr_dim) //does not converted to scalar type
     {
         cout<<"<Error> found in Line: "<<linenum<<" Array reference does not converted to scalar type successfully "<<endl;
         return "error";
     }
-    else if(LHS_type!="integer" && LHS_type!="real" && LHS_type!="string" && LHS_type!="boolean")
+    else if(LHS_type!="integer" && LHS_type!="real" && LHS_type!="string" && LHS_type!="boolean") //has converted to scalar type but not right type in the spec
     {
         return "error";
     }

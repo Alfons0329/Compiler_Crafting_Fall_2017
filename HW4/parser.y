@@ -31,8 +31,8 @@ vector<string> funct_param_buf;
 //this one is the new array buffer which is easier to be implemented in C++
 vector<int> arr_dim_buf;
 int is_proc_call;
-int arr_dim_cnt;
-int LHS_is_scalar,RHS_is_scalar;
+//use for array scalar type checking
+int LHS_dim,RHS_dim,switch_side;
 %}
 /*tokens*/
 %union
@@ -383,20 +383,27 @@ stmt_list		: stmt_list stmt
 			| stmt
 			;
 
-simple_stmt	: var_ref
+simple_stmt	:
+			var_ref
+			{
+				switch_side=1;
+				RHS_dim=0;
+			}
             OP_ASSIGN boolean_expr MK_SEMICOLON
             {
 				/* cout<<"we have an assign LHS "<<find_type($1)<<" with RHS "<<find_type($3)<<endl; */
-				if(find_type($3)=="none")
+				if(find_type($4)=="none")
 				{
-					cout<<"const type "<<$3<<endl;
-					assignop(find_type($1),$3,$1,$3);
+					cout<<"const type "<<$4<<endl;
+					assignop(find_type($1),$4,$1,$4);
 				}
 				else
 				{
-					assignop(find_type($1),find_type($3),$1,$3);
+					assignop(find_type($1),find_type($4),$1,$4);
 				}
-				arr_dim_cnt=0; //finish counting the dimension
+				switch_side=0;
+				LHS_dim=0;
+				RHS_dim=0;
             }
 			| PRINT boolean_expr MK_SEMICOLON
 			{
@@ -468,33 +475,35 @@ boolean_factor		: OP_NOT boolean_factor
 			| relop_expr {$$=$1;}
 			;
 
-relop_expr	:
-			expr rel_op expr
-			{
+relop_expr	: 	expr
+				rel_op
+				{
+					switch_side=1;
+					RHS_dim=0;
+				}
+				expr
+				{
 				/* cout<<"RELOP EXPR HAPPENS HERE linenum "<<linenum<<endl; */
-				if(find_type($3)=="none")
-				{
-					cout<<"Right const type "<<$3<<endl;
-					/*if(relop(find_type($1),$3,$1,$3)!="error")
-					{*/
-					$$=strdup(relop(find_type($1),$3,$1,$3).c_str());
+					if(find_type($4)=="none")
+					{
+						cout<<"Right const type "<<$4<<endl;
+						$$=strdup(relop(find_type($1),$4,$1,$4).c_str());
+					}
+					else if(find_type($1)=="none")
+					{
+						cout<<"Left const type "<<$4<<endl;
+						$$=strdup(relop($1,find_type($4),$1,$4).c_str());
+					}
+					else
+					{
+						cout<<"Both Non const type "<<$4<<endl;
+						$$=strdup(relop(find_type($1),find_type($4),$1,$4).c_str());
+					}
+					switch_side=0;
+					LHS_dim=0;
+					RHS_dim=0;
 				}
-				else if(find_type($1)=="none")
-				{
-					cout<<"Left const type "<<$3<<endl;
-					/*if(relop($1,find_type($3),$1,$3)!="error")
-					{*/
-					$$=strdup(relop($1,find_type($3),$1,$3).c_str());
-				}
-				else
-				{
-					cout<<"Both Non const type "<<$3<<endl;
-					/*if(relop(find_type($1),find_type($3),$1,$3)!="error")
-					{*/
-					$$=strdup(relop(find_type($1),find_type($3),$1,$3).c_str());
-				}
-			}
-			| expr {$$=$1;}
+				| expr {$$=$1;}
 			;
 
 rel_op		: OP_LT
@@ -505,62 +514,67 @@ rel_op		: OP_LT
 			| OP_NE
 			;
 
-expr		: expr add_op term
-            {
-                if(find_type($3)=="none")
+expr		: 	expr
+ 				add_op
 				{
-					cout<<" Left variable type "<<$1<<" Right const type "<<$3<<endl;
-					/*if(addop(find_type($1),$3,$1,$3,$2)!="error")
-					{*/
-					$$=strdup(addop(find_type($1),$3,$1,$3,$2).c_str());
+					switch_side=1;
+					RHS_dim=0;
 				}
-				else if(find_type($1)=="none")
-				{
-					cout<<" Left const type "<<$1<<" Right variable type "<<$3<<endl;
-					/*if(addop($1,find_type($3),$1,$3,$2)!="error")
-					{*/
-					$$=strdup(addop($1,find_type($3),$1,$3,$2).c_str());
-				}
-				else
-				{
-					cout<<"Both Non const type "<<$3<<endl;
-					/*if(addop(find_type($1),find_type($3),$1,$3,$2)!="error")
-					{*/
-					$$=strdup(addop(find_type($1),find_type($3),$1,$3,$2).c_str());
-
-				}
-            }
-			| term {$$=$1;}
+				term
+            	{
+                	if(find_type($4)=="none")
+					{
+						cout<<" Left variable type "<<$1<<" Right const type "<<$4<<endl;
+						$$=strdup(addop(find_type($1),$4,$1,$4,$2).c_str());
+					}
+					else if(find_type($1)=="none")
+					{
+						cout<<" Left const type "<<$1<<" Right variable type "<<$4<<endl;
+						$$=strdup(addop($1,find_type($4),$1,$4,$2).c_str());
+					}
+					else
+					{
+						cout<<"Both Non const type "<<$4<<endl;
+						$$=strdup(addop(find_type($1),find_type($4),$1,$4,$2).c_str());
+					}
+					switch_side=0;
+					LHS_dim=0;
+					RHS_dim=0;
+            	}
+				| term {$$=$1;}
 			;
 
 add_op		: OP_ADD
 			| OP_SUB
 			;
 
-term		: term mul_op factor /*use dollar sign to do things*/
+term		:
+			term
+			mul_op
 			{
-				if(find_type($3)=="none")
+				switch_side=1;
+				RHS_dim=0;
+			}
+			factor /*use dollar sign to do things*/
+			{
+				if(find_type($4)=="none")
 				{
-					cout<<" Left variable type xdxdxdxddx "<<$1<<" Right const type "<<$3<<endl;
-						/*if(addop(find_type($1),$3,$1,$3,$2)!="error")
-						{*/
-					$$=strdup(mulop(find_type($1),$3,$1,$3,$2).c_str());
+					cout<<" Left variable type xdxdxdxddx "<<$1<<" Right const type "<<$4<<endl;
+					$$=strdup(mulop(find_type($1),$4,$1,$4,$2).c_str());
 				}
 				else if(find_type($1)=="none")
 				{
-					cout<<" Left const type "<<$1<<" Right variable type "<<$3<<endl;
-					/*if(addop($1,find_type($3),$1,$3,$2)!="error")
-					{*/
-					$$=strdup(mulop($1,find_type($3),$1,$3,$2).c_str());
+					cout<<" Left const type "<<$1<<" Right variable type "<<$4<<endl;
+					$$=strdup(mulop($1,find_type($4),$1,$4,$2).c_str());
 				}
 				else
 				{
-					cout<<"Both Non const type "<<$3<<endl;
-					/*if(addop(find_type($1),find_type($3),$1,$3,$2)!="error")
-					{*/
-					$$=strdup(mulop(find_type($1),find_type($3),$1,$3,$2).c_str());
-
+					cout<<"Both Non const type "<<$4<<endl;
+					$$=strdup(mulop(find_type($1),find_type($4),$1,$4,$2).c_str());
 				}
+				switch_side=0;
+				LHS_dim=0;
+				RHS_dim=0;
 			}
 			| factor
 			{
@@ -612,8 +626,17 @@ var_ref		:
             }
 			| var_ref dim
 			{
-				arr_dim_cnt++;
-				cout<<"Array dimension reference at Line"<<linenum<<"  now dim count up to"<<arr_dim_cnt<<endl;
+				if(switch_side)
+				{
+					RHS_dim++;
+					cout<<"Array RIGHT dimension reference at Line"<<linenum<<"  now dim count up to"<<RHS_dim<<endl;
+				}
+				else
+				{
+					LHS_dim++;
+					cout<<"Array LEFT dimension reference at Line"<<linenum<<"  now dim count up to"<<LHS_dim<<endl;
+				}
+
 			}
 			;
 
