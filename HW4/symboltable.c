@@ -467,7 +467,7 @@ string arr_convert_to_scalar_checking(string LHS_type,string RHS_type)
 {
     size_t LHS_arr_dim=count(LHS_type.begin(),LHS_type.end(),'[');
     size_t RHS_arr_dim=count(RHS_type.begin(),RHS_type.end(),'[');
-    // cout<<"Line:"<<linenum<<"LHS Array dimension "<<LHS_arr_dim<<" RHS Array dimension "<<RHS_arr_dim<<" Total dimension "<<arr_dim_cnt<<endl;
+    cout<<"Line:"<<linenum<<"LHS Array dimension "<<LHS_arr_dim<<" RHS Array dimension "<<RHS_arr_dim<<" Total dimension "<<arr_dim_cnt<<endl;
     //ends here
     string check_LHS_arr;
     if(arr_dim_cnt!=LHS_arr_dim+RHS_arr_dim && LHS_arr_dim && RHS_arr_dim) //total array dimension reference should be equal to their sum of dimension
@@ -497,7 +497,7 @@ string arr_convert_to_scalar_checking(string LHS_type,string RHS_type)
 }
 string assignop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
 {
-    // cout<<"Assignop at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl<<endl;
+    cout<<"Assignop at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl<<endl;
     if(find_kind(LHS_name)=="constant")
     {
         cout<<"<Error> found in Line: "<<linenum<<" constant '"<<LHS_name<<"'cannot be assigned"<<endl;
@@ -533,7 +533,7 @@ string assignop(string LHS_type,string RHS_type,string LHS_name, string RHS_name
 }
 string relop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
 {
-    // cout<<"Relop at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
+    cout<<"Relop at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
 
     //if array type since it comes with dimention, so use string find to check if
     size_t find1=LHS_type.find("integer");
