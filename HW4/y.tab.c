@@ -1709,7 +1709,7 @@ yyreduce:
 							}
 						}
                         array_type_str=$7;
-                        array_type_str+	ㄈ=" ";
+                        array_type_str+=" ";
                         array_type_str+=reverse_arr_buf;
 						inserting_symbol_table(id_list_buf,"function",array_type_str,funct_attri_buf);
                         memset(arr_buf,0,sizeof(arr_buf));//update it for next segment*/
@@ -2143,8 +2143,8 @@ yyreduce:
   case 113:
 #line 614 "parser.y" /* yacc.c:1646  */
     {
-				 cout<<"Array dimension reference! now dim count up to"<<arr_dim_cnt<<endl;
 				arr_dim_cnt++;
+				cout<<"Array dimension reference at Line"<<linenum<<"  now dim count up to"<<arr_dim_cnt<<endl;
 			}
 #line 2150 "y.tab.c" /* yacc.c:1646  */
     break;

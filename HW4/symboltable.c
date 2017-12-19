@@ -426,21 +426,27 @@ void procedure_call_checking()
 string find_type(string name_in)
 {
     //dumpsymbol();
+    string ret_type="none";
     if(name_in=="integer" || name_in=="real" || name_in=="boolean" || name_in=="string")
     {
-        return name_in;
+        ret_type=name_in;
     }
-    for(unsigned int i=0;i<=scope_depth;i++)
+    else
     {
-        for(unsigned int j=0;j<mysymbol_table[i].size();j++)
+        for(unsigned int i=0;i<=scope_depth;i++)
         {
-            if(mysymbol_table[i][j].name==name_in)
+            for(unsigned int j=0;j<mysymbol_table[i].size();j++)
             {
-                return mysymbol_table[i][j].type;
+                if(mysymbol_table[i][j].name==name_in)
+                {
+                    // cout<<"Name in "<<name_in<<" scope_depth "<<scope_depth<<" with type "<<mysymbol_table[i][j].type<<endl;
+                    return mysymbol_table[i][j].type;
+                }
             }
         }
     }
-    return "none";
+    // cout<<"Line "<<linenum<<" Name in "<<name_in<<" scope_depth "<<scope_depth<<" with type "<<ret_type<<endl;
+    return ret_type;
 }
 string find_kind(string name_in)
 {
@@ -464,7 +470,7 @@ string arr_convert_to_scalar_checking(string LHS_type,string RHS_type)
     // cout<<"Line:"<<linenum<<"LHS Array dimension "<<LHS_arr_dim<<" RHS Array dimension "<<RHS_arr_dim<<" Total dimension "<<arr_dim_cnt<<endl;
     //ends here
     string check_LHS_arr;
-    if(arr_dim_cnt!=LHS_arr_dim+RHS_arr_dim) //total array dimension reference should be equal to their sum of dimension
+    if(arr_dim_cnt!=LHS_arr_dim+RHS_arr_dim && LHS_arr_dim && RHS_arr_dim) //total array dimension reference should be equal to their sum of dimension
     //e.g. arr1[6][7] and arr2[4] then total array dimension reference should be 3, so given arr1[6] = arr2[4] is an illegal condition
     {
         cout<<"<Error> found in Line: "<<linenum<<" Array reference does not converted to scalar type successfully "<<endl;
@@ -491,7 +497,7 @@ string arr_convert_to_scalar_checking(string LHS_type,string RHS_type)
 }
 string assignop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
 {
-    cout<<"Assignop at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl<<endl;
+    // cout<<"Assignop at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl<<endl;
     if(find_kind(LHS_name)=="constant")
     {
         cout<<"<Error> found in Line: "<<linenum<<" constant '"<<LHS_name<<"'cannot be assigned"<<endl;

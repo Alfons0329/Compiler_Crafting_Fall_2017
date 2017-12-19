@@ -1,207 +1,179 @@
 Program name semtest1
 
 Both Non const type b
+Both Non const type integer
+Operator MUL FUNCTION * at Line:19 LHS_type integer RHS_type integer
+Both Non const type integer
+Operator MUL FUNCTION * at Line:21 LHS_type real RHS_type integer
 44:     //&S+
 45: 
 46:     //relop start testing here
 47: 
+Array dimension reference at Line48  now dim count up to1
+Array dimension reference at Line48  now dim count up to2
 Both Non const type zr
 Array has been converted to scalar type :stringQQ
 <Error> found in Line: 48 Assign operation LHS_type and RHS_type inconsistent 
 48:     if h[3] > zr[5] then //error LHS string RHS integer
-const type integer
 49:         aa := 7;
 50:     else
-const type integer
 51:         aa := 10;
 52:     end if
 53: 
+Array dimension reference at Line54  now dim count up to1
 Both Non const type zr
 <Error> found in Line: 54 Array reference does not converted to scalar type successfully 
 54:     if h > zr[5] then //error LHS has not been converted to scalar type
-const type integer
 55:         aa := 7;
 56:     else
-const type integer
 57:         aa := 10;
 58:     end if
 59: 
+Array dimension reference at Line60  now dim count up to1
 Both Non const type sttr
-<Error> found in Line: 60 Relational operation LHS_type and RHS_type inconsistent 
+<Error> found in Line: 60 Relational operation LHS_type and RHS_type should be either real or integer type
 60:     if h[3] > sttr then //error relop should be real or integer
-const type integer
 61:         aa := 7;
 62:     else
-const type integer
 63:         aa := 10;
 64:     end if
 65: 
 66: 
 67: 
+Array dimension reference at Line68  now dim count up to1
 Both Non const type aa
 68:     if zr[3] > aa then //OK LHS integer RHS integer
-const type integer
 69:         aa := 7;
 70:     else
-const type integer
 71:         aa := 10;
 72:     end if
 73: 
 Both Non const type aa
-<Error> found in Line: 74 Array reference does not converted to scalar type successfully 
 74:     if zr > aa then //error LHS has not been converted to scalar type
-const type integer
 75:         aa := 7;
 76:     else
-const type integer
 77:         aa := 10;
 78:     end if
 79: 
+Array dimension reference at Line80  now dim count up to1
+Array dimension reference at Line80  now dim count up to2
 Both Non const type zr
 <Error> found in Line: 80 Array reference does not converted to scalar type successfully 
 80:     if twodim[4] > zr[5] then //error LHS has not been converted to scalar type
-const type integer
 81:         aa := 7;
 82:     else
-const type integer
 83:         aa := 10;
 84:     end if
 85: 
+Array dimension reference at Line86  now dim count up to1
+Array dimension reference at Line86  now dim count up to2
+Array dimension reference at Line86  now dim count up to3
 Both Non const type zr
 Array has been converted to scalar type :integerQQ
-Array has been converted to scalar type :integerQQ
 86:     if twodim[3][4] > zr[5] then //correct LHS integer and RHS Integer, all of them has been converted to scalar type
-const type integer
 87:         aa := 7;
 88:     else
-const type integer
 89:         aa := 10;
 90:     end if
 91: 
 92: 
 93: 
 Both Non const type sttr
-<Error> found in Line: 94 Relational operation LHS_type and RHS_type inconsistent 
+<Error> found in Line: 94 Relational operation LHS_type and RHS_type should be either real or integer type
 94:     if str > sttr then //error relop should be real or integer
-const type integer
 95:         aa := 7;
 96:     else
-const type integer
 97:         aa := 10;
 98:     end if
 99: 
 100: 
 Both Non const type sttr
-<Error> found in Line: 101 Relational operation LHS_type and RHS_type inconsistent 
+<Error> found in Line: 101 Relational operation LHS_type and RHS_type should be either real or integer type
 101:     if str > sttr then //error relop should be real or integer
-const type integer
 102:         aa := 7;
 103:     else
-const type integer
 104:         aa := 10;
 105:     end if
 106: 
 Both Non const type sttr
-<Error> found in Line: 107 Relational operation LHS_type and RHS_type inconsistent 
+<Error> found in Line: 107 Relational operation LHS_type and RHS_type should be either real or integer type
 107:     if aa > sttr then //error relop should be real or integer
-const type integer
 108:         aa := 7;
 109:     else
-const type integer
 110:         aa := 10;
 111:     end if
 112: 
 Both Non const type sttr
-<Error> found in Line: 113 Relational operation LHS_type and RHS_type inconsistent 
+<Error> found in Line: 113 Relational operation LHS_type and RHS_type should be either real or integer type
 113:     if bb > sttr then //error relop should be real or integer
-const type integer
 114:         aa := 7;
 115:     else
-const type integer
 116:         aa := 10;
 117:     end if
 118: 
 Both Non const type sttr
-<Error> found in Line: 119 Relational operation LHS_type and RHS_type inconsistent 
+<Error> found in Line: 119 Relational operation LHS_type and RHS_type should be either real or integer type
 119:     if rl > sttr then //error relop should be real or integer
-const type integer
 120:         aa := 7;
 121:     else
-const type integer
 122:         aa := 10;
 123:     end if
 124: 
 Both Non const type sttr
-<Error> found in Line: 125 Relational operation LHS_type and RHS_type inconsistent 
+<Error> found in Line: 125 Relational operation LHS_type and RHS_type should be either real or integer type
 125:     if itg > sttr then //error relop should be real or integer
-const type integer
 126:         aa := 7;
 127:     else
-const type integer
 128:         aa := 10;
 129:     end if
 130: 
 Both Non const type an
 131:     if aa > an then    //correct LHS int RHS int
-const type integer
 132:         aa := 7;
 133:     else
-const type integer
 134:         aa := 10;
 135:     end if
 136: 
-Right const type integer
+Both Non const type integer
 137:     if aa > 10 then    //correct LHS int RHS int
-const type integer
 138:         aa := 7;
 139:     else
-const type integer
 140:         aa := 10;
 141:     end if
 142: 
-Right const type real
+Both Non const type real
 143:     if aa > 10.625 then    //correct LHS int RHS real
-const type integer
 144:         aa := 7;
 145:     else
-const type integer
 146:         aa := 10;
 147:     end if
 148: 
 Both Non const type bk
 149:     if aa > bk then    //correct LHS int RHS int
-const type integer
 150:         aa := 7;
 151:     else
-const type integer
 152:         aa := 10;
 153:     end if
 154: 
 Both Non const type rl
 155:     if aa > rl then    //correct LHS int RHS real
-const type integer
 156:         aa := 7;
 157:     else
-const type integer
 158:         aa := 10;
 159:     end if
 160: 
-Right const type integer
+Both Non const type integer
 161:     if aa > 10 then    //correct LHS int RHS int
-const type integer
 162:         aa := 7;
 163:     else
-const type integer
 164:         aa := 10;
 165:     end if
 166: 
 Both Non const type sttr
-<Error> found in Line: 167 Relational operation LHS_type and RHS_type inconsistent 
+<Error> found in Line: 167 Relational operation LHS_type and RHS_type should be either real or integer type
 167:     if str > sttr then //error relop should be real or integer
-const type integer
 168:         aa := 7;
 169:     else
-const type integer
 170:         aa := 10;
 171:     end if
 172:     //relop end testing here
@@ -210,23 +182,34 @@ const type integer
 <Error> found in Line: 174 Array reference does not converted to scalar type successfully 
 174:     twodim := zr;      //error array dimension error, also , whole array cannot be assigned
 175: 
+Array dimension reference at Line176  now dim count up to1
+Array dimension reference at Line176  now dim count up to2
 176:     aa := twodim[2][4]; //correct
+Array dimension reference at Line177  now dim count up to1
+Array dimension reference at Line177  now dim count up to2
 177:     twodim[7][3] := aa; //correct
-<Error> found in Line: 178 Array reference does not converted to scalar type successfully 
+Array dimension reference at Line178  now dim count up to1
 178:     twodim[7] := aa;    //incorrect not a scalar type
 <Error> found in Line: 179 Array reference does not converted to scalar type successfully 
 179:     twodim := zr;       //incorrect not a scalar type
+Array dimension reference at Line180  now dim count up to1
+Array dimension reference at Line180  now dim count up to2
+Array dimension reference at Line180  now dim count up to3
 Array has been converted to scalar type :integerQQ
 180:     zr[8] := twodim[4][7]; //correct
+Array dimension reference at Line181  now dim count up to1
+Array dimension reference at Line181  now dim count up to2
 <Error> found in Line: 181 Array reference does not converted to scalar type successfully 
 181:     zr[8] := twodim[4];  //incorrect not a scalar type
+Array dimension reference at Line182  now dim count up to1
 <Error> found in Line: 182 Array reference does not converted to scalar type successfully 
 182:     zr[8] := twodim;    //incorrect not a scalar type
+Array dimension reference at Line183  now dim count up to1
+Array dimension reference at Line183  now dim count up to2
 Array has been converted to scalar type :stringQQ
 <Error> found in Line: 183 Assign operation LHS_type and RHS_type inconsistent 
 183:     h[4] := zr[5];      //array in same dimension but different type error
 184: 
-const type integer
 <Error> found in Line: 185 constant 'a'cannot be assigned
 185:     a := 5;            // error, constant cannot be assigned
 Check function name fun
@@ -236,17 +219,23 @@ fun integer integer
 Check function name fun
 fun integer integer 
 188:     aa := fun(a,a);    // ok
+Array dimension reference at Line189  now dim count up to1
 <Error> found in Line: 189 Assign operation LHS_type and RHS_type inconsistent 
 189:     aa := h[4];        // error string array cannot assign to integer
+Array dimension reference at Line190  now dim count up to1
 <Error> found in Line: 190 Assign operation LHS_type and RHS_type inconsistent 
 190:     h[4] := aa;        // still an error like line54
 191:     dr := aa;          // ok assign integer to real , type coercion
 <Error> found in Line: 192 Assign operation LHS_type and RHS_type inconsistent 
 192:     aa := dr;          // wrong assign real to integer, invalid type coercion
+Array dimension reference at Line193  now dim count up to1
 193:     dr := zr[7];       // ok assign integer to real , type coercion
+Array dimension reference at Line194  now dim count up to1
 <Error> found in Line: 194 Assign operation LHS_type and RHS_type inconsistent 
 194:     zr[7] := dr;       // wrong assign real to integer, invalid type coercion
+Array dimension reference at Line195  now dim count up to1
 195:     aa := zr[3];       // correct a LHS RHS same type
+Array dimension reference at Line196  now dim count up to1
 196:     zr[3] := aa;       // correct a LHS RHS same type
 Check function name fun
 fun integer 
