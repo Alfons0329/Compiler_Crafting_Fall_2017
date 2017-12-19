@@ -511,6 +511,7 @@ string assignop(string LHS_type,string RHS_type,string LHS_name, string RHS_name
         {
             LHS_type=has_scalar(LHS_type,LHS_dim);
             RHS_type=has_scalar(RHS_type,RHS_dim);
+            cout<<"Assignop at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl<<endl;
         }
         else
         {
@@ -520,7 +521,6 @@ string assignop(string LHS_type,string RHS_type,string LHS_name, string RHS_name
         size_t find2=RHS_type.find(LHS_type); //find left in right ex: left integer right integer [10] is allowed
         size_t find3=LHS_type.find("real"); //the only allowed conversion is this one
         size_t find4=RHS_type.find("integer"); //the only allowed conversion is this one
-        cout<<"Assignop at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl<<endl;
         /*if((LHS_arr_dim!=RHS_arr_dim) && LHS_arr_dim && RHS_arr_dim)
         {
             cout<<"<Error> found in Line: "<<linenum<<" Assign operation LHS Array dimension  RHS Array dimension inconsistent "<<endl;
@@ -546,6 +546,7 @@ string relop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
     {
         LHS_type=has_scalar(LHS_type,LHS_dim);
         RHS_type=has_scalar(RHS_type,RHS_dim);
+        cout<<"Relop at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
     }
     else
     {
@@ -555,7 +556,6 @@ string relop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
     size_t find2=RHS_type.find("real");
     size_t find3=LHS_type.find("real");
     size_t find4=RHS_type.find("integer");
-    cout<<"Relop at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
     /*cout<<"FIND 1 "<<find1
         <<"FIND 2 "<<find2
         <<"FIND 3 "<<find3
@@ -586,6 +586,7 @@ string addop(string LHS_type,string RHS_type,string LHS_name, string RHS_name,st
     {
         LHS_type=has_scalar(LHS_type,LHS_dim);
         RHS_type=has_scalar(RHS_type,RHS_dim);
+        cout<<"Operator "<<oper<<" at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
     }
     else
     {
@@ -595,7 +596,6 @@ string addop(string LHS_type,string RHS_type,string LHS_name, string RHS_name,st
     size_t find2=RHS_type.find("real");
     size_t find3=LHS_type.find("real");
     size_t find4=RHS_type.find("integer");
-    cout<<"Operator "<<oper<<" at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
     if(oper=="+") //add, operator overloading works for striong type
     {
         size_t LHS_str=LHS_type.find("string");
@@ -660,11 +660,11 @@ string addop(string LHS_type,string RHS_type,string LHS_name, string RHS_name,st
 string mulop(string LHS_type,string RHS_type,string LHS_name, string RHS_name,string oper)
 {
     //still chekc the array type first
-    cout<<"Operator MUL FUNCTION "<<oper<<" at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
     if(has_scalar(LHS_type,LHS_dim)!="error" && has_scalar(RHS_type,RHS_dim)!="error" )
     {
         LHS_type=has_scalar(LHS_type,LHS_dim);
         RHS_type=has_scalar(RHS_type,RHS_dim);
+        cout<<"Operator MUL FUNCTION "<<oper<<" at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
     }
     else
     {
@@ -743,10 +743,6 @@ string has_scalar(string LHS_type,int reference_dim)
         cout<<"<Error> found in Line: "<<linenum<<" Array reference does not converted to scalar type successfully "<<endl;
         return "error";
     }
-    else if(LHS_type!="integer" && LHS_type!="real" && LHS_type!="string" && LHS_type!="boolean") //has converted to scalar type but not right type in the spec
-    {
-        return "error";
-    }
     else
     {
         size_t find5=LHS_type.find("["); //extract the critical part of array_type, ex int [4], we extract int only
@@ -755,6 +751,10 @@ string has_scalar(string LHS_type,int reference_dim)
             string extracted_type=LHS_type.substr(0,find5-1);
             cout<<"Array has been converted to scalar type :"<<extracted_type<<"QQ"<<endl;
             return extracted_type;
+        }
+        else if(LHS_type!="integer" && LHS_type!="real" && LHS_type!="string" && LHS_type!="boolean") //has converted to scalar type but not right type in the spec
+        {
+            return "error";
         }
         else
         {
