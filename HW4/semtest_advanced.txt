@@ -1,256 +1,671 @@
 Program name semtest1
 
-Both Non const type b
-Both Non const type integer
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+semtest1                         program    0(global)  void             
+a                                constant   0(global)  integer          10
+b                                constant   0(global)  real             10.635
+dr                               variable   0(global)  real             
+fun                              function   0(global)  integer          integer, integer
+--------------------------------------------------------------------------------------------------------------
+Operation is relopCheck scalar FUNCTION  at Line:18 LHS_type integer actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:18 LHS_type integer actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:18 LHS_type integer actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:18 LHS_type integer actual total dim 0 however, reference_dim 0
+Relop at Line:18 LHS_type integer RHS_type integer
+Operation is mulopCheck scalar FUNCTION  at Line:19 LHS_type integer actual total dim 0 however, reference_dim 0
+Operation is mulopCheck scalar FUNCTION  at Line:19 LHS_type integer actual total dim 0 however, reference_dim 0
+Operation is mulopCheck scalar FUNCTION  at Line:19 LHS_type integer actual total dim 0 however, reference_dim 0
+Operation is mulopCheck scalar FUNCTION  at Line:19 LHS_type integer actual total dim 0 however, reference_dim 0
 Operator MUL FUNCTION * at Line:19 LHS_type integer RHS_type integer
-Both Non const type integer
-Operator MUL FUNCTION * at Line:21 LHS_type real RHS_type integer
+Operation is mulopCheck scalar FUNCTION  at Line:21 LHS_type integer actual total dim 0 however, reference_dim 0
+Operation is mulopCheck scalar FUNCTION  at Line:21 LHS_type integer actual total dim 0 however, reference_dim 0
+Operation is mulopCheck scalar FUNCTION  at Line:21 LHS_type integer actual total dim 0 however, reference_dim 0
+Operation is mulopCheck scalar FUNCTION  at Line:21 LHS_type integer actual total dim 0 however, reference_dim 0
+Operator MUL FUNCTION * at Line:21 LHS_type integer RHS_type integer
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+a                                parameter  1(local)   integer          
+b                                parameter  1(local)   integer          
+--------------------------------------------------------------------------------------------------------------
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+semtest1                         program    0(global)  void             
+a                                constant   0(global)  integer          10
+b                                constant   0(global)  real             10.635
+dr                               variable   0(global)  real             
+fun                              function   0(global)  integer          integer, integer
+fun2                             function   0(global)  void             
+--------------------------------------------------------------------------------------------------------------
+Operation is simpleop Check scalar FUNCTION  at Line:28 LHS_type string  actual total dim 0 however, reference_dim 0
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
 44:     //&S+
 45: 
 46:     //relop start testing here
 47: 
-Array dimension reference at Line48  now dim count up to1
-Array dimension reference at Line48  now dim count up to2
-Both Non const type zr
+Array LEFT dimension reference at Line48  now dim count up to1
+Array RIGHT dimension reference at Line48  now dim count up to1
+Operation is relopCheck scalar FUNCTION  at Line:48 LHS_type string [8] actual total dim 1 however, reference_dim 1
 Array has been converted to scalar type :stringQQ
-<Error> found in Line: 48 Assign operation LHS_type and RHS_type inconsistent 
+Operation is relopCheck scalar FUNCTION  at Line:48 LHS_type integer [8] actual total dim 1 however, reference_dim 1
+Array has been converted to scalar type :integerQQ
+Operation is relopCheck scalar FUNCTION  at Line:48 LHS_type string [8] actual total dim 1 however, reference_dim 1
+Array has been converted to scalar type :stringQQ
+Operation is relopCheck scalar FUNCTION  at Line:48 LHS_type integer [8] actual total dim 1 however, reference_dim 1
+Array has been converted to scalar type :integerQQ
+Relop at Line:48 LHS_type string RHS_type integer
+<Error> found in Line: 48 Relational operation LHS_type and RHS_type should be either real or integer type
 48:     if h[3] > zr[5] then //error LHS string RHS integer
+Operation is assign LHSCheck scalar FUNCTION  at Line:49 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 49:         aa := 7;
 50:     else
+Operation is assign LHSCheck scalar FUNCTION  at Line:51 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 51:         aa := 10;
 52:     end if
 53: 
-Array dimension reference at Line54  now dim count up to1
-Both Non const type zr
+Array RIGHT dimension reference at Line54  now dim count up to1
+Operation is relopCheck scalar FUNCTION  at Line:54 LHS_type string [8] actual total dim 1 however, reference_dim 0
 <Error> found in Line: 54 Array reference does not converted to scalar type successfully 
 54:     if h > zr[5] then //error LHS has not been converted to scalar type
+Operation is assign LHSCheck scalar FUNCTION  at Line:55 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 55:         aa := 7;
 56:     else
+Operation is assign LHSCheck scalar FUNCTION  at Line:57 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 57:         aa := 10;
 58:     end if
 59: 
-Array dimension reference at Line60  now dim count up to1
-Both Non const type sttr
+Array LEFT dimension reference at Line60  now dim count up to1
+Operation is relopCheck scalar FUNCTION  at Line:60 LHS_type string [8] actual total dim 1 however, reference_dim 1
+Array has been converted to scalar type :stringQQ
+Operation is relopCheck scalar FUNCTION  at Line:60 LHS_type string actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:60 LHS_type string [8] actual total dim 1 however, reference_dim 1
+Array has been converted to scalar type :stringQQ
+Operation is relopCheck scalar FUNCTION  at Line:60 LHS_type string actual total dim 0 however, reference_dim 0
+Relop at Line:60 LHS_type string RHS_type string
 <Error> found in Line: 60 Relational operation LHS_type and RHS_type should be either real or integer type
 60:     if h[3] > sttr then //error relop should be real or integer
+Operation is assign LHSCheck scalar FUNCTION  at Line:61 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 61:         aa := 7;
 62:     else
+Operation is assign LHSCheck scalar FUNCTION  at Line:63 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 63:         aa := 10;
 64:     end if
 65: 
 66: 
 67: 
-Array dimension reference at Line68  now dim count up to1
-Both Non const type aa
+Array LEFT dimension reference at Line68  now dim count up to1
+Operation is relopCheck scalar FUNCTION  at Line:68 LHS_type integer [8] actual total dim 1 however, reference_dim 1
+Array has been converted to scalar type :integerQQ
+Operation is relopCheck scalar FUNCTION  at Line:68 LHS_type integer actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:68 LHS_type integer [8] actual total dim 1 however, reference_dim 1
+Array has been converted to scalar type :integerQQ
+Operation is relopCheck scalar FUNCTION  at Line:68 LHS_type integer actual total dim 0 however, reference_dim 0
+Relop at Line:68 LHS_type integer RHS_type integer
 68:     if zr[3] > aa then //OK LHS integer RHS integer
+Operation is assign LHSCheck scalar FUNCTION  at Line:69 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 69:         aa := 7;
 70:     else
+Operation is assign LHSCheck scalar FUNCTION  at Line:71 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 71:         aa := 10;
 72:     end if
 73: 
-Both Non const type aa
+Operation is relopCheck scalar FUNCTION  at Line:74 LHS_type integer [8] actual total dim 1 however, reference_dim 0
+<Error> found in Line: 74 Array reference does not converted to scalar type successfully 
 74:     if zr > aa then //error LHS has not been converted to scalar type
+Operation is assign LHSCheck scalar FUNCTION  at Line:75 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 75:         aa := 7;
 76:     else
+Operation is assign LHSCheck scalar FUNCTION  at Line:77 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 77:         aa := 10;
 78:     end if
 79: 
-Array dimension reference at Line80  now dim count up to1
-Array dimension reference at Line80  now dim count up to2
-Both Non const type zr
+Array LEFT dimension reference at Line80  now dim count up to1
+Array RIGHT dimension reference at Line80  now dim count up to1
+Operation is relopCheck scalar FUNCTION  at Line:80 LHS_type integer [8][7] actual total dim 2 however, reference_dim 1
 <Error> found in Line: 80 Array reference does not converted to scalar type successfully 
 80:     if twodim[4] > zr[5] then //error LHS has not been converted to scalar type
+Operation is assign LHSCheck scalar FUNCTION  at Line:81 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 81:         aa := 7;
 82:     else
+Operation is assign LHSCheck scalar FUNCTION  at Line:83 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 83:         aa := 10;
 84:     end if
 85: 
-Array dimension reference at Line86  now dim count up to1
-Array dimension reference at Line86  now dim count up to2
-Array dimension reference at Line86  now dim count up to3
-Both Non const type zr
+Array LEFT dimension reference at Line86  now dim count up to1
+Array LEFT dimension reference at Line86  now dim count up to2
+Array RIGHT dimension reference at Line86  now dim count up to1
+Operation is relopCheck scalar FUNCTION  at Line:86 LHS_type integer [8][7] actual total dim 2 however, reference_dim 2
 Array has been converted to scalar type :integerQQ
+Operation is relopCheck scalar FUNCTION  at Line:86 LHS_type integer [8] actual total dim 1 however, reference_dim 1
+Array has been converted to scalar type :integerQQ
+Operation is relopCheck scalar FUNCTION  at Line:86 LHS_type integer [8][7] actual total dim 2 however, reference_dim 2
+Array has been converted to scalar type :integerQQ
+Operation is relopCheck scalar FUNCTION  at Line:86 LHS_type integer [8] actual total dim 1 however, reference_dim 1
+Array has been converted to scalar type :integerQQ
+Relop at Line:86 LHS_type integer RHS_type integer
 86:     if twodim[3][4] > zr[5] then //correct LHS integer and RHS Integer, all of them has been converted to scalar type
+Operation is assign LHSCheck scalar FUNCTION  at Line:87 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 87:         aa := 7;
 88:     else
+Operation is assign LHSCheck scalar FUNCTION  at Line:89 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 89:         aa := 10;
 90:     end if
 91: 
 92: 
 93: 
-Both Non const type sttr
+Operation is relopCheck scalar FUNCTION  at Line:94 LHS_type string actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:94 LHS_type string actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:94 LHS_type string actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:94 LHS_type string actual total dim 0 however, reference_dim 0
+Relop at Line:94 LHS_type string RHS_type string
 <Error> found in Line: 94 Relational operation LHS_type and RHS_type should be either real or integer type
 94:     if str > sttr then //error relop should be real or integer
+Operation is assign LHSCheck scalar FUNCTION  at Line:95 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 95:         aa := 7;
 96:     else
+Operation is assign LHSCheck scalar FUNCTION  at Line:97 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 97:         aa := 10;
 98:     end if
 99: 
 100: 
-Both Non const type sttr
+Operation is relopCheck scalar FUNCTION  at Line:101 LHS_type string actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:101 LHS_type string actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:101 LHS_type string actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:101 LHS_type string actual total dim 0 however, reference_dim 0
+Relop at Line:101 LHS_type string RHS_type string
 <Error> found in Line: 101 Relational operation LHS_type and RHS_type should be either real or integer type
 101:     if str > sttr then //error relop should be real or integer
+Operation is assign LHSCheck scalar FUNCTION  at Line:102 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 102:         aa := 7;
 103:     else
+Operation is assign LHSCheck scalar FUNCTION  at Line:104 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 104:         aa := 10;
 105:     end if
 106: 
-Both Non const type sttr
+Operation is relopCheck scalar FUNCTION  at Line:107 LHS_type integer actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:107 LHS_type string actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:107 LHS_type integer actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:107 LHS_type string actual total dim 0 however, reference_dim 0
+Relop at Line:107 LHS_type integer RHS_type string
 <Error> found in Line: 107 Relational operation LHS_type and RHS_type should be either real or integer type
 107:     if aa > sttr then //error relop should be real or integer
+Operation is assign LHSCheck scalar FUNCTION  at Line:108 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 108:         aa := 7;
 109:     else
+Operation is assign LHSCheck scalar FUNCTION  at Line:110 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 110:         aa := 10;
 111:     end if
 112: 
-Both Non const type sttr
+Operation is relopCheck scalar FUNCTION  at Line:113 LHS_type boolean actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:113 LHS_type string actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:113 LHS_type boolean actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:113 LHS_type string actual total dim 0 however, reference_dim 0
+Relop at Line:113 LHS_type boolean RHS_type string
 <Error> found in Line: 113 Relational operation LHS_type and RHS_type should be either real or integer type
 113:     if bb > sttr then //error relop should be real or integer
+Operation is assign LHSCheck scalar FUNCTION  at Line:114 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 114:         aa := 7;
 115:     else
+Operation is assign LHSCheck scalar FUNCTION  at Line:116 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 116:         aa := 10;
 117:     end if
 118: 
-Both Non const type sttr
+Operation is relopCheck scalar FUNCTION  at Line:119 LHS_type real actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:119 LHS_type string actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:119 LHS_type real actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:119 LHS_type string actual total dim 0 however, reference_dim 0
+Relop at Line:119 LHS_type real RHS_type string
 <Error> found in Line: 119 Relational operation LHS_type and RHS_type should be either real or integer type
 119:     if rl > sttr then //error relop should be real or integer
+Operation is assign LHSCheck scalar FUNCTION  at Line:120 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 120:         aa := 7;
 121:     else
+Operation is assign LHSCheck scalar FUNCTION  at Line:122 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 122:         aa := 10;
 123:     end if
 124: 
-Both Non const type sttr
+Operation is relopCheck scalar FUNCTION  at Line:125 LHS_type integer actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:125 LHS_type string actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:125 LHS_type integer actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:125 LHS_type string actual total dim 0 however, reference_dim 0
+Relop at Line:125 LHS_type integer RHS_type string
 <Error> found in Line: 125 Relational operation LHS_type and RHS_type should be either real or integer type
 125:     if itg > sttr then //error relop should be real or integer
+Operation is assign LHSCheck scalar FUNCTION  at Line:126 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 126:         aa := 7;
 127:     else
+Operation is assign LHSCheck scalar FUNCTION  at Line:128 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 128:         aa := 10;
 129:     end if
 130: 
-Both Non const type an
+Operation is relopCheck scalar FUNCTION  at Line:131 LHS_type integer actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:131 LHS_type integer actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:131 LHS_type integer actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:131 LHS_type integer actual total dim 0 however, reference_dim 0
+Relop at Line:131 LHS_type integer RHS_type integer
 131:     if aa > an then    //correct LHS int RHS int
+Operation is assign LHSCheck scalar FUNCTION  at Line:132 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 132:         aa := 7;
 133:     else
+Operation is assign LHSCheck scalar FUNCTION  at Line:134 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 134:         aa := 10;
 135:     end if
 136: 
-Both Non const type integer
+Operation is relopCheck scalar FUNCTION  at Line:137 LHS_type integer actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:137 LHS_type integer actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:137 LHS_type integer actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:137 LHS_type integer actual total dim 0 however, reference_dim 0
+Relop at Line:137 LHS_type integer RHS_type integer
 137:     if aa > 10 then    //correct LHS int RHS int
+Operation is assign LHSCheck scalar FUNCTION  at Line:138 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 138:         aa := 7;
 139:     else
+Operation is assign LHSCheck scalar FUNCTION  at Line:140 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 140:         aa := 10;
 141:     end if
 142: 
-Both Non const type real
+Operation is relopCheck scalar FUNCTION  at Line:143 LHS_type integer actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:143 LHS_type real actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:143 LHS_type integer actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:143 LHS_type real actual total dim 0 however, reference_dim 0
+Relop at Line:143 LHS_type integer RHS_type real
 143:     if aa > 10.625 then    //correct LHS int RHS real
+Operation is assign LHSCheck scalar FUNCTION  at Line:144 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 144:         aa := 7;
 145:     else
+Operation is assign LHSCheck scalar FUNCTION  at Line:146 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 146:         aa := 10;
 147:     end if
 148: 
-Both Non const type bk
+Operation is relopCheck scalar FUNCTION  at Line:149 LHS_type integer actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:149 LHS_type real actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:149 LHS_type integer actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:149 LHS_type real actual total dim 0 however, reference_dim 0
+Relop at Line:149 LHS_type integer RHS_type real
 149:     if aa > bk then    //correct LHS int RHS int
+Operation is assign LHSCheck scalar FUNCTION  at Line:150 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 150:         aa := 7;
 151:     else
+Operation is assign LHSCheck scalar FUNCTION  at Line:152 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 152:         aa := 10;
 153:     end if
 154: 
-Both Non const type rl
+Operation is relopCheck scalar FUNCTION  at Line:155 LHS_type integer actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:155 LHS_type real actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:155 LHS_type integer actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:155 LHS_type real actual total dim 0 however, reference_dim 0
+Relop at Line:155 LHS_type integer RHS_type real
 155:     if aa > rl then    //correct LHS int RHS real
+Operation is assign LHSCheck scalar FUNCTION  at Line:156 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 156:         aa := 7;
 157:     else
+Operation is assign LHSCheck scalar FUNCTION  at Line:158 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 158:         aa := 10;
 159:     end if
 160: 
-Both Non const type integer
+Operation is relopCheck scalar FUNCTION  at Line:161 LHS_type integer actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:161 LHS_type integer actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:161 LHS_type integer actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:161 LHS_type integer actual total dim 0 however, reference_dim 0
+Relop at Line:161 LHS_type integer RHS_type integer
 161:     if aa > 10 then    //correct LHS int RHS int
+Operation is assign LHSCheck scalar FUNCTION  at Line:162 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 162:         aa := 7;
 163:     else
+Operation is assign LHSCheck scalar FUNCTION  at Line:164 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 164:         aa := 10;
 165:     end if
 166: 
-Both Non const type sttr
+Operation is relopCheck scalar FUNCTION  at Line:167 LHS_type string actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:167 LHS_type string actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:167 LHS_type string actual total dim 0 however, reference_dim 0
+Operation is relopCheck scalar FUNCTION  at Line:167 LHS_type string actual total dim 0 however, reference_dim 0
+Relop at Line:167 LHS_type string RHS_type string
 <Error> found in Line: 167 Relational operation LHS_type and RHS_type should be either real or integer type
 167:     if str > sttr then //error relop should be real or integer
+Operation is assign LHSCheck scalar FUNCTION  at Line:168 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 168:         aa := 7;
 169:     else
+Operation is assign LHSCheck scalar FUNCTION  at Line:170 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 170:         aa := 10;
 171:     end if
 172:     //relop end testing here
+Operation is assign LHSCheck scalar FUNCTION  at Line:173 LHS_type integer [8] actual total dim 1 however, reference_dim 0
 <Error> found in Line: 173 Array reference does not converted to scalar type successfully 
+we have an assign LHS integer [8] with RHS integer [8][7]
+non const right type twodim
 173:     zr := twodim;      //error array dimension error, also , whole array cannot be assigned
+Operation is assign LHSCheck scalar FUNCTION  at Line:174 LHS_type integer [8][7] actual total dim 2 however, reference_dim 0
 <Error> found in Line: 174 Array reference does not converted to scalar type successfully 
+we have an assign LHS integer [8][7] with RHS integer [8]
+non const right type zr
 174:     twodim := zr;      //error array dimension error, also , whole array cannot be assigned
 175: 
-Array dimension reference at Line176  now dim count up to1
-Array dimension reference at Line176  now dim count up to2
-176:     aa := twodim[2][4]; //correct
-Array dimension reference at Line177  now dim count up to1
-Array dimension reference at Line177  now dim count up to2
-177:     twodim[7][3] := aa; //correct
-Array dimension reference at Line178  now dim count up to1
-178:     twodim[7] := aa;    //incorrect not a scalar type
-<Error> found in Line: 179 Array reference does not converted to scalar type successfully 
-179:     twodim := zr;       //incorrect not a scalar type
-Array dimension reference at Line180  now dim count up to1
-Array dimension reference at Line180  now dim count up to2
-Array dimension reference at Line180  now dim count up to3
+Operation is assign LHSCheck scalar FUNCTION  at Line:176 LHS_type integer actual total dim 0 however, reference_dim 0
+Array RIGHT dimension reference at Line176  now dim count up to1
+Array RIGHT dimension reference at Line176  now dim count up to2
+we have an assign LHS integer with RHS integer [8][7]
+non const right type twodim
+Operation is assignCheck scalar FUNCTION  at Line:176 LHS_type integer [8][7] actual total dim 2 however, reference_dim 2
 Array has been converted to scalar type :integerQQ
+Operation is assignCheck scalar FUNCTION  at Line:176 LHS_type integer [8][7] actual total dim 2 however, reference_dim 2
+Array has been converted to scalar type :integerQQ
+Assignop at Line:176 LHS_type integer RHS_type integer
+
+176:     aa := twodim[2][4]; //correct
+Array LEFT dimension reference at Line177  now dim count up to1
+Array LEFT dimension reference at Line177  now dim count up to2
+Operation is assign LHSCheck scalar FUNCTION  at Line:177 LHS_type integer [8][7] actual total dim 2 however, reference_dim 2
+Array has been converted to scalar type :integerQQ
+we have an assign LHS integer [8][7] with RHS integer
+non const right type aa
+Operation is assignCheck scalar FUNCTION  at Line:177 LHS_type integer actual total dim 0 however, reference_dim 0
+Operation is assignCheck scalar FUNCTION  at Line:177 LHS_type integer actual total dim 0 however, reference_dim 0
+Assignop at Line:177 LHS_type integer RHS_type integer
+
+177:     twodim[7][3] := aa; //correct
+Array LEFT dimension reference at Line178  now dim count up to1
+Operation is assign LHSCheck scalar FUNCTION  at Line:178 LHS_type integer [8][7] actual total dim 2 however, reference_dim 1
+<Error> found in Line: 178 Array reference does not converted to scalar type successfully 
+we have an assign LHS integer [8][7] with RHS integer
+non const right type aa
+178:     twodim[7] := aa;    //incorrect not a scalar type
+Operation is assign LHSCheck scalar FUNCTION  at Line:179 LHS_type integer [8][7] actual total dim 2 however, reference_dim 0
+<Error> found in Line: 179 Array reference does not converted to scalar type successfully 
+we have an assign LHS integer [8][7] with RHS integer [8]
+non const right type zr
+179:     twodim := zr;       //incorrect not a scalar type
+Array LEFT dimension reference at Line180  now dim count up to1
+Operation is assign LHSCheck scalar FUNCTION  at Line:180 LHS_type integer [8] actual total dim 1 however, reference_dim 1
+Array has been converted to scalar type :integerQQ
+Array RIGHT dimension reference at Line180  now dim count up to1
+Array RIGHT dimension reference at Line180  now dim count up to2
+we have an assign LHS integer [8] with RHS integer [8][7]
+non const right type twodim
+Operation is assignCheck scalar FUNCTION  at Line:180 LHS_type integer [8][7] actual total dim 2 however, reference_dim 2
+Array has been converted to scalar type :integerQQ
+Operation is assignCheck scalar FUNCTION  at Line:180 LHS_type integer [8][7] actual total dim 2 however, reference_dim 2
+Array has been converted to scalar type :integerQQ
+Assignop at Line:180 LHS_type integer RHS_type integer
+
 180:     zr[8] := twodim[4][7]; //correct
-Array dimension reference at Line181  now dim count up to1
-Array dimension reference at Line181  now dim count up to2
+Array LEFT dimension reference at Line181  now dim count up to1
+Operation is assign LHSCheck scalar FUNCTION  at Line:181 LHS_type integer [8] actual total dim 1 however, reference_dim 1
+Array has been converted to scalar type :integerQQ
+Array RIGHT dimension reference at Line181  now dim count up to1
+we have an assign LHS integer [8] with RHS integer [8][7]
+non const right type twodim
+Operation is assignCheck scalar FUNCTION  at Line:181 LHS_type integer [8][7] actual total dim 2 however, reference_dim 1
 <Error> found in Line: 181 Array reference does not converted to scalar type successfully 
 181:     zr[8] := twodim[4];  //incorrect not a scalar type
-Array dimension reference at Line182  now dim count up to1
+Array LEFT dimension reference at Line182  now dim count up to1
+Operation is assign LHSCheck scalar FUNCTION  at Line:182 LHS_type integer [8] actual total dim 1 however, reference_dim 1
+Array has been converted to scalar type :integerQQ
+we have an assign LHS integer [8] with RHS integer [8][7]
+non const right type twodim
+Operation is assignCheck scalar FUNCTION  at Line:182 LHS_type integer [8][7] actual total dim 2 however, reference_dim 0
 <Error> found in Line: 182 Array reference does not converted to scalar type successfully 
 182:     zr[8] := twodim;    //incorrect not a scalar type
-Array dimension reference at Line183  now dim count up to1
-Array dimension reference at Line183  now dim count up to2
+Array LEFT dimension reference at Line183  now dim count up to1
+Operation is assign LHSCheck scalar FUNCTION  at Line:183 LHS_type string [8] actual total dim 1 however, reference_dim 1
 Array has been converted to scalar type :stringQQ
+Array RIGHT dimension reference at Line183  now dim count up to1
+we have an assign LHS string [8] with RHS integer [8]
+non const right type zr
+Operation is assignCheck scalar FUNCTION  at Line:183 LHS_type integer [8] actual total dim 1 however, reference_dim 1
+Array has been converted to scalar type :integerQQ
+Operation is assignCheck scalar FUNCTION  at Line:183 LHS_type integer [8] actual total dim 1 however, reference_dim 1
+Array has been converted to scalar type :integerQQ
+Assignop at Line:183 LHS_type string RHS_type integer
+
 <Error> found in Line: 183 Assign operation LHS_type and RHS_type inconsistent 
 183:     h[4] := zr[5];      //array in same dimension but different type error
 184: 
+Operation is assign LHSCheck scalar FUNCTION  at Line:185 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS integer
+non const right type integer
 <Error> found in Line: 185 constant 'a'cannot be assigned
 185:     a := 5;            // error, constant cannot be assigned
+Operation is assign LHSCheck scalar FUNCTION  at Line:186 LHS_type integer actual total dim 0 however, reference_dim 0
 Check function name fun
 fun integer integer 
+we have an assign LHS integer with RHS integer
+non const right type fun
 186:     aa := fun(1,2);    // ok
 187:     fun(1,2);          // ok
+Operation is assign LHSCheck scalar FUNCTION  at Line:188 LHS_type integer actual total dim 0 however, reference_dim 0
 Check function name fun
 fun integer integer 
+we have an assign LHS integer with RHS integer
+non const right type fun
 188:     aa := fun(a,a);    // ok
-Array dimension reference at Line189  now dim count up to1
+Operation is assign LHSCheck scalar FUNCTION  at Line:189 LHS_type integer actual total dim 0 however, reference_dim 0
+Array RIGHT dimension reference at Line189  now dim count up to1
+we have an assign LHS integer with RHS string [8]
+non const right type h
+Operation is assignCheck scalar FUNCTION  at Line:189 LHS_type string [8] actual total dim 1 however, reference_dim 1
+Array has been converted to scalar type :stringQQ
+Operation is assignCheck scalar FUNCTION  at Line:189 LHS_type string [8] actual total dim 1 however, reference_dim 1
+Array has been converted to scalar type :stringQQ
+Assignop at Line:189 LHS_type integer RHS_type string
+
 <Error> found in Line: 189 Assign operation LHS_type and RHS_type inconsistent 
 189:     aa := h[4];        // error string array cannot assign to integer
-Array dimension reference at Line190  now dim count up to1
+Array LEFT dimension reference at Line190  now dim count up to1
+Operation is assign LHSCheck scalar FUNCTION  at Line:190 LHS_type string [8] actual total dim 1 however, reference_dim 1
+Array has been converted to scalar type :stringQQ
+we have an assign LHS string [8] with RHS integer
+non const right type aa
+Operation is assignCheck scalar FUNCTION  at Line:190 LHS_type integer actual total dim 0 however, reference_dim 0
+Operation is assignCheck scalar FUNCTION  at Line:190 LHS_type integer actual total dim 0 however, reference_dim 0
+Assignop at Line:190 LHS_type string RHS_type integer
+
 <Error> found in Line: 190 Assign operation LHS_type and RHS_type inconsistent 
 190:     h[4] := aa;        // still an error like line54
+Operation is assign LHSCheck scalar FUNCTION  at Line:191 LHS_type real actual total dim 0 however, reference_dim 0
+we have an assign LHS real with RHS integer
+non const right type aa
+Operation is assignCheck scalar FUNCTION  at Line:191 LHS_type integer actual total dim 0 however, reference_dim 0
+Operation is assignCheck scalar FUNCTION  at Line:191 LHS_type integer actual total dim 0 however, reference_dim 0
+Assignop at Line:191 LHS_type real RHS_type integer
+
 191:     dr := aa;          // ok assign integer to real , type coercion
+Operation is assign LHSCheck scalar FUNCTION  at Line:192 LHS_type integer actual total dim 0 however, reference_dim 0
+we have an assign LHS integer with RHS real
+non const right type dr
+Operation is assignCheck scalar FUNCTION  at Line:192 LHS_type real actual total dim 0 however, reference_dim 0
+Operation is assignCheck scalar FUNCTION  at Line:192 LHS_type real actual total dim 0 however, reference_dim 0
+Assignop at Line:192 LHS_type integer RHS_type real
+
 <Error> found in Line: 192 Assign operation LHS_type and RHS_type inconsistent 
 192:     aa := dr;          // wrong assign real to integer, invalid type coercion
-Array dimension reference at Line193  now dim count up to1
+Operation is assign LHSCheck scalar FUNCTION  at Line:193 LHS_type real actual total dim 0 however, reference_dim 0
+Array RIGHT dimension reference at Line193  now dim count up to1
+we have an assign LHS real with RHS integer [8]
+non const right type zr
+Operation is assignCheck scalar FUNCTION  at Line:193 LHS_type integer [8] actual total dim 1 however, reference_dim 1
+Array has been converted to scalar type :integerQQ
+Operation is assignCheck scalar FUNCTION  at Line:193 LHS_type integer [8] actual total dim 1 however, reference_dim 1
+Array has been converted to scalar type :integerQQ
+Assignop at Line:193 LHS_type real RHS_type integer
+
 193:     dr := zr[7];       // ok assign integer to real , type coercion
-Array dimension reference at Line194  now dim count up to1
+Array LEFT dimension reference at Line194  now dim count up to1
+Operation is assign LHSCheck scalar FUNCTION  at Line:194 LHS_type integer [8] actual total dim 1 however, reference_dim 1
+Array has been converted to scalar type :integerQQ
+we have an assign LHS integer [8] with RHS real
+non const right type dr
+Operation is assignCheck scalar FUNCTION  at Line:194 LHS_type real actual total dim 0 however, reference_dim 0
+Operation is assignCheck scalar FUNCTION  at Line:194 LHS_type real actual total dim 0 however, reference_dim 0
+Assignop at Line:194 LHS_type integer RHS_type real
+
 <Error> found in Line: 194 Assign operation LHS_type and RHS_type inconsistent 
 194:     zr[7] := dr;       // wrong assign real to integer, invalid type coercion
-Array dimension reference at Line195  now dim count up to1
+Operation is assign LHSCheck scalar FUNCTION  at Line:195 LHS_type integer actual total dim 0 however, reference_dim 0
+Array RIGHT dimension reference at Line195  now dim count up to1
+we have an assign LHS integer with RHS integer [8]
+non const right type zr
+Operation is assignCheck scalar FUNCTION  at Line:195 LHS_type integer [8] actual total dim 1 however, reference_dim 1
+Array has been converted to scalar type :integerQQ
+Operation is assignCheck scalar FUNCTION  at Line:195 LHS_type integer [8] actual total dim 1 however, reference_dim 1
+Array has been converted to scalar type :integerQQ
+Assignop at Line:195 LHS_type integer RHS_type integer
+
 195:     aa := zr[3];       // correct a LHS RHS same type
-Array dimension reference at Line196  now dim count up to1
+Array LEFT dimension reference at Line196  now dim count up to1
+Operation is assign LHSCheck scalar FUNCTION  at Line:196 LHS_type integer [8] actual total dim 1 however, reference_dim 1
+Array has been converted to scalar type :integerQQ
+we have an assign LHS integer [8] with RHS integer
+non const right type aa
+Operation is assignCheck scalar FUNCTION  at Line:196 LHS_type integer actual total dim 0 however, reference_dim 0
+Operation is assignCheck scalar FUNCTION  at Line:196 LHS_type integer actual total dim 0 however, reference_dim 0
+Assignop at Line:196 LHS_type integer RHS_type integer
+
 196:     zr[3] := aa;       // correct a LHS RHS same type
+Operation is assign LHSCheck scalar FUNCTION  at Line:197 LHS_type integer actual total dim 0 however, reference_dim 0
 Check function name fun
 fun integer 
 <Error> found in Line: 197 parameter number inconsistent
+we have an assign LHS integer with RHS integer
+non const right type fun
 197:     aa := fun(a);      // error, parameter number inconsistent
+Operation is assign LHSCheck scalar FUNCTION  at Line:198 LHS_type integer actual total dim 0 however, reference_dim 0
 Check function name fun
 fun boolean boolean 
 <Error> found in Line: 198 parameter type inconsistent
+we have an assign LHS integer with RHS integer
+non const right type fun
 198:     aa := fun(bb,cc);  // error, parameter type inconsistent
+Operation is assign LHSCheck scalar FUNCTION  at Line:199 LHS_type boolean actual total dim 0 however, reference_dim 0
 Check function name fun2
 fun2 
-<Error> found in Line: 199 Assign operation LHS_type and RHS_type inconsistent 
+we have an assign LHS boolean with RHS void
+non const right type fun2
+<Error> found in Line: 199 Assign operation cannot assign with/to void type 
 199:     bb := fun2();      // error, fun2() has no return type
+Operation is assign LHSCheck scalar FUNCTION  at Line:200 LHS_type boolean actual total dim 0 however, reference_dim 0
 Check function name fun
 fun integer integer 
+we have an assign LHS boolean with RHS integer
+non const right type fun
+Operation is assignCheck scalar FUNCTION  at Line:200 LHS_type integer actual total dim 0 however, reference_dim 0
+Operation is assignCheck scalar FUNCTION  at Line:200 LHS_type integer actual total dim 0 however, reference_dim 0
+Assignop at Line:200 LHS_type boolean RHS_type integer
+
 <Error> found in Line: 200 Assign operation LHS_type and RHS_type inconsistent 
 200:     bb := fun(5,6);    // error, return type inconsistent
 201:     fun2();            // ok
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+aa                               variable   1(local)   integer          
+an                               variable   1(local)   integer          
+bk                               variable   1(local)   real             
+rl                               constant   1(local)   real             0.123
+itg                              constant   1(local)   integer          44
+bb                               variable   1(local)   boolean          
+cc                               variable   1(local)   boolean          
+h                                variable   1(local)   string [8]       
+i                                variable   1(local)   string [8]       
+zr                               variable   1(local)   integer [8]      
+zs                               variable   1(local)   integer [8]      
+str                              variable   1(local)   string           
+sttr                             variable   1(local)   string           
+twodim                           variable   1(local)   integer [8][7]   
+--------------------------------------------------------------------------------------------------------------
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+semtest1                         program    0(global)  void             
+a                                constant   0(global)  integer          10
+b                                constant   0(global)  real             10.635
+dr                               variable   0(global)  real             
+fun                              function   0(global)  integer          integer, integer
+fun2                             function   0(global)  void             
+--------------------------------------------------------------------------------------------------------------

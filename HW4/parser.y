@@ -395,7 +395,7 @@ simple_stmt	:
 			}
             OP_ASSIGN boolean_expr MK_SEMICOLON
             {
-				/* cout<<"we have an assign LHS "<<find_type($1)<<" with RHS "<<find_type($3)<<endl; */
+				cout<<"we have an assign LHS "<<find_type($1)<<" with RHS "<<find_type($4)<<endl;
 				if(find_type($4)=="none")
 				{
 					cout<<"const type "<<$4<<endl;
@@ -403,6 +403,7 @@ simple_stmt	:
 				}
 				else
 				{
+					cout<<"non const right type "<<$4<<endl;
 					assignop(find_type($1),find_type($4),$1,$4);
 				}
 				tmp_inheritance.clear();

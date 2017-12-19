@@ -438,12 +438,22 @@ string find_type(string name_in)
     {
         /*for(unsigned int i=0;i<=scope_depth;i++)
         {*/
+        //search this level first
         for(unsigned int j=0;j<mysymbol_table[scope_depth].size();j++)
         {
             if(mysymbol_table[scope_depth][j].name==name_in)
             {
                 // cout<<"Name in "<<name_in<<" scope_depth "<<scope_depth<<" with type "<<mysymbol_table[scope_depth][j].type<<endl;
                 return mysymbol_table[scope_depth][j].type;
+            }
+        }
+        //ans then search for global
+        for(unsigned int j=0;j<mysymbol_table[0].size();j++)
+        {
+            if(mysymbol_table[0][j].name==name_in)
+            {
+                // cout<<"Name in "<<name_in<<" scope_depth "<<scope_depth<<" with type "<<mysymbol_table[scope_depth][j].type<<endl;
+                return mysymbol_table[0][j].type;
             }
         }
         //}
@@ -500,6 +510,11 @@ string find_kind(string name_in)
 }*/
 string assignop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
 {
+    if(LHS_type=="void" || RHS_type=="void")
+    {
+        cout<<"<Error> found in Line: "<<linenum<<" Assign operation cannot assign with/to void type "<<endl;
+        return "error";
+    }
     if(find_kind(LHS_name)=="constant")
     {
         cout<<"<Error> found in Line: "<<linenum<<" constant '"<<LHS_name<<"'cannot be assigned"<<endl;
