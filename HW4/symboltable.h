@@ -25,6 +25,7 @@ extern vector<string> funct_attri_buf; //for concatenating the function attribut
 //global varaible declaration for HW4 semantic analysis
 extern int is_proc_call;
 extern int arr_dim_cnt; //for not scalar type array count
+extern int LHS_is_scalar,RHS_is_scalar;//for checking the array dimesion
 extern string program_name;
 extern vector<string> assign_check_buf;
 extern vector<string> funct_param_buf;

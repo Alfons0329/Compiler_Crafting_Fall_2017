@@ -32,6 +32,7 @@ vector<string> funct_param_buf;
 vector<int> arr_dim_buf;
 int is_proc_call;
 int arr_dim_cnt;
+int LHS_is_scalar,RHS_is_scalar;
 %}
 /*tokens*/
 %union
@@ -408,8 +409,7 @@ simple_stmt	: var_ref
 			;
 
 proc_call_stmt	:
-            ID
-            MK_LPAREN opt_boolean_expr_list MK_RPAREN MK_SEMICOLON
+            ID MK_LPAREN opt_boolean_expr_list MK_RPAREN MK_SEMICOLON
 			;
 
 cond_stmt	: IF boolean_expr THEN
