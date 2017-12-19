@@ -729,9 +729,20 @@ string mulop(string LHS_type,string RHS_type,string LHS_name, string RHS_name,st
         }
     }
 }
-string boolop(string,string,string,string)
+string boolop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
 {
-
+    if(has_scalar(LHS_type,LHS_dim,"addop")!="error" && has_scalar(RHS_type,RHS_dim,"addop")!="error" )
+    {
+        LHS_type=has_scalar(LHS_type,LHS_dim,"addop");
+        RHS_type=has_scalar(RHS_type,RHS_dim,"addop");
+        cout<<"Operator "<<oper<<" at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
+    }
+    else if(LHS_type!="boolean" || RHS_type!="boolean")
+    {
+        cout<<"<Error> found in Line: "<<linenum<<" boolean operation LHS_type and RHS_type should both be boolean type"<<endl;
+        return "error";
+    }
+    return "boolean";
 }
 string simple(string SIM_type)
 {

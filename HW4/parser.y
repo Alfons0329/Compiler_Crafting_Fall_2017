@@ -310,8 +310,14 @@ id_list		: id_list MK_COMMA ID /*one ID for one sub_entry*/
 			}
 			;
 
-opt_type	: MK_COLON type {$$=$2;}
-			| /* epsilon */
+opt_type	: MK_COLON type
+			{
+				$$=$2;
+			}
+			|
+			{
+				$$="void";
+			}/* epsilon */
 			;
 
 type		: scalar_type {$$=$1;} /*type transmittion*/
@@ -459,6 +465,9 @@ for_stmt	: 	FOR ID
 			;
 
 return_stmt	: RETURN boolean_expr MK_SEMICOLON
+			{
+				has_scalar($2,LHS_dim,"return_stmt ");
+			}
 			;
 
 opt_boolean_expr_list	: boolean_expr_list
@@ -469,16 +478,65 @@ boolean_expr_list	: boolean_expr_list MK_COMMA boolean_expr
 			| boolean_expr {$$=$1;}
 			;
 
-boolean_expr		: boolean_expr OP_OR boolean_term
-			| boolean_term {$$=$1;}
+boolean_expr		: 	boolean_expr OP_OR boolean_term
+						{
+							if(find_type($3)=="none")
+							{
+								/* cout<<"Right const type "<<$3<<endl; */
+								$$=strdup(boolop(find_type($1),$3,$1,$3).c_str());
+							}
+							else if(find_type($1)=="none")
+							{
+								/* cout<<"Left const type "<<$3<<endl; */
+								$$=strdup(boolop($1,find_type($3),$1,$3).c_str());
+							}
+							else
+							{
+								/* cout<<"Both Non const type "<<$4<<endl; */
+								$$=strdup(boolop(find_type($1),find_type($3),$1,$3).c_str());
+							}
+						}
+						| boolean_term
+						{
+							$$=$1;
+						}
 			;
 
-boolean_term		: boolean_term OP_AND boolean_factor
-			| boolean_factor {$$=$1;}
+boolean_term		: 	boolean_term OP_AND boolean_factor
+						{
+							if(find_type($3)=="none")
+							{
+								/* cout<<"Right const type "<<$3<<endl; */
+								$$=strdup(boolop(find_type($1),$3,$1,$3).c_str());
+							}
+							else if(find_type($1)=="none")
+							{
+								/* cout<<"Left const type "<<$3<<endl; */
+								$$=strdup(boolop($1,find_type($3),$1,$3).c_str());
+							}
+							else
+							{
+								/* cout<<"Both Non const type "<<$4<<endl; */
+								$$=strdup(boolop(find_type($1),find_type($3),$1,$3).c_str());
+							}
+						}
+						| boolean_factor {$$=$1;}
 			;
 
-boolean_factor		: OP_NOT boolean_factor
-			| relop_expr {$$=$1;}
+boolean_factor		: OP_NOT boolean_factor /*do self relation*/
+					{
+						if(find_type($2)=="none")
+						{
+							/* cout<<"Right const type "<<$2<<endl; */
+							$$=strdup(boolop($2,$2,$2,$2).c_str());
+						}
+						else
+						{
+							/* cout<<"Both Non const type "<<$2<<endl; */
+							$$=strdup(boolop(find_type($2),find_type($2),$2,$2).c_str());
+						}
+					}
+					| relop_expr {$$=$1;}
 			;
 
 relop_expr	: 	expr

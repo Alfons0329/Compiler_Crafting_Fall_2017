@@ -50,6 +50,13 @@ struct loop_iterator
 };
 extern vector <loop_iterator> myiter_table;
 //operation data structures
+//
+struct param_struct
+{
+    int reference_dim;
+    string param_name;
+}
+extern vector <param_struct> temp;
 //function prototype declaration for HW3 symbol table implementation
 void symbol_table_init();
 void inserting_symbol_table(vector<string> , string , string , vector<string> );
