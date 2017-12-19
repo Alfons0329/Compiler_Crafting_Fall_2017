@@ -1902,7 +1902,7 @@ yyreduce:
     {
 				switch_side=1;
 				RHS_dim=0;
-				cout<<666666<<endl;
+				/* cout<<666666<<endl; */
 				tmp_inheritance=has_scalar(find_type((yyvsp[0].str)),LHS_dim,"assign LHS");
 			}
 #line 1909 "y.tab.c" /* yacc.c:1646  */
@@ -2013,17 +2013,17 @@ yyreduce:
 				/* cout<<"RELOP EXPR HAPPENS HERE linenum "<<linenum<<endl; */
 					if(find_type((yyvsp[0].str))=="none")
 					{
-						cout<<"Right const type "<<(yyvsp[0].str)<<endl;
+						/* cout<<"Right const type "<<$4<<endl; */
 						(yyval.str)=strdup(relop(find_type((yyvsp[-3].str)),(yyvsp[0].str),(yyvsp[-3].str),(yyvsp[0].str)).c_str());
 					}
 					else if(find_type((yyvsp[-3].str))=="none")
 					{
-						cout<<"Left const type "<<(yyvsp[0].str)<<endl;
+						/* cout<<"Left const type "<<$4<<endl; */
 						(yyval.str)=strdup(relop((yyvsp[-3].str),find_type((yyvsp[0].str)),(yyvsp[-3].str),(yyvsp[0].str)).c_str());
 					}
 					else
 					{
-						cout<<"Both Non const type "<<(yyvsp[0].str)<<endl;
+						/* cout<<"Both Non const type "<<$4<<endl; */
 						(yyval.str)=strdup(relop(find_type((yyvsp[-3].str)),find_type((yyvsp[0].str)),(yyvsp[-3].str),(yyvsp[0].str)).c_str());
 					}
 					switch_side=0;
@@ -2053,17 +2053,17 @@ yyreduce:
     {
                 	if(find_type((yyvsp[0].str))=="none")
 					{
-						cout<<" Left variable type "<<(yyvsp[-3].str)<<" Right const type "<<(yyvsp[0].str)<<endl;
+						/* cout<<" Left variable type "<<$1<<" Right const type "<<$4<<endl; */
 						(yyval.str)=strdup(addop(find_type((yyvsp[-3].str)),(yyvsp[0].str),(yyvsp[-3].str),(yyvsp[0].str),(yyvsp[-2].str)).c_str());
 					}
 					else if(find_type((yyvsp[-3].str))=="none")
 					{
-						cout<<" Left const type "<<(yyvsp[-3].str)<<" Right variable type "<<(yyvsp[0].str)<<endl;
+						/* cout<<" Left const type "<<$1<<" Right variable type "<<$4<<endl; */
 						(yyval.str)=strdup(addop((yyvsp[-3].str),find_type((yyvsp[0].str)),(yyvsp[-3].str),(yyvsp[0].str),(yyvsp[-2].str)).c_str());
 					}
 					else
 					{
-						cout<<"Both Non const type "<<(yyvsp[0].str)<<endl;
+						/* cout<<"Both Non const type "<<$4<<endl; */
 						(yyval.str)=strdup(addop(find_type((yyvsp[-3].str)),find_type((yyvsp[0].str)),(yyvsp[-3].str),(yyvsp[0].str),(yyvsp[-2].str)).c_str());
 					}
 					switch_side=0;
@@ -2091,20 +2091,20 @@ yyreduce:
   case 103:
 #line 564 "parser.y" /* yacc.c:1646  */
     {
-				cout<<"555555  "<<endl;
+				/* cout<<"555555  "<<endl; */
 				if(find_type((yyvsp[0].str))=="none")
 				{
-					cout<<" Left variable type xdxdxdxddx "<<(yyvsp[-3].str)<<" Right const type "<<(yyvsp[0].str)<<endl;
+					/* cout<<" Left variable type xdxdxdxddx "<<$1<<" Right const type "<<$4<<endl; */
 					(yyval.str)=strdup(mulop(find_type((yyvsp[-3].str)),(yyvsp[0].str),(yyvsp[-3].str),(yyvsp[0].str),(yyvsp[-2].str)).c_str());
 				}
 				else if(find_type((yyvsp[-3].str))=="none")
 				{
-					cout<<" Left const type "<<(yyvsp[-3].str)<<" Right variable type "<<(yyvsp[0].str)<<endl;
+					/* cout<<" Left const type "<<$1<<" Right variable type "<<$4<<endl; */
 					(yyval.str)=strdup(mulop((yyvsp[-3].str),find_type((yyvsp[0].str)),(yyvsp[-3].str),(yyvsp[0].str),(yyvsp[-2].str)).c_str());
 				}
 				else
 				{
-					cout<<"Both Non const type "<<(yyvsp[0].str)<<endl;
+					/* cout<<"Both Non const type "<<$4<<endl; */
 					(yyval.str)=strdup(mulop(find_type((yyvsp[-3].str)),find_type((yyvsp[0].str)),(yyvsp[-3].str),(yyvsp[0].str),(yyvsp[-2].str)).c_str());
 				}
 				switch_side=0;

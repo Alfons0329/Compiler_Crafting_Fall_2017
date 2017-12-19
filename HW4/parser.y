@@ -390,7 +390,7 @@ simple_stmt	:
 			{
 				switch_side=1;
 				RHS_dim=0;
-				cout<<666666<<endl;
+				/* cout<<666666<<endl; */
 				tmp_inheritance=has_scalar(find_type($1),LHS_dim,"assign LHS");
 			}
             OP_ASSIGN boolean_expr MK_SEMICOLON
@@ -491,17 +491,17 @@ relop_expr	: 	expr
 				/* cout<<"RELOP EXPR HAPPENS HERE linenum "<<linenum<<endl; */
 					if(find_type($4)=="none")
 					{
-						cout<<"Right const type "<<$4<<endl;
+						/* cout<<"Right const type "<<$4<<endl; */
 						$$=strdup(relop(find_type($1),$4,$1,$4).c_str());
 					}
 					else if(find_type($1)=="none")
 					{
-						cout<<"Left const type "<<$4<<endl;
+						/* cout<<"Left const type "<<$4<<endl; */
 						$$=strdup(relop($1,find_type($4),$1,$4).c_str());
 					}
 					else
 					{
-						cout<<"Both Non const type "<<$4<<endl;
+						/* cout<<"Both Non const type "<<$4<<endl; */
 						$$=strdup(relop(find_type($1),find_type($4),$1,$4).c_str());
 					}
 					switch_side=0;
@@ -529,17 +529,17 @@ expr		: 	expr
             	{
                 	if(find_type($4)=="none")
 					{
-						cout<<" Left variable type "<<$1<<" Right const type "<<$4<<endl;
+						/* cout<<" Left variable type "<<$1<<" Right const type "<<$4<<endl; */
 						$$=strdup(addop(find_type($1),$4,$1,$4,$2).c_str());
 					}
 					else if(find_type($1)=="none")
 					{
-						cout<<" Left const type "<<$1<<" Right variable type "<<$4<<endl;
+						/* cout<<" Left const type "<<$1<<" Right variable type "<<$4<<endl; */
 						$$=strdup(addop($1,find_type($4),$1,$4,$2).c_str());
 					}
 					else
 					{
-						cout<<"Both Non const type "<<$4<<endl;
+						/* cout<<"Both Non const type "<<$4<<endl; */
 						$$=strdup(addop(find_type($1),find_type($4),$1,$4,$2).c_str());
 					}
 					switch_side=0;
@@ -562,20 +562,20 @@ term		:
 			}
 			factor /*use dollar sign to do things*/
 			{
-				cout<<"555555  "<<endl;
+				/* cout<<"555555  "<<endl; */
 				if(find_type($4)=="none")
 				{
-					cout<<" Left variable type xdxdxdxddx "<<$1<<" Right const type "<<$4<<endl;
+					/* cout<<" Left variable type xdxdxdxddx "<<$1<<" Right const type "<<$4<<endl; */
 					$$=strdup(mulop(find_type($1),$4,$1,$4,$2).c_str());
 				}
 				else if(find_type($1)=="none")
 				{
-					cout<<" Left const type "<<$1<<" Right variable type "<<$4<<endl;
+					/* cout<<" Left const type "<<$1<<" Right variable type "<<$4<<endl; */
 					$$=strdup(mulop($1,find_type($4),$1,$4,$2).c_str());
 				}
 				else
 				{
-					cout<<"Both Non const type "<<$4<<endl;
+					/* cout<<"Both Non const type "<<$4<<endl; */
 					$$=strdup(mulop(find_type($1),find_type($4),$1,$4,$2).c_str());
 				}
 				switch_side=0;

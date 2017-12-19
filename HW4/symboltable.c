@@ -436,17 +436,17 @@ string find_type(string name_in)
     }
     else
     {
-        for(unsigned int i=0;i<=scope_depth;i++)
+        /*for(unsigned int i=0;i<=scope_depth;i++)
+        {*/
+        for(unsigned int j=0;j<mysymbol_table[scope_depth].size();j++)
         {
-            for(unsigned int j=0;j<mysymbol_table[i].size();j++)
+            if(mysymbol_table[scope_depth][j].name==name_in)
             {
-                if(mysymbol_table[i][j].name==name_in)
-                {
-                    // cout<<"Name in "<<name_in<<" scope_depth "<<scope_depth<<" with type "<<mysymbol_table[i][j].type<<endl;
-                    return mysymbol_table[i][j].type;
-                }
+                // cout<<"Name in "<<name_in<<" scope_depth "<<scope_depth<<" with type "<<mysymbol_table[scope_depth][j].type<<endl;
+                return mysymbol_table[scope_depth][j].type;
             }
         }
+        //}
     }
     // cout<<"Line "<<linenum<<" Name in "<<name_in<<" scope_depth "<<scope_depth<<" with type "<<ret_type<<endl;
     return ret_type;
