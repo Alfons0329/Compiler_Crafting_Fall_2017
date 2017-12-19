@@ -364,7 +364,10 @@ array_type	: ARRAY
 			;
 
 stmt		: compound_stmt
-			| simple_stmt
+ 			| simple_stmt
+			{
+				cout<<"stmt before simple_stmt"<<endl;
+			}
 			| cond_stmt
 			| while_stmt
 			| for_stmt
@@ -574,7 +577,10 @@ relop_expr	: 	expr
 					LHS_dim=0;
 					RHS_dim=0;
 				}
-				| expr {$$=$1;}
+				| expr
+				{
+					$$=$1;
+				}
 			;
 
 rel_op		: OP_LT
@@ -616,7 +622,10 @@ expr		: 	expr
 					LHS_dim=0;
 					RHS_dim=0;
             	}
-				| term {$$=$1;}
+				| term
+				{
+					$$=$1;
+				}
 			;
 
 add_op		: OP_ADD

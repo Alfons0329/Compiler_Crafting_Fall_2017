@@ -484,7 +484,7 @@ string find_type(string name_in)
                 return mysymbol_table[0][j].type;
             }
         }
-        if(is_found==0)
+        if(is_found==0 && name_in !="error")
         {
             cout<<"<Error> found in Line: "<<linenum<<" symbol "<<name_in<<" was not declared in thsi scope "<<endl;
         }
