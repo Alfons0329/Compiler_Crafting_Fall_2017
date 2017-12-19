@@ -580,9 +580,9 @@ static const yytype_uint16 yyrline[] =
      381,   375,   388,   389,   392,   393,   398,   397,   422,   426,
      433,   436,   441,   444,   450,   456,   449,   469,   475,   476,
      479,   480,   483,   501,   507,   525,   528,   541,   546,   544,
-     572,   575,   576,   577,   578,   579,   580,   585,   583,   610,
-     613,   614,   620,   618,   646,   652,   653,   654,   657,   661,
-     665,   666,   668,   667,   681,   682,   696,   708,   724
+     573,   576,   577,   578,   579,   580,   581,   586,   584,   611,
+     614,   615,   621,   619,   648,   654,   655,   656,   659,   663,
+     667,   668,   670,   669,   683,   684,   698,   710,   726
 };
 #endif
 
@@ -1908,7 +1908,7 @@ yyreduce:
     {
 				switch_side=1;
 				RHS_dim=0;
-				/* cout<<666666<<endl; */
+				cout<<"Switch side assign !! \n\n";
 				tmp_inheritance=has_scalar(find_type((yyvsp[0].str)),LHS_dim,"assign LHS");
 			}
 #line 1915 "y.tab.c" /* yacc.c:1646  */
@@ -2079,14 +2079,15 @@ yyreduce:
   case 88:
 #line 546 "parser.y" /* yacc.c:1646  */
     {
+					cout<<"Switch side relop !! \n\n";
 					switch_side=1;
 					RHS_dim=0;
 				}
-#line 2086 "y.tab.c" /* yacc.c:1646  */
+#line 2087 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 89:
-#line 551 "parser.y" /* yacc.c:1646  */
+#line 552 "parser.y" /* yacc.c:1646  */
     {
 				/* cout<<"RELOP EXPR HAPPENS HERE linenum "<<linenum<<endl; */
 					if(find_type((yyvsp[0].str))=="none")
@@ -2108,26 +2109,26 @@ yyreduce:
 					LHS_dim=0;
 					RHS_dim=0;
 				}
-#line 2112 "y.tab.c" /* yacc.c:1646  */
+#line 2113 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 90:
-#line 572 "parser.y" /* yacc.c:1646  */
+#line 573 "parser.y" /* yacc.c:1646  */
     {(yyval.str)=(yyvsp[0].str);}
-#line 2118 "y.tab.c" /* yacc.c:1646  */
+#line 2119 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 97:
-#line 585 "parser.y" /* yacc.c:1646  */
+#line 586 "parser.y" /* yacc.c:1646  */
     {
 					switch_side=1;
 					RHS_dim=0;
 				}
-#line 2127 "y.tab.c" /* yacc.c:1646  */
+#line 2128 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 98:
-#line 590 "parser.y" /* yacc.c:1646  */
+#line 591 "parser.y" /* yacc.c:1646  */
     {
                 	if(find_type((yyvsp[0].str))=="none")
 					{
@@ -2148,26 +2149,27 @@ yyreduce:
 					LHS_dim=0;
 					RHS_dim=0;
             	}
-#line 2152 "y.tab.c" /* yacc.c:1646  */
+#line 2153 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 99:
-#line 610 "parser.y" /* yacc.c:1646  */
+#line 611 "parser.y" /* yacc.c:1646  */
     {(yyval.str)=(yyvsp[0].str);}
-#line 2158 "y.tab.c" /* yacc.c:1646  */
+#line 2159 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 102:
-#line 620 "parser.y" /* yacc.c:1646  */
+#line 621 "parser.y" /* yacc.c:1646  */
     {
+				cout<<"Switch side mul !! \n\n";
 				switch_side=1;
 				RHS_dim=0;
 			}
-#line 2167 "y.tab.c" /* yacc.c:1646  */
+#line 2169 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 103:
-#line 625 "parser.y" /* yacc.c:1646  */
+#line 627 "parser.y" /* yacc.c:1646  */
     {
 				/* cout<<"555555  "<<endl; */
 				if(find_type((yyvsp[0].str))=="none")
@@ -2189,35 +2191,35 @@ yyreduce:
 				LHS_dim=0;
 				RHS_dim=0;
 			}
-#line 2193 "y.tab.c" /* yacc.c:1646  */
+#line 2195 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 104:
-#line 647 "parser.y" /* yacc.c:1646  */
+#line 649 "parser.y" /* yacc.c:1646  */
     {
 				(yyval.str)=(yyvsp[0].str);  /*pass the factor up*/
 			}
-#line 2201 "y.tab.c" /* yacc.c:1646  */
+#line 2203 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 108:
-#line 658 "parser.y" /* yacc.c:1646  */
+#line 660 "parser.y" /* yacc.c:1646  */
     {
 				(yyval.str)=(yyvsp[0].str);
 			}
-#line 2209 "y.tab.c" /* yacc.c:1646  */
+#line 2211 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 109:
-#line 662 "parser.y" /* yacc.c:1646  */
+#line 664 "parser.y" /* yacc.c:1646  */
     {
 				(yyval.str)=(yyvsp[0].str);
 			}
-#line 2217 "y.tab.c" /* yacc.c:1646  */
+#line 2219 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 112:
-#line 668 "parser.y" /* yacc.c:1646  */
+#line 670 "parser.y" /* yacc.c:1646  */
     {
 				one_param_struct.param_name=(yyvsp[0].str);
 				one_param_struct.param_dim=0;
@@ -2225,21 +2227,21 @@ yyreduce:
 				LHS_dim=0;
                 is_proc_call=1;
             }
-#line 2229 "y.tab.c" /* yacc.c:1646  */
+#line 2231 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 113:
-#line 676 "parser.y" /* yacc.c:1646  */
+#line 678 "parser.y" /* yacc.c:1646  */
     {
 				procedure_call_checking();
                 funct_param_buf.clear();
                 is_proc_call=0;
             }
-#line 2239 "y.tab.c" /* yacc.c:1646  */
+#line 2241 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 115:
-#line 683 "parser.y" /* yacc.c:1646  */
+#line 685 "parser.y" /* yacc.c:1646  */
     {
                 (yyval.str)=(yyvsp[0].str);
                 if(is_proc_call)
@@ -2250,11 +2252,11 @@ yyreduce:
 					LHS_dim=0;
                 }
             }
-#line 2254 "y.tab.c" /* yacc.c:1646  */
+#line 2256 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 116:
-#line 697 "parser.y" /* yacc.c:1646  */
+#line 699 "parser.y" /* yacc.c:1646  */
     {
                 (yyval.str)=(yyvsp[0].str);
                 if(is_proc_call)
@@ -2266,11 +2268,11 @@ yyreduce:
                 }
 				/* cout<<"Array First time reference! "<<endl; */
             }
-#line 2270 "y.tab.c" /* yacc.c:1646  */
+#line 2272 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 117:
-#line 709 "parser.y" /* yacc.c:1646  */
+#line 711 "parser.y" /* yacc.c:1646  */
     {
 				if(switch_side)
 				{
@@ -2284,11 +2286,11 @@ yyreduce:
 				}
 
 			}
-#line 2288 "y.tab.c" /* yacc.c:1646  */
+#line 2290 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 2292 "y.tab.c" /* yacc.c:1646  */
+#line 2294 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2516,7 +2518,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 727 "parser.y" /* yacc.c:1906  */
+#line 729 "parser.y" /* yacc.c:1906  */
 
 
 int yyerror(const char *msg )

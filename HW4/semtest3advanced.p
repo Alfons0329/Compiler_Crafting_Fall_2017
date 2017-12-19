@@ -17,7 +17,7 @@ begin
         a[i] := i*i;
     end do
 
-    return a;
+    return a; // error, return an array
 end
 end fun
 

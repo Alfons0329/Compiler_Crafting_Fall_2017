@@ -398,7 +398,7 @@ simple_stmt	:
 			{
 				switch_side=1;
 				RHS_dim=0;
-				/* cout<<666666<<endl; */
+				cout<<"Switch side assign !! \n\n";
 				tmp_inheritance=has_scalar(find_type($1),LHS_dim,"assign LHS");
 			}
             OP_ASSIGN boolean_expr MK_SEMICOLON
@@ -544,6 +544,7 @@ boolean_factor		: OP_NOT boolean_factor /*do self relation*/
 relop_expr	: 	expr
 				rel_op
 				{
+					cout<<"Switch side relop !! \n\n";
 					switch_side=1;
 					RHS_dim=0;
 				}
@@ -618,6 +619,7 @@ term		:
 			term
 			mul_op
 			{
+				cout<<"Switch side mul !! \n\n";
 				switch_side=1;
 				RHS_dim=0;
 			}
