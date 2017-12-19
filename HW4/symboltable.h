@@ -24,7 +24,7 @@ extern vector<string> id_list_buf; //for multiple ID
 extern vector<string> funct_attri_buf; //for concatenating the function attribute
 //global varaible declaration for HW4 semantic analysis
 extern int is_proc_call;
-extern int LHS_dim,RHS_dim,switch_side;//for checking the array dimesion
+extern int LHS_dim,RHS_dim,switch_side,matching_param_dim;//for checking the array dimesion
 extern string program_name;
 extern string tmp_inheritance; //for assignop case by case
 extern vector<string> assign_check_buf;

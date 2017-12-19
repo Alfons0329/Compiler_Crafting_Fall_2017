@@ -36,7 +36,7 @@ param_struct one_param_struct;
 vector<int> arr_dim_buf;
 int is_proc_call;
 //use for array scalar type checking
-int LHS_dim,RHS_dim,switch_side;
+int LHS_dim,RHS_dim,switch_side,matching_param_dim;
 string tmp_inheritance;
 %}
 /*tokens*/
@@ -705,8 +705,11 @@ factor		: var_ref
 			| literal_const
             {
                 $$=$1;
-                if(is_proc_call)
+                if(is_proc_call && matching_param_dim == 0)
                 {
+					if(linenum==68)
+						cout<<" push constant "<<$1<<" to function "<<endl;
+						
 					one_param_struct.param_name=$1;
 					one_param_struct.param_dim=LHS_dim;
 					funct_param_buf.pb(one_param_struct);
@@ -725,6 +728,7 @@ var_ref		:
 					one_param_struct.param_dim=LHS_dim;
 					funct_param_buf.pb(one_param_struct);
 					LHS_dim=0;
+					matching_param_dim=0;
                 }
 				/* cout<<"Array First time reference! "<<endl; */
             }
@@ -740,7 +744,7 @@ var_ref		:
 					LHS_dim++;
 					cout<<"Array LEFT dimension reference at Line"<<linenum<<"  now dim count up to"<<LHS_dim<<endl;
 				}
-
+				matching_param_dim=1;
 			}
 			;
 

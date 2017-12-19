@@ -24,6 +24,7 @@ void symbol_table_init()
     RHS_dim = 0;
     switch_side = 0;
     tmp_inheritance = "";
+    matching_param_dim = 0;
 }
 void inserting_symbol_table(vector<string> id_list_buf, string kind_in, string type_in, vector<string> funct_attri_buf)
 {
@@ -541,6 +542,7 @@ string find_kind(string name_in)
 }*/
 string assignop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
 {
+    cout<<"Assignop at Line:"<<linenum<<" LHS_type "<<tmp_inheritance<<" RHS_type "<<RHS_type<<endl<<endl;
     if(LHS_type=="void" || RHS_type=="void")
     {
         cout<<"<Error> found in Line: "<<linenum<<" Assign operation cannot assign with/to void type "<<endl;
