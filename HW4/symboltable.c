@@ -513,6 +513,10 @@ string assignop(string LHS_type,string RHS_type,string LHS_name, string RHS_name
             LHS_type=has_scalar(LHS_type,LHS_dim);
             RHS_type=has_scalar(RHS_type,RHS_dim);
         }
+        else
+        {
+            return "error";
+        }
         size_t find1=LHS_type.find(RHS_type); //find right in left ex: left string[10] right string is allowed
         size_t find2=RHS_type.find(LHS_type); //find left in right ex: left integer right integer [10] is allowed
         size_t find3=LHS_type.find("real"); //the only allowed conversion is this one
@@ -543,6 +547,10 @@ string relop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
     {
         LHS_type=has_scalar(LHS_type,LHS_dim);
         RHS_type=has_scalar(RHS_type,RHS_dim);
+    }
+    else
+    {
+        return "error";
     }
     size_t find1=LHS_type.find("integer");
     size_t find2=RHS_type.find("real");
@@ -579,6 +587,10 @@ string addop(string LHS_type,string RHS_type,string LHS_name, string RHS_name,st
     {
         LHS_type=has_scalar(LHS_type,LHS_dim);
         RHS_type=has_scalar(RHS_type,RHS_dim);
+    }
+    else
+    {
+        return "error";
     }
     size_t find1=LHS_type.find("integer");
     size_t find2=RHS_type.find("real");
@@ -653,6 +665,10 @@ string mulop(string LHS_type,string RHS_type,string LHS_name, string RHS_name,st
     {
         LHS_type=has_scalar(LHS_type,LHS_dim);
         RHS_type=has_scalar(RHS_type,RHS_dim);
+    }
+    else
+    {
+        return "error";
     }
     size_t find1=LHS_type.find("integer");
     size_t find2=RHS_type.find("real");
