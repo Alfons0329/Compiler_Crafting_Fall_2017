@@ -461,7 +461,7 @@ for_stmt	: 	FOR ID
 					{
 						printf("<Error> Found in Line%d: loop parameter's lower bound >= uppper bound\n",linenum);
 					}
-				}
+				} 4
 			  	opt_stmt_list
 			  	END DO
 				{
@@ -709,7 +709,7 @@ factor		: var_ref
                 {
 					if(linenum==68)
 						cout<<" push constant "<<$1<<" to function "<<endl;
-						
+
 					one_param_struct.param_name=$1;
 					one_param_struct.param_dim=LHS_dim;
 					funct_param_buf.pb(one_param_struct);
