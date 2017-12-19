@@ -57,7 +57,7 @@ program		:	ID
 					symbol_table_init();
 					id_list_buf.pb(yytext);
 					funct_attri_buf.clear();
-                    program_name_checking(program_name,yytext,0);
+                    program_name_checking(program_name,$1,0);
 				}
 				MK_SEMICOLON
 				{
@@ -68,7 +68,7 @@ program		:	ID
 			  	END ID
 			  	{
 					error_detection();
-                    program_name_checking(program_name,yytext,1);
+                    program_name_checking(program_name,$7,1);
 					dumpsymbol();
 					pop_symbol_table();
 			  	}
@@ -226,7 +226,7 @@ func_decl	: 	ID
                         array_type_str=$7;
                         array_type_str+=" ";
                         array_type_str+=reverse_arr_buf;
-						inserting_symbol_table(id_list_buf,"function",array_type_str,funct_attri_buf);
+						inserting_symbol_table(id_list_buf,"function",array_type_str,funct_attri_buf);*/
                         memset(arr_buf,0,sizeof(arr_buf));//update it for next segment*/
 					}
 					else

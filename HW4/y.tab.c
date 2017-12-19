@@ -1502,7 +1502,7 @@ yyreduce:
 					symbol_table_init();
 					id_list_buf.pb(yytext);
 					funct_attri_buf.clear();
-                    program_name_checking(program_name,yytext,0);
+                    program_name_checking(program_name,(yyvsp[0].str),0);
 				}
 #line 1508 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1520,7 +1520,7 @@ yyreduce:
 #line 69 "parser.y" /* yacc.c:1646  */
     {
 					error_detection();
-                    program_name_checking(program_name,yytext,1);
+                    program_name_checking(program_name,(yyvsp[0].str),1);
 					dumpsymbol();
 					pop_symbol_table();
 			  	}
@@ -1718,7 +1718,7 @@ yyreduce:
                         array_type_str=$7;
                         array_type_str+=" ";
                         array_type_str+=reverse_arr_buf;
-						inserting_symbol_table(id_list_buf,"function",array_type_str,funct_attri_buf);
+						inserting_symbol_table(id_list_buf,"function",array_type_str,funct_attri_buf);*/
                         memset(arr_buf,0,sizeof(arr_buf));//update it for next segment*/
 					}
 					else
