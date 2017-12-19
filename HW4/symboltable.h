@@ -63,17 +63,20 @@ void scientific_converter(char* );
 void dumpiterator();
 //function prototype declaration for HW4 semantic analysis
 int program_name_checking(string,string,int);
-// int op_assign_checking(string );
-// void dumpallsymbol();
-// void allsymbol_table_error_detection();
 void procedure_call_checking();
 //operations type ckecking
 string find_type(string);
 string find_kind(string);
-string arr_convert_to_scalar_checking();
+string arr_convert_to_scalar_checking(string,string); //for checking the correctness of two array
 string assignop(string,string,string,string);
 string relop(string,string,string,string);
 string addop(string,string,string,string,string);
 string mulop(string,string,string,string,string);
-string simple(string);
+string boolop(string,string,string,string);
+string simple(string); //for checking the simple statement
+string condition(string); //for checking the conditional statement
+string has_scalar(string);
+
+
+
 #endif

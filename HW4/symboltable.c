@@ -464,7 +464,8 @@ string arr_convert_to_scalar_checking(string LHS_type,string RHS_type)
     // cout<<"Line:"<<linenum<<"LHS Array dimension "<<LHS_arr_dim<<" RHS Array dimension "<<RHS_arr_dim<<" Total dimension "<<arr_dim_cnt<<endl;
     //ends here
     string check_LHS_arr;
-    if(arr_dim_cnt!=LHS_arr_dim+RHS_arr_dim)
+    if(arr_dim_cnt!=LHS_arr_dim+RHS_arr_dim) //total array dimension reference should be equal to their sum of dimension
+    //e.g. arr1[6][7] and arr2[4] then total array dimension reference should be 3, so given arr1[6] = arr2[4] is an illegal condition
     {
         cout<<"<Error> found in Line: "<<linenum<<" Array reference does not converted to scalar type successfully "<<endl;
         return "error";
@@ -685,7 +686,46 @@ string mulop(string LHS_type,string RHS_type,string LHS_name, string RHS_name,st
         }
     }
 }
+string boolop(string,string,string,string)
+{
+
+}
 string simple(string SIM_type)
 {
-    
+    return (has_scalar(SIM_type)=="error") ? "error" : has_scalar(SIM_type);
+}
+string condition(string COND_type)
+{
+    return (COND_type == "boolean" ) ? "boolean" : "error";
+}
+string has_scalar(string LHS_type)
+{
+    size_t LHS_arr_dim=count(LHS_type.begin(),LHS_type.end(),'[');
+    //total array dimension reference should be equal to their sum of dimension
+    //e.g. arr1[6][7] and arr2[4] then total array dimension reference should be 3, so given arr1[6] = arr2[4] is an illegal condition
+    //same idea as arr_convert_to_scalar_checking but without the type coercion checking
+    if(LHS_arr_dim!=arr_dim_cnt)
+    {
+        cout<<"<Error> found in Line: "<<linenum<<" Array reference does not converted to scalar type successfully "<<endl;
+        return "error";
+    }
+    else if(LHS_type!="integer" && LHS_type!="real" && LHS_type!="string" && LHS_type!="boolean")
+    {
+        return "error";
+    }
+    else
+    {
+        size_t find5=LHS_type.find("["); //extract the critical part of array_type, ex int [4], we extract int only
+        if(find5!=string::npos)
+        {
+            string extracted_type=LHS_type.substr(0,find5-1);
+            cout<<"Array has been converted to scalar type :"<<extracted_type<<"QQ"<<endl;
+            return extracted_type;
+        }
+        else
+        {
+            return LHS_type;
+        }
+    }
+    return "error";
 }

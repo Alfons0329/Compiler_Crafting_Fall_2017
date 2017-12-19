@@ -398,7 +398,13 @@ simple_stmt	: var_ref
 				arr_dim_cnt=0; //finish counting the dimension
             }
 			| PRINT boolean_expr MK_SEMICOLON
+			{
+				simple($2);
+			}
 			| READ boolean_expr MK_SEMICOLON
+			{
+				simple($2);
+			}
 			;
 
 proc_call_stmt	:
@@ -426,6 +432,12 @@ for_stmt	: 	FOR ID
 					is_loop=1;
 				}
  			  	OP_ASSIGN int_const TO int_const DO
+				{
+					if(atoi($7)-atoi($5) < 0)
+					{
+						printf("<Error> Found in Line%d: loop parameter's lower bound >= uppper bound\n",linenum);
+					}
+				}
 			  	opt_stmt_list
 			  	END DO
 				{
@@ -550,7 +562,10 @@ term		: term mul_op factor /*use dollar sign to do things*/
 
 				}
 			}
-			| factor {$$=$1;} /*pass the factor up*/
+			| factor
+			{
+				$$=$1;  /*pass the factor up*/
+			}
 			;
 
 mul_op		: OP_MUL
@@ -597,7 +612,7 @@ var_ref		:
             }
 			| var_ref dim
 			{
-				/* cout<<"Array dimension reference! "<<endl; */
+				 cout<<"Array dimension reference! now dim count up to"<<arr_dim_cnt<<endl;
 				arr_dim_cnt++;
 			}
 			;
