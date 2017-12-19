@@ -391,7 +391,7 @@ void procedure_call_checking()
     cout<<"Check function name "<<funct_name<<endl;
     for(unsigned int i=0;i<funct_param_buf.size();i++)
     {
-        cout<<funct_param_buf[i].name<<"  and with dimension "<<funct_param_buf[i].param_dim;
+        cout<<funct_param_buf[i].param_name<<"  and with dimension "<<funct_param_buf[i].param_dim;
     }
     cout<<endl;
     for(unsigned int i=0;i<mysymbol_table[0].size();i++)
@@ -457,6 +457,7 @@ string find_type(string name_in)
 {
     //dumpsymbol();
     string ret_type="none";
+    int is_found=0;
     if(name_in=="integer" || name_in=="real" || name_in=="boolean" || name_in=="string")
     {
         ret_type=name_in;
@@ -469,6 +470,7 @@ string find_type(string name_in)
             if(mysymbol_table[scope_depth][j].name==name_in)
             {
                 // cout<<"Name in "<<name_in<<" scope_depth "<<scope_depth<<" with type "<<mysymbol_table[scope_depth][j].type<<endl;
+                is_found=1;
                 return mysymbol_table[scope_depth][j].type;
             }
         }
@@ -478,8 +480,13 @@ string find_type(string name_in)
             if(mysymbol_table[0][j].name==name_in)
             {
                 // cout<<"Name in "<<name_in<<" scope_depth "<<scope_depth<<" with type "<<mysymbol_table[scope_depth][j].type<<endl;
+                is_found=1;
                 return mysymbol_table[0][j].type;
             }
+        }
+        if(is_found==0)
+        {
+            cout<<"<Error> found in Line: "<<linenum<<" symbol "<<name_in<<" was not declared in thsi scope "<<endl;
         }
     }
     // cout<<"Line "<<linenum<<" Name in "<<name_in<<" scope_depth "<<scope_depth<<" with type "<<ret_type<<endl;

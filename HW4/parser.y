@@ -319,9 +319,7 @@ opt_type	: MK_COLON type
 				$$=$2;
 			}
 			|
-			{
-				$$="void";
-			}/* epsilon */
+			/* epsilon */
 			;
 
 type		: scalar_type {$$=$1;} /*type transmittion*/
@@ -470,7 +468,7 @@ for_stmt	: 	FOR ID
 
 return_stmt	: RETURN boolean_expr MK_SEMICOLON
 			{
-				has_scalar($2,LHS_dim,"return_stmt ");
+				has_scalar(find_type($2),LHS_dim,"return_stmt ");
 			}
 			;
 
@@ -670,7 +668,7 @@ factor		: var_ref
             {
 				one_param_struct.param_name=$1;
 				one_param_struct.param_dim=0;
-				funct_param_buf.pb(find_type(one_param_struct));
+				funct_param_buf.pb(one_param_struct);
 				LHS_dim=0;
                 is_proc_call=1;
             }
@@ -688,7 +686,7 @@ factor		: var_ref
                 {
 					one_param_struct.param_name=$1;
 					one_param_struct.param_dim=LHS_dim;
-					funct_param_buf.pb(find_type(one_param_struct));
+					funct_param_buf.pb(one_param_struct);
 					LHS_dim=0;
                 }
             }
@@ -702,7 +700,7 @@ var_ref		:
                 {
 					one_param_struct.param_name=$1;
 					one_param_struct.param_dim=LHS_dim;
-					funct_param_buf.pb(find_type(one_param_struct));
+					funct_param_buf.pb(one_param_struct);
 					LHS_dim=0;
                 }
 				/* cout<<"Array First time reference! "<<endl; */

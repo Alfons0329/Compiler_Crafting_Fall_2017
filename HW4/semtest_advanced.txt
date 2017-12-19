@@ -19,11 +19,13 @@ Operation is mulopCheck scalar FUNCTION  at Line:19 LHS_type integer actual tota
 Operation is mulopCheck scalar FUNCTION  at Line:19 LHS_type integer actual total dim 0 however, reference_dim 0
 Operation is mulopCheck scalar FUNCTION  at Line:19 LHS_type integer actual total dim 0 however, reference_dim 0
 Operator MUL FUNCTION * at Line:19 LHS_type integer RHS_type integer
+Operation is return_stmt Check scalar FUNCTION  at Line:19 LHS_type integer actual total dim 0 however, reference_dim 0
 Operation is mulopCheck scalar FUNCTION  at Line:21 LHS_type integer actual total dim 0 however, reference_dim 0
 Operation is mulopCheck scalar FUNCTION  at Line:21 LHS_type integer actual total dim 0 however, reference_dim 0
 Operation is mulopCheck scalar FUNCTION  at Line:21 LHS_type integer actual total dim 0 however, reference_dim 0
 Operation is mulopCheck scalar FUNCTION  at Line:21 LHS_type integer actual total dim 0 however, reference_dim 0
 Operator MUL FUNCTION * at Line:21 LHS_type integer RHS_type integer
+Operation is return_stmt Check scalar FUNCTION  at Line:21 LHS_type integer actual total dim 0 however, reference_dim 0
 ==============================================================================================================
 Name                             Kind       Level      Type             Attribute  
 --------------------------------------------------------------------------------------------------------------
@@ -514,14 +516,18 @@ non const right type integer
 185:     a := 5;            // error, constant cannot be assigned
 Operation is assign LHSCheck scalar FUNCTION  at Line:186 LHS_type integer actual total dim 0 however, reference_dim 0
 Check function name fun
-fun integer integer 
+fun  and with dimension 0integer  and with dimension 0integer  and with dimension 0
+Function parameter originally be integer and what I passed in is integer
+Function parameter originally be integer and what I passed in is integer
 we have an assign LHS integer with RHS integer
 non const right type fun
 186:     aa := fun(1,2);    // ok
 187:     fun(1,2);          // ok
 Operation is assign LHSCheck scalar FUNCTION  at Line:188 LHS_type integer actual total dim 0 however, reference_dim 0
 Check function name fun
-fun integer integer 
+fun  and with dimension 0a  and with dimension 0a  and with dimension 0
+Function parameter originally be integer and what I passed in is integer
+Function parameter originally be integer and what I passed in is integer
 we have an assign LHS integer with RHS integer
 non const right type fun
 188:     aa := fun(a,a);    // ok
@@ -610,28 +616,34 @@ Assignop at Line:196 LHS_type integer RHS_type integer
 196:     zr[3] := aa;       // correct a LHS RHS same type
 Operation is assign LHSCheck scalar FUNCTION  at Line:197 LHS_type integer actual total dim 0 however, reference_dim 0
 Check function name fun
-fun integer 
+fun  and with dimension 0a  and with dimension 0
 <Error> found in Line: 197 parameter number inconsistent
+Function parameter originally be integer and what I passed in is integer
+Function parameter originally be integer and what I passed in is integer
 we have an assign LHS integer with RHS integer
 non const right type fun
 197:     aa := fun(a);      // error, parameter number inconsistent
 Operation is assign LHSCheck scalar FUNCTION  at Line:198 LHS_type integer actual total dim 0 however, reference_dim 0
 Check function name fun
-fun boolean boolean 
+fun  and with dimension 0bb  and with dimension 0cc  and with dimension 0
+Function parameter originally be integer and what I passed in is integer
+Function parameter originally be integer and what I passed in is boolean
 <Error> found in Line: 198 parameter type inconsistent
 we have an assign LHS integer with RHS integer
 non const right type fun
 198:     aa := fun(bb,cc);  // error, parameter type inconsistent
 Operation is assign LHSCheck scalar FUNCTION  at Line:199 LHS_type boolean actual total dim 0 however, reference_dim 0
 Check function name fun2
-fun2 
+fun2  and with dimension 0
 we have an assign LHS boolean with RHS void
 non const right type fun2
 <Error> found in Line: 199 Assign operation cannot assign with/to void type 
 199:     bb := fun2();      // error, fun2() has no return type
 Operation is assign LHSCheck scalar FUNCTION  at Line:200 LHS_type boolean actual total dim 0 however, reference_dim 0
 Check function name fun
-fun integer integer 
+fun  and with dimension 0integer  and with dimension 0integer  and with dimension 0
+Function parameter originally be integer and what I passed in is integer
+Function parameter originally be integer and what I passed in is integer
 we have an assign LHS boolean with RHS integer
 non const right type fun
 Operation is assignCheck scalar FUNCTION  at Line:200 LHS_type integer actual total dim 0 however, reference_dim 0
