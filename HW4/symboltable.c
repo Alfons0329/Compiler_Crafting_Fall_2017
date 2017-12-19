@@ -386,12 +386,12 @@ int program_name_checking(string program_name_in,string parsed_name,int situatio
 }
 void procedure_call_checking()
 {
-    string funct_name = funct_param_buf[0];
+    string funct_name = funct_param_buf[0].param_name;
     //check if parameter count consistent
     cout<<"Check function name "<<funct_name<<endl;
-    for(int i=0;i<funct_param_buf.size();i++)
+    for(unsigned int i=0;i<funct_param_buf.size();i++)
     {
-        cout<<funct_param_buf[i]<<" ";
+        cout<<funct_param_buf[i].name<<"  and with dimension "<<funct_param_buf[i].param_dim;
     }
     cout<<endl;
     for(unsigned int i=0;i<mysymbol_table[0].size();i++)
@@ -406,7 +406,7 @@ void procedure_call_checking()
             }
         }
     }
-    //check if parameter type consistent
+    //check if parameter type consistent. this is the hardest part
     for(unsigned int i=0;i<mysymbol_table[0].size();i++)
     {
         if(mysymbol_table[0][i].name == funct_name
@@ -414,12 +414,39 @@ void procedure_call_checking()
         {
             for(unsigned int param_idx=0;param_idx<mysymbol_table[0][i].funct_attri.size();param_idx++)
             {
-                if(funct_param_buf[param_idx+1]!=mysymbol_table[0][i].funct_attri[param_idx])
+                size_t symtab_dim_cnt = count(mysymbol_table[0][i].funct_attri[param_idx].begin(),mysymbol_table[0][i].funct_attri[param_idx].begin(),']');//the dimension originally declared in the symbol table
+                string referenced_type = find_type(funct_param_buf[param_idx].param_name);
+                size_t actual_referenced_dim_cnt = count(referenced_type.begin(),referenced_type.begin(),']') - funct_param_buf[param_idx].param_dim;
+                cout<<"Function parameter originally be "<<mysymbol_table[0][i].funct_attri[param_idx]<<" and what I passed in is "<<referenced_type<<endl;
+                if(symtab_dim_cnt) //if the parameter of the function has array to be passed in
                 {
-                    /*cout<<"funct attri "<<i<<" and paramidx "<<param_idx<<" "
-                    <<mysymbol_table[0][i].funct_attri[param_idx]<<"r"<<" with "<<funct_param_buf[param_idx+1]<<"s"<<endl;*/
-                    cout<<"<Error> found in Line: "<<linenum<<" parameter type inconsistent"<<endl;
-                    return;
+                    if(actual_referenced_dim_cnt != symtab_dim_cnt)//then the dimension or sub-dimension should be the same
+                    {
+                        cout<<"<Error> found in Line: "<<linenum<<" array as parameter, dimension inconsistent"<<endl;
+                    }
+                    else //dimension should be the same using is digit algorithm to traverse the string
+                    {
+                        for(unsigned int check_length_idx=0;check_length_idx<referenced_type.length();check_length_idx++)
+                        {
+                            if(isdigit(referenced_type[check_length_idx]))//using the isdigit STL to check such as integer [5] and integer [8] is a mismatch but with integer [5] , fine
+                            {
+                                if(referenced_type[check_length_idx]!=mysymbol_table[0][i].funct_attri[param_idx][check_length_idx])
+                                {
+                                    cout<<"<Error> found in Line: "<<linenum<<" array as parameter, array length inconsistent"<<endl;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if((referenced_type != mysymbol_table[0][i].funct_attri[param_idx])
+                    && (mysymbol_table[0][i].funct_attri[param_idx]!="real")
+                    && (referenced_type != "integer"))//the only allowed type coercion, otherwise mismatch
+                    {
+                        cout<<"<Error> found in Line: "<<linenum<<" parameter type inconsistent"<<endl;
+                    }
                 }
             }
         }
@@ -436,8 +463,6 @@ string find_type(string name_in)
     }
     else
     {
-        /*for(unsigned int i=0;i<=scope_depth;i++)
-        {*/
         //search this level first
         for(unsigned int j=0;j<mysymbol_table[scope_depth].size();j++)
         {
@@ -456,7 +481,6 @@ string find_type(string name_in)
                 return mysymbol_table[0][j].type;
             }
         }
-        //}
     }
     // cout<<"Line "<<linenum<<" Name in "<<name_in<<" scope_depth "<<scope_depth<<" with type "<<ret_type<<endl;
     return ret_type;
