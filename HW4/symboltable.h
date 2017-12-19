@@ -28,7 +28,6 @@ extern int LHS_dim,RHS_dim,switch_side;//for checking the array dimesion
 extern string program_name;
 extern string tmp_inheritance; //for assignop case by case
 extern vector<string> assign_check_buf;
-extern vector<string> funct_param_buf;
 //this one is the new array buffer which is easier to be implemented in C++
 extern vector<int> arr_dim_buf;
 //symbol table data structure declaration
@@ -50,13 +49,15 @@ struct loop_iterator
 };
 extern vector <loop_iterator> myiter_table;
 //operation data structures
-//
+//data structure for parameter processing starts here
 struct param_struct
 {
-    int reference_dim;
+    int param_dim;
     string param_name;
-}
-extern vector <param_struct> temp;
+};
+extern vector<param_struct> funct_param_buf;
+extern param_struct one_param_struct;
+//data structure for parameter processing ends here
 //function prototype declaration for HW3 symbol table implementation
 void symbol_table_init();
 void inserting_symbol_table(vector<string> , string , string , vector<string> );

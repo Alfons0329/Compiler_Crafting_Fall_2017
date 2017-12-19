@@ -735,7 +735,7 @@ string boolop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
     {
         LHS_type=has_scalar(LHS_type,LHS_dim,"addop");
         RHS_type=has_scalar(RHS_type,RHS_dim,"addop");
-        cout<<"Operator "<<oper<<" at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
+        cout<<"Operator boolean "<<" at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
     }
     else if(LHS_type!="boolean" || RHS_type!="boolean")
     {

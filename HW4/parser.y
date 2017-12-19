@@ -27,7 +27,11 @@ vector<string> id_list_buf; //
 vector<string> funct_attri_buf;
 //global variables for HW4
 vector<string> assign_check_buf;
-vector<string> funct_param_buf;
+//data structure for parameter processing starts here
+vector<param_struct> funct_param_buf;
+param_struct one_param_struct;
+//data structure for parameter processing ends here
+//important data structure for funct paramater collection including their dimension
 //this one is the new array buffer which is easier to be implemented in C++
 vector<int> arr_dim_buf;
 int is_proc_call;
@@ -652,13 +656,22 @@ mul_op		: OP_MUL
 			| OP_MOD
 			;
 
-factor		: var_ref {$$=$1;}
-			| OP_SUB var_ref {$$=$2;}
+factor		: var_ref
+			{
+				$$=$1;
+			}
+			| OP_SUB var_ref
+			{
+				$$=$2;
+			}
 			| MK_LPAREN boolean_expr MK_RPAREN
 			| OP_SUB MK_LPAREN boolean_expr MK_RPAREN
 			| ID /*function param here*/
             {
-                funct_param_buf.pb($1);
+				one_param_struct.param_name=$1;
+				one_param_struct.param_dim=0;
+				funct_param_buf.pb(find_type(one_param_struct));
+				LHS_dim=0;
                 is_proc_call=1;
             }
             MK_LPAREN opt_boolean_expr_list MK_RPAREN
@@ -673,7 +686,10 @@ factor		: var_ref {$$=$1;}
                 $$=$1;
                 if(is_proc_call)
                 {
-                    funct_param_buf.pb(const_type_str);
+					one_param_struct.param_name=$1;
+					one_param_struct.param_dim=LHS_dim;
+					funct_param_buf.pb(find_type(one_param_struct));
+					LHS_dim=0;
                 }
             }
 			;
@@ -684,10 +700,12 @@ var_ref		:
                 $$=$1;
                 if(is_proc_call)
                 {
-                    funct_param_buf.pb(find_type($1));
+					one_param_struct.param_name=$1;
+					one_param_struct.param_dim=LHS_dim;
+					funct_param_buf.pb(find_type(one_param_struct));
+					LHS_dim=0;
                 }
 				/* cout<<"Array First time reference! "<<endl; */
-
             }
 			| var_ref dim
 			{
