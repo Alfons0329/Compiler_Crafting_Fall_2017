@@ -75,6 +75,7 @@ program		:	ID
                     program_name_checking(program_name,$7,1);
 					dumpsymbol();
 					pop_symbol_table();
+					perfect();
 			  	}
 			;
 
