@@ -397,10 +397,10 @@ void procedure_call_checking()
 {
     string funct_name = funct_param_buf[0].param_name;
     //check if parameter count consistent
-    cout<<"Check function name "<<funct_name<<endl;
+    // cout<<"Check function name "<<funct_name<<endl;
     for(unsigned int i=0;i<funct_param_buf.size();i++)
     {
-        cout<<funct_param_buf[i].param_name<<"  and with dimension "<<funct_param_buf[i].param_dim;
+        // cout<<funct_param_buf[i].param_name<<"  and with dimension "<<funct_param_buf[i].param_dim;
     }
     cout<<endl;
     for(unsigned int i=0;i<mysymbol_table[0].size();i++)
@@ -427,7 +427,7 @@ void procedure_call_checking()
                 size_t symtab_dim_cnt = count(mysymbol_table[0][i].funct_attri[param_idx].begin(),mysymbol_table[0][i].funct_attri[param_idx].begin(),']');//the dimension originally declared in the symbol table
                 string referenced_type = find_type(funct_param_buf[param_idx].param_name);
                 size_t actual_referenced_dim_cnt = count(referenced_type.begin(),referenced_type.begin(),']') - funct_param_buf[param_idx].param_dim;
-                cout<<"Function parameter originally be "<<mysymbol_table[0][i].funct_attri[param_idx]<<" and what I passed in is "<<referenced_type<<endl;
+                // cout<<"Function parameter originally be "<<mysymbol_table[0][i].funct_attri[param_idx]<<" and what I passed in is "<<referenced_type<<endl;
                 if(symtab_dim_cnt) //if the parameter of the function has array to be passed in
                 {
                     if(actual_referenced_dim_cnt != symtab_dim_cnt)//then the dimension or sub-dimension should be the same
@@ -555,7 +555,7 @@ string find_kind(string name_in)
 }*/
 string assignop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
 {
-    cout<<"Assignop at Line:"<<linenum<<" LHS_type "<<tmp_inheritance<<" RHS_type "<<RHS_type<<endl<<endl;
+    // cout<<"Assignop at Line:"<<linenum<<" LHS_type "<<tmp_inheritance<<" RHS_type "<<RHS_type<<endl<<endl;
     if(LHS_type=="void" || RHS_type=="void")
     {
         cout<<"<Error> found in Line: "<<linenum<<" Assign operation cannot assign with/to void type "<<endl;
@@ -574,7 +574,7 @@ string assignop(string LHS_type,string RHS_type,string LHS_name, string RHS_name
         if(tmp_inheritance!="error" && has_scalar(RHS_type,RHS_dim,"assign")!="error" )
         {
             RHS_type=has_scalar(RHS_type,RHS_dim,"assign");
-            cout<<"Assignop at Line:"<<linenum<<" LHS_type "<<tmp_inheritance<<" RHS_type "<<RHS_type<<endl<<endl;
+            // cout<<"Assignop at Line:"<<linenum<<" LHS_type "<<tmp_inheritance<<" RHS_type "<<RHS_type<<endl<<endl;
         }
         else
         {
@@ -611,7 +611,7 @@ string relop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
     {
         LHS_type=has_scalar(LHS_type,LHS_dim,"relop");
         RHS_type=has_scalar(RHS_type,RHS_dim,"relop");
-        cout<<"Relop at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
+        // cout<<"Relop at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
     }
     else
     {
@@ -652,7 +652,7 @@ string addop(string LHS_type,string RHS_type,string LHS_name, string RHS_name,st
     {
         LHS_type=has_scalar(LHS_type,LHS_dim,"addop");
         RHS_type=has_scalar(RHS_type,RHS_dim,"addop");
-        cout<<"Operator "<<oper<<" at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
+        // cout<<"Operator "<<oper<<" at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
     }
     else
     {
@@ -734,7 +734,7 @@ string mulop(string LHS_type,string RHS_type,string LHS_name, string RHS_name,st
     {
         LHS_type=has_scalar(LHS_type,LHS_dim,"mulop");
         RHS_type=has_scalar(RHS_type,RHS_dim,"mulop");
-        cout<<"Operator MUL FUNCTION "<<oper<<" at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
+        // cout<<"Operator MUL FUNCTION "<<oper<<" at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
     }
     else
     {
@@ -794,7 +794,7 @@ string boolop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
     {
         LHS_type=has_scalar(LHS_type,LHS_dim,"addop");
         RHS_type=has_scalar(RHS_type,RHS_dim,"addop");
-        cout<<"Operator boolean "<<" at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
+        // cout<<"Operator boolean "<<" at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
     }
     else if(LHS_type!="boolean" || RHS_type!="boolean")
     {
@@ -818,9 +818,9 @@ string has_scalar(string LHS_type,int reference_dim,string oper)
     //total array dimension reference should be equal to their sum of dimension
     //e.g. arr1[6][7] and arr2[4] then total array dimension reference should be 3, so given arr1[6] = arr2[4] is an illegal condition
     //same idea as arr_convert_to_scalar_checking but without the type coercion checking
-    cout<<"Operation is "<<oper
-    <<"Check scalar FUNCTION  at Line:"<<linenum<<" LHS_type "
-    <<LHS_type<<" actual total dim "<<LHS_arr_dim<<" however, reference_dim "<<reference_dim<<endl;
+    // cout<<"Operation is "<<oper
+    // <<"Check scalar FUNCTION  at Line:"<<linenum<<" LHS_type "
+    // <<LHS_type<<" actual total dim "<<LHS_arr_dim<<" however, reference_dim "<<reference_dim<<endl;
     if(LHS_type=="integer" || LHS_type=="real" || LHS_type=="boolean" || LHS_type=="string") //is already an scalar_type
     {
         return LHS_type;
@@ -838,7 +838,7 @@ string has_scalar(string LHS_type,int reference_dim,string oper)
         if(find5!=string::npos)
         {
             string extracted_type=LHS_type.substr(0,find5-1);
-            cout<<"Array has been converted to scalar type :"<<extracted_type<<"QQ"<<endl;
+            // cout<<"Array has been converted to scalar type :"<<extracted_type<<"QQ"<<endl;
             return extracted_type;
         }
         else if(LHS_type!="integer" && LHS_type!="real" && LHS_type!="string" && LHS_type!="boolean") //has converted to scalar type but not right type in the spec

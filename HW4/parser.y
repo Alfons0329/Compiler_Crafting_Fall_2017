@@ -367,7 +367,7 @@ array_type	: ARRAY
 stmt		: compound_stmt
  			| simple_stmt
 			{
-				cout<<"stmt before simple_stmt"<<endl;
+				/* cout<<"stmt before simple_stmt"<<endl; */
 			}
 			| cond_stmt
 			| while_stmt
@@ -402,7 +402,7 @@ simple_stmt	:
 			{
 				switch_side=1;
 				RHS_dim=0;
-				cout<<"Switch side assign !! \n\n";
+				/* cout<<"Switch side assign !! \n\n"; */
 				tmp_inheritance=has_scalar(find_type($1),LHS_dim,"assign LHS");
 			}
             OP_ASSIGN boolean_expr MK_SEMICOLON
@@ -410,12 +410,12 @@ simple_stmt	:
 				cout<<"we have an assign LHS "<<find_type($1)<<" with RHS "<<find_type($4)<<endl;
 				if(find_type($4)=="none")
 				{
-					cout<<"const type "<<$4<<endl;
+					/* cout<<"const type "<<$4<<endl; */
 					assignop(find_type($1),$4,$1,$4);
 				}
 				else
 				{
-					cout<<"non const right type "<<$4<<endl;
+					/* cout<<"non const right type "<<$4<<endl; */
 					assignop(find_type($1),find_type($4),$1,$4);
 				}
 				tmp_inheritance.clear();
@@ -550,12 +550,12 @@ boolean_factor		: OP_NOT boolean_factor /*do self relation*/
 
 relop_expr	: 	expr
 				{
-					cout<<"relop most left part "<<endl;
+					/* cout<<"relop most left part "<<endl; */
 					switch_side=0;
 				}
 				rel_op
 				{
-					cout<<"Switch side relop !! \n\n";
+					/* cout<<"Switch side relop !! \n\n"; */
 					switch_side=1;
 					RHS_dim=0;
 				}
@@ -583,7 +583,7 @@ relop_expr	: 	expr
 				}
 				| expr
 				{
-					cout<<"relop -> expr "<<endl;
+					/* cout<<"relop -> expr "<<endl; */
 					$$=$1;
 				}
 			;
@@ -598,7 +598,7 @@ rel_op		: OP_LT
 
 expr		: 	expr
 				{
-					cout<<"addop most left part "<<endl;
+					/* cout<<"addop most left part "<<endl; */
 					switch_side=0;
 				}
  				add_op
@@ -629,7 +629,7 @@ expr		: 	expr
             	}
 				| term
 				{
-					cout<<"expr->term "<<endl;
+					/* cout<<"expr->term "<<endl; */
 					$$=$1;
 				}
 			;
@@ -641,12 +641,12 @@ add_op		: OP_ADD
 term		:
 			term
 			{
-				cout<<"mulop most left part "<<endl;
+				/* cout<<"mulop most left part "<<endl; */
 				switch_side=0;
 			}
 			mul_op
 			{
-				cout<<"Switch side mul !! \n\n";
+				/* cout<<"Switch side mul !! \n\n"; */
 				switch_side=1;
 				RHS_dim=0;
 			}
@@ -674,7 +674,7 @@ term		:
 			}
 			| factor
 			{
-				cout<<"term->factor"<<endl;
+				/* cout<<"term->factor"<<endl; */
 				$$=$1;  /*pass the factor up*/
 			}
 			;
@@ -714,8 +714,8 @@ factor		: var_ref
                 $$=$1;
                 if(is_proc_call && matching_param_dim != 0)
                 {
-					if(linenum==68)
-						cout<<" push constant "<<$1<<" to function "<<endl;
+					/* if(linenum==68) */
+						/* cout<<" push constant "<<$1<<" to function "<<endl; */
 
 					one_param_struct.param_name=$1;
 					one_param_struct.param_dim=LHS_dim;
@@ -744,12 +744,12 @@ var_ref		:
 				if(switch_side)
 				{
 					RHS_dim++;
-					cout<<"Array RIGHT dimension reference at Line"<<linenum<<"  now dim count up to"<<RHS_dim<<endl;
+					/* cout<<"Array RIGHT dimension reference at Line"<<linenum<<"  now dim count up to"<<RHS_dim<<endl; */
 				}
 				else
 				{
 					LHS_dim++;
-					cout<<"Array LEFT dimension reference at Line"<<linenum<<"  now dim count up to"<<LHS_dim<<endl;
+					/* cout<<"Array LEFT dimension reference at Line"<<linenum<<"  now dim count up to"<<LHS_dim<<endl; */
 				}
 				matching_param_dim=1;
 			}
