@@ -582,7 +582,7 @@ static const yytype_uint16 yyrline[] =
      482,   483,   486,   504,   510,   528,   531,   544,   548,   553,
      547,   580,   586,   587,   588,   589,   590,   591,   595,   600,
      594,   625,   631,   632,   637,   642,   636,   669,   675,   676,
-     677,   680,   684,   688,   689,   691,   690,   704,   705,   722,
+     677,   680,   684,   688,   689,   691,   690,   704,   705,   723,
      735,   751
 };
 #endif
@@ -2290,22 +2290,23 @@ yyreduce:
 #line 706 "parser.y" /* yacc.c:1646  */
     {
                 (yyval.str)=(yyvsp[0].str);
-                if(is_proc_call && matching_param_dim == 0)
+                if(is_proc_call && matching_param_dim != 0)
                 {
 					if(linenum==68)
 						cout<<" push constant "<<(yyvsp[0].str)<<" to function "<<endl;
-						
+
 					one_param_struct.param_name=(yyvsp[0].str);
 					one_param_struct.param_dim=LHS_dim;
 					funct_param_buf.pb(one_param_struct);
 					LHS_dim=0;
                 }
+				matching_param_dim=0;
             }
-#line 2305 "y.tab.c" /* yacc.c:1646  */
+#line 2306 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 119:
-#line 723 "parser.y" /* yacc.c:1646  */
+#line 724 "parser.y" /* yacc.c:1646  */
     {
                 (yyval.str)=(yyvsp[0].str);
                 if(is_proc_call)
@@ -2314,7 +2315,6 @@ yyreduce:
 					one_param_struct.param_dim=LHS_dim;
 					funct_param_buf.pb(one_param_struct);
 					LHS_dim=0;
-					matching_param_dim=0;
                 }
 				/* cout<<"Array First time reference! "<<endl; */
             }

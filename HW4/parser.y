@@ -461,7 +461,7 @@ for_stmt	: 	FOR ID
 					{
 						printf("<Error> Found in Line%d: loop parameter's lower bound >= uppper bound\n",linenum);
 					}
-				} 4
+				}
 			  	opt_stmt_list
 			  	END DO
 				{
@@ -705,7 +705,7 @@ factor		: var_ref
 			| literal_const
             {
                 $$=$1;
-                if(is_proc_call && matching_param_dim == 0)
+                if(is_proc_call && matching_param_dim != 0)
                 {
 					if(linenum==68)
 						cout<<" push constant "<<$1<<" to function "<<endl;
@@ -715,6 +715,7 @@ factor		: var_ref
 					funct_param_buf.pb(one_param_struct);
 					LHS_dim=0;
                 }
+				matching_param_dim=0;
             }
 			;
 
@@ -728,7 +729,6 @@ var_ref		:
 					one_param_struct.param_dim=LHS_dim;
 					funct_param_buf.pb(one_param_struct);
 					LHS_dim=0;
-					matching_param_dim=0;
                 }
 				/* cout<<"Array First time reference! "<<endl; */
             }
