@@ -582,8 +582,8 @@ static const yytype_uint16 yyrline[] =
      483,   484,   490,   508,   514,   532,   535,   548,   552,   557,
      551,   584,   591,   592,   593,   594,   595,   596,   600,   605,
      599,   630,   637,   638,   643,   648,   642,   675,   682,   683,
-     684,   687,   691,   695,   696,   698,   697,   711,   712,   730,
-     742,   758
+     684,   687,   691,   695,   696,   698,   697,   711,   712,   729,
+     741,   757
 };
 #endif
 
@@ -1897,7 +1897,7 @@ yyreduce:
   case 53:
 #line 369 "parser.y" /* yacc.c:1646  */
     {
-				cout<<"stmt before simple_stmt"<<endl;
+				/* cout<<"stmt before simple_stmt"<<endl; */
 			}
 #line 1903 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1924,7 +1924,7 @@ yyreduce:
     {
 				switch_side=1;
 				RHS_dim=0;
-				cout<<"Switch side assign !! \n\n";
+				/* cout<<"Switch side assign !! \n\n"; */
 				tmp_inheritance=has_scalar(find_type((yyvsp[0].str)),LHS_dim,"assign LHS");
 			}
 #line 1931 "y.tab.c" /* yacc.c:1646  */
@@ -1933,15 +1933,15 @@ yyreduce:
   case 67:
 #line 409 "parser.y" /* yacc.c:1646  */
     {
-				cout<<"we have an assign LHS "<<find_type((yyvsp[-4].str))<<" with RHS "<<find_type((yyvsp[-1].str))<<endl;
+				/* cout<<"we have an assign LHS "<<find_type($1)<<" with RHS "<<find_type($4)<<endl; */
 				if(find_type((yyvsp[-1].str))=="none")
 				{
-					cout<<"const type "<<(yyvsp[-1].str)<<endl;
+					/* cout<<"const type "<<$4<<endl; */
 					assignop(find_type((yyvsp[-4].str)),(yyvsp[-1].str),(yyvsp[-4].str),(yyvsp[-1].str));
 				}
 				else
 				{
-					cout<<"non const right type "<<(yyvsp[-1].str)<<endl;
+					/* cout<<"non const right type "<<$4<<endl; */
 					assignop(find_type((yyvsp[-4].str)),find_type((yyvsp[-1].str)),(yyvsp[-4].str),(yyvsp[-1].str));
 				}
 				tmp_inheritance.clear();
@@ -2097,7 +2097,7 @@ yyreduce:
   case 88:
 #line 552 "parser.y" /* yacc.c:1646  */
     {
-					cout<<"relop most left part "<<endl;
+					/* cout<<"relop most left part "<<endl; */
 					switch_side=0;
 				}
 #line 2104 "y.tab.c" /* yacc.c:1646  */
@@ -2106,7 +2106,7 @@ yyreduce:
   case 89:
 #line 557 "parser.y" /* yacc.c:1646  */
     {
-					cout<<"Switch side relop !! \n\n";
+					/* cout<<"Switch side relop !! \n\n"; */
 					switch_side=1;
 					RHS_dim=0;
 				}
@@ -2142,7 +2142,7 @@ yyreduce:
   case 91:
 #line 585 "parser.y" /* yacc.c:1646  */
     {
-					cout<<"relop -> expr "<<endl;
+					/* cout<<"relop -> expr "<<endl; */
 					(yyval.str)=(yyvsp[0].str);
 				}
 #line 2149 "y.tab.c" /* yacc.c:1646  */
@@ -2151,7 +2151,7 @@ yyreduce:
   case 98:
 #line 600 "parser.y" /* yacc.c:1646  */
     {
-					cout<<"addop most left part "<<endl;
+					/* cout<<"addop most left part "<<endl; */
 					switch_side=0;
 				}
 #line 2158 "y.tab.c" /* yacc.c:1646  */
@@ -2194,7 +2194,7 @@ yyreduce:
   case 101:
 #line 631 "parser.y" /* yacc.c:1646  */
     {
-					cout<<"expr->term "<<endl;
+					/* cout<<"expr->term "<<endl; */
 					(yyval.str)=(yyvsp[0].str);
 				}
 #line 2201 "y.tab.c" /* yacc.c:1646  */
@@ -2203,7 +2203,7 @@ yyreduce:
   case 104:
 #line 643 "parser.y" /* yacc.c:1646  */
     {
-				cout<<"mulop most left part "<<endl;
+				/* cout<<"mulop most left part "<<endl; */
 				switch_side=0;
 			}
 #line 2210 "y.tab.c" /* yacc.c:1646  */
@@ -2212,7 +2212,7 @@ yyreduce:
   case 105:
 #line 648 "parser.y" /* yacc.c:1646  */
     {
-				cout<<"Switch side mul !! \n\n";
+				/* cout<<"Switch side mul !! \n\n"; */
 				switch_side=1;
 				RHS_dim=0;
 			}
@@ -2248,7 +2248,7 @@ yyreduce:
   case 107:
 #line 676 "parser.y" /* yacc.c:1646  */
     {
-				cout<<"term->factor"<<endl;
+				/* cout<<"term->factor"<<endl; */
 				(yyval.str)=(yyvsp[0].str);  /*pass the factor up*/
 			}
 #line 2255 "y.tab.c" /* yacc.c:1646  */
@@ -2296,7 +2296,7 @@ yyreduce:
 #line 713 "parser.y" /* yacc.c:1646  */
     {
                 (yyval.str)=(yyvsp[0].str);
-                if(is_proc_call && matching_param_dim != 0)
+                if(is_proc_call)
                 {
 					if(linenum==68)
 						cout<<" push constant "<<(yyvsp[0].str)<<" to function "<<endl;
@@ -2306,13 +2306,12 @@ yyreduce:
 					funct_param_buf.pb(one_param_struct);
 					LHS_dim=0;
                 }
-				matching_param_dim=0;
             }
-#line 2312 "y.tab.c" /* yacc.c:1646  */
+#line 2311 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 119:
-#line 731 "parser.y" /* yacc.c:1646  */
+#line 730 "parser.y" /* yacc.c:1646  */
     {
                 (yyval.str)=(yyvsp[0].str);
                 if(is_proc_call)
@@ -2324,29 +2323,29 @@ yyreduce:
                 }
 				/* cout<<"Array First time reference! "<<endl; */
             }
-#line 2328 "y.tab.c" /* yacc.c:1646  */
+#line 2327 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 120:
-#line 743 "parser.y" /* yacc.c:1646  */
+#line 742 "parser.y" /* yacc.c:1646  */
     {
 				if(switch_side)
 				{
 					RHS_dim++;
-					cout<<"Array RIGHT dimension reference at Line"<<linenum<<"  now dim count up to"<<RHS_dim<<endl;
+					/* cout<<"Array RIGHT dimension reference at Line"<<linenum<<"  now dim count up to"<<RHS_dim<<endl; */
 				}
 				else
 				{
 					LHS_dim++;
-					cout<<"Array LEFT dimension reference at Line"<<linenum<<"  now dim count up to"<<LHS_dim<<endl;
+					/* cout<<"Array LEFT dimension reference at Line"<<linenum<<"  now dim count up to"<<LHS_dim<<endl; */
 				}
 				matching_param_dim=1;
 			}
-#line 2346 "y.tab.c" /* yacc.c:1646  */
+#line 2345 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 2350 "y.tab.c" /* yacc.c:1646  */
+#line 2349 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2574,7 +2573,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 761 "parser.y" /* yacc.c:1906  */
+#line 760 "parser.y" /* yacc.c:1906  */
 
 
 int yyerror(const char *msg )

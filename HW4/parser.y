@@ -407,7 +407,7 @@ simple_stmt	:
 			}
             OP_ASSIGN boolean_expr MK_SEMICOLON
             {
-				cout<<"we have an assign LHS "<<find_type($1)<<" with RHS "<<find_type($4)<<endl;
+				/* cout<<"we have an assign LHS "<<find_type($1)<<" with RHS "<<find_type($4)<<endl; */
 				if(find_type($4)=="none")
 				{
 					/* cout<<"const type "<<$4<<endl; */
@@ -712,17 +712,16 @@ factor		: var_ref
 			| literal_const
             {
                 $$=$1;
-                if(is_proc_call && matching_param_dim != 0)
+                if(is_proc_call)
                 {
-					/* if(linenum==68) */
-						/* cout<<" push constant "<<$1<<" to function "<<endl; */
+					if(linenum==68)
+						cout<<" push constant "<<$1<<" to function "<<endl;
 
 					one_param_struct.param_name=$1;
 					one_param_struct.param_dim=LHS_dim;
 					funct_param_buf.pb(one_param_struct);
 					LHS_dim=0;
                 }
-				matching_param_dim=0;
             }
 			;
 
