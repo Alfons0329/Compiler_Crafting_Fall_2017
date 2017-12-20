@@ -435,15 +435,17 @@ proc_call_stmt	:
 			;
 
 cond_stmt	: 	IF
- 				boolean_expr THEN
+ 				boolean_expr
+				THEN
 			  	opt_stmt_list
-			  	ELSE
-			  	opt_stmt_list
-			  	END IF
 				{
 					/* cout<<"conditional type in is "<<find_type($2)<<endl; */
 					condition(find_type($2),"conditional");
 				}
+			  	ELSE
+			  	opt_stmt_list
+			  	END IF
+
 				| IF boolean_expr THEN opt_stmt_list END IF
 			;
 
