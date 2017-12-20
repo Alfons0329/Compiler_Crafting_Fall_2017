@@ -52,7 +52,7 @@ string tmp_inheritance;
 %type <str> decl func_decl opt_type int_const literal_const param id_list type scalar_type array_type
 /* HW4 more type to be implemented*/
 %type <str> var_ref factor
-%type <str> boolean_expr_list boolean_expr boolean_term boolean_factor relop_expr expr term add_op mul_op
+%type <str> boolean_expr_list boolean_expr boolean_term boolean_factor relop_expr expr term add_op mul_op rel_op
 %start program
 %%
 
@@ -210,7 +210,6 @@ func_decl	: 	ID
 				{
 					is_funct=1;
 					scope_depth--;
-					cout<<"function starts here"<<endl;
 				}
 				opt_type MK_SEMICOLON
 				{
@@ -265,7 +264,6 @@ func_decl	: 	ID
 			  	compound_stmt
 			  	END
 				{
-					cout<<"function ends here"<<endl;
 					is_funct=0;
 				}
 				ID
@@ -368,9 +366,6 @@ array_type	: ARRAY
 
 stmt		: compound_stmt
  			| simple_stmt
-			{
-				/* cout<<"stmt before simple_stmt"<<endl; */
-			}
 			| cond_stmt
 			| while_stmt
 			| for_stmt
@@ -439,12 +434,17 @@ proc_call_stmt	:
             ID MK_LPAREN opt_boolean_expr_list MK_RPAREN MK_SEMICOLON
 			;
 
-cond_stmt	: IF boolean_expr THEN
-			  opt_stmt_list
-			  ELSE
-			  opt_stmt_list
-			  END IF
-			| IF boolean_expr THEN opt_stmt_list END IF
+cond_stmt	: 	IF
+ 				boolean_expr THEN
+			  	opt_stmt_list
+			  	ELSE
+			  	opt_stmt_list
+			  	END IF
+				{
+					cout<<"conditional type in is "<<find_type($2)<<endl;
+					condition(find_type($2));
+				}
+				| IF boolean_expr THEN opt_stmt_list END IF
 			;
 
 while_stmt	: WHILE boolean_expr DO
@@ -589,17 +589,35 @@ relop_expr	: 	expr
 				}
 				| expr
 				{
-					/* cout<<"relop -> expr "<<endl; */
+					cout<<"relop -> expr "<<endl;
 					$$=$1;
 				}
 			;
 
 rel_op		: OP_LT
+			{
+				$$=$1;  /*pass the factor up*/
+			}
 			| OP_LE
+			{
+				$$=$1;  /*pass the factor up*/
+			}
 			| OP_EQ
+			{
+				$$=$1;  /*pass the factor up*/
+			}
 			| OP_GE
+			{
+				$$=$1;  /*pass the factor up*/
+			}
 			| OP_GT
+			{
+				$$=$1;  /*pass the factor up*/
+			}
 			| OP_NE
+			{
+				$$=$1;  /*pass the factor up*/
+			}
 			;
 
 expr		: 	expr
@@ -635,13 +653,19 @@ expr		: 	expr
             	}
 				| term
 				{
-					/* cout<<"expr->term "<<endl; */
+					cout<<"expr->term "<<endl;
 					$$=$1;
 				}
 			;
 
-add_op		: OP_ADD
-			| OP_SUB
+add_op		: 	OP_ADD
+				{
+					$$=$1;  /*pass the factor up*/
+				}
+				| OP_SUB
+				{
+					$$=$1;  /*pass the factor up*/
+				}
 			;
 
 term		:
@@ -680,14 +704,23 @@ term		:
 			}
 			| factor
 			{
-				/* cout<<"term->factor"<<endl; */
+				cout<<"term->factor"<<endl;
 				$$=$1;  /*pass the factor up*/
 			}
 			;
 
 mul_op		: OP_MUL
+			{
+				$$=$1;  /*pass the factor up*/
+			}
 			| OP_DIV
+			{
+				$$=$1;  /*pass the factor up*/
+			}
 			| OP_MOD
+			{
+				$$=$1;  /*pass the factor up*/
+			}
 			;
 
 factor		: var_ref

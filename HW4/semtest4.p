@@ -20,6 +20,11 @@ begin
 
         i1 := i2-r1;    // error, RHS=real, cannot convert into integer implicitly
 
-        return i2;
+                if i1 > i2 then     //error what in conditional should be the boolean type
+                        i1 := 3;
+                else
+                        i1 := 4;
+                end if
+
 end
 end semtest4
