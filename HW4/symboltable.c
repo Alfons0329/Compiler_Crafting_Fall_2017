@@ -471,7 +471,7 @@ string find_type(string name_in)
     //dumpsymbol();
     string ret_type="none";
     int is_found=0;
-    cout<<"namr in "<<name_in<<endl;
+    // cout<<"namr in "<<name_in<<"end"<<endl;
     if(name_in=="integer" || name_in=="real" || name_in=="boolean" || name_in=="string")
     {
         ret_type=name_in;
@@ -499,9 +499,9 @@ string find_type(string name_in)
                 return mysymbol_table[0][j].type;
             }
         }
-        if(is_found==0 && name_in !="error" && name_in!="string" && name_in!="integer" && name_in!="boolean" && name_in!="real" )
+        if(is_found==0 && name_in !="error")
         {
-            cout<<"<Error> found in Line: "<<linenum<<" symbol "<<name_in<<" was not declared in thsi scope "<<endl;
+            cout<<"<Error> found in Line: "<<linenum<<" symbol "<<name_in<<" was not declared in this scope "<<endl;
             all_correct=0;
         }
     }

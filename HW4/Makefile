@@ -1,7 +1,7 @@
 TARGET   = parser
 OBJECT   = lex.yy.c y.tab.c y.output parser y.tab.h
 CC       = g++ -std=c++11
-CCFLAGS   = -Wall -Wextra -pedantic -g3
+CCFLAGS   = -Wall -Wextra -Wno-unused-variable -Wno-unused-parameter -pedantic -g3
 LEX      = flex
 YACC     = yacc -v -t
 YACCFLAG = -d

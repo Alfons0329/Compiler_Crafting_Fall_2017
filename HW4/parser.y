@@ -173,7 +173,7 @@ literal_const	: int_const
 				| STR_CONST
 				{
 					 const_type=7;
-					 const_type_str="string ";
+					 const_type_str="string";
 					 parse_constant();
 					 $$=strdup(const_type_str.c_str());
 				 }

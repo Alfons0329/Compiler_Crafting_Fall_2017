@@ -1662,7 +1662,7 @@ yyreduce:
 #line 174 "parser.y" /* yacc.c:1646  */
     {
 					 const_type=7;
-					 const_type_str="string ";
+					 const_type_str="string";
 					 parse_constant();
 					 (yyval.str)=strdup(const_type_str.c_str());
 				 }
