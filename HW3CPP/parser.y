@@ -1,8 +1,5 @@
 %{
-/**
- * Introduction to Compiler Design by Prof. Yi Ping You
- * Project 2 YACC sample
- */
+
 #include <bits/stdc++.h>
 #include "symboltable.h"
 #define pb push_back
