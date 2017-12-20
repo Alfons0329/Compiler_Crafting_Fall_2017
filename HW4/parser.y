@@ -480,7 +480,10 @@ opt_boolean_expr_list	: boolean_expr_list
 			;
 
 boolean_expr_list	: boolean_expr_list MK_COMMA boolean_expr
-			| boolean_expr {$$=$1;}
+			| boolean_expr
+			{
+				$$=$1;
+			}
 			;
 
 boolean_expr		: 	boolean_expr OP_OR boolean_term
@@ -579,6 +582,7 @@ relop_expr	: 	expr
 				}
 				| expr
 				{
+					cout<<"relop -> expr "<<endl;
 					$$=$1;
 				}
 			;
@@ -624,6 +628,7 @@ expr		: 	expr
             	}
 				| term
 				{
+					cout<<"expr->term "<<endl;
 					$$=$1;
 				}
 			;
@@ -668,6 +673,7 @@ term		:
 			}
 			| factor
 			{
+				cout<<"term->factor"<<endl;
 				$$=$1;  /*pass the factor up*/
 			}
 			;
