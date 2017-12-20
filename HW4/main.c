@@ -20,7 +20,7 @@ int  main( int argc, char **argv )
 	FILE *fp = fopen( argv[1], "r" );
 	program_name = argv[1];
 	program_name = program_name.substr(0,program_name.length()-2);
-	cout<<"Program name "<<program_name<<endl<<endl;
+	cout<<"File name "<<program_name<<endl<<endl;
 	if( fp == NULL )  {
 		fprintf( stdout, "Open  file  error\n" );
 		exit(-1);
