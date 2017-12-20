@@ -1,4 +1,4 @@
-//&S-
+
 //&T-
 //&D-
 /**
@@ -20,11 +20,39 @@ begin
 
         i1 := i2-r1;    // error, RHS=real, cannot convert into integer implicitly
 
-                if i1 > i2 then     //error what in conditional should be the boolean type
-                        i1 := 3;
-                else
-                        i1 := 4;
-                end if
+        if i1  then     //error what in conditional should be the boolean type
+            i1 := 3;
+        else
+            i1 := 4;
+        end if
+
+        if b2  then     //correct
+            i1 := 3;
+        else
+            i1 := 4;
+        end if
+
+        if r2 > 2.0  then    //correct
+            i1 := 3;
+        else
+            i1 := 4;
+        end if
+
+        while i2    //error what in conditional should be the boolean type
+        do
+            i2 := 4;
+        end do
+
+        while b2    //correct
+        do
+            i2 := 4;
+        end do
+
+        while i1 > 2.0   //correct
+        do
+            i2 := 4;
+        end do
+
 
 end
 end semtest4

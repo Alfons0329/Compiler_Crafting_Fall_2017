@@ -441,15 +441,19 @@ cond_stmt	: 	IF
 			  	opt_stmt_list
 			  	END IF
 				{
-					cout<<"conditional type in is "<<find_type($2)<<endl;
-					condition(find_type($2));
+					/* cout<<"conditional type in is "<<find_type($2)<<endl; */
+					condition(find_type($2),"conditional");
 				}
 				| IF boolean_expr THEN opt_stmt_list END IF
 			;
 
-while_stmt	: WHILE boolean_expr DO
-			  opt_stmt_list
-			  END DO
+while_stmt	:
+			WHILE boolean_expr
+			{
+				condition(find_type($2),"while");
+			}
+			DO opt_stmt_list
+			END DO
 			;
 
 for_stmt	: 	FOR ID
@@ -589,7 +593,7 @@ relop_expr	: 	expr
 				}
 				| expr
 				{
-					cout<<"relop -> expr "<<endl;
+					/* cout<<"relop -> expr "<<endl; */
 					$$=$1;
 				}
 			;
@@ -653,7 +657,7 @@ expr		: 	expr
             	}
 				| term
 				{
-					cout<<"expr->term "<<endl;
+					/* cout<<"expr->term "<<endl; */
 					$$=$1;
 				}
 			;
@@ -704,7 +708,7 @@ term		:
 			}
 			| factor
 			{
-				cout<<"term->factor"<<endl;
+				/* cout<<"term->factor"<<endl; */
 				$$=$1;  /*pass the factor up*/
 			}
 			;

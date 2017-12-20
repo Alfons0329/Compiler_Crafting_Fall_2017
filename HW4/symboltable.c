@@ -810,11 +810,11 @@ string simple(string SIM_type)
 {
     return (has_scalar(SIM_type,LHS_dim,"simpleop ")=="error") ? "error" : has_scalar(SIM_type,LHS_dim,"simpleop ");
 }
-string condition(string COND_type)
+string condition(string COND_type,string situation)
 {
-    if(COND_type == "boolean" )
+    if(COND_type != "boolean" )
     {
-        cout<<"<Error> found in Line: "<<linenum<<" type in conditional statement should be only boolean type "<<endl;
+        cout<<"<Error> type in "<<situation<<" statement should be only boolean type "<<endl;
         return "error";
     }
     return "boolean";

@@ -83,7 +83,7 @@ string addop(string,string,string,string,string);
 string mulop(string,string,string,string,string);
 string boolop(string,string,string,string);
 string simple(string); //for checking the simple statement
-string condition(string); //for checking the conditional statement
+string condition(string,string); //for checking the conditional statement
 string has_scalar(string,int,string);
 void perfect();
 
