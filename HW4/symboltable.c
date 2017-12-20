@@ -7,6 +7,7 @@ int is_arr;
 int is_funct;
 int is_loop;
 int const_type;
+int all_correct;
 vector <vector <sub_entry> > mysymbol_table;
 vector <vector <sub_entry> > allsymbol_table;
 vector <loop_iterator> myiter_table;
@@ -25,6 +26,7 @@ void symbol_table_init()
     switch_side = 0;
     tmp_inheritance = "";
     matching_param_dim = 0;
+    all_correct = 1;
 }
 void inserting_symbol_table(vector<string> id_list_buf, string kind_in, string type_in, vector<string> funct_attri_buf)
 {
@@ -704,6 +706,7 @@ string addop(string LHS_type,string RHS_type,string LHS_name, string RHS_name,st
             }
         }
     }
+    return "error";
 }
 string mulop(string LHS_type,string RHS_type,string LHS_name, string RHS_name,string oper)
 {
@@ -761,6 +764,7 @@ string mulop(string LHS_type,string RHS_type,string LHS_name, string RHS_name,st
             return "error";
         }
     }
+    return "error";
 }
 string boolop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
 {
@@ -823,4 +827,13 @@ string has_scalar(string LHS_type,int reference_dim,string oper)
         }
     }
     return "error";
+}
+void perfect()
+{
+    if(all_correct)
+    {
+        cout<<"|-------------------------------------------|\n"
+        <<"| There is no syntactic and semantic error! |\n"
+        <<"|-------------------------------------------|\n";
+    }
 }
