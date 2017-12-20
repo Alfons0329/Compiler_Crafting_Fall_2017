@@ -479,6 +479,15 @@ string find_type(string name_in)
     }
     else
     {
+        //searching the fucking iterator table
+        for(unsigned int j=0;j<myiter_table.size();j++)
+        {
+            if(scope_depth+1==myiter_table[j].iter_level && name_in==myiter_table[j].iter_name)
+            {
+                is_found=1;
+                return "iterator";
+            }
+        }
         //search this level first
         for(unsigned int j=0;j<mysymbol_table[scope_depth].size();j++)
         {
@@ -557,16 +566,21 @@ string find_kind(string name_in)
 }*/
 string assignop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
 {
-    // cout<<"Assignop at Line:"<<linenum<<" LHS_type "<<tmp_inheritance<<" RHS_type "<<RHS_type<<endl<<endl;
+    // cout<<"Assignop at Line:"<<linenum<<" LHS_type"<<tmp_inheritance<<"RHS_type "<<RHS_type<<endl<<endl;
+    if(tmp_inheritance=="error")
+    {
+        cout<<"<Error> found in Line: "<<linenum<<" '"<<LHS_name<<"'cannot be assigned"<<endl;
+        return "error";
+    }
     if(LHS_type=="void" || RHS_type=="void")
     {
         cout<<"<Error> found in Line: "<<linenum<<" Assign operation cannot assign with/to void type "<<endl;
         all_correct=0;
         return "error";
     }
-    if(find_kind(LHS_name)=="constant")
+    if(find_kind(LHS_name)=="constant" || find_kind(LHS_name)=="iterator")
     {
-        cout<<"<Error> found in Line: "<<linenum<<" constant '"<<LHS_name<<"'cannot be assigned"<<endl;
+        cout<<"<Error> found in Line: "<<linenum<<" "<<find_kind(LHS_name)<<" '"<<LHS_name<<"'cannot be assigned"<<endl;
         all_correct=0;
         return "error";
     }
