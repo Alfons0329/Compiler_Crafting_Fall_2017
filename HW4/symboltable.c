@@ -826,7 +826,7 @@ string simple(string SIM_type)
 }
 string condition(string COND_type,string situation)
 {
-    if(COND_type != "boolean" )
+    if(COND_type != "boolean" && COND_type !="none") //la testcase
     {
         cout<<"<Error> type in "<<situation<<" statement should be only boolean type "<<endl;
         return "error";
