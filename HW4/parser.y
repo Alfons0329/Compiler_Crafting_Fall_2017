@@ -477,7 +477,7 @@ return_stmt	: RETURN boolean_expr MK_SEMICOLON
                 }
 				else
 				{
-					check_return(find_type(funct_name),find_type($2));
+					check_return(find_type(funct_name),has_scalar(find_type($2),LHS_dim,"return_stmt "));
 				}
 			}
 			;

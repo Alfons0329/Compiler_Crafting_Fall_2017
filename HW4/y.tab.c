@@ -2005,7 +2005,7 @@ yyreduce:
                 }
 				else
 				{
-					check_return(find_type(funct_name),find_type((yyvsp[-1].str)));
+					check_return(find_type(funct_name),has_scalar(find_type((yyvsp[-1].str)),LHS_dim,"return_stmt "));
 				}
 			}
 #line 2012 "y.tab.c" /* yacc.c:1646  */
