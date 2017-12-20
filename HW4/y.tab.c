@@ -2012,9 +2012,9 @@ yyreduce:
 				{
 					cout<<"<Error> found in Line: "<<linenum<<" Program cannot have a return value "<<endl;
 				}
-				if(has_scalar(find_type((yyvsp[-1].str)),LHS_dim,"return_stmt ")=="error");
+				if(has_scalar(find_type((yyvsp[-1].str)),LHS_dim,"return_stmt ") == "error")
                 {
-                    cout<<"<Error> found in Line: "<<linenum<<" The return value of function should be a scalar type "<<endl;
+					cout<<"<Error> found in Line: "<<linenum<<" The return value of function should be a scalar type "<<endl;
                 }
 			}
 #line 2021 "y.tab.c" /* yacc.c:1646  */

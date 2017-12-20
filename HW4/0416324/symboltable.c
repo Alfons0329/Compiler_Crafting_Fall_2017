@@ -841,11 +841,10 @@ string has_scalar(string LHS_type,int reference_dim,string oper)
     //e.g. arr1[6][7] and arr2[4] then total array dimension reference should be 3, so given arr1[6] = arr2[4] is an illegal condition
     //same idea as arr_convert_to_scalar_checking but without the type coercion checking
     /*cout<<"Operation is "<<oper
-    <<"Check scalar FUNCTION  at Line:"<<linenum<<" LHS_type :"
-    <<LHS_type<<"actual total dim"<<LHS_arr_dim<<"however, reference_dim "<<reference_dim<<endl;*/
+    <<"Check scalar FUNCTION  at Line:"<<linenum<<" LHS_type "
+    <<LHS_type<<" actual total dim "<<LHS_arr_dim<<" however, reference_dim "<<reference_dim<<endl;*/
     if(LHS_type=="integer" || LHS_type=="real" || LHS_type=="boolean" || LHS_type=="string") //is already an scalar_type
     {
-        //cout<<"error line 19 of tcaseertwegwgw return LHS:"<<LHS_type<<endl;
         return LHS_type;
     }
 
@@ -862,22 +861,18 @@ string has_scalar(string LHS_type,int reference_dim,string oper)
         {
             string extracted_type=LHS_type.substr(0,find5-1);
             // cout<<"Array has been converted to scalar type :"<<extracted_type<<"QQ"<<endl;
-
             return extracted_type;
         }
         else if(LHS_type!="integer" && LHS_type!="real" && LHS_type!="string" && LHS_type!="boolean") //has converted to scalar type but not right type in the spec
         {
             all_correct=0;
-            cout<<"<Error> found in Line: "<<linenum<<" Incorrect type "<<endl;
             return "error";
         }
         else
         {
-            cout<<"error line 19 of tcase1 "<<endl;
             return LHS_type;
         }
     }
-    cout<<"error line 19 of tcase1 "<<endl;
     return "error";
 }
 void perfect()
