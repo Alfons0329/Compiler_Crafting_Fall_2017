@@ -2,7 +2,7 @@
 //&T-
 //&D-
 /**
- * semtest3.p : check array type properties 
+ * semtest3.p : check array type properties
  */
 semtest3;
 
@@ -13,7 +13,7 @@ begin
     while i <= 5 do
         a[i] := i*i;
     end do
-    
+
     return a;        // ok, return 1D integer array
 end
 end fun
@@ -26,7 +26,7 @@ begin
     while i <= 5 do
         a[i] := i*i;
     end do
-    
+
     return a[2];        // error, return scalar
 end
 end fun2
@@ -45,5 +45,6 @@ begin
     c[3] := fun(b);      // ok
     c := fun(b);         // error ,LHS=2D RHS return 1D
 
+    return a;
 end
 end semtest3

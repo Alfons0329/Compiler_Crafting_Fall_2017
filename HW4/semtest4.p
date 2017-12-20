@@ -20,5 +20,6 @@ begin
 
         i1 := i2-r1;    // error, RHS=real, cannot convert into integer implicitly
 
+        return i2;
 end
 end semtest4

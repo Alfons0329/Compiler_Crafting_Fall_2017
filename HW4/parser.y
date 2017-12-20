@@ -210,6 +210,7 @@ func_decl	: 	ID
 				{
 					is_funct=1;
 					scope_depth--;
+					cout<<"function starts here"<<endl;
 				}
 				opt_type MK_SEMICOLON
 				{
@@ -264,6 +265,7 @@ func_decl	: 	ID
 			  	compound_stmt
 			  	END
 				{
+					cout<<"function ends here"<<endl;
 					is_funct=0;
 				}
 				ID
@@ -472,6 +474,10 @@ for_stmt	: 	FOR ID
 
 return_stmt	: RETURN boolean_expr MK_SEMICOLON
 			{
+				if(is_funct==0)
+				{
+					cout<<"<Error> found in Line: "<<linenum<<" Program cannot have a return value "<<endl;
+				}
 				has_scalar(find_type($2),LHS_dim,"return_stmt ");
 			}
 			;

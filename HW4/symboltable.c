@@ -812,7 +812,13 @@ string simple(string SIM_type)
 }
 string condition(string COND_type)
 {
-    return (COND_type == "boolean" ) ? "boolean" : "error";
+    if(COND_type == "boolean" )
+    {
+        cout<<"<Error> found in Line: "<<linenum<<" type in conditional statement should be only boolean type "<<endl;
+        return "error";
+    }
+    return "boolean";
+
 }
 string has_scalar(string LHS_type,int reference_dim,string oper)
 {
@@ -820,9 +826,9 @@ string has_scalar(string LHS_type,int reference_dim,string oper)
     //total array dimension reference should be equal to their sum of dimension
     //e.g. arr1[6][7] and arr2[4] then total array dimension reference should be 3, so given arr1[6] = arr2[4] is an illegal condition
     //same idea as arr_convert_to_scalar_checking but without the type coercion checking
-    // cout<<"Operation is "<<oper
-    // <<"Check scalar FUNCTION  at Line:"<<linenum<<" LHS_type "
-    // <<LHS_type<<" actual total dim "<<LHS_arr_dim<<" however, reference_dim "<<reference_dim<<endl;
+    /*cout<<"Operation is "<<oper
+    <<"Check scalar FUNCTION  at Line:"<<linenum<<" LHS_type "
+    <<LHS_type<<" actual total dim "<<LHS_arr_dim<<" however, reference_dim "<<reference_dim<<endl;*/
     if(LHS_type=="integer" || LHS_type=="real" || LHS_type=="boolean" || LHS_type=="string") //is already an scalar_type
     {
         return LHS_type;
