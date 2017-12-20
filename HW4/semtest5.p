@@ -15,7 +15,7 @@ begin
     a[1][1] := b[1][2]; // legal
     a := b; // illegal array arithmetic
     a[1] := b[2]; // illegal: array arithmetic
-    return a[1][1]; // legal: ‘a[1][1]’ is a scalar type, but ‘a’ is an array type.
+    return a; // legal: ‘a[1][1]’ is a scalar type, but ‘a’ is an array type.
 end
 end foo
 begin

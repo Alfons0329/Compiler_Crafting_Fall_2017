@@ -484,7 +484,10 @@ return_stmt	: RETURN boolean_expr MK_SEMICOLON
 				{
 					cout<<"<Error> found in Line: "<<linenum<<" Program cannot have a return value "<<endl;
 				}
-				has_scalar(find_type($2),LHS_dim,"return_stmt ");
+				if(has_scalar(find_type($2),LHS_dim,"return_stmt ")=="error");
+                {
+                    cout<<"<Error> found in Line: "<<linenum<<" The return value of function should be a scalar type "<<endl;
+                }
 			}
 			;
 
