@@ -161,6 +161,7 @@ int error_detection() //no hashing, just naive solution
             error_msg+=redeclared_var[i];
             error_msg+="' is redeclared";
             cout<<"<Error> found in Line "<<linenum<<error_msg<<endl;
+            all_correct=0;
             error_msg.clear();
         }
     }
@@ -190,6 +191,7 @@ int error_detection() //no hashing, just naive solution
             error_msg+=redeclared_var[i];
             error_msg+="' is redeclared";
             cout<<"<Error> found in Line "<<linenum<<error_msg<<endl;
+            all_correct=0;
             error_msg.clear();
         }
     }
@@ -219,6 +221,7 @@ int error_detection() //no hashing, just naive solution
             error_msg+=redeclared_var[i];
             error_msg+="' is redeclared";
             cout<<"<Error> found in Line "<<linenum<<error_msg<<endl;
+            all_correct=0;
             error_msg.clear();
         }
     }
@@ -369,6 +372,7 @@ int program_name_checking(string program_name_in,string parsed_name,int situatio
         if(program_name_in!=parsed_name)
         {
             cout<<"<Error> found in Line "<<linenum<<": program end ID inconsist with the file name"<<endl;
+            all_correct=0;
             is_error=1;
         }
     }
@@ -377,11 +381,13 @@ int program_name_checking(string program_name_in,string parsed_name,int situatio
         if(program_name_in!=mysymbol_table[0][0].name)
         {
             cout<<"<Error> found in Line "<<linenum<<": program end ID inconsist with the file name"<<endl;
+            all_correct=0;
             is_error=1;
         }
         if(parsed_name!=mysymbol_table[0][0].name)
         {
             cout<<"<Error> found in Line "<<linenum<<": program end ID inconsist with the beginning ID"<<endl;
+            all_correct=0;
             is_error=1;
         }
     }
@@ -405,6 +411,7 @@ void procedure_call_checking()
             if(funct_param_buf.size()-1!=mysymbol_table[0][i].funct_attri.size())
             {
                 cout<<"<Error> found in Line: "<<linenum<<" parameter number inconsistent"<<endl;
+                all_correct=0;
                 break;
             }
         }
@@ -426,6 +433,7 @@ void procedure_call_checking()
                     if(actual_referenced_dim_cnt != symtab_dim_cnt)//then the dimension or sub-dimension should be the same
                     {
                         cout<<"<Error> found in Line: "<<linenum<<" array as parameter, dimension inconsistent"<<endl;
+                        all_correct=0;
                     }
                     else //dimension should be the same using is digit algorithm to traverse the string
                     {
@@ -436,6 +444,7 @@ void procedure_call_checking()
                                 if(referenced_type[check_length_idx]!=mysymbol_table[0][i].funct_attri[param_idx][check_length_idx])
                                 {
                                     cout<<"<Error> found in Line: "<<linenum<<" array as parameter, array length inconsistent"<<endl;
+                                    all_correct=0;
                                     break;
                                 }
                             }
@@ -449,6 +458,7 @@ void procedure_call_checking()
                     && (referenced_type != "integer"))//the only allowed type coercion, otherwise mismatch
                     {
                         cout<<"<Error> found in Line: "<<linenum<<" parameter type inconsistent"<<endl;
+                        all_correct=0;
                     }
                 }
             }
@@ -490,6 +500,7 @@ string find_type(string name_in)
         if(is_found==0 && name_in !="error")
         {
             cout<<"<Error> found in Line: "<<linenum<<" symbol "<<name_in<<" was not declared in thsi scope "<<endl;
+            all_correct=0;
         }
     }
     // cout<<"Line "<<linenum<<" Name in "<<name_in<<" scope_depth "<<scope_depth<<" with type "<<ret_type<<endl;
@@ -548,11 +559,13 @@ string assignop(string LHS_type,string RHS_type,string LHS_name, string RHS_name
     if(LHS_type=="void" || RHS_type=="void")
     {
         cout<<"<Error> found in Line: "<<linenum<<" Assign operation cannot assign with/to void type "<<endl;
+        all_correct=0;
         return "error";
     }
     if(find_kind(LHS_name)=="constant")
     {
         cout<<"<Error> found in Line: "<<linenum<<" constant '"<<LHS_name<<"'cannot be assigned"<<endl;
+        all_correct=0;
         return "error";
     }
     if(LHS_type!=RHS_type)
@@ -565,6 +578,7 @@ string assignop(string LHS_type,string RHS_type,string LHS_name, string RHS_name
         }
         else
         {
+            all_correct=0;
             return "error";
         }
         size_t find1=LHS_type.find(RHS_type); //find right in left ex: left string[10] right string is allowed
@@ -581,6 +595,7 @@ string assignop(string LHS_type,string RHS_type,string LHS_name, string RHS_name
             if(find1==string::npos && find2==string::npos) //LHS does not have the same type
             {
                 cout<<"<Error> found in Line: "<<linenum<<" Assign operation LHS_type and RHS_type inconsistent "<<endl;
+                all_correct=0;
                 return "error";
             }
         }
@@ -624,6 +639,7 @@ string relop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
         if(!(find3!=string::npos && find4!=string::npos)) //LHS RHS Is neither real nor integer
         {
             cout<<"<Error> found in Line: "<<linenum<<" Relational operation LHS_type and RHS_type should be either real or integer type"<<endl;
+            all_correct=0;
             return "error";
         }
     }
@@ -640,6 +656,7 @@ string addop(string LHS_type,string RHS_type,string LHS_name, string RHS_name,st
     }
     else
     {
+        all_correct=0;
         return "error";
     }
     size_t find1=LHS_type.find("integer");
@@ -675,6 +692,7 @@ string addop(string LHS_type,string RHS_type,string LHS_name, string RHS_name,st
             if(!(find3!=string::npos && find4!=string::npos)) //LHS RHS Is neither real nor integer
             {
                 cout<<"<Error> found in Line: "<<linenum<<oper<<" operation LHS_type and RHS_type should be either real integer or string type"<<endl;
+                all_correct=0;
                 return "error";
             }
         }
@@ -702,6 +720,7 @@ string addop(string LHS_type,string RHS_type,string LHS_name, string RHS_name,st
             if(!(find3!=string::npos && find4!=string::npos)) //LHS RHS Is neither real nor integer
             {
                 cout<<"<Error> found in Line: "<<linenum<<oper<<" operation LHS_type and RHS_type should be either real or integer type"<<endl;
+                all_correct=0;
                 return "error";
             }
         }
@@ -719,6 +738,7 @@ string mulop(string LHS_type,string RHS_type,string LHS_name, string RHS_name,st
     }
     else
     {
+        all_correct=0;
         return "error";
     }
     size_t find1=LHS_type.find("integer");
@@ -748,6 +768,7 @@ string mulop(string LHS_type,string RHS_type,string LHS_name, string RHS_name,st
             if(!(find3!=string::npos && find4!=string::npos)) //LHS RHS Is neither real nor integer
             {
                 cout<<"<Error> found in Line: "<<linenum<<oper<<" operation LHS_type and RHS_type should be either real or integer type"<<endl;
+                all_correct=0;
                 return "error";
             }
         }
@@ -761,6 +782,7 @@ string mulop(string LHS_type,string RHS_type,string LHS_name, string RHS_name,st
         else
         {
             cout<<"<Error> found in Line: "<<linenum<<oper<<" operation LHS_type and RHS_type should be either integer type"<<endl;
+            all_correct=0;
             return "error";
         }
     }
@@ -777,6 +799,7 @@ string boolop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
     else if(LHS_type!="boolean" || RHS_type!="boolean")
     {
         cout<<"<Error> found in Line: "<<linenum<<" boolean operation LHS_type and RHS_type should both be boolean type"<<endl;
+        all_correct=0;
         return "error";
     }
     return "boolean";
@@ -806,6 +829,7 @@ string has_scalar(string LHS_type,int reference_dim,string oper)
     if(LHS_arr_dim!=reference_dim && LHS_arr_dim) //does not converted to scalar type
     {
         cout<<"<Error> found in Line: "<<linenum<<" Array reference does not converted to scalar type successfully "<<endl;
+        all_correct=0;
         return "error";
     }
     else
@@ -819,6 +843,7 @@ string has_scalar(string LHS_type,int reference_dim,string oper)
         }
         else if(LHS_type!="integer" && LHS_type!="real" && LHS_type!="string" && LHS_type!="boolean") //has converted to scalar type but not right type in the spec
         {
+            all_correct=0;
             return "error";
         }
         else
