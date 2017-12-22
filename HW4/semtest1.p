@@ -64,8 +64,14 @@ begin
     end if
 
 
+    if sttr > 2.45 then //error
+        aa := 7;
+    else
+        aa := 10;
+    end if
 
-    if zr[3] > aa then //OK LHS integer RHS integer
+
+    if zr[3] > 2.45 then //error
         aa := 7;
     else
         aa := 10;

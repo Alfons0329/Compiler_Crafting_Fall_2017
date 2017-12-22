@@ -1,0 +1,5 @@
+File name semtest6
+
+|-------------------------------------------|
+| There is no syntactic and semantic error! |
+|-------------------------------------------|

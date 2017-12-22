@@ -1,0 +1,46 @@
+File name semtest2
+
+1: 
+2: //&T-
+3: //&D-
+4: /**
+5:  * semtest2.p
+6:  */
+7: semtest2;
+8: 
+9: // main program
+10: begin
+11:     var a, b, c : integer;
+12:     var d, e, f : boolean;
+13:     var g, h, i : string;
+14: 
+15:     b := 100;
+16:     c := 25;
+17:     a := b+c;                     // ok
+<Error> found in Line: 18 Assign operation LHS_type and RHS_type inconsistent 
+18:     a := g+i;                     // error, LHS=integer RHS=string
+19:     g := h+1;                     // ok, LHS=string RHS=string
+20:     g := h+"apple";               // ok, LHS=string RHS=string  
+21:     a := b+c*c mod 17;            // ok
+<Error> found in Line: 22 Assign operation LHS_type and RHS_type inconsistent 
+22:     a := b >= c*4;                // error, LHS=integer RHS=boolean
+23:     e := b >= c*4;                // ok
+24:     print a <> 11 ;               // ok
+25: 
+26:     e := false;
+27:     f := true;
+28:     d := e and f;                 // ok
+29:     d := true or false;           // ok
+<Error> found in Line: 30 Assign operation LHS_type and RHS_type inconsistent 
+30:     d := a+b mod c;               // error, LHS=boolean RHS=integer
+31: 
+32:     g := "hello ";
+33:     h := "world\n";
+34:     i := g;                       // ok
+35:     i := g+h;                     // ok, string concatenation
+<Error> found in Line: 36* operation LHS_type and RHS_type should be either real or integer type
+<Error> found in Line: 36 Incorrect type 
+36:     i := g*h;                     // error, we cannot perform multiplication on string type
+37: 
+38: end
+39: end semtest2

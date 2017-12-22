@@ -1,0 +1,79 @@
+File name semtest4
+
+1: 
+2: //&T-
+3: //&D-
+4: /**
+5:  * semtest4.p: test for type coercion
+6:  */
+7: semtest4;
+8: 
+9: begin
+10:         var i1, i2: integer;
+11:         var r1, r2: real;
+12:         var s1, s2: string;
+13:         var b1, b2: boolean;
+14:         var s7 : 707070;
+15:         r1 := i1+i2;    // ok, LHS=real, RHS=integer
+16:         r2 := r1+i2;    // ok, r1+i2 ---> real
+<Error> found in Line: 17 constant 's7'cannot be assigned
+17:         s7 := r1;
+18:         s1 := s2+"123"; // ok
+<Error> found in Line: 19 Assign operation LHS_type and RHS_type inconsistent 
+19:         b1 := i1+i2;    // error, LHS=boolean, RHS=integer
+20: 
+<Error> found in Line: 21 Assign operation LHS_type and RHS_type inconsistent 
+21:         i1 := i2-r1;    // error, RHS=real, cannot convert into integer implicitly
+22: 
+23:         if i1  then     //error what in conditional should be the boolean type
+24:             i1 := 3;
+<Error> type in conditional statement should be only boolean type 
+25:         else
+26:             i1 := 4;
+27:         end if
+28: 
+29:         if b2  then     //correct
+30:             i1 := 3;
+31:         else
+32:             i1 := 4;
+33:         end if
+34: 
+35:         if r2 > 2.0  then    //correct
+36:             i1 := 3;
+37:         else
+38:             i1 := 4;
+39:         end if
+40: 
+41:         while i2    //error what in conditional should be the boolean type
+<Error> type in while statement should be only boolean type 
+42:         do
+43:             i2 := 4;
+44:         end do
+45: 
+46:         while b2    //correct
+47:         do
+48:             i2 := 4;
+49:         end do
+50: 
+51:         while i1 > 2.0   //correct
+52:         do
+53:             i2 := 4;
+54:         end do
+55: 
+<Error> Found in Line56: loop parameter's lower bound >= uppper bound
+56:         for i := 5 to 3 do //wrong
+57:             i2 := 4;
+58:         end do
+59: 
+60:         for i := 3 to 5 do //correct
+61:             i2 := 4;
+62:         end do
+63: 
+64:         for ab := 3 to 5 do //wrong iterator cannot be assigned
+<Error> found in Line: 65 Incorrect type 
+<Error> found in Line: 65 'ab'cannot be assigned
+65:             ab := 4;
+66:         end do
+67: 
+68: end
+69: end semtest4

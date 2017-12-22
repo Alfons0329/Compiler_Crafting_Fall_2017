@@ -1,0 +1,13 @@
+File name semtest5
+
+<Error> found in Line 7: program end ID inconsist with the file name
+<Error> found in Line: 14 Array reference does not converted to scalar type successfully 
+<Error> found in Line: 14 Incorrect type 
+<Error> found in Line: 16 Array reference does not converted to scalar type successfully 
+<Error> found in Line: 16 'a'cannot be assigned
+<Error> found in Line: 17 Array reference does not converted to scalar type successfully 
+<Error> found in Line: 17 'a'cannot be assigned
+<Error> found in Line: 18 Array reference does not converted to scalar type successfully 
+<Error> found in Line: 18 The return value of function should be a scalar type 
+<Error> found in Line 24: program end ID inconsist with the file name
+<Error> found in Line 24: program end ID inconsist with the beginning ID

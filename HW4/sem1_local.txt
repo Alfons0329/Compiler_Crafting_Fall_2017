@@ -1,0 +1,198 @@
+File name semtest1
+
+44:     //&S+
+45: 
+46:     //relop start testing here
+47: 
+<Error> found in Line: 48 Relational operation LHS_type and RHS_type should be either real or integer type
+48:     if h[3] > zr[5] then //error LHS string RHS integer
+49:         aa := 7;
+50:     else
+51:         aa := 10;
+52:     end if
+53: 
+<Error> found in Line: 54 Array reference does not converted to scalar type successfully 
+54:     if h > zr[5] then //error LHS has not been converted to scalar type
+55:         aa := 7;
+56:     else
+57:         aa := 10;
+58:     end if
+59: 
+<Error> found in Line: 60 Relational operation LHS_type and RHS_type should be either real or integer type
+60:     if h[3] > sttr then //error relop should be real or integer
+61:         aa := 7;
+62:     else
+63:         aa := 10;
+64:     end if
+65: 
+66: 
+67: 
+68:     if zr[3] > aa then //OK LHS integer RHS integer
+69:         aa := 7;
+70:     else
+71:         aa := 10;
+72:     end if
+73: 
+<Error> found in Line: 74 Array reference does not converted to scalar type successfully 
+74:     if zr > aa then //error LHS has not been converted to scalar type
+75:         aa := 7;
+76:     else
+77:         aa := 10;
+78:     end if
+79: 
+<Error> found in Line: 80 Array reference does not converted to scalar type successfully 
+80:     if twodim[4] > zr[5] then //error LHS has not been converted to scalar type
+81:         aa := 7;
+82:     else
+83:         aa := 10;
+84:     end if
+85: 
+86:     if twodim[3][4] > zr[5] then //correct LHS integer and RHS Integer, all of them has been converted to scalar type
+87:         aa := 7;
+88:     else
+89:         aa := 10;
+90:     end if
+91: 
+92: 
+93: 
+<Error> found in Line: 94 Relational operation LHS_type and RHS_type should be either real or integer type
+94:     if str > sttr then //error relop should be real or integer
+95:         aa := 7;
+96:     else
+97:         aa := 10;
+98:     end if
+99: 
+100: 
+<Error> found in Line: 101 Relational operation LHS_type and RHS_type should be either real or integer type
+101:     if str > sttr then //error relop should be real or integer
+102:         aa := 7;
+103:     else
+104:         aa := 10;
+105:     end if
+106: 
+<Error> found in Line: 107 Relational operation LHS_type and RHS_type should be either real or integer type
+107:     if aa > sttr then //error relop should be real or integer
+108:         aa := 7;
+109:     else
+110:         aa := 10;
+111:     end if
+112: 
+<Error> found in Line: 113 Relational operation LHS_type and RHS_type should be either real or integer type
+113:     if bb > sttr then //error relop should be real or integer
+114:         aa := 7;
+115:     else
+116:         aa := 10;
+117:     end if
+118: 
+<Error> found in Line: 119 Relational operation LHS_type and RHS_type should be either real or integer type
+119:     if rl > sttr then //error relop should be real or integer
+120:         aa := 7;
+121:     else
+122:         aa := 10;
+123:     end if
+124: 
+<Error> found in Line: 125 Relational operation LHS_type and RHS_type should be either real or integer type
+125:     if itg > sttr then //error relop should be real or integer
+126:         aa := 7;
+127:     else
+128:         aa := 10;
+129:     end if
+130: 
+131:     if aa > an then    //correct LHS int RHS int
+132:         aa := 7;
+133:     else
+134:         aa := 10;
+135:     end if
+136: 
+137:     if aa > 10 then    //correct LHS int RHS int
+138:         aa := 7;
+139:     else
+140:         aa := 10;
+141:     end if
+142: 
+143:     if aa > 10.625 then    //correct LHS int RHS real
+144:         aa := 7;
+145:     else
+146:         aa := 10;
+147:     end if
+148: 
+149:     if aa > bk then    //correct LHS int RHS int
+150:         aa := 7;
+151:     else
+152:         aa := 10;
+153:     end if
+154: 
+155:     if aa > rl then    //correct LHS int RHS real
+156:         aa := 7;
+157:     else
+158:         aa := 10;
+159:     end if
+160: 
+161:     if aa > 10 then    //correct LHS int RHS int
+162:         aa := 7;
+163:     else
+164:         aa := 10;
+165:     end if
+166: 
+<Error> found in Line: 167 Relational operation LHS_type and RHS_type should be either real or integer type
+167:     if str > sttr then //error relop should be real or integer
+168:         aa := 7;
+169:     else
+170:         aa := 10;
+171:     end if
+172:     //relop end testing here
+<Error> found in Line: 173 Array reference does not converted to scalar type successfully 
+<Error> found in Line: 173 'zr'cannot be assigned
+173:     zr := twodim;      //error array dimension error, also , whole array cannot be assigned
+<Error> found in Line: 174 Array reference does not converted to scalar type successfully 
+<Error> found in Line: 174 'twodim'cannot be assigned
+174:     twodim := zr;      //error array dimension error, also , whole array cannot be assigned
+175: 
+176:     aa := twodim[2][4]; //correct
+177:     twodim[7][3] := aa; //correct
+<Error> found in Line: 178 Array reference does not converted to scalar type successfully 
+<Error> found in Line: 178 'twodim'cannot be assigned
+178:     twodim[7] := aa;    //incorrect not a scalar type
+<Error> found in Line: 179 Array reference does not converted to scalar type successfully 
+<Error> found in Line: 179 'twodim'cannot be assigned
+179:     twodim := zr;       //incorrect not a scalar type
+180:     zr[8] := twodim[4][7]; //correct
+<Error> found in Line: 181 Array reference does not converted to scalar type successfully 
+181:     zr[8] := twodim[4];  //incorrect not a scalar type
+<Error> found in Line: 182 Array reference does not converted to scalar type successfully 
+182:     zr[8] := twodim;    //incorrect not a scalar type
+<Error> found in Line: 183 Assign operation LHS_type and RHS_type inconsistent 
+183:     h[4] := zr[5];      //array in same dimension but different type error
+184: 
+<Error> found in Line: 185 constant 'a'cannot be assigned
+185:     a := 5;            // error, constant cannot be assigned
+
+186:     aa := fun(1,2);    // ok
+187:     fun(1,2);          // ok
+
+188:     aa := fun(a,a);    // ok
+<Error> found in Line: 189 Assign operation LHS_type and RHS_type inconsistent 
+189:     aa := h[4];        // error string array cannot assign to integer
+<Error> found in Line: 190 Assign operation LHS_type and RHS_type inconsistent 
+190:     h[4] := aa;        // still an error like line54
+191:     dr := aa;          // ok assign integer to real , type coercion
+<Error> found in Line: 192 Assign operation LHS_type and RHS_type inconsistent 
+192:     aa := dr;          // wrong assign real to integer, invalid type coercion
+193:     dr := zr[7];       // ok assign integer to real , type coercion
+<Error> found in Line: 194 Assign operation LHS_type and RHS_type inconsistent 
+194:     zr[7] := dr;       // wrong assign real to integer, invalid type coercion
+195:     aa := zr[3];       // correct a LHS RHS same type
+196:     zr[3] := aa;       // correct a LHS RHS same type
+
+<Error> found in Line: 197 parameter number inconsistent
+197:     aa := fun(a);      // error, parameter number inconsistent
+
+<Error> found in Line: 198 parameter type inconsistent
+198:     aa := fun(bb,cc);  // error, parameter type inconsistent
+
+<Error> found in Line: 199 Assign operation cannot assign with/to void type 
+199:     bb := fun2();      // error, fun2() has no return type
+
+<Error> found in Line: 200 Assign operation LHS_type and RHS_type inconsistent 
+200:     bb := fun(5,6);    // error, return type inconsistent
+201:     fun2();            // ok

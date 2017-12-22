@@ -214,24 +214,10 @@ func_decl	: 	ID
 				opt_type MK_SEMICOLON
 				{
                     id_list_buf.pb(funct_name);
-                    funct_name.clear();
+
                     if(is_arr)
 					{
 						cout<<"<Error> found in Line: "<<linenum<<" function cannot return a non-scalar type!"<<endl;
-						/*array_dimension_parser();
-						//here we push_back the funct_attri_buf inorder to match the attributes of function
-						funct_attri_buf.clear(); //primitive initialization
-						for(unsigned int i=0;i<mysymbol_table[1].size();i++) //search the parameter for function attribute
-						{
-							if((mysymbol_table[1][i].kind=="parameter")&&(mysymbol_table[1][i].name[0]!=0))
-							{
-                                funct_attri_buf.pb(mysymbol_table[1][i].type);
-							}
-						}
-                        array_type_str=$7;
-                        array_type_str+=" ";
-                        array_type_str+=reverse_arr_buf;
-						inserting_symbol_table(id_list_buf,"function",array_type_str,funct_attri_buf);*/
                         memset(arr_buf,0,sizeof(arr_buf));//update it for next segment*/
 					}
 					else
@@ -264,6 +250,7 @@ func_decl	: 	ID
 			  	compound_stmt
 			  	END
 				{
+					funct_name.clear();
 					is_funct=0;
 				}
 				ID
@@ -488,6 +475,10 @@ return_stmt	: RETURN boolean_expr MK_SEMICOLON
                 {
 					cout<<"<Error> found in Line: "<<linenum<<" The return value of function should be a scalar type "<<endl;
                 }
+				else
+				{
+					check_return(find_type(funct_name),has_scalar(find_type($2),LHS_dim,"return_stmt "));
+				}
 			}
 			;
 

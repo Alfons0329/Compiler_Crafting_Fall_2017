@@ -85,6 +85,7 @@ string boolop(string,string,string,string);
 string simple(string); //for checking the simple statement
 string condition(string,string); //for checking the conditional statement
 string has_scalar(string,int,string);
+string check_return(string,string);
 void perfect();
 
 

@@ -877,8 +877,15 @@ string has_scalar(string LHS_type,int reference_dim,string oper)
             return LHS_type;
         }
     }
-    cout<<"error line 19 of tcase1 "<<endl;
     return "error";
+}
+string check_return(string funct_type,string return_type)
+{
+    if(funct_type!=return_type)
+    {
+        cout<<"<Error> found in Line: "<<linenum<<" Function return_stmt and its original return_type inconsistent "<<endl;
+    }
+    return return_type;
 }
 void perfect()
 {

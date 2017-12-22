@@ -1,0 +1,123 @@
+File name semtest3advanced
+
+<Error> found in Line: 12 function cannot return a non-scalar type!
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+semtest3advanced                 program    0(global)  void             
+c                                variable   0(global)  integer          
+k                                variable   0(global)  integer          
+p                                constant   0(global)  integer          123
+--------------------------------------------------------------------------------------------------------------
+<Error> found in Line: 20 Array reference does not converted to scalar type successfully 
+<Error> found in Line: 20 The return value of function should be a scalar type 
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+a                                parameter  1(local)   integer [5]      
+i                                variable   1(local)   integer          
+--------------------------------------------------------------------------------------------------------------
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+semtest3advanced                 program    0(global)  void             
+c                                variable   0(global)  integer          
+k                                variable   0(global)  integer          
+p                                constant   0(global)  integer          123
+fun2                             function   0(global)  integer          integer [5]
+--------------------------------------------------------------------------------------------------------------
+<Error> found in Line: 33 Array reference does not converted to scalar type successfully 
+<Error> found in Line: 33 The return value of function should be a scalar type 
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+a                                parameter  1(local)   integer [5]      
+i                                variable   1(local)   integer          
+--------------------------------------------------------------------------------------------------------------
+<Error> found in Line 45: symbol 'cc' is redeclared
+49:     //&S+
+<Error> found in Line: 50 Array reference does not converted to scalar type successfully 
+50: 	if a >= b then                        // error a , b should be integer/real
+<Error> found in Line: 51 symbol dd was not declared in this scope 
+<Error> found in Line: 51 Incorrect type 
+<Error> found in Line: 51 symbol dd was not declared in this scope 
+<Error> found in Line: 51 'dd'cannot be assigned
+51: 	    dd := aa;                         // error not declared
+<Error> found in Line: 52 Array reference does not converted to scalar type successfully 
+<Error> found in Line: 52 'c'cannot be assigned
+52: 	    c := aa;                          // error array can not be assign
+53: 	else
+<Error> found in Line: 54 constant 'p'cannot be assigned
+54: 	    p := aa;                          // error const cannot be assign
+55: 	    k := aa;                          // correct k is global variable
+56: 	end if
+57: 
+58:     cc := aa;                         // correct integer assign to real
+<Error> found in Line: 59 Assign operation LHS_type and RHS_type inconsistent 
+59: 	aa := cc;                         // error, real assign to integer
+60: 
+<Error> found in Line: 61 Array reference does not converted to scalar type successfully 
+<Error> found in Line: 61 Incorrect type 
+61:     aa := zr[2] * zr[3];              // correct integer * integer
+<Error> found in Line: 62 Array reference does not converted to scalar type successfully 
+<Error> found in Line: 62 Incorrect type 
+62:     aa := zr[2][3] + twodim[2][3];    // error, error dimension of zr
+63: 
+<Error> found in Line: 64 Array reference does not converted to scalar type successfully 
+
+<Error> found in Line: 64 symbol fun was not declared in this scope 
+<Error> found in Line: 64 'result'cannot be assigned
+64:     result := fun(b);        // error, LHS=int[5] RHS=?
+<Error> found in Line: 65 Array reference does not converted to scalar type successfully 
+
+<Error> found in Line: 65 'result'cannot be assigned
+65:     result := fun2(a);       // error, parameter type inconsistent
+<Error> found in Line: 66 Array reference does not converted to scalar type successfully 
+
+<Error> found in Line: 66 'result'cannot be assigned
+66:     result := fun2(c);       // error, parameter type inconsistent
+<Error> found in Line: 67 Array reference does not converted to scalar type successfully 
+
+<Error> found in Line: 67 parameter number inconsistent
+<Error> found in Line: 67 'result'cannot be assigned
+67:     result := fun2(c[2]);    // error, LHS=int[5] RHS=int
+ push constant integer to function 
+
+<Error> found in Line: 68 parameter number inconsistent
+68:     result[2] := fun2(c[2]); // ok
+
+69:     c[3][2] := fun2(b);      // ok
+<Error> found in Line: 70 Array reference does not converted to scalar type successfully 
+<Error> found in Line: 70 'c'cannot be assigned
+70:     c := b;                  // error ,LHS=2D RHS=1D
+71: 
+<Error> found in Line: 72 Program cannot have a return value 
+<Error> found in Line: 72 Array reference does not converted to scalar type successfully 
+<Error> found in Line: 72 The return value of function should be a scalar type 
+72:     return a;                // error ,cannot return in main
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+a                                variable   1(local)   integer [10]     
+b                                variable   1(local)   integer [5]      
+result                           variable   1(local)   integer [5]      
+c                                variable   1(local)   integer [5][5]   
+aa                               variable   1(local)   integer          
+cc                               variable   1(local)   real             
+bb                               variable   1(local)   boolean          
+h                                variable   1(local)   string [8]       
+i                                variable   1(local)   string [8]       
+zr                               variable   1(local)   integer [8]      
+twodim                           variable   1(local)   integer [8][7]   
+--------------------------------------------------------------------------------------------------------------
+73: end
+==============================================================================================================
+Name                             Kind       Level      Type             Attribute  
+--------------------------------------------------------------------------------------------------------------
+semtest3advanced                 program    0(global)  void             
+c                                variable   0(global)  integer          
+k                                variable   0(global)  integer          
+p                                constant   0(global)  integer          123
+fun2                             function   0(global)  integer          integer [5]
+--------------------------------------------------------------------------------------------------------------
+74: end semtest3advanced
