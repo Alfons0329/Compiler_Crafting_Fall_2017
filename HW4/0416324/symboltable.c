@@ -628,12 +628,12 @@ string relop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
         LHS_type=has_scalar(LHS_type,LHS_dim,"relop");
         RHS_type=has_scalar(RHS_type,RHS_dim,"relop");
         // cout<<"Relop at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
-        if(RHS_type != LHS_type)
+        /*if(RHS_type != LHS_type)
         {
             cout<<"<Error> found in Line: "<<linenum<<" Relational operation LHS_type and RHS_type inconsistent "<<endl;
             all_correct=0;
             return "error";
-        }
+        }*/
     }
     else
     {
