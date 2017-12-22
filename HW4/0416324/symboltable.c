@@ -628,6 +628,12 @@ string relop(string LHS_type,string RHS_type,string LHS_name, string RHS_name)
         LHS_type=has_scalar(LHS_type,LHS_dim,"relop");
         RHS_type=has_scalar(RHS_type,RHS_dim,"relop");
         // cout<<"Relop at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
+        if(RHS_type != LHS_type)
+        {
+            cout<<"<Error> found in Line: "<<linenum<<" Relational operation LHS_type and RHS_type inconsistent "<<endl;
+            all_correct=0;
+            return "error";
+        }
     }
     else
     {
@@ -668,13 +674,13 @@ string addop(string LHS_type,string RHS_type,string LHS_name, string RHS_name,st
     {
         LHS_type=has_scalar(LHS_type,LHS_dim,"addop");
         RHS_type=has_scalar(RHS_type,RHS_dim,"addop");
-        // cout<<"Operator "<<oper<<" at Line:"<<linenum<<" LHS_type "<<LHS_type<<" RHS_type "<<RHS_type<<endl;
     }
     else
     {
         all_correct=0;
         return "error";
     }
+    // cout<<"Operator "<<oper<<" at Line:"<<linenum<<" LHS_type "<<LHS_type<<"z"<<" RHS_type "<<RHS_type<<"z"<<endl;
     size_t find1=LHS_type.find("integer");
     size_t find2=RHS_type.find("real");
     size_t find3=LHS_type.find("real");
@@ -682,7 +688,7 @@ string addop(string LHS_type,string RHS_type,string LHS_name, string RHS_name,st
     if(oper=="+") //add, operator overloading works for striong type
     {
         size_t LHS_str=LHS_type.find("string");
-        size_t RHS_str=LHS_type.find("string");
+        size_t RHS_str=RHS_type.find("string");
         if(LHS_str!=string::npos && RHS_str!=string::npos) //LHS RHS if both be the string, then + operator fits the case
         {
             return "string";
@@ -868,7 +874,7 @@ string has_scalar(string LHS_type,int reference_dim,string oper)
         else if(LHS_type!="integer" && LHS_type!="real" && LHS_type!="string" && LHS_type!="boolean") //has converted to scalar type but not right type in the spec
         {
             all_correct=0;
-            cout<<"<Error> found in Line: "<<linenum<<" Incorrect type "<<endl;
+            cout<<"<Error> found in Line: "<<linenum<<" Incorrect type or an error happens cause the type fail "<<endl;
             return "error";
         }
         else

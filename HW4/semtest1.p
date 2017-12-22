@@ -64,14 +64,8 @@ begin
     end if
 
 
-    if sttr > 2.45 then //error
-        aa := 7;
-    else
-        aa := 10;
-    end if
 
-
-    if zr[3] > 2.45 then //error
+    if zr[3] > aa then //OK LHS integer RHS integer
         aa := 7;
     else
         aa := 10;
@@ -82,7 +76,7 @@ begin
     else
         aa := 10;
     end if
-
+        
     if twodim[4] > zr[5] then //error LHS has not been converted to scalar type
         aa := 7;
     else
@@ -152,13 +146,13 @@ begin
         aa := 10;
     end if
 
-    if aa > bk then    //correct LHS int RHS int
+    if aa > bk then    //error LHS int RHS real
         aa := 7;
     else
         aa := 10;
     end if
 
-    if aa > rl then    //correct LHS int RHS real
+    if aa > rl then    //error LHS int RHS real
         aa := 7;
     else
         aa := 10;
