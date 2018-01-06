@@ -42,7 +42,7 @@ begin
     var str,sttr : string;
     var twodim: array 1 to 8 of array 1 to 7 of integer; //mytest
     //&S+
-
+    aa();
     //relop start testing here
 
     if h[3] > zr[5] then //error LHS string RHS integer
@@ -51,7 +51,7 @@ begin
         aa := 10;
     end if
 
-    if h > zr[5] then //error LHS has not been converted to scalar type
+    if h  then //error LHS has not been converted to scalar type
         aa := 7;
     else
         aa := 10;
@@ -76,7 +76,7 @@ begin
     else
         aa := 10;
     end if
-        
+
     if twodim[4] > zr[5] then //error LHS has not been converted to scalar type
         aa := 7;
     else

@@ -418,7 +418,14 @@ simple_stmt	:
 			;
 
 proc_call_stmt	:
-            ID MK_LPAREN opt_boolean_expr_list MK_RPAREN MK_SEMICOLON
+            ID
+			{
+				if(find_kind($1)!="function")
+				{
+					printf("<Error> Found in Line%d: symbol %s is not the function\n",linenum,$1);
+				}
+			}
+			MK_LPAREN opt_boolean_expr_list MK_RPAREN MK_SEMICOLON
 			;
 
 cond_stmt	: 	IF
@@ -735,7 +742,7 @@ factor		: var_ref
 			| OP_SUB MK_LPAREN boolean_expr MK_RPAREN
 			| ID /*function param here*/
             {
-				one_param_struct.param_name=$1;
+                one_param_struct.param_name=$1;
 				one_param_struct.param_dim=0;
 				funct_param_buf.pb(one_param_struct);
 				LHS_dim=0;

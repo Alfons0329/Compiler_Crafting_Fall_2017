@@ -397,11 +397,11 @@ void procedure_call_checking()
 {
     string funct_name = funct_param_buf[0].param_name;
     //check if parameter count consistent
-    // cout<<"Check function name "<<funct_name<<endl;
+    /*cout<<"Check function name "<<funct_name<<endl;
     for(unsigned int i=0;i<funct_param_buf.size();i++)
     {
-        // cout<<funct_param_buf[i].param_name<<"  and with dimension "<<funct_param_buf[i].param_dim;
-    }
+         cout<<funct_param_buf[i].param_name<<"  and with dimension "<<funct_param_buf[i].param_dim;
+    }*/
     cout<<endl;
     for(unsigned int i=0;i<mysymbol_table[0].size();i++)
     {
