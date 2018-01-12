@@ -36,8 +36,10 @@ void prog_end();
 //method
 void method(char*, int, char*, char*);
 //ref(say load) the value and assign (say save)
-void ref_expr(struct expr_sem* expr);
-void asn_expr(struct expr_sem* expr,struct expr_sem* RHS);
+void ref_expr(struct expr_sem* );
+void asn_expr(struct expr_sem* ,struct expr_sem* );
+//append more instruction of negative value
+void negative(struct expr_sem*);
 //vars global and others
 void global_var(char* ,struct PType*);
 void funct_end(char* name_in);

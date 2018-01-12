@@ -501,6 +501,7 @@ factor			: var_ref
 			  verifyExistence( symbolTable, $1, scope, __FALSE );
 			  $$ = $1;
 			  $$->beginningOp = NONE_t;
+			  ref_expr($1);
 			}
 			| OP_SUB var_ref
 			{
@@ -508,6 +509,8 @@ factor			: var_ref
 				verifyUnaryMinus( $2 );
 			  $$ = $2;
 			  $$->beginningOp = SUB_t;
+			  ref_expr($1);
+
 			}
 			| MK_LPAREN boolean_expr MK_RPAREN
 			{
@@ -537,10 +540,12 @@ factor			: var_ref
 			  $$->varRef = 0;
 			  $$->pType = createPType( $1->category );
 			  $$->next = 0;
-			  if( $1->hasMinus == __TRUE ) {
+			  if( $1->hasMinus == __TRUE )
+			  {
 			  	$$->beginningOp = SUB_t;
 			  }
-			  else {
+			  else
+			  {
 				$$->beginningOp = NONE_t;
 			  }
 			}
