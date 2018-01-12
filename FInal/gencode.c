@@ -1,4 +1,9 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 #include "gencode.h"
+#include "header.h"
+#include "symtab.h"
 void init_all()
 {
     label_cnt=0;
@@ -202,18 +207,8 @@ void for_loop(char* iter, int loop_begin, int loop_end)
     loop_ptr = lookupLoopVar(symbolTable, iter);
     if(loop_ptr)
     {
-        snprintf(instr_buf
-        ,sizeof(instr_buf)
-        ,"iload %d
-        \nsipush 1
-        \niadd
-        \nistore %d
-        \ngoto Lbegin_%d
-        \nLexit_%d:\n\n"\
-        ,ptr->attribute->var_no
-        ,ptr->attribute->var_no
-        ,loop_stk.stack[loop_stk.top]
-        ,loop_stk.stack[loop_stk.top]);
+        snprintf(instr_buf,sizeof(instr_buf),"iload %d\nsipush 1\niadd\nistore %d\ngoto Lbegin_%d\nLexit_%d:\n\n"\
+        ,ptr->attribute->var_no,ptr->attribute->var_no,loop_stk.stack[loop_stk.top],loop_stk.stack[loop_stk.top]);
         push_instr(instr_buf);
         memset(instr_buf,0,sizeof(instr_buf));
         output_instr_stk();
@@ -227,18 +222,8 @@ void for_loop_end(char* iter)
     loop_ptr = lookupLoopVar(symbolTable, iter); //find again
     if(loop_ptr)
     {
-        snprintf(instr_buf
-        ,sizeof(instr_buf)
-        ,"iload %d
-        \nsipush 1
-        \niadd
-        \nistore %d
-        \ngoto Lbegin_%d
-        \nLexit_%d:\n\n"\
-        ,ptr->attribute->var_no
-        ,ptr->attribute->var_no
-        ,loop_stk.stack[loop_stk.top]
-        ,loop_stk.stack[loop_stk.top]);
+        snprintf(instr_buf,sizeof(instr_buf),"iload %d\nsipush 1\niadd\nistore %d\ngoto Lbegin_%d\nLexit_%d:\n\n"\
+        ,ptr->attribute->var_no,ptr->attribute->var_no,loop_stk.stack[loop_stk.top],loop_stk.stack[loop_stk.top]);
         push_instr(instr_buf);
         memset(instr_buf,0,sizeof(instr_buf));
         output_instr_stk();

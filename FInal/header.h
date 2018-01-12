@@ -82,15 +82,16 @@ struct expr_sem {
 union SymAttr {
 	struct ConstAttr *constVal;
 	struct FuncAttr *formalParam;
+	int var_no;
 };
 // structure for symbol table
 struct SymNode {
 	char *name;
-	int scope;		
-	SEMTYPE category;		
+	int scope;
+	SEMTYPE category;
 	struct PType *type;
 	union SymAttr *attribute;
-	
+
 	struct SymNode *next;
 	struct SymNode *prev;
 };

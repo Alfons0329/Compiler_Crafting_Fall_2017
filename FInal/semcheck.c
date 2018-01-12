@@ -9,8 +9,7 @@ extern int linenum;
 
 void printOperator(OPERATOR op)
 {
-    switch (op)
-    {
+    switch (op) {
     case ADD_t:
         fprintf(stdout, "+");
         break;

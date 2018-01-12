@@ -363,7 +363,7 @@ simple_stmt		: var_ref OP_ASSIGN boolean_expr MK_SEMICOLON
 			| PRINT boolean_expr MK_SEMICOLON
 			{
 				verifyScalarExpr( $2, "print" );
-				print($3);
+				//print($3);
 			}
  			| READ boolean_expr MK_SEMICOLON
 			{
@@ -589,7 +589,7 @@ factor			: var_ref
 				verifyUnaryMinus( $2 );
 			  $$ = $2;
 			  $$->beginningOp = SUB_t;
-			  ref_expr($1);
+			  ref_expr($2);
 
 			}
 			| MK_LPAREN boolean_expr MK_RPAREN

@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdarg.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -18,22 +17,23 @@ int instr_stk_size;
 int label_cnt;
 //instruction stack if multiple insructions to be added
 //instrbuf for temporary store the instruction
-struct instr_stk
+struct one_instr_stk
 {
     char buf[BUF_SIZE*4];
 };
-instr_stk instr_stk[INSTR_STK_SIZE]
+one_instr_stk instr_stk[INSTR_STK_SIZE];
 char instr_buf[BUF_SIZE]; //instruction buffer for temporarily store the instruction
-struct loop_stk
+struct one_loop_stk
 {
 	int stk[STK_SIZE];
 	int top;
 };
-struct cond_stk
-{
-	int stk[STK_SIZE];
-	int top;
-};
+one_loop_stk loop_stk;
+// struct cond_stk
+// {
+// 	int stk[STK_SIZE];
+// 	int top;
+// };
 //operand stack user size to maintain
 void init_all();
 void instr_stk_init();
