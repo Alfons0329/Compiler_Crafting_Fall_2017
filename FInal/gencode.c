@@ -22,16 +22,39 @@ void method(char* name_in, int stk_lim, char* param, char* ret)
 }
 void global_var(char* name_in, struct PType* type_in)
 {
-	if(type->type == INTEGER_t)
+	if(type_in->type == INTEGER_t)
     {
 		fprintf(outfp, ".field public static %s %s\n",name_in,"I");
 	}
-	else if(type->type == BOOLEAN_t)
+	else if(type_in->type == BOOLEAN_t)
     {
 		fprintf(outfp, ".field public static %s %s\n",name_in,"Z");
 	}
-	else if(type->type == REAL_t)
+	else if(type_in->type == REAL_t)
     {
 		fprintf(outfp, ".field public static %s %s\n",name_in,"F");
 	}
+}
+void ref_expr(struct expr_sem* expr)
+{
+    if(expr==NULL)
+    {
+        return; //return if nothing
+    }
+    else if(expr->varRef) //is var ref type expression
+    {
+        struct SymNode* find_entry = lookupLoopVar(symbolTable,expr->varRef->id);//find the loop variable first
+        if(find_entry)
+        {
+            snprintf(instr_buf, sizeof(instr_buf), "iload %d\n",lookup->attribute->var_no);
+        }
+        else
+        {
+            find_entry = lookupSymbol()//or check the symbol table
+        }
+    }
+}
+void asn_expr()
+{
+
 }

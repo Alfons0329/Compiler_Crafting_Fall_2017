@@ -91,7 +91,11 @@ program			: ID
 			}
 			;
 
-program_body		: opt_decl_list opt_func_decl_list compound_stmt
+program_body		: 	opt_decl_list opt_func_decl_list
+						{
+							method("main",128,"[Ljava/lang/String;","V");
+						}
+						compound_stmt
 			;
 
 opt_decl_list		: decl_list
@@ -107,13 +111,21 @@ decl			: VAR id_list MK_COLON scalar_type MK_SEMICOLON       /* scalar type decl
 			  // insert into symbol table
 			  struct idNode_sem *ptr;
 			  struct SymNode *newNode;
-			  for (ptr=$2 ; ptr!=0; ptr=(ptr->next)) {
+			  for (ptr=$2 ; ptr!=0; ptr=(ptr->next))
+			  {
 			  	if( verifyRedeclaration(symbolTable, ptr->value, scope) == __TRUE ) {
-					newNode = createVarNode (ptr->value, scope, $4);
+					if(scope) //local
+					{
+						newNode = createVarNode (ptr->value, scope, $4);
+						global(ptr->value, $4);
+					}
+					else //global
+					{
+						newNode = createVarNode (ptr->value, scope, $4);
+					}
 					insertTab (symbolTable, newNode);
 				}
 			  }
-
 			  deleteIdList( $2 );
 			}
 			| VAR id_list MK_COLON array_type MK_SEMICOLON        /* array type declaration */
@@ -122,10 +134,12 @@ decl			: VAR id_list MK_COLON scalar_type MK_SEMICOLON       /* scalar type decl
 			  // insert into symbol table
 			  struct idNode_sem *ptr;
 			  struct SymNode *newNode;
-			  for( ptr=$2 ; ptr!=0 ; ptr=(ptr->next) ) {
+			  for( ptr=$2 ; ptr!=0 ; ptr=(ptr->next) )
+			  {
 			  	if( $4->isError == __TRUE ) { }
 				else if( verifyRedeclaration( symbolTable, ptr->value, scope ) ==__FALSE ) { }
-				else {
+				else
+				{
 					newNode = createVarNode( ptr->value, scope, $4 );
 					insertTab( symbolTable, newNode );
 				}
@@ -139,9 +153,11 @@ decl			: VAR id_list MK_COLON scalar_type MK_SEMICOLON       /* scalar type decl
 			  // insert constants into symbol table
 			  struct idNode_sem *ptr;
 			  struct SymNode *newNode;
-			  for( ptr=$2 ; ptr!=0 ; ptr=(ptr->next) ) {
+			  for( ptr=$2 ; ptr!=0 ; ptr=(ptr->next) )
+			  {
 			  	if( verifyRedeclaration( symbolTable, ptr->value, scope ) ==__FALSE ) { }
-				else {
+				else
+				{
 					newNode = createConstNode( ptr->value, scope, pType, $4 );
 					insertTab( symbolTable, newNode );
 				}
@@ -213,26 +229,34 @@ func_decl		: ID MK_LPAREN opt_param_list
 			  MK_RPAREN opt_type
 			{
 			  // check and insert function into symbol table
-			  if( paramError == __TRUE ) {
-			  	printf("<Error> found in Line %d: param(s) with several error\n", linenum);
-			  } else if( $6->isArray == __TRUE ) {
-
+			  	if( paramError == __TRUE )
+			  	{
+				  printf("<Error> found in Line %d: param(s) with several error\n", linenum);
+			  	}
+			  	else if( $6->isArray == __TRUE )
+			  	{
 					printf("<Error> found in Line %d: a function cannot return an array type\n", linenum);
-				} else {
-
-				insertFuncIntoSymTable( symbolTable, $1, $3, $6, scope );
-			  }
+				}
+				else
+				{
+					insertFuncIntoSymTable( symbolTable, $1, $3, $6, scope );
+			  	}
 			  funcReturn = $6;
 			}
-			  MK_SEMICOLON
-			  compound_stmt
-			  END ID
-			{
-			  if( strcmp($1,$11) ) {
-				fprintf( stdout, "<Error> found in Line %d: the end of the functionName mismatch\n", linenum );
-			  }
-			  funcReturn = 0;
-			}
+			  	MK_SEMICOLON
+			  	compound_stmt
+			  	{
+				  	expr_instr(); //some expression instruction have to be generated
+				  	funct_end();
+			  	}
+			  	END ID
+				{
+			  		if( strcmp($1,$12) )
+			  		{
+					fprintf( stdout, "<Error> found in Line %d: the end of the functionName mismatch\n", linenum );
+			  		}
+			  		funcReturn = 0;
+				}
 			;
 
 opt_param_list		: param_list { $$ = $1; }

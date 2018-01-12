@@ -7,12 +7,14 @@ extern int scope;
 extern int hasRead;
 extern struct SymTable *symbolTable;	// main symbol table
 extern char fileName[256];
-//instruction stack
+//instruction stack if multiple insructions to be added
+//instrbuf for temporary store the instruction
 struct instr_stk
 {
-    char
-    int top
+    char buf[1024];
+    int top;
 };
+char instr_buf[256];
 struct loop_stk
 {
 	int stk[100];
@@ -30,10 +32,15 @@ void prog_end();
 
 //method
 void method(char*, int, char*, char*);
-//load and save
-void load_expr();
-void save_expr();
-//vars
-void global_var(char* ,struct PType*)
+//ref(say load) the value and assign (say save)
+void ref_expr(struct expr_sem* expr);
+void asn_expr(struct expr_sem* expr,struct expr_sem* RHS);
+//vars global and others
+void global_var(char* ,struct PType*);
+void funct_end(char* name_in);
+//group of instructions to be generated
+void expr_instr();
+
+
 
 #endif
