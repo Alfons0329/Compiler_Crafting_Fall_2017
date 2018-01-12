@@ -26,6 +26,9 @@ char fileName[256];             // filename of input file
 struct SymTable *symbolTable;	// main symbol table
 __BOOLEAN paramError;			// indicate is parameter have any error?
 struct PType *funcReturn;		// record return type of function, used at 'return statement' production rule
+
+//code gen data structure
+extern char instr_buf[256];
 %}
 
 %union {
@@ -69,6 +72,7 @@ program			: ID
 			{
 			  struct PType *pType = createPType (VOID_t);
 			  struct SymNode *newNode = createProgramNode ($1, scope, pType);
+			  init_all();
 			  insertTab (symbolTable, newNode);
 			  prog_start(fileName);
 			  if (strcmp(fileName, $1)) {
@@ -117,7 +121,7 @@ decl			: VAR id_list MK_COLON scalar_type MK_SEMICOLON       /* scalar type decl
 					if(scope) //local
 					{
 						newNode = createVarNode (ptr->value, scope, $4);
-						global(ptr->value, $4);
+						global_var(ptr->value, $4);
 					}
 					else //global
 					{
@@ -240,6 +244,7 @@ func_decl		: ID MK_LPAREN opt_param_list
 				else
 				{
 					insertFuncIntoSymTable( symbolTable, $1, $3, $6, scope );
+					funct_start($1,$3,$6);
 			  	}
 			  funcReturn = $6;
 			}
@@ -247,13 +252,13 @@ func_decl		: ID MK_LPAREN opt_param_list
 			  	compound_stmt
 			  	{
 				  	expr_instr(); //some expression instruction have to be generated
-				  	funct_end();
+				  	funct_end($6);
 			  	}
 			  	END ID
 				{
 			  		if( strcmp($1,$12) )
 			  		{
-					fprintf( stdout, "<Error> found in Line %d: the end of the functionName mismatch\n", linenum );
+						fprintf( stdout, "<Error> found in Line %d: the end of the functionName mismatch\n", linenum );
 			  		}
 			  		funcReturn = 0;
 				}
@@ -351,33 +356,99 @@ simple_stmt		: var_ref OP_ASSIGN boolean_expr MK_SEMICOLON
 				flagRHS = verifyExistence( symbolTable, $3, scope, __FALSE );
 			  }
 			  // if both LHS and RHS are exists, verify their type
-			  if( flagLHS==__TRUE && flagRHS==__TRUE )
-				verifyAssignmentTypeMatch( $1, $3 );
+			  	if( flagLHS==__TRUE && flagRHS==__TRUE )
+					verifyAssignmentTypeMatch( $1, $3 );
+
+				asn_expr($1,$3);
+				output_instr_stk();
 			}
-			| PRINT boolean_expr MK_SEMICOLON { verifyScalarExpr( $2, "print" ); }
- 			| READ boolean_expr MK_SEMICOLON { verifyScalarExpr( $2, "read" ); }
+			| PRINT boolean_expr MK_SEMICOLON
+			{
+				verifyScalarExpr( $2, "print" );
+				print($3);
+			}
+ 			| READ boolean_expr MK_SEMICOLON
+			{
+				verifyScalarExpr( $2, "read" );
+				read_start();
+				read();
+			}
 			;
 
 proc_call_stmt		: ID MK_LPAREN opt_boolean_expr_list MK_RPAREN MK_SEMICOLON
 			{
 			  verifyFuncInvoke( $1, $3, symbolTable, scope );
+			  funct_call($1);
 			}
 			;
 
-cond_stmt		: IF condition THEN
-			  opt_stmt_list
-			  ELSE
-			  opt_stmt_list
-			  END IF
-			| IF condition THEN opt_stmt_list END IF
+cond_stmt		:
+				IF condition THEN
+				{
+					output_instr_stk();
+					snprintf(instr_buf, sizeof(instr_buf),"goto Lcondexit_%d\nLfalse_%d:\n",loop_stk.stk[loop_stk.top],loop_stk.stk[loop_stk.top]);
+					push_instr(instrbuf);
+					output_instr_stk();
+					memset(instr_buf,0,sizeof(instr_buf));
+				}
+			  	opt_stmt_list
+			  	ELSE
+			  	opt_stmt_list
+				{
+					output_instr_stk();
+					snprintf(instr_buf, sizeof(instr_buf),"Lcondexit_%d:\n",loop_stk.stk[loop_stk.top]);
+					push_instr(instr_buf);
+					memset(instr_buf,0,sizeof(instr_buf));
+					loop_stk.top--;
+				}
+			  	END IF
+				{
+					output_instr_stk();
+				}
+			|
+				IF condition THEN opt_stmt_list
+				{
+					output_instr_stk();
+					snprintf(instr_buf, sizeof(instr_buf),"Lfalse_%d:\n",loop_stk.stk[loop_stk.top]);
+					push_instr(instr_buf);
+				}
+			 	END IF
+				{
+					output_instr_stk();
+					loop_stk.top--;
+				}
 			;
 
-condition		: boolean_expr { verifyBooleanExpr( $1, "if" ); }
+condition		: 	boolean_expr
+					{
+						loop_stk.top++;
+						label_cnt++;
+						loop
+						verifyBooleanExpr( $1, "if" );
+						snprintf(instr_buf, sizeof(instr_buf),"Lcondexit_%d:\n",loop_stk.stk[loop_stk.top]);
+					   	push_instr(instr_buf);
+					}
 			;
 
-while_stmt		: WHILE condition_while DO
-			  opt_stmt_list
-			  END DO
+while_stmt		:
+				WHILE
+				{
+					loop_stk.top++
+					label_cnt++;
+					loop_stk[loop_stk.top]=label_cnt;
+					snprintf(instr_buf, sizeof(instr_buf),"Lcondexit_%d:\n",loop_stk.stk[loop_stk.top]);
+					push_instr(instr_buf);
+					output_instr_stk();
+				}
+				condition_while
+				{
+					snprintf(instr_buf, sizeof(instr_buf),"Lcondexit_%d:\n",loop_stk.stk[loop_stk.top]);
+					push_instr(instr_buf);
+					output_instr_stk();
+				}
+				DO
+			  	opt_stmt_list
+			  	END DO
 			;
 
 condition_while		: boolean_expr { verifyBooleanExpr( $1, "while" ); }

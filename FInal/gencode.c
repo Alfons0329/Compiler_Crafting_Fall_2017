@@ -1,4 +1,8 @@
 #include "gencode.h"
+void init_all()
+{
+    label_cnt=0;
+}
 void instr_stk_init()
 {
     instr_stk_size=0;
@@ -190,17 +194,14 @@ void asn_expr(struct expr_sem* expr,struct expr_sem* RHS)
         memset(instrbuf,0,sizeof(instrbuf));
     }
 }
-void append_instr(char* instr_in)
-{
 
-}
 void negative(struct expr_sem* expr)
 {
     if(expr->pType->type==INTEGER_t)
     {
-		("ineg\n");
+		push_instr("ineg\n");
 	}else if(expr->pType->type==REAL_t)
     {
-		("fneg\n");
+		push_instr("fneg\n");
 	}
 }

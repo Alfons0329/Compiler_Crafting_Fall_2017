@@ -1,3 +1,8 @@
+#include <stdio.h>
+#include <stdarg.h>
+#include <string.h>
+#include <stdlib.h>
+
 #ifndef _GENCODE_H_
 #define _GENCODE_H_
 #define INSTR_STK_SIZE 10000
@@ -10,6 +15,7 @@ extern int hasRead;
 extern struct SymTable *symbolTable;	// main symbol table
 extern char fileName[BUF_SIZE];
 int instr_stk_size;
+int label_cnt;
 //instruction stack if multiple insructions to be added
 //instrbuf for temporary store the instruction
 struct instr_stk
