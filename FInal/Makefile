@@ -4,8 +4,8 @@ CC       = gcc
 CFLAGS   = -Wall -Wextra -pedantic -g3
 LEX      = flex
 YACC     = yacc -v -t -l
-YACCFLAG = -d
 LIBS     = -lfl -lm
+YACCFLAG = -d
 
 all: $(TARGET)
 

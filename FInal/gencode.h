@@ -28,9 +28,12 @@ struct cond_stk
 void prog_start();
 void prog_end();
 
+//method
+void method(char*, int, char*, char*);
 //load and save
 void load_expr();
 void save_expr();
-
+//vars
+void global_var(char* ,struct PType*)
 
 #endif

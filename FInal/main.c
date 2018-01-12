@@ -16,7 +16,7 @@ extern int yyparse(); /* declared by yacc */
 extern struct SymTable *symbolTable; /* declared in parser.y */
 extern struct PType *funcReturn;     /* declared in parser.y */
 extern char fileName[256];           /* declared in parser.y */
-
+FILE *ofptr;
 int main(int argc, char **argv)
 {
     if (argc != 2)
@@ -51,11 +51,15 @@ int main(int argc, char **argv)
     fileName[fileNameLength - 2] = '\0';
 
     yyin = fp;
+    char output_name[64];
+    snpintf(output_name,sizeof(output_name),"%s.j",fileName); //generate compiled code, use sn to limit the buffer size
 
+    ofptr = fopen(output_name,"w");
     // initialize symbol table
     symbolTable = (struct SymTable *)malloc(sizeof(struct SymTable));
     initSymTab(symbolTable);
 
     yyparse();
+    fclose(outfp);
     exit(0);
 }
