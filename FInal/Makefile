@@ -8,7 +8,7 @@ YACCFLAG = -d
 LIBS     = -lfl -lm
 
 all: $(TARGET)
-	
+
 $(TARGET): y.tab.c lex.yy.c main.c semcheck.c symtab.c
 	$(CC) $^ -o $(TARGET) $(CCFLAGS) $(LIBS)
 

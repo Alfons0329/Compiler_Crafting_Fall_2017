@@ -17,7 +17,7 @@ extern int linenum;     /* declared in lex.l */
 extern FILE *yyin;      /* declared by lex */
 extern char *yytext;    /* declared by lex */
 extern char buf[256];   /* declared in lex.l */
-extern int yylex(void);
+extern int yylex(void); /* used for C++ */
 int yyerror(char*);
 
 int scope = 0;
@@ -49,7 +49,7 @@ struct PType *funcReturn;		// record return type of function, used at 'return st
 %token MK_COMMA MK_COLON MK_SEMICOLON MK_LPAREN MK_RPAREN MK_LB MK_RB
 
 %token <lexeme>ID
-%token <intVal>INT_CONST 
+%token <intVal>INT_CONST
 %token <realVal>FLOAT_CONST
 %token <realVal>SCIENTIFIC
 %token <lexeme>STR_CONST
@@ -70,7 +70,7 @@ program			: ID
 			  struct PType *pType = createPType (VOID_t);
 			  struct SymNode *newNode = createProgramNode ($1, scope, pType);
 			  insertTab (symbolTable, newNode);
-
+			  prog_start(fileName);
 			  if (strcmp(fileName, $1)) {
 				fprintf (stdout, "<Error> found in Line %d: program beginning ID inconsist with file name\n", linenum);
 			  }
@@ -113,7 +113,7 @@ decl			: VAR id_list MK_COLON scalar_type MK_SEMICOLON       /* scalar type decl
 					insertTab (symbolTable, newNode);
 				}
 			  }
-			  
+
 			  deleteIdList( $2 );
 			}
 			| VAR id_list MK_COLON array_type MK_SEMICOLON        /* array type declaration */
@@ -130,7 +130,7 @@ decl			: VAR id_list MK_COLON scalar_type MK_SEMICOLON       /* scalar type decl
 					insertTab( symbolTable, newNode );
 				}
 			  }
-			  
+
 			  deleteIdList( $2 );
 			}
 			| VAR id_list MK_COLON literal_const MK_SEMICOLON     /* const declaration */
@@ -146,7 +146,7 @@ decl			: VAR id_list MK_COLON scalar_type MK_SEMICOLON       /* scalar type decl
 					insertTab( symbolTable, newNode );
 				}
 			  }
-			  
+
 			  deleteIdList( $2 );
 			}
 			;
@@ -171,7 +171,7 @@ literal_const		: INT_CONST
 			  float tmp = -$2;
 			  $$ = createConstAttr( REAL_t, &tmp );
 			}
-			| SCIENTIFIC 
+			| SCIENTIFIC
 			{
 			  float tmp = $1;
 			  $$ = createConstAttr( REAL_t, &tmp );
@@ -210,16 +210,16 @@ func_decl		: ID MK_LPAREN opt_param_list
 			  // check and insert parameters into symbol table
 			  paramError = insertParamIntoSymTable( symbolTable, $3, scope+1 );
 			}
-			  MK_RPAREN opt_type 
+			  MK_RPAREN opt_type
 			{
 			  // check and insert function into symbol table
 			  if( paramError == __TRUE ) {
 			  	printf("<Error> found in Line %d: param(s) with several error\n", linenum);
 			  } else if( $6->isArray == __TRUE ) {
-					
+
 					printf("<Error> found in Line %d: a function cannot return an array type\n", linenum);
 				} else {
-					
+
 				insertFuncIntoSymTable( symbolTable, $1, $3, $6, scope );
 			  }
 			  funcReturn = $6;
@@ -292,20 +292,20 @@ stmt			: compound_stmt
 			| proc_call_stmt
 			;
 
-compound_stmt		: 
-			{ 
+compound_stmt		:
+			{
 			  scope++;
 			}
 			  BEG
 			  opt_decl_list
 			  opt_stmt_list
-			  END 
-			{ 
+			  END
+			{
 			  // print contents of current scope
 			  if( Opt_D == 1 )
 			  	printSymTable( symbolTable, scope );
 			  deleteScope( symbolTable, scope );	// leave this scope, delete...
-			  scope--; 
+			  scope--;
 			}
 			;
 
@@ -348,7 +348,7 @@ cond_stmt		: IF condition THEN
 			| IF condition THEN opt_stmt_list END IF
 			;
 
-condition		: boolean_expr { verifyBooleanExpr( $1, "if" ); } 
+condition		: boolean_expr { verifyBooleanExpr( $1, "if" ); }
 			;
 
 while_stmt		: WHILE condition_while DO
@@ -356,11 +356,11 @@ while_stmt		: WHILE condition_while DO
 			  END DO
 			;
 
-condition_while		: boolean_expr { verifyBooleanExpr( $1, "while" ); } 
+condition_while		: boolean_expr { verifyBooleanExpr( $1, "while" ); }
 			;
 
-for_stmt		: FOR ID 
-			{ 
+for_stmt		: FOR ID
+			{
 			  insertLoopVarIntoTable( symbolTable, $2 );
 			}
 			  OP_ASSIGN loop_param TO loop_param
@@ -418,7 +418,7 @@ boolean_term		: boolean_term OP_AND boolean_factor
 			| boolean_factor { $$ = $1; }
 			;
 
-boolean_factor		: OP_NOT boolean_factor 
+boolean_factor		: OP_NOT boolean_factor
 			{
 			  verifyUnaryNOT( $2 );
 			  $$ = $2;
@@ -485,10 +485,10 @@ factor			: var_ref
 			  $$ = $2;
 			  $$->beginningOp = SUB_t;
 			}
-			| MK_LPAREN boolean_expr MK_RPAREN 
+			| MK_LPAREN boolean_expr MK_RPAREN
 			{
 			  $2->beginningOp = NONE_t;
-			  $$ = $2; 
+			  $$ = $2;
 			}
 			| OP_SUB MK_LPAREN boolean_expr MK_RPAREN
 			{
@@ -551,4 +551,3 @@ int yyerror( char *msg )
 	fprintf( stderr, "|--------------------------------------------------------------------------\n" );
 	exit(-1);
 }
-
