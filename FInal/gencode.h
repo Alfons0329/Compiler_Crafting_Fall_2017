@@ -23,7 +23,7 @@ struct instr_stk
     char buf[BUF_SIZE*4];
 };
 instr_stk instr_stk[INSTR_STK_SIZE]
-char instr_buf[BUF_SIZE];
+char instr_buf[BUF_SIZE]; //instruction buffer for temporarily store the instruction
 struct loop_stk
 {
 	int stk[STK_SIZE];
@@ -35,23 +35,29 @@ struct cond_stk
 	int top;
 };
 //operand stack user size to maintain
+void init_all();
+void instr_stk_init();
+void push_instr(char*);
+//group of instructions to be generated
+void output_instr_stk();
 //start and end of program
 void prog_start();
 void prog_end();
 
 //method
 void method(char*, int, char*, char*);
+//vars global and others
+void global_var(char* ,struct PType*);
 //ref(say load) the value and assign (say save)
 void ref_expr(struct expr_sem* );
 void asn_expr(struct expr_sem* ,struct expr_sem* );
+//for loop
+void for_loop(char*, int, int);
 //append more instruction of negative value
+void corecion(struct expr_sem*, struct expr_sem*);
 void negative(struct expr_sem*);
-//vars global and others
-void global_var(char* ,struct PType*);
 void funct_end(char* name_in);
-//group of instructions to be generated
-void output_instr_stk();
-
+//while loop
 
 
 #endif

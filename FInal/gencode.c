@@ -190,11 +190,68 @@ void asn_expr(struct expr_sem* expr,struct expr_sem* RHS)
 			}
         }
         //clean the buffer for next assign
-        push_instr(instrbuf);
-        memset(instrbuf,0,sizeof(instrbuf));
+        push_instr(instr_buf);
+        memset(instr_buf,0,sizeof(instr_buf));
     }
 }
-
+void for_loop(char* iter, int loop_begin, int loop_end)
+{
+    loop_stk.top++; //depth inner by 1
+    label_cnt++; //label cnt is used for the while or loop depth
+    struct SymNode* loop_ptr;
+    loop_ptr = lookupLoopVar(symbolTable, iter);
+    if(loop_ptr)
+    {
+        snprintf(instr_buf
+        ,sizeof(instr_buf)
+        ,"iload %d
+        \nsipush 1
+        \niadd
+        \nistore %d
+        \ngoto Lbegin_%d
+        \nLexit_%d:\n\n"\
+        ,ptr->attribute->var_no
+        ,ptr->attribute->var_no
+        ,loop_stk.stack[loop_stk.top]
+        ,loop_stk.stack[loop_stk.top]);
+        push_instr(instr_buf);
+        memset(instr_buf,0,sizeof(instr_buf));
+        output_instr_stk();
+    }
+    loop_stk.top--;
+}
+void for_loop_end(char* iter)
+{
+    loop_stk.top++;
+    struct SymNode* loop_ptr;
+    loop_ptr = lookupLoopVar(symbolTable, iter); //find again
+    if(loop_ptr)
+    {
+        snprintf(instr_buf
+        ,sizeof(instr_buf)
+        ,"iload %d
+        \nsipush 1
+        \niadd
+        \nistore %d
+        \ngoto Lbegin_%d
+        \nLexit_%d:\n\n"\
+        ,ptr->attribute->var_no
+        ,ptr->attribute->var_no
+        ,loop_stk.stack[loop_stk.top]
+        ,loop_stk.stack[loop_stk.top]);
+        push_instr(instr_buf);
+        memset(instr_buf,0,sizeof(instr_buf));
+        output_instr_stk();
+    }
+    loop_stk.top--;
+}
+void coercion(struct expr_sem* LHS_type, struct expr_sem* RHS_type)
+{
+    if(LHS_type->pType->type==INTEGER_t && RHS_type->pType->type == REAL_t)
+    {
+		push_instr("i2f\n");
+	}
+}
 void negative(struct expr_sem* expr)
 {
     if(expr->pType->type==INTEGER_t)

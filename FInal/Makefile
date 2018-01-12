@@ -9,7 +9,7 @@ YACCFLAG = -d
 
 all: $(TARGET)
 
-$(TARGET): y.tab.c lex.yy.c main.c semcheck.c symtab.c
+$(TARGET): y.tab.c lex.yy.c main.c semcheck.c symtab.c gencode.c
 	$(CC) $^ -o $(TARGET) $(CCFLAGS) $(LIBS)
 
 y.tab.c: parser.y

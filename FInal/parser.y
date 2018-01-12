@@ -10,7 +10,7 @@
 #include "header.h"
 #include "symtab.h"
 #include "semcheck.h"
-
+#include "gencode.h"
 int yydebug;
 
 extern int linenum;     /* declared in lex.l */
@@ -27,8 +27,6 @@ struct SymTable *symbolTable;	// main symbol table
 __BOOLEAN paramError;			// indicate is parameter have any error?
 struct PType *funcReturn;		// record return type of function, used at 'return statement' production rule
 
-//code gen data structure
-extern char instr_buf[256];
 %}
 
 %union {
@@ -244,7 +242,7 @@ func_decl		: ID MK_LPAREN opt_param_list
 				else
 				{
 					insertFuncIntoSymTable( symbolTable, $1, $3, $6, scope );
-					funct_start($1,$3,$6);
+					//funct_start($1,$3,$6);
 			  	}
 			  funcReturn = $6;
 			}
@@ -252,7 +250,7 @@ func_decl		: ID MK_LPAREN opt_param_list
 			  	compound_stmt
 			  	{
 				  	expr_instr(); //some expression instruction have to be generated
-				  	funct_end($6);
+				  	//funct_end($6);
 			  	}
 			  	END ID
 				{
@@ -378,7 +376,7 @@ simple_stmt		: var_ref OP_ASSIGN boolean_expr MK_SEMICOLON
 proc_call_stmt		: ID MK_LPAREN opt_boolean_expr_list MK_RPAREN MK_SEMICOLON
 			{
 			  verifyFuncInvoke( $1, $3, symbolTable, scope );
-			  funct_call($1);
+			  //funct_call($1);
 			}
 			;
 
@@ -448,7 +446,15 @@ while_stmt		:
 				}
 				DO
 			  	opt_stmt_list
+				{
+					snprintf(instr_buf, sizeof(instr_buf),"Lcondexit_%d:\n",loop_stk.stk[loop_stk.top]);
+					push_instr(instr_buf);
+					output_instr_stk();
+				}
 			  	END DO
+				{
+					loop_stk.top--;
+				}
 			;
 
 condition_while		: boolean_expr { verifyBooleanExpr( $1, "while" ); }
@@ -461,12 +467,14 @@ for_stmt		: FOR ID
 			  OP_ASSIGN loop_param TO loop_param
 			{
 			  verifyLoopParam( $5, $7 );
+			  for_loop($2, $5, $7);
 			}
 			  DO
 			  opt_stmt_list
 			  END DO
 			{
-			  popLoopVar( symbolTable );
+				for_loop_end($2);
+			  	popLoopVar( symbolTable );
 			}
 			;
 
@@ -477,6 +485,7 @@ loop_param		: INT_CONST { $$ = $1; }
 return_stmt		: RETURN boolean_expr MK_SEMICOLON
 			{
 			  verifyReturnStatement( $2, funcReturn );
+			  output_instr_stk();
 			}
 			;
 
