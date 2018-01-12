@@ -1,28 +1,31 @@
 #ifndef _GENCODE_H_
 #define _GENCODE_H_
-
+#define INSTR_STK_SIZE 10000
+#define STK_SIZE 100
+#define BUF_SIZE 256
 extern int linenum;
 extern FILE* outfp;
 extern int scope;
 extern int hasRead;
 extern struct SymTable *symbolTable;	// main symbol table
-extern char fileName[256];
+extern char fileName[BUF_SIZE];
+int instr_stk_size;
 //instruction stack if multiple insructions to be added
 //instrbuf for temporary store the instruction
 struct instr_stk
 {
-    char buf[1024];
-    int top;
+    char buf[BUF_SIZE*4];
 };
-char instr_buf[256];
+instr_stk instr_stk[INSTR_STK_SIZE]
+char instr_buf[BUF_SIZE];
 struct loop_stk
 {
-	int stk[100];
+	int stk[STK_SIZE];
 	int top;
 };
 struct cond_stk
 {
-	int stk[100];
+	int stk[STK_SIZE];
 	int top;
 };
 //operand stack user size to maintain
@@ -39,7 +42,7 @@ void asn_expr(struct expr_sem* expr,struct expr_sem* RHS);
 void global_var(char* ,struct PType*);
 void funct_end(char* name_in);
 //group of instructions to be generated
-void expr_instr();
+void output_instr_stk();
 
 
 
