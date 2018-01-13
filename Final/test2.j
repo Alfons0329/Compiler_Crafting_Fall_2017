@@ -32,6 +32,7 @@ ldc "\n"
 invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
 
 sipush 3
+i2f
 ldc 1.230000
 fdiv
 fstore 6
@@ -85,6 +86,7 @@ getstatic java/lang/System/out Ljava/io/PrintStream;
 sipush 100
 sipush 20
 iadd
+i2f
 ldc 3.140000
 fmul
 sipush 2
