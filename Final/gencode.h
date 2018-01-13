@@ -45,6 +45,14 @@ void init_all()
         memset(instr_stack[i].buf, 0, sizeof(instr_stack[i].buf));
     }
 }
+void clear_instr_stk()
+{
+    for(int i=0;i<cur_instr_stk_size;i++)
+    {
+        memset(instr_stack[i].buf, 0, sizeof(instr_stack[i].buf));
+    }
+    cur_instr_stk_size=0;
+}
 void push_instr(char* instr_in)
 {
     printf("Push instruction %s \n",instr_in);
@@ -520,6 +528,7 @@ void read_stdin(struct expr_sem* expr)
                     break;
 			}
 		}
+        clear_instr_stk();
         asn_expr(expr,NULL); //save what i read
 		output_instr_stack();
 	}

@@ -19,11 +19,11 @@ putstatic test3/_sc Ljava/util/Scanner;
 
 getstatic test3/_sc Ljava/util/Scanner;
 invokevirtual java/util/Scanner/nextInt()I
-iload 2
 istore 2
 
 iload 2
 sipush 100
+isub
 ifgt Ltrue_1
 iconst_0
 goto Lfalse_1
@@ -39,6 +39,7 @@ goto Lcondexit_2
 Lfalse_2:
 iload 2
 sipush 20
+isub
 iflt Ltrue_3
 iconst_0
 goto Lfalse_3

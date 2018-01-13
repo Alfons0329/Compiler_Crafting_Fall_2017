@@ -542,8 +542,8 @@ boolean_factor		: OP_NOT boolean_factor
 
 relop_expr		: expr rel_op expr
 			{
-			  	verifyRelOp( $1, $2, $3 );
 				relational($1,$2,$3);
+			  	verifyRelOp( $1, $2, $3 );
 			  	$$ = $1;
 			}
 			| expr { $$ = $1; }
