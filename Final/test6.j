@@ -1,5 +1,5 @@
-; test7
-.class public test7
+; test6
+.class public test6
 .super java/lang/Object
 
 .field public static _sc Ljava/util/Scanner;

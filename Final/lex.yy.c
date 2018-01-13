@@ -1197,7 +1197,7 @@ YY_RULE_SETUP
 				  LIST;
 				  if( Opt_S )
 				  	printf("%d: %s",  linenum,  buf);
-				  	fprintf(ofptr,";%d: %s",  linenum,  buf);
+				  	/* fprintf(ofptr,";%d: %s",  linenum,  buf); */
 				  linenum++;
 				  memset( buf, 0, MAX_LINE_LENG );
 				  BEGIN INITIAL;
@@ -1227,7 +1227,7 @@ YY_RULE_SETUP
 				  LIST;
 				  if  (Opt_S)
 				  	printf("%d: %s",  linenum,  buf);
-				  	fprintf(ofptr,";%d: %s",  linenum,  buf);
+				  	/* fprintf(ofptr,";%d: %s",  linenum,  buf); */
 				  linenum++;
 				  memset( buf, 0, MAX_LINE_LENG );
 				}
@@ -1254,7 +1254,7 @@ YY_RULE_SETUP
 				  LIST;
 				  if  (Opt_S)
 				  	printf("%d: %s",  linenum,  buf);
-				  	fprintf(ofptr,";%d: %s",  linenum,  buf);
+				  	/* fprintf(ofptr,";%d: %s",  linenum,  buf); */
 				  linenum++;
 				  memset( buf, 0, MAX_LINE_LENG );
 		   		}
@@ -2325,5 +2325,4 @@ float scientificToFloat( const char *str )
 
 	return fraction;
 }
-
 
