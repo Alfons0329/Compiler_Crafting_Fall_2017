@@ -253,7 +253,7 @@ void asn_expr(struct expr_sem* expr,struct expr_sem* RHS)
         memset(instr_buf,0,sizeof(instr_buf));
     }
 }
-void boolean(struct expr_sem *op1, OPERATOR operator_in, struct expr_sem *op2)
+void boolean(struct expr_sem *oper_1, OPERATOR operator_in, struct expr_sem *oper_2)
 {
 	output_instr_stack();
 	switch(operator_in)
@@ -271,17 +271,91 @@ void boolean(struct expr_sem *op1, OPERATOR operator_in, struct expr_sem *op2)
             break;
 	}
 }
-void relational(struct expr_sem *op1, OPERATOR operator_in, struct expr_sem *op2)
+void arithemetic( struct expr_sem *oper_1, OPERATOR oprator_in, struct expr_sem *oper_2)
+{
+    //coercion
+    memset(instr_buf,0,sizeof(instr_buf));
+    //unary no corecion is needed
+    if(oper_1 && oper_2)
+    {
+		if( ((oper_1->pType->type==INTEGER_t || oper_1->pType->type==REAL_t) && (oper_2->pType->type==INTEGER_t || oper_2->pType->type==REAL_t)) )
+        {
+			if( oper_1->pType->type==INTEGER_t && oper_2->pType->type==REAL_t)
+            {
+				fprintf(ofptr,"i2f\n");
+				output_instr_stack();
+				oper_1->pType->type = REAL_t;
+			}
+            else if( oper_1->pType->type==REAL_t && oper_2->pType->type==INTEGER_t)
+            {
+				push_instr("i2f\n");
+			}
+		}
+	}
+
+	switch(oprator_in)
+    {
+		case ADD_t:
+			if(oper_1->pType->type == INTEGER_t)
+            {
+				snprintf(instr_buf,sizeof(instr_buf), "iadd\n");
+			}
+			else if(oper_1->pType->type == REAL_t)
+            {
+				snprintf(instr_buf,sizeof(instr_buf), "fadd\n");
+			}
+			break;
+		case SUB_t:
+			if(oper_1->pType->type == INTEGER_t)
+            {
+				snprintf(instr_buf,sizeof(instr_buf), "isub\n");
+			}
+			else if(oper_1->pType->type == REAL_t)
+            {
+				snprintf(instr_buf,sizeof(instr_buf), "fsub\n");
+			}
+			break;
+		case MUL_t:
+			if(oper_1->pType->type == INTEGER_t)
+            {
+				snprintf(instr_buf,sizeof(instr_buf), "imul\n");
+			}
+			else if(oper_1->pType->type == REAL_t)
+            {
+				snprintf(instr_buf,sizeof(instr_buf), "fmul\n");
+			}
+			break;
+		case DIV_t:
+			if(oper_1->pType->type == INTEGER_t)
+            {
+				snprintf(instr_buf,sizeof(instr_buf), "idiv\n");
+			}
+			else if(oper_1->pType->type == REAL_t)
+            {
+				snprintf(instr_buf,sizeof(instr_buf), "fdiv\n");
+			}
+			break;
+		case MOD_t:
+			snprintf(instr_buf,sizeof(instr_buf), "irem\n");
+			break;
+        default:
+            break;
+	}
+	push_instr(instr_buf);
+	memset(instr_buf,0,sizeof(instr_buf));
+	output_instr_stack();
+}
+void relational(struct expr_sem *oper_1, OPERATOR operator_in, struct expr_sem *oper_2)
 {
     memset(instr_buf,0,sizeof(instr_buf));
     loop_stack.top++;
     label_cnt++; //depth
     loop_stack.stack[loop_stack.top]=label_cnt;
-    if(op1->pType->type == INTEGER_t)
+    if(oper_1->pType->type == INTEGER_t)
     {
         push_instr("isub\n");
     }
-    else if(op1->pType->type == REAL_t)
+    else if(oper_1->pType->type == REAL_t)
     {
         push_instr("fcmpl\n");
     }
@@ -453,16 +527,20 @@ void read_stdin(struct expr_sem* expr)
 }
 void load_const_stk(struct ConstAttr* constattr)
 {
-	if(constattr->category==STRING_t){
+	if(constattr->category==STRING_t)
+    {
 		snprintf(instr_buf,sizeof(instr_buf), "ldc \"%s\"\n",constattr->value.stringVal);
 	}
-	else if(constattr->category==INTEGER_t){
+	else if(constattr->category==INTEGER_t)
+    {
 		snprintf(instr_buf,sizeof(instr_buf), "sipush %d\n",constattr->value.integerVal);
 	}
-	else if(constattr->category==REAL_t){
+	else if(constattr->category==REAL_t)
+    {
 		snprintf(instr_buf,sizeof(instr_buf), "ldc %lf\n",constattr->value.realVal);
 	}
-	else if(constattr->category==BOOLEAN_t){
+	else if(constattr->category==BOOLEAN_t)
+    {
 		snprintf(instr_buf,sizeof(instr_buf), "iconst_%d\n",constattr->value.booleanVal);
 	}
 	push_instr(instr_buf);
