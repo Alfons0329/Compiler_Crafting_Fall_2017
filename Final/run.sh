@@ -11,6 +11,6 @@ echo "Parsing succeeded ready for execution"
 java -jar "$JASMIN" "$JNAME"
 java "$FILE_NAME"
 echo "End running program"
-#make clean
+make clean
 #rm -f "$FILE_NAME.class"
 #rm -f "$FILE_NAME.j"

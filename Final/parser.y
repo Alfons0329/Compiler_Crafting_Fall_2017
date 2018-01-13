@@ -11,9 +11,6 @@
 #include "symtab.h"
 #include "semcheck.h"
 #include "gencode.h"
-
-//#include "test.h"
-
 int yydebug;
 
 extern int linenum;		/* declared in lex.l */
@@ -27,7 +24,7 @@ int yyerror(char* );
 
 int scope = 0;
 int var_no=1;
-int hasRead=0;
+int is_read=0;
 
 int Opt_D = 1;			/* symbol table dump option */
 char fileName[256];
@@ -83,6 +80,7 @@ program			: ID
 			  struct PType *pType = createPType( VOID_t );
 			  struct SymNode *newNode = createProgramNode( $1, scope, pType );
 			  insertTab( symbolTable, newNode );
+			  init_all();
 			  prog_start(fileName);
 			  if( strcmp(fileName,$1) ) {
 				fprintf( stdout, "<Error> at Line#%d: program beginning ID inconsist with file name ########## \n", linenum );
@@ -128,9 +126,13 @@ decl			: VAR id_list MK_COLON scalar_type MK_SEMICOLON       /* scalar type decl
 			  for( ptr=$2 ; ptr!=0 ; ptr=(ptr->next) ) {
 			  	if( verifyRedeclaration( symbolTable, ptr->value, scope ) ==__FALSE ) { }
 				else {
-					if(scope==0){ // global
+					if(scope==0)
+					{ // global
 						newNode = createVarNode( ptr->value, scope, $4,0 );
-					}else{
+						global_var(ptr->value,$4);
+					}
+					else
+					{
 						newNode = createVarNode( ptr->value, scope, $4,var_no++ );
 					}
 					insertTab( symbolTable, newNode );
@@ -354,19 +356,33 @@ simple_stmt		: var_ref OP_ASSIGN boolean_expr MK_SEMICOLON
 			  // if both LHS and RHS are exists, verify their type
 			  if( flagLHS==__TRUE && flagRHS==__TRUE )
 				verifyAssignmentTypeMatch( $1, $3 );
-
-
+				asn_expr($1,$3);
+				output_instr_stack();
 			}
-			| PRINT{}
-			boolean_expr{}
-			MK_SEMICOLON { verifyScalarExpr( $3, "print" ); }
- 			| READ boolean_expr MK_SEMICOLON { verifyScalarExpr( $2, "read" ); }
+			| PRINT
+			{
+				print_stdout_init();
+			}
+			boolean_expr
+			{
+				output_instr_stack(); //push the remain instructions
+			}
+			MK_SEMICOLON
+			{
+				verifyScalarExpr( $3, "print" );
+				print_stdout($3);//ready for stdout
+			}
+ 			| READ boolean_expr MK_SEMICOLON
+			{
+				verifyScalarExpr( $2, "read" );
+				read_stdin_init();
+				read_stdin($2);
+			}
 			;
 
 proc_call_stmt		: ID MK_LPAREN opt_boolean_expr_list MK_RPAREN MK_SEMICOLON
 			{
 			  verifyFuncInvoke( $1, $3, symbolTable, scope );
-
 			}
 			;
 
@@ -531,7 +547,7 @@ expr			: expr add_op{} term
 			{
 
 				verifyArithmeticOp( $1, $2, $4 );
-
+				output_instr_stack();
 				$$ = $1;
 			}
 			| term { $$ = $1; }
@@ -563,7 +579,7 @@ mul_op			: OP_MUL { $$ = MUL_t; }
 factor			: var_ref
 			{
 			  verifyExistence( symbolTable, $1, scope, __FALSE );
-
+			  ref_expr($1);
 			  $$ = $1;
 			  $$->beginningOp = NONE_t;
 			}
@@ -573,7 +589,8 @@ factor			: var_ref
 				verifyUnaryMinus( $2 );
 			  $$ = $2;
 			  $$->beginningOp = SUB_t;
-
+			  ref_expr($2);
+			  negative($2);
 
 			}
 			| MK_LPAREN boolean_expr MK_RPAREN
@@ -586,7 +603,7 @@ factor			: var_ref
 			  verifyUnaryMinus( $3 );
 			  $$ = $3;
 			  $$->beginningOp = SUB_t;
-
+			  negative($3);
 			}
 			| ID MK_LPAREN opt_boolean_expr_list MK_RPAREN
 			{
@@ -598,7 +615,7 @@ factor			: var_ref
 			{
 			  $$ = verifyFuncInvoke( $2, $4, symbolTable, scope );
 			  $$->beginningOp = SUB_t;
-
+			  negative($4);
 
 			}
 			| literal_const
@@ -614,7 +631,7 @@ factor			: var_ref
 			  else {
 				$$->beginningOp = NONE_t;
 			  }
-			  //LoadConstTostack($1);
+			  load_const_stk($1);
 			}
 			;
 

@@ -5,25 +5,24 @@
 #include "symtab.h"
 #ifndef _GENCODE_H_
 #define _GENCODE_H_
-#define INSTR_stack_SIZE 10000
+#define INSTR_STACK_SIZE 10000
 #define stack_SIZE 100
 #define BUF_SIZE 256
 extern int linenum;
 extern FILE* ofptr;
 extern int scope;
-extern int hasRead;
+extern int is_read;
 extern struct SymTable *symbolTable;	// main symbol table
 extern char fileName[BUF_SIZE];
 char instr_buf[BUF_SIZE]; //instruction buffer for temporarily store the instruction
-int instr_stack_size;
-int label_cnt;
-//instruction stack if multiple insructions to be added
-//instrbuf for temporary store the instruction
+int cur_instr_stk_size; //current instruction stack size
+int label_cnt; //label for depth
+//instruction stack if multiple insructions to be fprintf
 struct one_instr_stack
 {
     char buf[BUF_SIZE*4];
 };
-struct one_instr_stack instr_stack[INSTR_stack_SIZE];
+struct one_instr_stack instr_stack[INSTR_STACK_SIZE];
 struct one_loop_stack
 {
 	int stack[stack_SIZE];
@@ -40,27 +39,31 @@ struct one_loop_stack loop_stack;
 void init_all()
 {
     label_cnt=0;
-}
-void instr_stack_init()
-{
-    instr_stack_size=0;
-    for(int i=0;i<INSTR_stack_SIZE;i++)
+    cur_instr_stk_size=0;
+    for(int i=0;i<INSTR_STACK_SIZE;i++)
     {
         memset(instr_stack[i].buf, 0, sizeof(instr_stack[i].buf));
     }
 }
 void push_instr(char* instr_in)
 {
-	instr_stack_size++;
-	strcpy(instr_stack[instr_stack_size].buf, strdup(instr_in));
+    printf("Push instruction %s \n",instr_in);
+	strcpy(instr_stack[cur_instr_stk_size].buf,instr_in);
+    cur_instr_stk_size++;
 }
 void output_instr_stack()
 {
-	for(int i=0;i<instr_stack_size;i++)
+    printf("Lets output! size is %d\n",cur_instr_stk_size);
+    for(int i=0;i<cur_instr_stk_size;i++)
+    {
+        printf("%s \n",instr_stack[i].buf);
+    }
+    for(int i=0;i<cur_instr_stk_size;i++)
     {
         fprintf(ofptr,"%s",instr_stack[i].buf);
+        memset(instr_stack[i].buf, 0, sizeof(instr_stack[i].buf));
     }
-    instr_stack_size=0;
+    cur_instr_stk_size=0;
 }
 void prog_start(char* name_in)
 {
@@ -93,7 +96,8 @@ void corecion(struct expr_sem* LHS_type,struct expr_sem* RHS_type)
 //vars global and others
 void global_var(char* name_in, struct PType* type_in)
 {
-	if(type_in->type == INTEGER_t)
+    printf("global_var \n");
+    if(type_in->type == INTEGER_t)
     {
 		fprintf(ofptr, ".field public static %s %s\n",name_in,"I");
 	}
@@ -122,6 +126,7 @@ void ref_expr(struct expr_sem* expr)
         }
         else
         {
+            printf("Noot loop var reference \n");
             find_entry = lookupSymbol(symbolTable, expr->varRef->id, scope, __FALSE);//or check the symbol table
             if(find_entry) //find a symbol to be referenced
             {
@@ -178,13 +183,20 @@ void ref_expr(struct expr_sem* expr)
 				}
             }
         }
+        push_instr(instr_buf);
+        memset(instr_buf,0,sizeof(instr_buf));
     }
 }
 void asn_expr(struct expr_sem* expr,struct expr_sem* RHS)
 {
-    if(expr->varRef)
+    if(expr==NULL)
     {
-        struct SymNode* find_entry = lookupLoopVar(symbolTable, expr->varRef->id);//find the loop variable first
+        return;
+    }
+    else if(expr->varRef)
+    {
+        printf("Assign instruction \n");
+        struct SymNode* find_entry = lookupSymbol(symbolTable,expr->varRef->id,scope,__FALSE);//find the loop variable first
         if(find_entry)
         {
             if(find_entry->category==VARIABLE_t && find_entry->scope!=0)
@@ -236,7 +248,7 @@ void asn_expr(struct expr_sem* expr,struct expr_sem* RHS)
 				}
 			}
         }
-        //clean the buffer for next assign
+        printf("Instr buf for assign %s\n",instr_buf);
         push_instr(instr_buf);
         memset(instr_buf,0,sizeof(instr_buf));
     }
@@ -283,5 +295,108 @@ void negative(struct expr_sem* expr)
     {
 		push_instr("fneg\n");
 	}
+}
+
+void print_stdout_init()
+{
+	snprintf(instr_buf,sizeof(instr_buf), "getstatic java/lang/System/out Ljava/io/PrintStream;\n");
+	push_instr(instr_buf);
+	memset(instr_buf,0,sizeof(instr_buf));
+}
+void print_stdout(struct expr_sem* expr)
+{
+	switch(expr->pType->type)
+    {
+		case STRING_t:
+			fprintf(ofptr, "invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V\n");
+			break;
+		case INTEGER_t:
+			fprintf(ofptr, "invokevirtual java/io/PrintStream/print(I)V\n");
+			break;
+		case REAL_t:
+			fprintf(ofptr, "invokevirtual java/io/PrintStream/print(F)V\n");
+			break;
+		case BOOLEAN_t:
+			fprintf(ofptr, "invokevirtual java/io/PrintStream/print(Z)V\n");
+			break;
+        default:
+            break;
+	}
+	fprintf(ofptr, "\n");
+
+}
+void read_stdin_init()
+{
+    if(!is_read)
+    {
+		fprintf(ofptr, "new java/util/Scanner\n");
+		fprintf(ofptr, "dup\n");
+		fprintf(ofptr, "getstatic java/lang/System/in Ljava/io/InputStream;\n");
+		fprintf(ofptr, "invokespecial java/util/Scanner/<init>(Ljava/io/InputStream;)V\n");
+		fprintf(ofptr, "putstatic %s/_sc Ljava/util/Scanner;\n",fileName);
+		fprintf(ofptr, "\n");
+		is_read=1;
+    }
+}
+void read_stdin(struct expr_sem* expr)
+{
+    fprintf(ofptr, "getstatic %s/_sc Ljava/util/Scanner;\n",fileName);
+	if(expr->varRef)
+    {
+		struct SymNode* find_entry= lookupSymbol(symbolTable,expr->varRef->id,scope,__FALSE);
+		if(find_entry->category==VARIABLE_t && find_entry->scope!=0)
+        {
+			switch(expr->pType->type)
+            {
+				case INTEGER_t:
+					fprintf(ofptr, "invokevirtual java/util/Scanner/nextInt()I\n");
+					break;
+				case REAL_t:
+					fprintf(ofptr, "invokevirtual java/util/Scanner/nextFloat()F\n");
+					break;
+				case BOOLEAN_t:
+					fprintf(ofptr, "invokevirtual java/util/Scanner/nextBoolean()Z\n");
+					break;
+                default:
+                    break;
+			}
+		}
+        else if(find_entry->category==VARIABLE_t && find_entry->scope==0)
+        {
+			switch(expr->pType->type){
+				case INTEGER_t:
+					fprintf(ofptr, "invokevirtual java/util/Scanner/nextInt()I\n");
+					break;
+				case REAL_t:
+					fprintf(ofptr, "invokevirtual java/util/Scanner/nextFloat()F\n");
+					break;
+				case BOOLEAN_t:
+					fprintf(ofptr, "invokevirtual java/util/Scanner/nextBoolean()Z\n");
+					break;
+                default:
+                    break;
+			}
+		}
+		asn_expr(expr,NULL); //sace what i read
+		output_instr_stack();
+	}
+	fprintf(ofptr, "\n");
+}
+void load_const_stk(struct ConstAttr* constattr)
+{
+	if(constattr->category==STRING_t){
+		snprintf(instr_buf,sizeof(instr_buf), "ldc \"%s\"\n",constattr->value.stringVal);
+	}
+	else if(constattr->category==INTEGER_t){
+		snprintf(instr_buf,sizeof(instr_buf), "sipush %d\n",constattr->value.integerVal);
+	}
+	else if(constattr->category==REAL_t){
+		snprintf(instr_buf,sizeof(instr_buf), "ldc %lf\n",constattr->value.realVal);
+	}
+	else if(constattr->category==BOOLEAN_t){
+		snprintf(instr_buf,sizeof(instr_buf), "iconst_%d\n",constattr->value.booleanVal);
+	}
+	push_instr(instr_buf);
+	memset(instr_buf,0,sizeof(instr_buf));
 }
 #endif
