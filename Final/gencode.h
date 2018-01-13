@@ -56,7 +56,7 @@ void output_instr_stack()
     printf("Lets output! size is %d\n",cur_instr_stk_size);
     for(int i=0;i<cur_instr_stk_size;i++)
     {
-        printf("%s \n",instr_stack[i].buf);
+        printf("%s",instr_stack[i].buf);
     }
     for(int i=0;i<cur_instr_stk_size;i++)
     {
@@ -520,7 +520,7 @@ void read_stdin(struct expr_sem* expr)
                     break;
 			}
 		}
-		asn_expr(expr,NULL); //sace what i read
+        asn_expr(expr,NULL); //save what i read
 		output_instr_stack();
 	}
 	fprintf(ofptr, "\n");

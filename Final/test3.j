@@ -24,7 +24,6 @@ istore 2
 
 iload 2
 sipush 100
-isub
 ifgt Ltrue_1
 iconst_0
 goto Lfalse_1
@@ -40,7 +39,6 @@ goto Lcondexit_2
 Lfalse_2:
 iload 2
 sipush 20
-isub
 iflt Ltrue_3
 iconst_0
 goto Lfalse_3
@@ -59,6 +57,6 @@ ldc "bbb \n"
 invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
 
 Lcondexit_4:
-Lcondexit_0:
+Lcondexit_2:
 return
 .end method

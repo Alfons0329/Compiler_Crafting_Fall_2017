@@ -405,13 +405,12 @@ cond_stmt		: IF condition THEN opt_stmt_list
 					push_instr(instr_buf);
 					memset(instr_buf,0,sizeof(instr_buf));
 
-					output_instr_stack();
+					//output_instr_stack();
 					loop_stack.top--; //nested conditional depth--;
 				}
 			  	END IF
 				{
 					output_instr_stack();
-					loop_stack.top--;  //nested conditional depth--;
 				}
 
 			| IF condition THEN opt_stmt_list
@@ -436,7 +435,7 @@ condition		:
 					loop_stack.stack[loop_stack.top]=label_cnt;
 					 //condition false go away
 					verifyBooleanExpr( $1, "if" );
-					snprintf(instr_buf,sizeof(instr_buf),"ifeq Lfalse_%d\n",loop_stack.stack[loop_stack.top],loop_stack.stack[loop_stack.top]);
+					snprintf(instr_buf,sizeof(instr_buf),"ifeq Lfalse_%d\n",loop_stack.stack[loop_stack.top]);
 					push_instr(instr_buf);
 					memset(instr_buf,0,sizeof(instr_buf));
 		   		}
@@ -516,8 +515,8 @@ boolean_expr_list	: boolean_expr_list MK_COMMA boolean_expr
 
 boolean_expr		: boolean_expr OP_OR boolean_term
 			{
-				boolean($1,OR_t,$3);
 			  verifyAndOrOp( $1, OR_t, $3 );
+			  boolean($1,OR_t,$3);
 			  $$ = $1;
 			}
 			| boolean_term { $$ = $1; }
@@ -525,8 +524,8 @@ boolean_expr		: boolean_expr OP_OR boolean_term
 
 boolean_term		: boolean_term OP_AND boolean_factor
 			{
-				boolean($1,AND_t,$3);
 			  verifyAndOrOp( $1, AND_t, $3 );
+			  boolean($1,AND_t,$3);
 			  $$ = $1;
 			}
 			| boolean_factor { $$ = $1; }
@@ -534,8 +533,8 @@ boolean_term		: boolean_term OP_AND boolean_factor
 
 boolean_factor		: OP_NOT boolean_factor
 			{
-				boolean($2,AND_t,$2);
 			  verifyUnaryNOT( $2 );
+			  boolean($2,AND_t,$2);
 			  $$ = $2;
 			}
 			| relop_expr { $$ = $1; }
@@ -543,8 +542,8 @@ boolean_factor		: OP_NOT boolean_factor
 
 relop_expr		: expr rel_op expr
 			{
-				relational($1,$2,$3);
 			  	verifyRelOp( $1, $2, $3 );
+				relational($1,$2,$3);
 			  	$$ = $1;
 			}
 			| expr { $$ = $1; }
