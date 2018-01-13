@@ -83,6 +83,7 @@ program			: ID
 			  struct PType *pType = createPType( VOID_t );
 			  struct SymNode *newNode = createProgramNode( $1, scope, pType );
 			  insertTab( symbolTable, newNode );
+			  prog_start(fileName);
 			  if( strcmp(fileName,$1) ) {
 				fprintf( stdout, "########## Error at Line#%d: program beginning ID inconsist with file name ########## \n", linenum );
 			  }
@@ -101,7 +102,14 @@ program			: ID
 			}
 			;
 
-program_body		: opt_decl_list opt_func_decl_list { }
+program_body		: 	opt_decl_list opt_func_decl_list
+						{
+							method("main",128,"[Ljava/lang/String;","V");
+						}
+						compound_stmt
+						{
+							prog_end();
+						}
 			  ;
 
 opt_decl_list		: decl_list
@@ -373,7 +381,7 @@ cond_stmt		: IF condition THEN opt_stmt_list
 				{
 
 
-				loop_stk.top--;
+				loop_stack.top--;
 				}
 			  END IF
 				{
@@ -388,15 +396,15 @@ cond_stmt		: IF condition THEN opt_stmt_list
 			END IF
 			{
 
-			loop_stk.top--;
+			loop_stack.top--;
 			}
 			;
 
 condition		: boolean_expr
 		   {
-			loop_stk.top++;
+			loop_stack.top++;
 			label_cnt++;
-			loop_stk.stk[loop_stk.top]=label_cnt;
+			loop_stack.stack[loop_stack.top]=label_cnt;
 
 		   verifyBooleanExpr( $1, "if" );
 
@@ -405,9 +413,9 @@ condition		: boolean_expr
 
 while_stmt		: WHILE
 			{
-			loop_stk.top++;
+			loop_stack.top++;
 			label_cnt++;
-			loop_stk.stk[loop_stk.top]=label_cnt; //push to stk
+			loop_stack.stack[loop_stack.top]=label_cnt; //push to stack
 
 
 			}
@@ -422,7 +430,7 @@ while_stmt		: WHILE
 
 
 			  }
-			  END DO {loop_stk.top--;}
+			  END DO {loop_stack.top--;}
 			;
 
 condition_while		: boolean_expr { verifyBooleanExpr( $1, "while" ); }
@@ -606,7 +614,7 @@ factor			: var_ref
 			  else {
 				$$->beginningOp = NONE_t;
 			  }
-			  //LoadConstTostk($1);
+			  //LoadConstTostack($1);
 			}
 			;
 

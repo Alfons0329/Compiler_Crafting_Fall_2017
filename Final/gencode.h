@@ -5,8 +5,8 @@
 #include "symtab.h"
 #ifndef _GENCODE_H_
 #define _GENCODE_H_
-#define INSTR_STK_SIZE 10000
-#define STK_SIZE 100
+#define INSTR_stack_SIZE 10000
+#define stack_SIZE 100
 #define BUF_SIZE 256
 extern int linenum;
 extern FILE* ofptr;
@@ -15,76 +15,56 @@ extern int hasRead;
 extern struct SymTable *symbolTable;	// main symbol table
 extern char fileName[BUF_SIZE];
 char instr_buf[BUF_SIZE]; //instruction buffer for temporarily store the instruction
-int instr_stk_size;
+int instr_stack_size;
 int label_cnt;
 //instruction stack if multiple insructions to be added
 //instrbuf for temporary store the instruction
-struct one_instr_stk
+struct one_instr_stack
 {
     char buf[BUF_SIZE*4];
 };
-struct one_instr_stk instr_stk[INSTR_STK_SIZE];
-struct one_loop_stk
+struct one_instr_stack instr_stack[INSTR_stack_SIZE];
+struct one_loop_stack
 {
-	int stk[STK_SIZE];
+	int stack[stack_SIZE];
 	int top;
 };
-struct one_loop_stk loop_stk;
+struct one_loop_stack loop_stack;
 //operand stack user size to maintain
 //group of instructions to be generated
 //start and end of program
-
-
-
-//void global_var(char*,struct PType*);
 //for loop
 //append more instruction of negative value
 //void negative(struct expr_sem* expr);
-void funct_end(char* name_in);
-//method
-void method(char* name_in, int stk_lim, char* param, char* ret)
-{
-    fprintf(ofptr, "\n;main start\n");
-    fprintf(ofptr, ".method public static %s(%s)%s\n",name_in,param,ret);
-    fprintf(ofptr, ".limit stk %d ; up to %ditems can be pushed\n",stk_lim,stk_lim);
-    fprintf(ofptr, ".limit locals 128 ; up to 64 varibles can be pushed\n\n");
-}
-void corecion(struct expr_sem* LHS_type,struct expr_sem* RHS_type)
-{
-    if(LHS_type->pType->type==INTEGER_t && RHS_type->pType->type == REAL_t)
-    {
-		push_instr("i2f\n");
-	}
-}
 
 void init_all()
 {
     label_cnt=0;
 }
-void instr_stk_init()
+void instr_stack_init()
 {
-    instr_stk_size=0;
-    for(int i=0;i<INSTR_STK_SIZE;i++)
+    instr_stack_size=0;
+    for(int i=0;i<INSTR_stack_SIZE;i++)
     {
-        memset(instr_stk[i].buf, 0, sizeof(instr_stk[i].buf));
+        memset(instr_stack[i].buf, 0, sizeof(instr_stack[i].buf));
     }
 }
 void push_instr(char* instr_in)
 {
-	instr_stk_size++;
-	strcpy(instr_stk[instr_stk_size].buf, strdup(instr_in));
+	instr_stack_size++;
+	strcpy(instr_stack[instr_stack_size].buf, strdup(instr_in));
 }
-void output_instr_stk()
+void output_instr_stack()
 {
-	for(int i=0;i<instr_stk_size;i++)
+	for(int i=0;i<instr_stack_size;i++)
     {
-        fprintf(ofptr,"%s",instr_stk[i].buf);
+        fprintf(ofptr,"%s",instr_stack[i].buf);
     }
-    instr_stk_size=0;
+    instr_stack_size=0;
 }
 void prog_start(char* name_in)
 {
-    loop_stk.top=-1; //start from 0 so use -1 is ok
+    loop_stack.top=-1; //start from 0 so use -1 is ok
     fprintf(ofptr, "; %s\n",name_in);
     fprintf(ofptr, ".class public %s\n",name_in);
     fprintf(ofptr, ".super java/lang/Object\n\n");
@@ -94,6 +74,21 @@ void prog_end()
 {
     fprintf(ofptr, "return\n");
     fprintf(ofptr, ".end method\n");
+}
+//method
+void method(char* name_in, int stack_lim, char* param, char* ret)
+{
+    fprintf(ofptr, "\n;main start\n");
+    fprintf(ofptr, ".method public static %s(%s)%s\n",name_in,param,ret);
+    fprintf(ofptr, ".limit stack %d ; up to %ditems can be pushed\n",stack_lim,stack_lim);
+    fprintf(ofptr, ".limit locals 128 ; up to 64 varibles can be pushed\n\n");
+}
+void corecion(struct expr_sem* LHS_type,struct expr_sem* RHS_type)
+{
+    if(LHS_type->pType->type==INTEGER_t && RHS_type->pType->type == REAL_t)
+    {
+        push_instr("i2f\n");
+    }
 }
 //vars global and others
 void global_var(char* name_in, struct PType* type_in)
@@ -248,34 +243,34 @@ void asn_expr(struct expr_sem* expr,struct expr_sem* RHS)
 }
 void for_loop(char* iter, int loop_begin, int loop_end)
 {
-    loop_stk.top++; //depth inner by 1
+    loop_stack.top++; //depth inner by 1
     label_cnt++; //label cnt is used for the while or loop depth
     struct SymNode* loop_ptr;
     loop_ptr = lookupLoopVar(symbolTable, iter);
     if(loop_ptr)
     {
         snprintf(instr_buf,sizeof(instr_buf),"iload %d\nsipush 1\niadd\nistore %d\ngoto Lbegin_%d\nLexit_%d:\n\n"\
-        ,loop_ptr->attribute->var_no,loop_ptr->attribute->var_no,loop_stk.stk[loop_stk.top],loop_stk.stk[loop_stk.top]);
+        ,loop_ptr->attribute->var_no,loop_ptr->attribute->var_no,loop_stack.stack[loop_stack.top],loop_stack.stack[loop_stack.top]);
         push_instr(instr_buf);
         memset(instr_buf,0,sizeof(instr_buf));
-        output_instr_stk();
+        output_instr_stack();
     }
-    loop_stk.top--;
+    loop_stack.top--;
 }
 void for_loop_end(char* iter)
 {
-    loop_stk.top++;
+    loop_stack.top++;
     struct SymNode* loop_ptr;
     loop_ptr = lookupLoopVar(symbolTable, iter); //find again
     if(loop_ptr)
     {
         snprintf(instr_buf,sizeof(instr_buf),"iload %d\nsipush 1\niadd\nistore %d\ngoto Lbegin_%d\nLexit_%d:\n\n"\
-        ,loop_ptr->attribute->var_no,loop_ptr->attribute->var_no,loop_stk.stk[loop_stk.top],loop_stk.stk[loop_stk.top]);
+        ,loop_ptr->attribute->var_no,loop_ptr->attribute->var_no,loop_stack.stack[loop_stack.top],loop_stack.stack[loop_stack.top]);
         push_instr(instr_buf);
         memset(instr_buf,0,sizeof(instr_buf));
-        output_instr_stk();
+        output_instr_stack();
     }
-    loop_stk.top--;
+    loop_stack.top--;
 }
 
 void negative(struct expr_sem* expr)
