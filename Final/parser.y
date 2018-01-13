@@ -501,8 +501,8 @@ boolean_expr_list	: boolean_expr_list MK_COMMA boolean_expr
 
 boolean_expr		: boolean_expr OP_OR boolean_term
 			{
+				boolean($1,OR_t,$3);
 			  verifyAndOrOp( $1, OR_t, $3 );
-			  boolean($1,OR_t,$3);
 			  $$ = $1;
 			}
 			| boolean_term { $$ = $1; }
@@ -510,8 +510,8 @@ boolean_expr		: boolean_expr OP_OR boolean_term
 
 boolean_term		: boolean_term OP_AND boolean_factor
 			{
+				boolean($1,AND_t,$3);
 			  verifyAndOrOp( $1, AND_t, $3 );
-			  boolean($1,AND_t,$3);
 			  $$ = $1;
 			}
 			| boolean_factor { $$ = $1; }
@@ -519,8 +519,8 @@ boolean_term		: boolean_term OP_AND boolean_factor
 
 boolean_factor		: OP_NOT boolean_factor
 			{
+				boolean($2,AND_t,$2);
 			  verifyUnaryNOT( $2 );
-			  boolean($2,AND_t,$2);
 			  $$ = $2;
 			}
 			| relop_expr { $$ = $1; }
@@ -528,9 +528,9 @@ boolean_factor		: OP_NOT boolean_factor
 
 relop_expr		: expr rel_op expr
 			{
-
-			  verifyRelOp( $1, $2, $3 );
-			  $$ = $1;
+				relational($1,$2,$3);
+			  	verifyRelOp( $1, $2, $3 );
+			  	$$ = $1;
 			}
 			| expr { $$ = $1; }
 			;
@@ -543,9 +543,14 @@ rel_op			: OP_LT { $$ = LT_t; }
 			| OP_NE { $$ = NE_t; }
 			;
 
-expr			: expr add_op{} term
+expr			:
+			expr add_op
 			{
-
+				output_instr_stack();
+			}
+			term
+			{
+				arithemetic( $1, $2, $4 );
 				verifyArithmeticOp( $1, $2, $4 );
 				output_instr_stack();
 				$$ = $1;
@@ -557,14 +562,22 @@ add_op			: OP_ADD { $$ = ADD_t; }
 			| OP_SUB { $$ = SUB_t; }
 			;
 
-term			: term mul_op{} factor
+term			:
+			term mul_op
+			{
+				output_instr_stack();
+			}
+			factor
 			{
 
-			  if( $2 == MOD_t ) {
-				verifyModOp( $1, $4 );
+			  arithemetic( $1, $2, $4 );
+			  if( $2 == MOD_t )
+			  {
+					verifyModOp( $1, $4 );
 			  }
-			  else {
-				verifyArithmeticOp( $1, $2, $4 );
+			  else
+			  {
+					verifyArithmeticOp( $1, $2, $4 );
 			  }
 			  $$ = $1;
 			}
@@ -578,43 +591,43 @@ mul_op			: OP_MUL { $$ = MUL_t; }
 
 factor			: var_ref
 			{
-			  verifyExistence( symbolTable, $1, scope, __FALSE );
-			  ref_expr($1);
-			  $$ = $1;
-			  $$->beginningOp = NONE_t;
+			  	verifyExistence( symbolTable, $1, scope, __FALSE );
+			  	ref_expr($1);
+			  	$$ = $1;
+			  	$$->beginningOp = NONE_t;
 			}
 			| OP_SUB var_ref
 			{
-			   verifyExistence( symbolTable, $2, scope, __FALSE );
+			   	verifyExistence( symbolTable, $2, scope, __FALSE );
 				verifyUnaryMinus( $2 );
-			  $$ = $2;
-			  $$->beginningOp = SUB_t;
-			  ref_expr($2);
-			  negative($2);
-
+			  	$$ = $2;
+			  	$$->beginningOp = SUB_t;
+			  	ref_expr($2);
+			  	negative($2);
 			}
 			| MK_LPAREN boolean_expr MK_RPAREN
 			{
-			  $2->beginningOp = NONE_t;
-			  $$ = $2;
+			  	$2->beginningOp = NONE_t;
+			  	$$ = $2;
 			}
 			| OP_SUB MK_LPAREN boolean_expr MK_RPAREN
 			{
-			  verifyUnaryMinus( $3 );
-			  $$ = $3;
-			  $$->beginningOp = SUB_t;
-			  negative($3);
+			  	verifyUnaryMinus( $3 );
+			  	$$ = $3;
+			  	$$->beginningOp = SUB_t;
+			  	negative($3);
 			}
 			| ID MK_LPAREN opt_boolean_expr_list MK_RPAREN
 			{
-			  $$ = verifyFuncInvoke( $1, $3, symbolTable, scope );
-			  $$->beginningOp = NONE_t;
-
+			  	$$ = verifyFuncInvoke( $1, $3, symbolTable, scope );
+			  	$$->beginningOp = NONE_t;
+				//genfunctcall
 			}
 			| OP_SUB ID MK_LPAREN opt_boolean_expr_list MK_RPAREN
 			{
 			  $$ = verifyFuncInvoke( $2, $4, symbolTable, scope );
 			  $$->beginningOp = SUB_t;
+			  //genfunctcall
 			  negative($4);
 
 			}
@@ -625,11 +638,13 @@ factor			: var_ref
 			  $$->varRef = 0;
 			  $$->pType = createPType( $1->category );
 			  $$->next = 0;
-			  if( $1->hasMinus == __TRUE ) {
-			  	$$->beginningOp = SUB_t;
+			  if( $1->hasMinus == __TRUE )
+			  {
+			  		$$->beginningOp = SUB_t;
 			  }
-			  else {
-				$$->beginningOp = NONE_t;
+			  else
+			  {
+				  	$$->beginningOp = NONE_t;
 			  }
 			  load_const_stk($1);
 			}
