@@ -1,11 +1,11 @@
 TARGET   = parser
 OBJECT   = lex.yy.c y.tab.c y.output parser y.tab.h
 CC       = gcc
-CFLAGS   = -Wall -Wextra -pedantic -g3
+CFLAGS   = -Wall -Wextra -pedantic -g6
 LEX      = flex
 YACC     = yacc -v -t -l
-LIBS     = -lfl -lm
 YACCFLAG = -d
+LIBS     = -lfl -lm
 
 all: $(TARGET)
 

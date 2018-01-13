@@ -19,7 +19,7 @@ void instr_stk_init()
 void push_instr(char* instr_in)
 {
 	instr_stk_size++;
-	instr_stk[instr_stk_size] = strdup(instr_in);
+	strcpy(instr_stk[instr_stk_size].buf, strdup(instr_in));
 }
 void output_instr_stk()
 {
@@ -32,37 +32,37 @@ void output_instr_stk()
 void prog_start(char* name_in)
 {
     loop_stk.top=-1; //start from 0 so use -1 is ok
-    fprintf(outfp, "; %s\n",name_in);
-    fprintf(outfp, ".class public %s\n",name_in);
-    fprintf(outfp, ".super java/lang/Object\n\n");
-    fprintf(outfp, ".field public static _sc Ljava/util/Scanner;\n ");
+    fprintf(ofptr, "; %s\n",name_in);
+    fprintf(ofptr, ".class public %s\n",name_in);
+    fprintf(ofptr, ".super java/lang/Object\n\n");
+    fprintf(ofptr, ".field public static _sc Ljava/util/Scanner;\n ");
 }
 void prog_end()
 {
-    fprintf(outfp, "return\n");
-    fprintf(outfp, ".end method\n");
+    fprintf(ofptr, "return\n");
+    fprintf(ofptr, ".end method\n");
 }
 
 void method(char* name_in, int stk_lim, char* param, char* ret)
 {
-    fprintf(outfp, "\n;main start\n");
-    fprintf(outfp, ".method public static %s(%s)%s\n",name,para,ret);
-    fprintf(outfp, ".limit stack %d ; up to %ditems can be pushed\n",stack_lim,stack_lim);
-    fprintf(outfp, ".limit locals 128 ; up to 64 varibles can be pushed\n\n");
+    fprintf(ofptr, "\n;main start\n");
+    fprintf(ofptr, ".method public static %s(%s)%s\n",name_in,param,ret);
+    fprintf(ofptr, ".limit stk %d ; up to %ditems can be pushed\n",stk_lim,stk_lim);
+    fprintf(ofptr, ".limit locals 128 ; up to 64 varibles can be pushed\n\n");
 }
 void global_var(char* name_in, struct PType* type_in)
 {
 	if(type_in->type == INTEGER_t)
     {
-		fprintf(outfp, ".field public static %s %s\n",name_in,"I");
+		fprintf(ofptr, ".field public static %s %s\n",name_in,"I");
 	}
 	else if(type_in->type == BOOLEAN_t)
     {
-		fprintf(outfp, ".field public static %s %s\n",name_in,"Z");
+		fprintf(ofptr, ".field public static %s %s\n",name_in,"Z");
 	}
 	else if(type_in->type == REAL_t)
     {
-		fprintf(outfp, ".field public static %s %s\n",name_in,"F");
+		fprintf(ofptr, ".field public static %s %s\n",name_in,"F");
 	}
 }
 void ref_expr(struct expr_sem* expr)
@@ -208,7 +208,7 @@ void for_loop(char* iter, int loop_begin, int loop_end)
     if(loop_ptr)
     {
         snprintf(instr_buf,sizeof(instr_buf),"iload %d\nsipush 1\niadd\nistore %d\ngoto Lbegin_%d\nLexit_%d:\n\n"\
-        ,ptr->attribute->var_no,ptr->attribute->var_no,loop_stk.stack[loop_stk.top],loop_stk.stack[loop_stk.top]);
+        ,loop_ptr->attribute->var_no,loop_ptr->attribute->var_no,loop_stk.stk[loop_stk.top],loop_stk.stk[loop_stk.top]);
         push_instr(instr_buf);
         memset(instr_buf,0,sizeof(instr_buf));
         output_instr_stk();
@@ -223,14 +223,14 @@ void for_loop_end(char* iter)
     if(loop_ptr)
     {
         snprintf(instr_buf,sizeof(instr_buf),"iload %d\nsipush 1\niadd\nistore %d\ngoto Lbegin_%d\nLexit_%d:\n\n"\
-        ,ptr->attribute->var_no,ptr->attribute->var_no,loop_stk.stack[loop_stk.top],loop_stk.stack[loop_stk.top]);
+        ,loop_ptr->attribute->var_no,loop_ptr->attribute->var_no,loop_stk.stk[loop_stk.top],loop_stk.stk[loop_stk.top]);
         push_instr(instr_buf);
         memset(instr_buf,0,sizeof(instr_buf));
         output_instr_stk();
     }
     loop_stk.top--;
 }
-void coercion(struct expr_sem* LHS_type, struct expr_sem* RHS_type)
+void corecion(struct expr_sem* LHS_type,struct expr_sem* RHS_type)
 {
     if(LHS_type->pType->type==INTEGER_t && RHS_type->pType->type == REAL_t)
     {
@@ -242,7 +242,8 @@ void negative(struct expr_sem* expr)
     if(expr->pType->type==INTEGER_t)
     {
 		push_instr("ineg\n");
-	}else if(expr->pType->type==REAL_t)
+	}
+    else if(expr->pType->type==REAL_t)
     {
 		push_instr("fneg\n");
 	}
