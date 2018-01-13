@@ -407,33 +407,35 @@ void relational(struct expr_sem *oper_1, OPERATOR operator_in, struct expr_sem *
 void for_loop(char* iter, int loop_begin, int loop_end)
 {
     loop_stack.top++; //depth inner by 1
-    label_cnt++; //label cnt is used for the while or loop depth
+    label_cnt++; //label cnt is used for the while or for loop depth i.e. nested loop depth
     struct SymNode* loop_ptr;
     loop_ptr = lookupLoopVar(symbolTable, iter);
     if(loop_ptr)
     {
-        snprintf(instr_buf,sizeof(instr_buf),"iload %d\nsipush 1\niadd\nistore %d\ngoto Lbegin_%d\nLexit_%d:\n\n"\
-        ,loop_ptr->attribute->var_no,loop_ptr->attribute->var_no,loop_stack.stack[loop_stack.top],loop_stack.stack[loop_stack.top]);
+        loop_stack.stack[loop_stack.top]=label_cnt; //nested depth for all jumping conditions
+        snprintf(instr_buf,sizeof(instr_buf),"\nsipush %d\nistore %d\nLbegin_%d:\niload %d\nsipush %d\nisub\niflt Ltrue_%d\niconst_0\ngoto Lfalse_%d\nLtrue_%d:\niconst_1\nLfalse_%d:\nifeq Lexit_%d\n"\
+        ,loop_begin,loop_ptr->attribute->var_no,loop_stack.stack[loop_stack.top],loop_ptr->attribute->var_no,loop_end,loop_stack.stack[loop_stack.top],loop_stack.stack[loop_stack.top],loop_stack.stack[loop_stack.top],loop_stack.stack[loop_stack.top],loop_stack.stack[loop_stack.top]);
+
         push_instr(instr_buf);
         memset(instr_buf,0,sizeof(instr_buf));
+
         output_instr_stack();
     }
-    loop_stack.top--;
 }
 void for_loop_end(char* iter)
 {
-    loop_stack.top++;
     struct SymNode* loop_ptr;
     loop_ptr = lookupLoopVar(symbolTable, iter); //find again
     if(loop_ptr)
     {
-        snprintf(instr_buf,sizeof(instr_buf),"iload %d\nsipush 1\niadd\nistore %d\ngoto Lbegin_%d\nLexit_%d:\n\n"\
-        ,loop_ptr->attribute->var_no,loop_ptr->attribute->var_no,loop_stack.stack[loop_stack.top],loop_stack.stack[loop_stack.top]);
+        snprintf(instr_buf,sizeof(instr_buf),"iload %d\nsipush 1\niadd\nistore %d\ngoto Lbegin_%d\nLexit_%d:\n\n",loop_ptr->attribute->var_no,loop_ptr->attribute->var_no,loop_stack.stack[loop_stack.top],loop_stack.stack[loop_stack.top]);
+
         push_instr(instr_buf);
         memset(instr_buf,0,sizeof(instr_buf));
+
         output_instr_stack();
     }
-    loop_stack.top--;
+    loop_stack.top--; //nested depth-- loop over;
 }
 
 void negative(struct expr_sem* expr)
