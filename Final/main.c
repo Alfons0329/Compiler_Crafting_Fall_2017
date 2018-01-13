@@ -1,4 +1,4 @@
-/**
+	/**
  * Introduction to Compiler Design by Prof. Yi Ping You
  * Prjoect 3 main function
   */
@@ -50,10 +50,10 @@ int  main( int argc, char **argv )
 	}
 	fileName[fileNameLength-2] = '\0';
 
-    char outputFN[64];
-    snprintf(outputFN,sizeof(outputFN),"%s.j",fileName);
+    char output_file[64];
+    snprintf(output_file,sizeof(output_file),"%s.j",fileName);
 
-	ofptr = fopen(outputFN,"w");
+	ofptr = fopen(output_file,"w");
 
 	yyin = fp;
 

@@ -502,7 +502,7 @@ boolean_expr_list	: boolean_expr_list MK_COMMA boolean_expr
 boolean_expr		: boolean_expr OP_OR boolean_term
 			{
 			  verifyAndOrOp( $1, OR_t, $3 );
-
+			  boolean($1,OR_t,$3);
 			  $$ = $1;
 			}
 			| boolean_term { $$ = $1; }
@@ -511,7 +511,7 @@ boolean_expr		: boolean_expr OP_OR boolean_term
 boolean_term		: boolean_term OP_AND boolean_factor
 			{
 			  verifyAndOrOp( $1, AND_t, $3 );
-
+			  boolean($1,AND_t,$3);
 			  $$ = $1;
 			}
 			| boolean_factor { $$ = $1; }
@@ -520,7 +520,7 @@ boolean_term		: boolean_term OP_AND boolean_factor
 boolean_factor		: OP_NOT boolean_factor
 			{
 			  verifyUnaryNOT( $2 );
-
+			  boolean($2,AND_t,$2);
 			  $$ = $2;
 			}
 			| relop_expr { $$ = $1; }

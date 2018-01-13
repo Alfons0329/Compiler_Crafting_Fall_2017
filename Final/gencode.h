@@ -253,6 +253,75 @@ void asn_expr(struct expr_sem* expr,struct expr_sem* RHS)
         memset(instr_buf,0,sizeof(instr_buf));
     }
 }
+void boolean(struct expr_sem *op1, OPERATOR operator_in, struct expr_sem *op2)
+{
+	output_instr_stack();
+	switch(operator_in)
+    {
+		case AND_t:
+			push_instr( "iand\n");
+			break;
+		case OR_t:
+			push_instr( "ior\n");
+			break;
+		case NOT_t:
+			push_instr( "iconst_1\nixor\n");
+			break;
+        default:
+            break;
+	}
+}
+void relational(struct expr_sem *op1, OPERATOR operator_in, struct expr_sem *op2)
+{
+    memset(instr_buf,0,sizeof(instr_buf));
+    loop_stack.top++;
+    label_cnt++; //depth
+    loop_stack.stack[loop_stack.top]=label_cnt;
+    if(op1->pType->type == INTEGER_t)
+    {
+        push_instr("isub\n");
+    }
+    else if(op1->pType->type == REAL_t)
+    {
+        push_instr("fcmpl\n");
+    }
+    switch(operator_in)
+    {
+        case LT_t:
+            snprintf(instr_buf,sizeof(instr_buf),"iflt Ltrue_%d\n",loop_stack.stack[loop_stack.top]);
+            break;
+        case LE_t:
+            snprintf(instr_buf,sizeof(instr_buf),"ifle Ltrue_%d\n",loop_stack.stack[loop_stack.top]);
+            break;
+        case NE_t:
+            snprintf(instr_buf,sizeof(instr_buf),"ifne Ltrue_%d\n",loop_stack.stack[loop_stack.top]);
+            break;
+        case GE_t:
+            snprintf(instr_buf,sizeof(instr_buf),"ifge Ltrue_%d\n",loop_stack.stack[loop_stack.top]);
+            break;
+        case GT_t:
+            snprintf(instr_buf,sizeof(instr_buf),"ifgt Ltrue_%d\n",loop_stack.stack[loop_stack.top]);
+            break;
+        case EQ_t:
+            snprintf(instr_buf,sizeof(instr_buf),"ifeq Ltrue_%d\n",loop_stack.stack[loop_stack.top]);
+            break;
+        default:
+        break;
+    }
+    push_instr(instr_buf);
+    push_instr( "iconst_0\n"); //false
+    snprintf(instr_buf,sizeof(instr_buf),"goto Lfalse_%d\n",loop_stack.stack[loop_stack.top]);
+    push_instr(instr_buf);
+
+    snprintf(instr_buf,sizeof(instr_buf),"Ltrue_%d:\n",loop_stack.stack[loop_stack.top]);
+    push_instr(instr_buf);
+
+    push_instr( "iconst_1\n");//true
+    snprintf(instr_buf,sizeof(instr_buf),"Lfalse_%d:\n",loop_stack.stack[loop_stack.top]);
+    push_instr(instr_buf);
+
+    loop_stack.top--;
+}
 void for_loop(char* iter, int loop_begin, int loop_end)
 {
     loop_stack.top++; //depth inner by 1
