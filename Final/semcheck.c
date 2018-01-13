@@ -248,10 +248,10 @@ struct PType *copyPType( struct PType *src )
 void verifyLoopParam( int lo, int hi )
 {
 	if( lo<0 || hi<0 ) {
-		fprintf( stdout, "########## Error at Line#%d: lower or upper bound of loop parameter < 0 ########## \n", linenum );
+		fprintf( stdout, "<Error> at Line#%d: lower or upper bound of loop parameter < 0 ########## \n", linenum );
 	}
 	else if( lo >= hi ) {
-		fprintf( stdout, "########## Error at Line#%d: loop parameter's lower bound >= uppper bound ########## \n", linenum );
+		fprintf( stdout, "<Error> at Line#%d: loop parameter's lower bound >= uppper bound ########## \n", linenum );
 	}
 }
 
@@ -275,7 +275,7 @@ void verifyArrayType( struct idNode_sem *ids, struct PType *pType )
 {
 	struct idNode_sem *ptr;
 	if( pType->isError == __TRUE ) {
-		fprintf( stdout, "########## Error at Line#%d: wrong dimension declaration for array ", linenum );
+		fprintf( stdout, "<Error> at Line#%d: wrong dimension declaration for array ", linenum );
 		printf("%s", ids->value);
 		for( ptr=ids->next ; ptr!=0 ; ptr=(ptr->next) ) {
 			printf(", %s", ptr->value);
@@ -288,15 +288,15 @@ SEMTYPE verifyArrayIndex( struct expr_sem *expr )
 {
 	SEMTYPE result;
 	if( expr->isDeref == __FALSE ) {
-		fprintf( stdout, "########## Error at Line#%d: array index is not integer ##########\n", linenum );
+		fprintf( stdout, "<Error> at Line#%d: array index is not integer ##########\n", linenum );
 		result = ERROR_t;
 	}
 	else if( expr->pType->isArray == __TRUE ) {
-		fprintf( stdout, "########## Error at Line#%d: array index cannot be arrya_type ##########\n", linenum );
+		fprintf( stdout, "<Error> at Line#%d: array index cannot be arrya_type ##########\n", linenum );
 		result = ERROR_t;
 	}
 	else if( expr->pType->type != INTEGER_t ) {
-		fprintf( stdout, "########## Error at Line#%d: array index cannot be arrya_type ##########\n", linenum );
+		fprintf( stdout, "<Error> at Line#%d: array index cannot be arrya_type ##########\n", linenum );
 		result = ERROR_t;
 	}
 	else {
@@ -310,7 +310,7 @@ __BOOLEAN verifyRedeclaration( struct SymTable *table, const char *str, int scop
 	__BOOLEAN result = __TRUE;
 	// first check loop variable(s)
 	if( lookupLoopVar( table, str ) != 0 ) {
-		fprintf( stdout, "########## Error at Line#%d: symbol %s is redeclared ##########\n", linenum, str );
+		fprintf( stdout, "<Error> at Line#%d: symbol %s is redeclared ##########\n", linenum, str );
 		result = __FALSE;
 	}
 	else {	// then check normal variable(s)
@@ -318,7 +318,7 @@ __BOOLEAN verifyRedeclaration( struct SymTable *table, const char *str, int scop
 			result =  __TRUE;
 		}
 		else {
-			fprintf( stdout, "########## Error at Line#%d: symbol %s is redeclared ##########\n", linenum, str );
+			fprintf( stdout, "<Error> at Line#%d: symbol %s is redeclared ##########\n", linenum, str );
 			result = __FALSE;
 		}
 	}
@@ -335,7 +335,7 @@ __BOOLEAN verifyExistence( struct SymTable *table, struct expr_sem *expr, int sc
 	}
 
 	if( node == 0 ) {	// symbol not found
-		fprintf( stdout, "########## Error at Line#%d: '%s' is not declared ##########\n", linenum, expr->varRef->id );
+		fprintf( stdout, "<Error> at Line#%d: '%s' is not declared ##########\n", linenum, expr->varRef->id );
 		expr->pType = createPType( ERROR_t );
 		result = __FALSE;
 	}
@@ -345,22 +345,22 @@ __BOOLEAN verifyExistence( struct SymTable *table, struct expr_sem *expr, int sc
 		expr->isDeref = __TRUE;
 
 		if( node->category == PROGRAM_t ) {
-			fprintf( stdout, "########## Error at Line#%d: '%s' is program ##########\n", linenum, node->name );
+			fprintf( stdout, "<Error> at Line#%d: '%s' is program ##########\n", linenum, node->name );
 			expr->pType = createPType( ERROR_t );
 			result = __FALSE;
 		}
 		else if( node->category == FUNCTION_t ) {
-			fprintf( stdout, "########## Error at Line#%d: '%s' is function ##########\n", linenum, node->name );
+			fprintf( stdout, "<Error> at Line#%d: '%s' is function ##########\n", linenum, node->name );
 			expr->pType = createPType( ERROR_t );
 			result = __FALSE;
 		}
 		else if( node->category==LOOPVAR_t && isAssignmentLHS==__TRUE ) {
-			fprintf( stdout, "########## Error at Line#%d: loop variable '%s' cannot be assigned ##########\n", linenum, node->name );
+			fprintf( stdout, "<Error> at Line#%d: loop variable '%s' cannot be assigned ##########\n", linenum, node->name );
 			expr->pType = createPType( ERROR_t );
 			result = __FALSE;
 		}
 		else if( node->category==CONSTANT_t && isAssignmentLHS==__TRUE ) {
-			fprintf( stdout, "########## Error at Line#%d: constant '%s' cannot be assigned ##########\n", linenum, node->name );
+			fprintf( stdout, "<Error> at Line#%d: constant '%s' cannot be assigned ##########\n", linenum, node->name );
 			expr->pType = createPType( ERROR_t );
 			result = __FALSE;
 		}
@@ -370,7 +370,7 @@ __BOOLEAN verifyExistence( struct SymTable *table, struct expr_sem *expr, int sc
 			}
 			else {	// dereference dimension
 				if( node->type->dimNum < expr->varRef->dimNum ) {
-					fprintf( stdout, "########## Error at Line#%d: '%s' is %d dimension(s), but reference in %d dimension(s) ##########\n", linenum, node->name, node->type->dimNum, expr->varRef->dimNum );
+					fprintf( stdout, "<Error> at Line#%d: '%s' is %d dimension(s), but reference in %d dimension(s) ##########\n", linenum, node->name, node->type->dimNum, expr->varRef->dimNum );
 					expr->pType = createPType( ERROR_t );
 					result = __FALSE;
 				}
@@ -406,13 +406,13 @@ void verifyUnaryMinus( struct expr_sem *expr )
 		// deference and verify existence and type
 		//struct SymNode *node = lookupSymbol( table );
 
-		fprintf( stdout, "########## Error at Line#%d: operand of unary - is not integer/real ##########\n", linenum );
+		fprintf( stdout, "<Error> at Line#%d: operand of unary - is not integer/real ##########\n", linenum );
 		expr->isDeref = __TRUE;
 		expr->pType->type = ERROR_t;
 	}
 	else {
 		if( !( ((expr->pType->type)==INTEGER_t) || ((expr->pType->type)==REAL_t)) ) {
-			fprintf( stdout, "########## Error at Line#%d: operand of unary - is not integer/real ##########\n", linenum );
+			fprintf( stdout, "<Error> at Line#%d: operand of unary - is not integer/real ##########\n", linenum );
 			expr->pType->type = ERROR_t;
 		}
 	}
@@ -424,11 +424,11 @@ void verifyUnaryNOT( struct expr_sem *expr )
 	expr->beginningOp = NOT_t;
 
 	if( expr->pType->dimNum != 0 ) {
-		fprintf( stdout, "########## Error at Line#%d: operand of 'not' cannot be array_type ##########\n", linenum );
+		fprintf( stdout, "<Error> at Line#%d: operand of 'not' cannot be array_type ##########\n", linenum );
 		expr->pType->type = ERROR_t;
 	}
 	else if( expr->pType->type != BOOLEAN_t ) {
-		fprintf( stdout, "########## Error at Line#%d: operand of 'not' is not boolean ##########\n", linenum );
+		fprintf( stdout, "<Error> at Line#%d: operand of 'not' is not boolean ##########\n", linenum );
 		expr->pType->type = ERROR_t;
 	}
 	else {	// pass verification, result is boolean
@@ -465,7 +465,7 @@ void verifyAssignmentTypeMatch( struct expr_sem *LHS, struct expr_sem *RHS )
 	}
 
 	if( misMatch == __TRUE ) {
-		fprintf( stdout, "########## Error at Line#%d: type mismatch, LHS= ", linenum );
+		fprintf( stdout, "<Error> at Line#%d: type mismatch, LHS= ", linenum );
 		printType( LHS->pType, 0 );
 		fprintf( stdout, ", RHS= " );
 		printType( RHS->pType, 0 );
@@ -479,18 +479,18 @@ void verifyModOp( struct expr_sem *op1, struct expr_sem *op2 )
 		op1->pType->type = ERROR_t;
 	}
 	else if( op2->beginningOp != NONE_t ) {
-		fprintf( stdout, "########## Error at Line#%d: adjacent operator 'mod", linenum);
+		fprintf( stdout, "<Error> at Line#%d: adjacent operator 'mod", linenum);
 		fprintf( stdout ,"' and '" );
 		printOperator( op2->beginningOp );
 		fprintf( stdout ,"'\n" );
 		op1->pType->type = ERROR_t;
 	}
 	else if( (op1->pType->dimNum)!=0 || (op2->pType->dimNum)!=0 ) {
-		fprintf( stdout, "########## Error at Line#%d: operand(s) between 'mod' are array_type\n", linenum );
+		fprintf( stdout, "<Error> at Line#%d: operand(s) between 'mod' are array_type\n", linenum );
 		op1->pType->type = ERROR_t;
 	}
 	else if( (op1->pType->type)!=INTEGER_t || (op2->pType->type)!=INTEGER_t ) {
-		fprintf( stdout, "########## Error at Line#%d: operand(s) between 'mod' are not integer\n", linenum );
+		fprintf( stdout, "<Error> at Line#%d: operand(s) between 'mod' are not integer\n", linenum );
 		op1->pType->type = ERROR_t;
 	}
 	else {	// pass verify
@@ -505,7 +505,7 @@ void verifyArithmeticOp( struct expr_sem *op1, OPERATOR operator, struct expr_se
 		op1->pType->type = ERROR_t;
 	}
 	else if( op2->beginningOp != NONE_t ) {
-		fprintf( stdout, "########## Error at Line#%d: adjacent operator '", linenum);
+		fprintf( stdout, "<Error> at Line#%d: adjacent operator '", linenum);
 		printOperator( operator );
 		fprintf( stdout ,"' and '" );
 		printOperator( op2->beginningOp );
@@ -513,7 +513,7 @@ void verifyArithmeticOp( struct expr_sem *op1, OPERATOR operator, struct expr_se
 		op1->pType->type = ERROR_t;
 	}
 	else if( (op1->pType->dimNum)!=0 || (op2->pType->dimNum)!=0 ) {
-		fprintf( stdout, "########## Error at Line#%d: operand(s) between '", linenum);
+		fprintf( stdout, "<Error> at Line#%d: operand(s) between '", linenum);
 		printOperator( operator );
 		fprintf( stdout ,"' are array_type ##########\n" );
 		op1->pType->type = ERROR_t;
@@ -524,7 +524,7 @@ void verifyArithmeticOp( struct expr_sem *op1, OPERATOR operator, struct expr_se
 				op1->pType->type = STRING_t;
 			}
 			else {
-				fprintf( stdout, "########## Error at Line#%d: operand(s) between '", linenum);
+				fprintf( stdout, "<Error> at Line#%d: operand(s) between '", linenum);
 				printOperator( operator );
 				fprintf( stdout ,"' are string type ##########\n" );
 			}
@@ -539,7 +539,7 @@ void verifyArithmeticOp( struct expr_sem *op1, OPERATOR operator, struct expr_se
 			}
 		}
 		else {	// fail verify, dump error message
-			fprintf( stdout, "########## Error at Line#%d: operand(s) between '", linenum);
+			fprintf( stdout, "<Error> at Line#%d: operand(s) between '", linenum);
 			printOperator( operator );
 			fprintf( stdout, "' are not integer/real ##########\n" );
 			op1->pType->type = ERROR_t;
@@ -553,7 +553,7 @@ void verifyRelOp( struct expr_sem *op1, OPERATOR operator, struct expr_sem *op2 
 		op1->pType->type = ERROR_t;
 	}
 	else if( op2->beginningOp != NONE_t ) {
-		fprintf( stdout, "########## Error at Line#%d: adjacent operator '", linenum);
+		fprintf( stdout, "<Error> at Line#%d: adjacent operator '", linenum);
 		printOperator( operator );
 		fprintf( stdout ,"' and '" );
 		printOperator( op2->beginningOp );
@@ -561,13 +561,13 @@ void verifyRelOp( struct expr_sem *op1, OPERATOR operator, struct expr_sem *op2 
 		op1->pType->type = ERROR_t;
 	}
 	else if( (op1->pType->dimNum)!=0 || (op2->pType->dimNum)!=0 ) {
-		fprintf( stdout, "########## Error at Line#%d: operand(s) between '", linenum);
+		fprintf( stdout, "<Error> at Line#%d: operand(s) between '", linenum);
 		printOperator( operator );
 		fprintf( stdout ,"' are array_type ##########\n" );
 		op1->pType->type = ERROR_t;
 	}
 	else if( !((op1->pType->type==INTEGER_t && op2->pType->type==INTEGER_t) || (op1->pType->type==REAL_t && op2->pType->type==REAL_t)) ) {
-		fprintf( stdout, "########## Error at Line#%d: operand(s) between '", linenum);
+		fprintf( stdout, "<Error> at Line#%d: operand(s) between '", linenum);
 		printOperator( operator );
 		fprintf( stdout, "' are not integer/real ##########\n" );
 		op1->pType->type = ERROR_t;
@@ -583,7 +583,7 @@ void verifyAndOrOp( struct expr_sem *op1, OPERATOR operator, struct expr_sem *op
 		op1->pType->type = ERROR_t;
 	}
 	else if( op2->beginningOp != NONE_t ) {
-		fprintf( stdout, "########## Error at Line#%d: adjacent operator '", linenum);
+		fprintf( stdout, "<Error> at Line#%d: adjacent operator '", linenum);
 		printOperator( operator );
 		fprintf( stdout ,"' and '" );
 		printOperator( op2->beginningOp );
@@ -591,13 +591,13 @@ void verifyAndOrOp( struct expr_sem *op1, OPERATOR operator, struct expr_sem *op
 		op1->pType->type = ERROR_t;
 	}
 	else if( (op1->pType->dimNum)!=0 || (op2->pType->dimNum)!=0 ) {
-		fprintf( stdout, "########## Error at Line#%d: operand(s) between '", linenum );
+		fprintf( stdout, "<Error> at Line#%d: operand(s) between '", linenum );
 		printOperator( operator );
 		fprintf( stdout, "' are array_type ##########\n" );
 		op1->pType->type = ERROR_t;
 	}
 	else if( (op1->pType->type)!=BOOLEAN_t || (op2->pType->type)!=BOOLEAN_t ) {
-		fprintf( stdout, "########## Error at Line#%d: operand(s) between '", linenum );
+		fprintf( stdout, "<Error> at Line#%d: operand(s) between '", linenum );
 		printOperator( operator );
 		fprintf( stdout, "' are not boolean ##########\n" );
 		op1->pType->type = ERROR_t;
@@ -622,17 +622,17 @@ struct expr_sem *verifyFuncInvoke( const char *id, struct expr_sem *exprList, st
 	/* FIXME: Shall we place assertion here to capture the case that 'scope' is not zero? */
 
 	if( node == 0 ) {	// symbol not found
-		fprintf( stdout, "########## Error at Line#%d: symbol '%s' not found ##########\n", linenum, id );
+		fprintf( stdout, "<Error> at Line#%d: symbol '%s' not found ##########\n", linenum, id );
 		result->pType = createPType( ERROR_t );
 	}
 	else if( node->category != FUNCTION_t  ) {
-		fprintf( stdout, "########## Error at Line#%d: symbol '%s' is not a function ##########\n", linenum, id );
+		fprintf( stdout, "<Error> at Line#%d: symbol '%s' is not a function ##########\n", linenum, id );
 		result->pType = createPType( ERROR_t );
 	}
 	else {			// check parameters...
 		if( node->attribute->formalParam->paramNum == 0 ) {
 			if( exprList != 0 ) {
-				fprintf( stdout, "########## Error at Line#%d: too many arguments to function %s ##########\n", linenum, node->name );
+				fprintf( stdout, "<Error> at Line#%d: too many arguments to function %s ##########\n", linenum, node->name );
 				result->pType = createPType( ERROR_t );
 			}
 			else {
@@ -665,16 +665,16 @@ struct expr_sem *verifyFuncInvoke( const char *id, struct expr_sem *exprList, st
 				}
 			}
 			if( mismatch == __TRUE ) {
-				fprintf( stdout, "########## Error at Line#%d: parameter type mismatch ##########\n", linenum );
+				fprintf( stdout, "<Error> at Line#%d: parameter type mismatch ##########\n", linenum );
 				result->pType = createPType( ERROR_t );
 			}
 			else {
 				if( listPtr != 0 ) {
-					fprintf( stdout, "########## Error at Line#%d: too few arguments to function '%s' ##########\n", linenum, node->name );
+					fprintf( stdout, "<Error> at Line#%d: too few arguments to function '%s' ##########\n", linenum, node->name );
 					result->pType = createPType( ERROR_t );
 				}
 				else if( exprPtr != 0 ) {
-					fprintf( stdout, "########## Error at Line#%d: too many arguments to function '%s' ##########\n", linenum, node->name );
+					fprintf( stdout, "<Error> at Line#%d: too many arguments to function '%s' ##########\n", linenum, node->name );
 					result->pType = createPType( ERROR_t );
 				}
 				else {
@@ -691,40 +691,40 @@ struct expr_sem *verifyFuncInvoke( const char *id, struct expr_sem *exprList, st
 void verifyScalarExpr( struct expr_sem *expr, const char *str )
 {
 	if( expr->pType->dim ) {
-		fprintf( stdout, "########## Error at Line#%d: %s statement's operand is array type ##########\n", linenum, str );
+		fprintf( stdout, "<Error> at Line#%d: %s statement's operand is array type ##########\n", linenum, str );
 	}
 }
 
 void verifyBooleanExpr( struct expr_sem *expr, const char *str )
 {
 	if( expr->pType->dim ) {
-		fprintf( stdout, "########## Error at Line#%d: %s statement's operand is array type ##########\n", linenum, str );
+		fprintf( stdout, "<Error> at Line#%d: %s statement's operand is array type ##########\n", linenum, str );
 	}
 	else if( expr->pType->type != BOOLEAN_t ) {
-		fprintf( stdout, "########## Error at Line#%d: %s statement's operand is not boolean type ##########\n", linenum, str );
+		fprintf( stdout, "<Error> at Line#%d: %s statement's operand is not boolean type ##########\n", linenum, str );
 	}
 }
 
 void verifyReturnStatement( struct expr_sem *expr, struct PType *funcReturn )
 {
 	if( funcReturn == 0 ) {
-		fprintf( stdout, "########## Error at Line#%d: program cannot be returned ##########\n", linenum );
+		fprintf( stdout, "<Error> at Line#%d: program cannot be returned ##########\n", linenum );
 	}
 	else if( funcReturn->type == VOID_t ) {
-		fprintf( stdout, "########## Error at Line#%d: void function cannot be returned ##########\n", linenum );
+		fprintf( stdout, "<Error> at Line#%d: void function cannot be returned ##########\n", linenum );
 	}
 	else if( funcReturn->type != expr->pType->type ) {
-		fprintf( stdout, "########## Error at Line#%d: return type mismatch ##########\n", linenum );
+		fprintf( stdout, "<Error> at Line#%d: return type mismatch ##########\n", linenum );
 	}
 	else if( funcReturn->dimNum != expr->pType->dimNum ) {
-		fprintf( stdout, "########## Error at Line#%d: return dimension number mismatch ##########\n", linenum );
+		fprintf( stdout, "<Error> at Line#%d: return dimension number mismatch ##########\n", linenum );
 	}
 	else {
 		struct ArrayDimNode *returnDim, *exprDim;
 		int i;
 		for( returnDim=(funcReturn->dim), exprDim=(expr->pType->dim), i=0 ; returnDim!=0 ; returnDim=(returnDim->next), exprDim=(exprDim->next), ++i ) {
 			if( returnDim->size != exprDim->size ) {
-				fprintf( stdout, "########## Error at Line#%d: return dimension #%d's size mismatch ##########\n", linenum, i );
+				fprintf( stdout, "<Error> at Line#%d: return dimension #%d's size mismatch ##########\n", linenum, i );
 			}
 		}
 	}
@@ -812,7 +812,7 @@ void insertLoopVarIntoTable( struct SymTable *table, const char *id )
 	struct SymNode *nodePtr = 0;
 	nodePtr = lookupLoopVar( table, id );
 	if( nodePtr != 0 ) {
-		fprintf( stdout, "########## Error at Line#%d: symbol '%s' has been declared as loop variable ##########\n", linenum, id );
+		fprintf( stdout, "<Error> at Line#%d: symbol '%s' has been declared as loop variable ##########\n", linenum, id );
 	}
 	else {
 		//struct SymNode *newNode = createLoopVarNode( id );
@@ -909,4 +909,3 @@ void deleteIdList( struct idNode_sem *idlist )
 		free( idlist );
 	}
 }
-

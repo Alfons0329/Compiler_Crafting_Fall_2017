@@ -85,16 +85,16 @@ program			: ID
 			  insertTab( symbolTable, newNode );
 			  prog_start(fileName);
 			  if( strcmp(fileName,$1) ) {
-				fprintf( stdout, "########## Error at Line#%d: program beginning ID inconsist with file name ########## \n", linenum );
+				fprintf( stdout, "<Error> at Line#%d: program beginning ID inconsist with file name ########## \n", linenum );
 			  }
 			}
 			  MK_SEMICOLON
 			  program_body
 			  END ID
 			{
-			  if( strcmp($1, $6) ) { fprintf( stdout, "########## Error at Line #%d: %s", linenum,"Program end ID inconsist with the beginning ID ########## \n"); }
+			  if( strcmp($1, $6) ) { fprintf( stdout, "<Error> at Line #%d: %s", linenum,"Program end ID inconsist with the beginning ID ########## \n"); }
 			  if( strcmp(fileName,$6) ) {
-				 fprintf( stdout, "########## Error at Line#%d: program end ID inconsist with file name ########## \n", linenum );
+				 fprintf( stdout, "<Error> at Line#%d: program end ID inconsist with file name ########## \n", linenum );
 			  }
 			  // dump symbol table
 			  if( Opt_D == 1 )
@@ -252,7 +252,7 @@ func_decl		: ID MK_LPAREN opt_param_list
 			  END ID
 			{
 			  if( strcmp($1,$12) ) {
-				fprintf( stdout, "########## Error at Line #%d: the end of the functionName mismatch ########## \n", linenum );
+				fprintf( stdout, "<Error> at Line #%d: the end of the functionName mismatch ########## \n", linenum );
 			  }
 			  funcReturn = 0;
 			  var_no=1;
