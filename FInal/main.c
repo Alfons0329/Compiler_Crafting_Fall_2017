@@ -18,7 +18,7 @@ extern FILE* yyin;	/* declared by lex */
 extern struct SymTable *symbolTable;
 extern struct PType *funcReturn;
 extern char fileName[256];
-FILE *outfp;
+FILE *ofptr;
 
 int  main( int argc, char **argv )
 {
@@ -53,7 +53,7 @@ int  main( int argc, char **argv )
     char outputFN[64];
     snprintf(outputFN,sizeof(outputFN),"%s.j",fileName);
 
-	outfp = fopen(outputFN,"w");
+	ofptr = fopen(outputFN,"w");
 
 	yyin = fp;
 
@@ -66,7 +66,6 @@ int  main( int argc, char **argv )
 	yydebug = 0;
 
 	yyparse();	/* primary procedure of parser */
-	fclose(outfp);
+	fclose(ofptr);
 	exit(0);
 }
-

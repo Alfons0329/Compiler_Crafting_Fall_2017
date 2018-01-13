@@ -21,10 +21,8 @@ extern FILE *yyin;		/* declared by lex */
 extern char *yytext;		/* declared by lex */
 extern char buf[256];		/* declared in lex.l */
 extern int yylex(void);
-extern int label_count;
+extern int label_cnt;
 extern int tf_count;
-extern struct loop_stack loopStack;
-extern struct cond_stack condStack;
 int yyerror(char* );
 
 int scope = 0;
@@ -33,7 +31,6 @@ int hasRead=0;
 
 int Opt_D = 1;			/* symbol table dump option */
 char fileName[256];
-struct insList insList;
 
 struct SymTable *symbolTable;	// main symbol table
 
@@ -376,7 +373,7 @@ cond_stmt		: IF condition THEN opt_stmt_list
 				{
 
 
-				loopStack.top--;
+				loop_stk.top--;
 				}
 			  END IF
 				{
@@ -391,15 +388,15 @@ cond_stmt		: IF condition THEN opt_stmt_list
 			END IF
 			{
 
-			loopStack.top--;
+			loop_stk.top--;
 			}
 			;
 
 condition		: boolean_expr
 		   {
-			loopStack.top++;
-			label_count++;
-			loopStack.stack[loopStack.top]=label_count;
+			loop_stk.top++;
+			label_cnt++;
+			loop_stk.stk[loop_stk.top]=label_cnt;
 
 		   verifyBooleanExpr( $1, "if" );
 
@@ -408,9 +405,9 @@ condition		: boolean_expr
 
 while_stmt		: WHILE
 			{
-			loopStack.top++;
-			label_count++;
-			loopStack.stack[loopStack.top]=label_count; //push to stack
+			loop_stk.top++;
+			label_cnt++;
+			loop_stk.stk[loop_stk.top]=label_cnt; //push to stk
 
 
 			}
@@ -425,7 +422,7 @@ while_stmt		: WHILE
 
 
 			  }
-			  END DO {loopStack.top--;}
+			  END DO {loop_stk.top--;}
 			;
 
 condition_while		: boolean_expr { verifyBooleanExpr( $1, "while" ); }
@@ -609,7 +606,7 @@ factor			: var_ref
 			  else {
 				$$->beginningOp = NONE_t;
 			  }
-			  LoadConstToStack($1);
+			  //LoadConstTostk($1);
 			}
 			;
 

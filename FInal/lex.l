@@ -29,7 +29,7 @@ void setPseudoComment( const char * );	/* pseudo comment option switch */
 float scientificToFloat( const char *str );
 
 extern int Opt_D;
-extern FILE* outfp;
+extern FILE* ofptr;
 %}
 
 whitespace [ \t]+
@@ -163,7 +163,7 @@ identifier ({letter})({letter}|{digit})*
 				  LIST;
 				  if( Opt_S )
 				  	printf("%d: %s",  linenum,  buf);
-				  	fprintf(outfp,";%d: %s",  linenum,  buf);
+				  	fprintf(ofptr,";%d: %s",  linenum,  buf);
 				  linenum++;
 				  memset( buf, 0, MAX_LINE_LENG );
 				  BEGIN INITIAL;
@@ -181,7 +181,7 @@ identifier ({letter})({letter}|{digit})*
 				  LIST;
 				  if  (Opt_S)
 				  	printf("%d: %s",  linenum,  buf);
-				  	fprintf(outfp,";%d: %s",  linenum,  buf);
+				  	fprintf(ofptr,";%d: %s",  linenum,  buf);
 				  linenum++;
 				  memset( buf, 0, MAX_LINE_LENG );
 				}
@@ -197,7 +197,7 @@ identifier ({letter})({letter}|{digit})*
 				  LIST;
 				  if  (Opt_S)
 				  	printf("%d: %s",  linenum,  buf);
-				  	fprintf(outfp,";%d: %s",  linenum,  buf);
+				  	fprintf(ofptr,";%d: %s",  linenum,  buf);
 				  linenum++;
 				  memset( buf, 0, MAX_LINE_LENG );
 		   		}
