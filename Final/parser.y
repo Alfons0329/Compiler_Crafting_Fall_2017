@@ -388,44 +388,59 @@ proc_call_stmt		: ID MK_LPAREN opt_boolean_expr_list MK_RPAREN MK_SEMICOLON
 
 cond_stmt		: IF condition THEN opt_stmt_list
 				{
+					output_instr_stack();
 
+					snprintf(instr_buf,sizeof(instr_buf),"goto Lcondexit_%d\nLfalse_%d:\n",loop_stack.stack[loop_stack.top],loop_stack.stack[loop_stack.top]);
+					push_instr(instr_buf);
+					memset(instr_buf,0,sizeof(instr_buf));
 
-
+					output_instr_stack();
 				}
-			  ELSE
-			  opt_stmt_list
+			  	ELSE
+			  	opt_stmt_list
 				{
+					output_instr_stack();
 
+					snprintf(instr_buf,sizeof(instr_buf),"Lcondexit_%d:\n",loop_stack.stack[loop_stack.top]);
+					push_instr(instr_buf);
+					memset(instr_buf,0,sizeof(instr_buf));
 
-				loop_stack.top--;
+					output_instr_stack();
+					loop_stack.top--; //nested conditional depth--;
 				}
-			  END IF
+			  	END IF
 				{
-
+					output_instr_stack();
+					loop_stack.top--;  //nested conditional depth--;
 				}
 
 			| IF condition THEN opt_stmt_list
 			{
-
-
+				output_instr_stack();
+				snprintf(instr_buf,sizeof(instr_buf),"Lfalse_%d:\n",loop_stack.stack[loop_stack.top]);
+				push_instr(instr_buf);
+				memset(instr_buf,0,sizeof(instr_buf));
 			}
 			END IF
 			{
-
-			loop_stack.top--;
+				output_instr_stack();
+				loop_stack.top--;
 			}
 			;
 
-condition		: boolean_expr
-		   {
-			loop_stack.top++;
-			label_cnt++;
-			loop_stack.stack[loop_stack.top]=label_cnt;
-
-		   verifyBooleanExpr( $1, "if" );
-
-		   }
-			;
+condition		:
+				boolean_expr
+		   		{
+					loop_stack.top++; //nested conditional depth++;
+					label_cnt++; //nested conditional depth++; for more labels to jump in and out
+					loop_stack.stack[loop_stack.top]=label_cnt;
+					 //condition false go away
+					verifyBooleanExpr( $1, "if" );
+					snprintf(instr_buf,sizeof(instr_buf),"ifeq Lfalse_%d\n",loop_stack.stack[loop_stack.top],loop_stack.stack[loop_stack.top]);
+					push_instr(instr_buf);
+					memset(instr_buf,0,sizeof(instr_buf));
+		   		}
+				;
 
 while_stmt		: WHILE
 			{
