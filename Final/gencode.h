@@ -528,7 +528,7 @@ void read_stdin(struct expr_sem* expr)
                     break;
 			}
 		}
-        clear_instr_stk();
+        clear_instr_stk(); //invalid read will occurred here!!!
         asn_expr(expr,NULL); //save what i read
 		output_instr_stack();
 	}

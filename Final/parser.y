@@ -473,15 +473,15 @@ for_stmt		: FOR ID
 			  OP_ASSIGN loop_param
 			  TO loop_param
 			{
-			  verifyLoopParam( $5, $7 );
-
+			  	verifyLoopParam( $5, $7 );
+			  	for_loop($2,$5,$7);
 			}
 			  DO
 			  opt_stmt_list{ }
 			  END DO
 			{
-
-			  popLoopVar( symbolTable );
+				for_loop_end($2);
+			  	popLoopVar( symbolTable );
 			}
 			;
 
