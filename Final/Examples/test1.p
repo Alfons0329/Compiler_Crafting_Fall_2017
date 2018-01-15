@@ -12,7 +12,7 @@ begin
         var a, b, c, d, e: integer;
         var f: boolean;
         var g: real;
-        var h: "helloworld";
+        var h: 4567.4589;
         f := true;
         f := false;
         a := 123;
