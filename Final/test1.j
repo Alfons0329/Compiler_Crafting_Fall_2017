@@ -47,6 +47,10 @@ ldc "\n"
 invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
 
 getstatic java/lang/System/out Ljava/io/PrintStream;
+ldc "helloworld"
+invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
+
+getstatic java/lang/System/out Ljava/io/PrintStream;
 ldc "\n"
 invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
 

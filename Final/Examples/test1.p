@@ -12,7 +12,7 @@ begin
         var a, b, c, d, e: integer;
         var f: boolean;
         var g: real;
-        //var h: "helloworld";
+        var h: "helloworld";
         f := true;
         f := false;
         a := 123;
@@ -28,7 +28,7 @@ begin
         print "\n";
         print g;
         print "\n";
-        //print h;
+        print h;
         print "\n";
         //a := e;
 end

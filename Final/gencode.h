@@ -177,7 +177,7 @@ void ref_expr(struct expr_sem* expr)
 					switch(expr->pType->type)
 					{
 						case INTEGER_t:
-							snprintf(instr_buf,sizeof(instr_buf), "sipush %d\n",find_entry->attribute->constVal->value.integerVal);
+							snprintf(instr_buf,sizeof(instr_buf), "ldc %d\n",find_entry->attribute->constVal->value.integerVal);
 							break;
 						case REAL_t:
 							snprintf(instr_buf,sizeof(instr_buf), "ldc %lf\n",find_entry->attribute->constVal->value.realVal);
@@ -185,6 +185,9 @@ void ref_expr(struct expr_sem* expr)
 						case BOOLEAN_t:
 							snprintf(instr_buf,sizeof(instr_buf), "iconst_%d\n",find_entry->attribute->constVal->value.booleanVal);
 							break;
+                        case STRING_t:
+                            snprintf(instr_buf,sizeof(instr_buf), "ldc \"%s\"\n",find_entry->attribute->constVal->value.stringVal);
+                            break;
                         default:
                             break;
 					}
